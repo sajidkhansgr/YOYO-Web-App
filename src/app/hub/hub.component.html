@@ -1,32 +1,81 @@
 <header>
   <nav class="navbar navbar-expand navbar-light bg-white">
-    <a class="navbar-brand ml-3 pr-5 border-right" href="#"><img src="assets/images/logo.png" alt="Hi Force"></a>
+    <a class="navbar-brand ml-3 pr-5 border-right py-2" href="#"><img src="../../assets/images/logo.png"
+        alt="Hi Force"></a>
 
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <a class="nav-link" href="javascript:void(0);" onclick="toggleSidebar()"><i
-              class="fas fa-bars text-hi-dark align-middle"></i></a>
+              class="fas fa-bars align-middle"></i></a>
         </li>
       </ul>
       <ul class="navbar-nav toggle-navbar">
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="fas fa-search text-hi-dark align-bottom"></i></a>
+        <li class="nav-item align-self-center">
+          <a class="nav-link" href="#"><i class="fas fa-search align-bottom icon-size"></i></a>
         </li>
-        <li class="nav-item ml-2">
-          <a class="nav-link" href="#"><i class="far fa-bell text-hi-dark align-bottom"></i></a>
+        <li class="nav-item align-self-center ml-2 dropdown notification">
+          <a class="nav-link" href="#" id="notificatioDD" data-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-bell align-bottom icon-size"></i>
+          </a>
+          <div class="dropdown-menu large-dropdown dropdown-menu-right" aria-labelledby="notificatioDD">
+            <h5 class="dropdown-item text-dark font-weight-bold no-bg-hover">Notifications<small
+                class="badge badge-danger float-right">8</small></h5>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item row m-0 mt-2" href="#">
+              <div class="col-3 align-self-center"><img src="../../assets/images/avatar.png" class="w-100"></div>
+              <div class="col-9 align-self-center row">
+                <div>
+                  <div class="name">Regina Cooper</div>
+                  <div class="time-active text-hi-dark-grey"><small>1 min ago</small></div>
+                </div>
+                <div class="ml-auto align-self-center">
+                  <i class="fas fa-times p-1"></i>
+                </div>
+              </div>
+            </a>
+            <a class="dropdown-item row m-0 mt-2" href="#">
+              <div class="col-3 align-self-center"><img src="../../assets/images/avatar.png" class="w-100"></div>
+              <div class="col-9 align-self-center row">
+                <div>
+                  <div class="name">Regina Cooper</div>
+                  <div class="time-active text-hi-dark-grey"><small>1 min ago</small></div>
+                </div>
+                <div class="ml-auto align-self-center">
+                  <i class="fas fa-times p-1"></i>
+                </div>
+              </div>
+            </a>
+          </div>
         </li>
-        <li class="nav-item dropdown ml-4">
+        <li class="nav-item align-self-center dropdown ml-4 user">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="far fa-user-circle text-hi-dark align-middle"></i><span class="text-hi-dark align-middle"> Art
+            aria-expanded="false">
+            <img src="../../assets/images/avatar.png"><span class="align-middle"> Art
               Template</span>
           </a>
-          <div class="dropdown-menu" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#">Text</a>
-            <a class="dropdown-item" href="#">Text</a>
+          <div class="dropdown-menu large-dropdown dropdown-menu-right" aria-labelledby="userDropdown">
+            <h6 class="dropdown-item row m-0 p-2 mt-2 no-bg-hover text-dark">
+              <div class="col-3"><img src="../../assets/images/avatar.png" class="w-100"></div>
+              <div class="col-9 align-self-center row">
+                <div>
+                  <div class="username">ArtTemplate</div>
+                  <div class="position text-hi-grey"><small>Manager</small></div>
+                </div>
+                <div class="ml-auto align-self-center">
+                  <span class="badge badge-danger">8</span>
+                </div>
+              </div>
+            </h6>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Log Out</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>My Profile</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-envelope mr-2"></i>My Messages</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-clipboard mr-2"></i>My Tasks</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Settings</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-lock mr-2"></i>Lock Screen</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
           </div>
         </li>
       </ul>
@@ -39,18 +88,28 @@
 <div class="content">
   <!-- sidebar -->
   <div class="sidebar sticky-top border-right">
-    <ul class="navbar-nav">
-      <li class="nav-item p-2">
-        <a href="#" class="text-hi-dark">
-          <div class="link-icon mr-2 align-middle"><i class="fas fa-th-large"></i></div>
-          <div class="link-text align-middle">Dashboard</div>
-        </a>
-      </li>
-      <li class="nav-item p-2 active">
-        <a href="#hubSubMenu" class="text-hi-dark dropdown-toggle" data-toggle="collapse" aria-expanded="false">
-          <div class="link-icon mr-2 align-middle"><i class="fas fa-layer-group"></i></div>
+    <div class="navbar-nav">
+      <a class="nav-item p-2 text-hi-dark pl-3" href="./dashboard.html">
+        <div class="link-icon pr-3 align-middle"><i class="fas fa-th-large"></i></div>
+        <div class="link-text align-middle">Dashboard</div>
+      </a>
+      <div class="dropright py-2 active">
+        <a class="nav-item text-hi-dark dropdown-toggle p-2 pl-3" href="#" id="navbarDropdown" role="button"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <div class="link-icon pr-3 align-middle w-100"><i class="fas fa-layer-group"></i></div>
           <div class="link-text align-middle">Hub</div>
         </a>
+        <div class="dropdown-menu ml-0" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item text-hi-dark" href="#">H.E.S. Sales Limited</a>
+          <a class="dropdown-item text-hi-dark" href="#">Hi-Force</a>
+          <a class="dropdown-item text-hi-dark" href="#">Protec SRL</a>
+        </div>
+      </div>
+      <!-- <li class=" nav-item p-2 active">
+            <a href="#hubSubMenu" class="text-hi-dark dropdown-toggle" data-toggle="collapse" aria-expanded="false">
+              <div class="link-icon pr-3 align-middle"><i class="fas fa-layer-group"></i></div>
+              <div class="link-text align-middle">Hub</div>
+            </a>
       </li>
       <ul class="collapse list-unstyled" id="hubSubMenu">
         <li class="nav-item p-2 pl-3">
@@ -68,26 +127,20 @@
             <div class="link-icon">Protec SRL</div>
           </a>
         </li>
-      </ul>
-      <li class="nav-item p-2">
-        <a href="#" class="text-hi-dark">
-          <div class="link-icon mr-2 align-middle"><i class="fas fa-user"></i></div>
-          <div class="link-text align-middle">Users</div>
-        </a>
-      </li>
-      <li class="nav-item p-2">
-        <a href="#" class="text-hi-dark">
-          <div class="link-icon mr-2 align-middle"><i class="far fa-envelope"></i></div>
-          <div class="link-text align-middle">Communication</div>
-        </a>
-      </li>
-      <li class="nav-item p-2">
-        <a href="#" class="text-hi-dark">
-          <div class="link-icon mr-2 align-middle"><i class="fas fa-signal"></i></div>
-          <div class="link-text align-middle">Reports</div>
-        </a>
-      </li>
-    </ul>
+      </ul> -->
+      <a class="nav-item p-2 text-hi-dark pl-3" href="#">
+        <div class="link-icon pr-3 align-middle"><i class="fas fa-user"></i></div>
+        <div class="link-text align-middle">Users</div>
+      </a>
+      <a class="nav-item p-2 text-hi-dark pl-3" href="#">
+        <div class="link-icon pr-3 align-middle"><i class="far fa-envelope"></i></div>
+        <div class="link-text align-middle">Communication</div>
+      </a>
+      <a class="nav-item p-2 text-hi-dark pl-3" href="#">
+        <div class="link-icon pr-3 align-middle"><i class="fas fa-signal"></i></div>
+        <div class="link-text align-middle">Reports</div>
+      </a>
+    </div>
   </div>
 
   <!-- main content -->
@@ -99,12 +152,13 @@
       <div class="main-tab-nav">
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link text-hi-dark active" href="javascript:void(0);" onclick="togglePages(this)"
-              id="candw">Content &
+            <a class="nav-link text-hi-dark-grey dark-bg-hover active" href="javascript:void(0);"
+              onclick="togglePages(this)" id="candw">Content &
               workspace</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-hi-dark" href="javascript:void(0);" onclick="togglePages(this)" id="tags">Tags</a>
+            <a class="nav-link text-hi-dark-grey dark-bg-hover" href="javascript:void(0);" onclick="togglePages(this)"
+              id="tags">Tags</a>
           </li>
         </ul>
       </div>
@@ -132,7 +186,7 @@
               <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
                   <li class="nav-item">
-                    <a class="nav-link active" href="#">
+                    <a class="nav-link text-hi-dark-grey active" href="#">
                       All
                       <small>
                         <span class="badge badge-secondary">253</span>
@@ -140,7 +194,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link text-hi-dark" href="#">
+                    <a class="nav-link text-hi-dark-grey" href="#">
                       Processing
                       <small>
                         <span class="badge badge-secondary">253</span>
@@ -148,7 +202,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link text-hi-dark" href="#">
+                    <a class="nav-link text-hi-dark-grey" href="#">
                       Trash
                       <small>
                         <span class="badge badge-secondary">253</span>
@@ -167,14 +221,15 @@
                         </div>
                         <input type="text" class="form-control border-left-0 border-right-0" placeholder="Search ...">
                         <div class="input-group-append">
-                          <span class="input-group-text bg-transparent"><i class="fas fa-sort"></i></span>
+                          <span class="input-group-text bg-transparent primary-bg-hover"><i
+                              class="fas fa-sliders-h"></i></span>
                         </div>
                       </div>
                     </div>
                     <div class="add-content col-lg-4 col-sm-5 text-right">
                       <div class="dropdown mt-3 mt-sm-0">
-                        <button class="btn border dropdown-toggle" type="button" id="actionsDD" data-toggle="dropdown"
-                          aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-light border dropdown-toggle" type="button" id="actionsDD"
+                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Add Content
                         </button>
                         <div class="dropdown-menu" aria-labelledby="actionsDD">
@@ -190,18 +245,15 @@
                   <table class="table table-hover text-dark w-100">
                     <thead>
                       <tr>
-                        <th scope="col"><input type="checkbox" name="" id=""></th>
                         <th scope="col">NAME<i class="fas fa-sort-down ml-1 align-top"></i></th>
                         <th scope="col">SIZE<i class="fas fa-sort-down ml-1 align-top"></i>
                         </th>
                         <th scope="col">ADDED<i class="fas fa-sort-down ml-1 align-top"></i></th>
                         <th scope="col">AUTHORS<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                        <th scope="col"></th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr onclick="workspaceToggle(this)" id="doc">
-                        <td><input type="checkbox" name="all"></td>
                         <td>
                           Group Stock Position - Regional Offices<br />
                           <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -210,10 +262,8 @@
                         <td class="text-hi-dark-grey">790 KB</td>
                         <td>19 Aug 2020</td>
                         <td class="text-hi-dark-grey">Andrea D'Souza</td>
-                        <td><i class="fas fa-ellipsis-v"></i></td>
                       </tr>
                       <tr onclick="workspaceToggle(this)" id="doc">
-                        <td><input type="checkbox" name="" id=""></td>
                         <td>
                           Group Stock Position - Regional Offices<br />
                           <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -222,10 +272,8 @@
                         <td class="text-hi-dark-grey">790 KB</td>
                         <td>19 Aug 2020</td>
                         <td class="text-hi-dark-grey">Andrea D'Souza</td>
-                        <td><i class="fas fa-ellipsis-v"></i></td>
                       </tr>
                       <tr onclick="workspaceToggle(this)" id="doc">
-                        <td><input type="checkbox" name="" id=""></td>
                         <td>
                           Group Stock Position - Regional Offices<br />
                           <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -234,10 +282,8 @@
                         <td class="text-hi-dark-grey">790 KB</td>
                         <td>19 Aug 2020</td>
                         <td class="text-hi-dark-grey">Andrea D'Souza</td>
-                        <td><i class="fas fa-ellipsis-v"></i></td>
                       </tr>
                       <tr onclick="workspaceToggle(this)" id="doc">
-                        <td><input type="checkbox" name="" id=""></td>
                         <td>
                           Group Stock Position - Regional Offices<br />
                           <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -246,7 +292,6 @@
                         <td class="text-hi-dark-grey">790 KB</td>
                         <td>19 Aug 2020</td>
                         <td class="text-hi-dark-grey">Andrea D'Souza</td>
-                        <td><i class="fas fa-ellipsis-v"></i></td>
                       </tr>
                     </tbody>
                   </table>
@@ -284,18 +329,23 @@
           <div class="workspace w-100 col-md-6" style="display: none;">
             <div class="document">
               <div class="card">
-                <div class="card-header bg-white">
-                  <h5 class="font-weight-bold mb-0 pt-1">Group Stock Position - Regional Offices.pdf</h5>
+                <div class="card-header row m-0">
+                  <h5 class="font-weight-bold mb-0 pt-1 col-10">Group Stock Position - Regional Offices.pdf</h5>
+                  <div class="mr-2 col-1 ml-auto">
+                    <div class="btn btn-light" onclick="closeWorkspace()">
+                      <i class="fas fa-times"></i>
+                    </div>
+                  </div>
                 </div>
                 <div class="card-body">
                   <div class="discription row">
                     <div class="col-6 text-center">
-                      <img src="assets/images/discription.png">
+                      <img src="../../assets/images/discription.png">
                     </div>
-                    <div class="col-6 align-self-center text-hi-dark work-div rounded p-2">
+                    <div class="col-6 align-self-center text-hi-dark work-div primary-bg-hover rounded p-2">
                       <h6 class="font-weight-bold">
                         DESCRIPTION
-                        <a class="float-right text-hi-dark text-hi-dark" onclick="openEdit(this)">
+                        <a class="float-right text-hi-dark-grey" onclick="openEdit(this)">
                           <i class=" fas fa-edit"></i>
                         </a>
                       </h6>
@@ -334,7 +384,7 @@
                           id="comments">COMMENTS</a>
                       </li>
                       <div class="dropdown ml-auto align-self-center dropleft">
-                        <a class="text-hi-dark" type="button" id="optionsDD" data-toggle="dropdown"
+                        <a class="text-hi-dark-grey" type="button" id="optionsDD" data-toggle="dropdown"
                           aria-haspopup="true" aria-expanded="false">
                           <i class="fa fa-ellipsis-h"></i>
                         </a>
@@ -349,10 +399,10 @@
                     </ul>
                   </div>
                   <div class="properties">
-                    <div class="tags mt-3 work-div rounded p-2">
+                    <div class="tags mt-3 work-div primary-bg-hover rounded p-2">
                       <div class="font-weight-bold mb-1">
                         Tags
-                        <a class="float-right text-hi-dark text-hi-dark" onclick="openEdit(this)">
+                        <a class="float-right text-hi-dark-grey" onclick="openEdit(this)">
                           <i class=" fas fa-edit"></i>
                         </a>
                       </div>
@@ -373,10 +423,10 @@
                       </div>
                     </div>
                     <div class="row mt-3 px-3">
-                      <div class="author col-6 work-div rounded p-2">
+                      <div class="author col-6 work-div primary-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Author
-                          <a class="float-right text-hi-dark" onclick="openEdit(this)">
+                          <a class="float-right text-hi-dark-grey" onclick="openEdit(this)">
                             <i class="fas fa-edit"></i>
                           </a>
                         </div>
@@ -398,10 +448,10 @@
                           </form>
                         </div>
                       </div>
-                      <div class="availibility col-6 work-div rounded p-2">
+                      <div class="availibility col-6 work-div primary-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Availibility
-                          <a class="float-right text-hi-dark" onclick="openEdit(this)">
+                          <a class="float-right text-hi-dark-grey" onclick="openEdit(this)">
                             <i class="fas fa-edit"></i>
                           </a>
                         </div>
@@ -428,10 +478,10 @@
                         </div>
                       </div>
                     </div>
-                    <div class="language work-div rounded p-2">
+                    <div class="language work-div primary-bg-hover rounded p-2">
                       <div class="font-weight-bold mb-1">
                         Language
-                        <a class="float-right text-hi-dark" onclick="openEdit(this)">
+                        <a class="float-right text-hi-dark-grey" onclick="openEdit(this)">
                           <i class="fas fa-edit"></i>
                         </a>
                       </div>
@@ -451,10 +501,10 @@
                         </form>
                       </div>
                     </div>
-                    <div class="country work-div rounded p-2">
+                    <div class="country work-div primary-bg-hover rounded p-2">
                       <div class="font-weight-bold mb-1">
                         Country
-                        <a class="float-right text-hi-dark" onclick="openEdit(this)">
+                        <a class="float-right text-hi-dark-grey" onclick="openEdit(this)">
                           <i class="fas fa-edit"></i>
                         </a>
                       </div>
@@ -478,7 +528,7 @@
                   <div class="info" style="display: none;">
                     <div class="row">
                       <div class="col-6">
-                        <div class="history mt-3 work-div rounded p-2">
+                        <div class="history mt-3 work-div primary-bg-hover rounded p-2">
                           <div class="font-weight-bold mb-1">
                             History
                           </div>
@@ -490,7 +540,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="crm mt-3 work-div rounded p-2">
+                        <div class="crm mt-3 work-div primary-bg-hover rounded p-2">
                           <div class="font-weight-bold mb-1">
                             CRM Recommendations
                           </div>
@@ -502,7 +552,7 @@
                         </div>
                       </div>
                       <div class="col-6">
-                        <div class="experiences mt-3 work-div rounded p-2">
+                        <div class="experiences mt-3 work-div primary-bg-hover rounded p-2">
                           <div class="font-weight-bold mb-1">
                             Used in Experiences
                           </div>
@@ -512,10 +562,10 @@
                             </div>
                           </div>
                         </div>
-                        <div class="extId mt-3 work-div rounded p-2">
+                        <div class="extId mt-3 work-div primary-bg-hover rounded p-2">
                           <div class="font-weight-bold mb-1">
                             External ID
-                            <a class="float-right text-hi-dark text-hi-dark" onclick="openEdit(this)">
+                            <a class="float-right text-hi-dark-grey" onclick="openEdit(this)">
                               <i class=" fas fa-edit"></i>
                             </a>
                           </div>
@@ -537,7 +587,7 @@
                             </form>
                           </div>
                         </div>
-                        <div class="appLink mt-3 work-div rounded p-2">
+                        <div class="appLink mt-3 work-div primary-bg-hover rounded p-2">
                           <div class="font-weight-bold mb-1">
                             App Link
                           </div>
@@ -584,17 +634,22 @@
             </div>
             <div class="worksp">
               <div class="card">
-                <div class="card-header">
-                  <div class="form-group w-50 mb-0">
+                <div class="card-header row m-0">
+                  <div class="form-group mb-0 exp">
                     <select class="form-control bg-transparent border-0">
                       <option selected hidden>Select an Experience</option>
                       <option>English</option>
                       <option>Stock</option>
                     </select>
                   </div>
+                  <div class="ml-auto mr-2">
+                    <div class="btn btn-light" onclick="closeWorkspace()">
+                      <i class="fas fa-times"></i>
+                    </div>
+                  </div>
                 </div>
                 <div class="card-header bg-hi-light-grey p-1 row m-0">
-                  <div class="dropdown mr-2">
+                  <div class="dropdown dark-bg-hover rounded mr-2">
                     <button class="btn btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown">
                       Add
                     </button>
@@ -603,18 +658,7 @@
                       <a class="dropdown-item" href="#">Add Smart Folder</a>
                     </div>
                   </div>
-                  <div class="dropdown mr-2">
-                    <button class="btn btn-sm dropdown-toggle" type="button" id="btnDesDD" data-toggle="dropdown">
-                      Design
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnDesDD">
-                      <a class="dropdown-item" href="#">Experience Background</a>
-                      <a class="dropdown-item" href="#">Add a Logo</a>
-                      <a class="dropdown-item" href="#">Cover Image</a>
-                      <a class="dropdown-item" href="#">Default Folder Icon</a>
-                    </div>
-                  </div>
-                  <div class="dropdown mr-2">
+                  <div class="dropdown dark-bg-hover rounded">
                     <button class="btn btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown">
                       Users <span class="badge badge-light">11</span>
                     </button>
@@ -651,35 +695,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="dropdown">
-                    <button class="btn btn-sm dropdown-toggle" type="button" id="btnThemesDD" data-toggle="dropdown">
-                      Themes <span class="badge badge-light">11</span>
-                    </button>
-                    <div class="dropdown-menu large-dropdown-menu pt-0 overflow-hidden dropdown-menu-right"
-                      aria-labelledby="btnThemesDD">
-                      <div class="bg-hi-dark-grey p-2">Assign Sharing Themes</div>
-                      <div class="p-3">
-                        <form>
-                          <div class="form-check form-check-inline m-0 w-100">
-                            <input class="form-check-input" type="checkbox" id="globalTheme" value="option1">
-                            <label class="form-check-label row m-0 w-100" for="globalTheme">
-                              <div class="image col-3 align-self-center">
-                              </div>
-                              <div class="text col-9 align-self-center">
-                                Global Theme<br />
-                                <span class="border px-1">Default</span><br />
-                                <small class="text-hi-dark-grey">All Experiences can use this theme</small>
-                              </div>
-                            </label>
-                          </div>
-                          <div class="form-group text-right mb-0 mt-3">
-                            <button type="submit" class="btn btn-success text-white btn-sm">Submit</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="dropdown ml-auto">
+                  <div class="dropdown dark-bg-hover rounded ml-auto">
                     <button class="btn btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown">
                       <i class="fas fa-cog"></i>
                     </button>
@@ -696,9 +712,9 @@
                 </div>
                 <div class="card-body">
                   <h5>English</h5>
-                  <div class="main row bg-hi-light-grey py-4">
+                  <div class="main row py-4">
                     <div class="col-3">
-                      <img src="assets/images/companyInfo.png" class="w-100">
+                      <img src="../../assets/images/companyInfo.png" class="w-100">
                       <div class="dropdown">
                         <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
                           data-toggle="dropdown">
@@ -716,7 +732,7 @@
                       </div>
                     </div>
                     <div class="col-3">
-                      <img src="assets/images/brands.png" class="w-100">
+                      <img src="../../assets/images/brands.png" class="w-100">
                       <div class="dropdown">
                         <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
                           data-toggle="dropdown">
@@ -734,7 +750,7 @@
                       </div>
                     </div>
                     <div class="col-3">
-                      <img src="assets/images/services.png" class="w-100">
+                      <img src="../../assets/images/services.png" class="w-100">
                       <div class="dropdown">
                         <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
                           data-toggle="dropdown">
@@ -752,7 +768,7 @@
                       </div>
                     </div>
                     <div class="col-3">
-                      <img src="assets/images/showpad.jpg" class="dd-img">
+                      <img src="../../assets/images/showpad.jpg" class="w-100">
                       <div class="dropdown">
                         <button class="btn btn-light btn-sm">
                           <i class="fas fa-trash-alt"></i>
@@ -774,7 +790,7 @@
             <div class="card-header">
               <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item">
-                  <a class="nav-link active" href="#">
+                  <a class="nav-link text-hi-dark-grey active" href="#">
                     All Tags
                     <small>
                       <span class="badge badge-secondary">253</span>
@@ -782,7 +798,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link text-hi-dark" href="#">
+                  <a class="nav-link text-hi-dark-grey" href="#">
                     Uncategorized Tags
                     <small>
                       <span class="badge badge-secondary">253</span>
@@ -790,7 +806,7 @@
                   </a>
                 </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="top" title="Add Category">
-                  <a class="nav-link text-hi-dark" href="#">
+                  <a class="nav-link text-hi-dark-grey" href="#">
                     <i class="fas fa-plus-circle"></i>
                   </a>
                 </li>
@@ -806,7 +822,8 @@
                       </div>
                       <input type="text" class="form-control border-left-0 border-right-0" placeholder="Search ...">
                       <div class="input-group-append">
-                        <span class="input-group-text bg-transparent"><i class="fas fa-sort"></i></span>
+                        <span class="input-group-text bg-transparent primary-bg-hover"><i
+                            class="fas fa-sliders-h"></i></span>
                       </div>
                     </div>
                   </div>
@@ -816,7 +833,6 @@
                 <table class="table table-hover text-dark w-100">
                   <thead>
                     <tr>
-                      <th scope="col"><input type="checkbox" name="" id=""></th>
                       <th scope="col">NAME<i class="fas fa-sort-down ml-1 align-top"></i></th>
                       <th scope="col">STATUS<i class="fas fa-sort-down ml-1 align-top"></i>
                       </th>
@@ -825,7 +841,6 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td><input type="checkbox" name="all"></td>
                       <td>
                         Group Stock Position - Regional Offices<br />
                         <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -835,7 +850,6 @@
                       <td>19 Aug 2020</td>
                     </tr>
                     <tr>
-                      <td><input type="checkbox" name="all"></td>
                       <td>
                         Group Stock Position - Regional Offices<br />
                         <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -845,7 +859,6 @@
                       <td>19 Aug 2020</td>
                     </tr>
                     <tr>
-                      <td><input type="checkbox" name="all"></td>
                       <td>
                         Group Stock Position - Regional Offices<br />
                         <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -855,7 +868,6 @@
                       <td>19 Aug 2020</td>
                     </tr>
                     <tr>
-                      <td><input type="checkbox" name="all"></td>
                       <td>
                         Group Stock Position - Regional Offices<br />
                         <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
