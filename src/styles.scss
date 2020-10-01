@@ -1,1 +1,474 @@
 /* You can add global styles to this file, and also import other style files */
+// customized bootstrap
+@import './assets/scss/customizedBootstrap/bootstrap.scss';
+//import url
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@400;500;700&display=swap");
+
+// global
+$hi-grey: #F7F7F7;
+$hi-dark-grey: darken($color: $hi-grey, $amount: 10);
+$hi-dark:#3E434A;
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: $hi-grey;
+  color: $hi-dark;
+}
+
+.text-hi-dark {
+  color: $hi-dark !important;
+}
+
+.text-hi-grey {
+  color: darken($color: $hi-dark-grey, $amount: 20);
+}
+
+.text-hi-dark-grey {
+  color: darken($color: $hi-dark-grey, $amount: 40);
+}
+
+.bg-hi-light-grey {
+  background-color: lighten($color: $hi-dark-grey, $amount: 10.8);
+}
+
+.bg-hi-dark-grey {
+  background-color: $hi-dark-grey;
+}
+
+.no-bg-hover:hover {
+  background-color: transparent;
+}
+
+.text-hover:hover {
+  color: $primary !important;
+}
+
+.primary-bg-hover:hover {
+  background-color: rgba($primary, .075) !important;
+}
+
+.dark-bg-hover:hover {
+  background-color: rgba($black, .075) !important;
+}
+
+// header/navbar
+header {
+  .navbar {
+    .icon-size {
+      font-size: 1.5rem !important;
+    }
+
+    .navbar-brand {
+      img {
+        height: 40px;
+      }
+    }
+
+    .navbar-nav {
+      .dropdown {
+        img {
+          width: 40px;
+        }
+      }
+
+      .notification,
+      .user {
+        .large-dropdown {
+          min-width: 20rem !important;
+        }
+
+        .name {
+          font-size: 14px;
+        }
+
+        .row {
+          display: flex !important;
+        }
+
+        .fa-times {
+          font-size: 15px;
+          border-radius: 10px;
+          display: none;
+        }
+
+        .dropdown-item:hover {
+          .text-hi-dark-grey {
+            color: lighten($color:$hi-dark-grey, $amount: 10);
+          }
+
+          .fa-times {
+            display: block;
+          }
+        }
+
+        .fa-times:hover {
+          background-color: $danger;
+          color: #fff;
+        }
+      }
+    }
+
+    .toggle-button {
+      display: none;
+
+      @media (max-width: 600px) {
+        display: inline;
+      }
+    }
+
+    .toggle-navbar {
+      @media (max-width: 600px) {
+        display: none;
+      }
+    }
+  }
+
+  .toggle-navbar-bottom {
+    display: none;
+
+    @media (max-width: 600px) {
+      display: block;
+    }
+
+    .dropdown {
+      a {
+        color: $hi-dark !important;
+      }
+
+      i {
+        font-size: 1.8rem;
+      }
+    }
+  }
+}
+
+
+// sidebar
+.content {
+  display: flex;
+}
+
+.sidebar {
+  background-color: #fff;
+  min-width: 250px;
+  transition: min-width 0.5s linear;
+  min-height: 100vh;
+  height: 100%;
+
+  .navbar-nav {
+    .nav-item {
+      font-size: 1.5rem;
+      text-decoration: none;
+
+      .link-icon {
+        display: inline;
+      }
+
+      .link-text {
+        display: inline;
+        opacity: 1;
+        transition: opacity 0.5s linear;
+        font-size: 1rem;
+      }
+    }
+
+    >.nav-item:hover,
+    .active {
+      background-color: lighten($color: $primary, $amount: 10);
+      color: white !important;
+    }
+
+    .dropright.active {
+      a {
+        color: white !important;
+      }
+    }
+
+    .dropright {
+      .dropdown-menu {
+        a {
+          font-size: 0.9rem;
+          color: $hi-dark !important;
+          border-left: 5px transparent solid;
+        }
+
+        a:hover {
+          background-color: lighten($color: $primary, $amount: 10);
+          color: white !important;
+        }
+      }
+
+      .nav-item {
+        padding-top: 9px !important;
+        padding-bottom: 12px !important;
+      }
+
+      // .nav-item:hover {
+      //   background-color: lighten($color: $primary, $amount: 10);
+      //   border-left: 5px darken($color: $primary, $amount: 10) solid;
+      //   border-bottom: 5px transparent solid;
+      //   border-top: 5px transparent solid;
+      //   color: white !important;
+      // }
+    }
+
+    .dropright:hover {
+      .nav-item {
+        background-color: lighten($color: $primary, $amount: 10);
+        color: white !important;
+      }
+    }
+
+    // .collapse {
+    //   .nav-item {
+    //     a {
+    //       font-size: 1rem;
+
+    //       i {
+    //         font-size: 0.5rem;
+    //       }
+
+    //     }
+    //   }
+    // }
+
+    .dropdown-toggle::after {
+      transition: opacity 0.5s linear;
+      margin-left: 6rem;
+      padding-right: 2.3rem;
+    }
+  }
+}
+
+.closeSidebar {
+  min-width: 4.05rem;
+}
+
+.displaySidebarText,
+.displayArrow::after {
+  display: none !important;
+}
+
+.showSidebarText,
+.showArrow::after {
+  opacity: 0 !important;
+}
+
+// app usage chart
+.app-usage {
+  .labels {
+    .badge-warning {
+      background-color: lighten($color: $warning, $amount: 25) !important;
+      color: $warning;
+    }
+
+    .badge-primary {
+      background-color: lighten($color: $primary, $amount: 35) !important;
+      color: $primary;
+    }
+
+    .badge-success {
+      background-color: lighten($color: $success, $amount: 35) !important;
+      color: $success;
+    }
+
+    .badge {
+      i {
+        font-size: 1rem;
+      }
+    }
+
+    .badge-text {
+      display: inline;
+
+      .number {
+        font-size: 1rem;
+      }
+
+      .text {
+        display: block;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+// recent file comments
+.recent-file-comments {
+  .file-container {
+    .file-name {
+      font-size: 0.9rem;
+    }
+
+    .file-comments {
+      .file-comment {
+        .dp {
+          i {
+            font-size: 1.8rem;
+          }
+        }
+
+        .col-11 {
+          font-size: 0.8rem;
+
+          .user-name {
+            .date {
+              font-size: 0.7rem;
+            }
+          }
+        }
+      }
+
+      .add-comment {
+        a:hover {
+          i {
+            color: #000;
+          }
+        }
+      }
+    }
+  }
+}
+
+// online users graph
+.online-users {
+  .numbers {
+    .num {
+      font-size: 1.2rem;
+    }
+
+    .text {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// content viewing graph
+.content-viewing {
+  .badge-primary.active {
+    background-color: lighten($color: $primary, $amount: 10) !important;
+    color: #fff;
+  }
+
+  .badge-primary {
+    color: lighten($color: $primary, $amount: 30);
+  }
+}
+
+// hub
+.main-hub {
+  .sub-tab-nav {
+    .card-body {
+      .input-group-append {
+        .input-group-text {
+          cursor: pointer;
+        }
+      }
+
+      .card-text {
+        @media (max-width:600px) {
+          overflow-x: scroll !important;
+        }
+
+        table {
+          @media (max-width:600px) {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.hide-rows {
+
+  tr>*:nth-child(3),
+  tr>*:nth-child(4),
+  tr>*:nth-child(5) {
+    display: none;
+  }
+}
+
+// workspace
+.workspace {
+  .discription {
+    img {
+      height: 200px;
+    }
+
+    .disc-text {
+      font-size: 12px;
+    }
+  }
+
+  .work-div {
+    .float-right {
+      display: none;
+      cursor: pointer;
+    }
+  }
+
+  .work-div:hover {
+    .float-right {
+      display: block;
+    }
+  }
+
+  .comments {
+    .file-comment {
+      i {
+        font-size: 1.8rem;
+      }
+    }
+  }
+
+  .worksp {
+    .card-header {
+      .form-group.exp {
+        width: 14rem;
+      }
+    }
+
+    .large-dropdown-menu {
+      min-width: 20rem;
+    }
+
+    .form-check {
+      .image {
+        background-color: $hi-dark;
+        height: 40px;
+      }
+
+      .text {
+        font-size: 12px;
+
+        .border {
+          background-color: limegreen;
+        }
+      }
+    }
+  }
+
+  .main {
+    .col-3 {
+      position: relative;
+
+      .dropdown {
+        position: absolute;
+        top: 30%;
+        left: 30%;
+        opacity: 0;
+      }
+    }
+
+    .col-3:hover {
+      .dropdown {
+        opacity: 1;
+      }
+    }
+  }
+}
