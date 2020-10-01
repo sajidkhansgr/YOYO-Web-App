@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-hub',
   templateUrl: './hub.component.html',
-  styleUrls: ['./hub.component.scss']
+  styleUrls: ['./hub.component.scss'],
+  encapsulation: ViewEncapsulation.None
+
 })
 export class HubComponent implements OnInit {
   // sidebar variables
