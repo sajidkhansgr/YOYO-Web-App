@@ -87,7 +87,10 @@ smallScreen = () => {
 }
 
 largeScreen = () => {
-  let bottomNav = document.querySelector('.toggle-navbar-bottom').children[0];
+  let bottomNav = document.querySelector('.toggle-navbar-bottom')
+  if (bottomNav.children[0]) {
+    bottomNav = bottomNav.children[0];
+  };
   if (bottomNav.children[0]) {
     for (let i = 0; i < nav.children.length; i++) {
       if (bottomNav.children[i]) {
