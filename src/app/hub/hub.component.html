@@ -148,769 +148,772 @@
       HUB > H.E.S. Sales Limited
     </h3>
     <div class="mt-2">
-      <div class="main-tab-nav">
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link text-hi-dark-grey dark-bg-hover active" href="javascript:void(0);"
-              onclick="togglePages(this)" id="candw">Content &
-              workspace</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-hi-dark-grey dark-bg-hover" href="javascript:void(0);" onclick="togglePages(this)"
-              id="tags">Tags</a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- content and workspace page -->
-      <div class="content-workspace">
-        <div class="buttons-row row mt-3 justify-content-between mx-2">
-          <div class="dropdown">
-            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addCOntentDD"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Add Content
-            </button>
-            <div class="dropdown-menu" aria-labelledby="addCOntentDD">
-              <a class="dropdown-item" href="#"><i class="fas fa-file-alt mr-1"></i>Upload Files</a>
-              <a class="dropdown-item" href="#"><i class="fas fa-link mr-1"></i>Add a URL</a>
-            </div>
-          </div>
-          <div class="btn btn-primary btn-sm float" (click)="workspaceToggle($event)" id="worksp"><i
-              class="fas fa-chevron-right mr-1"></i>Workspace</div>
-        </div>
-
-        <div class="row mt-4">
-          <div class="sub-tab-nav col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <ul class="nav nav-tabs card-header-tabs">
-                  <li class="nav-item">
-                    <a class="nav-link text-hi-dark-grey active" href="#">
-                      All
-                      <small>
-                        <span class="badge badge-secondary">253</span>
-                      </small>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link text-hi-dark-grey" href="#">
-                      Processing
-                      <small>
-                        <span class="badge badge-secondary">253</span>
-                      </small>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link text-hi-dark-grey" href="#">
-                      Trash
-                      <small>
-                        <span class="badge badge-secondary">253</span>
-                      </small>
-                    </a>
-                  </li>
-                </ul>
+      <div>
+        <mat-tab-group>
+          <mat-tab label="Content">
+            <!-- content and workspace page -->
+            <div class="content-workspace">
+              <div class="buttons-row row mt-3 justify-content-between mx-2">
+                <div class="dropdown">
+                  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addCOntentDD"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add Content
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="addCOntentDD">
+                    <a class="dropdown-item" href="#"><i class="fas fa-file-alt mr-1"></i>Upload Files</a>
+                    <a class="dropdown-item" href="#"><i class="fas fa-link mr-1"></i>Add a URL</a>
+                  </div>
+                </div>
+                <div class="btn btn-primary btn-sm float" (click)="workspaceToggle($event)" id="worksp"><i
+                    class="fas fa-chevron-right mr-1"></i>Workspace</div>
               </div>
-              <div class="card-body">
-                <h5 class="card-title">
-                  <div class="row heading">
-                    <div class="search col-lg-8 col-sm-7">
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text bg-transparent"><i class="fas fa-search"></i></span>
-                        </div>
-                        <input type="text" class="form-control border-left-0 border-right-0" placeholder="Search ...">
-                        <div class="input-group-append">
-                          <span class="input-group-text bg-transparent primary-bg-hover"><i
-                              class="fas fa-sliders-h"></i></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="add-content col-lg-4 col-sm-5 text-right">
-                      <div class="dropdown mt-3 mt-sm-0">
-                        <button class="btn btn-light border dropdown-toggle" type="button" id="actionsDD"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Add Content
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="actionsDD">
-                          <a class="dropdown-item" href="#">Upload Files</a>
-                          <a class="dropdown-item" href="#">Add a URL</a>
-                          <a class="dropdown-item" href="#">Import from</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </h5>
-                <div class="card-text">
-                  <table class="table table-hover text-dark w-100">
-                    <thead>
-                      <tr>
-                        <th scope="col">NAME<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                        <th scope="col">SIZE<i class="fas fa-sort-down ml-1 align-top"></i>
-                        </th>
-                        <th scope="col">ADDED<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                        <th scope="col">AUTHORS<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr (click)="workspaceToggle($event)" id="doc">
-                        <td>
-                          Group Stock Position - Regional Offices<br />
-                          <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                          <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                        </td>
-                        <td class="text-hi-dark-grey">790 KB</td>
-                        <td>19 Aug 2020</td>
-                        <td class="text-hi-dark-grey">Andrea D'Souza</td>
-                      </tr>
-                      <tr (click)="workspaceToggle($event)" id="doc">
-                        <td>
-                          Group Stock Position - Regional Offices<br />
-                          <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                          <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                        </td>
-                        <td class="text-hi-dark-grey">790 KB</td>
-                        <td>19 Aug 2020</td>
-                        <td class="text-hi-dark-grey">Andrea D'Souza</td>
-                      </tr>
-                      <tr (click)="workspaceToggle($event)" id="doc">
-                        <td>
-                          Group Stock Position - Regional Offices<br />
-                          <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                          <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                        </td>
-                        <td class="text-hi-dark-grey">790 KB</td>
-                        <td>19 Aug 2020</td>
-                        <td class="text-hi-dark-grey">Andrea D'Souza</td>
-                      </tr>
-                      <tr (click)="workspaceToggle($event)" id="doc">
-                        <td>
-                          Group Stock Position - Regional Offices<br />
-                          <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                          <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                        </td>
-                        <td class="text-hi-dark-grey">790 KB</td>
-                        <td>19 Aug 2020</td>
-                        <td class="text-hi-dark-grey">Andrea D'Souza</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="card-footer bg-white row justify-content-between">
-                  <div class="pages">
-                    <div class="input-group mb-3">
-                      <select class="custom-select rounded" id="inputGroupSelect02">
-                        <option selected>10</option>
-                        <option>20</option>
-                      </select>
-                      <div class="input-group-append">
-                        <label class="input-group-text bg-white border-0 text-hi-dark-grey"
-                          for="inputGroupSelect02">Showing 1-10 of
-                          100</label>
-                      </div>
-                    </div>
-                  </div>
-                  <ul class="pagination">
-                    <li class="page-item disabled">
-                      <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i
-                          class="fas fa-chevron-left"></i></a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                      <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="workspace w-100 col-md-6" [style.display]="workSecDisp">
-            <div class="document" [style.display]="docDisp">
-              <div class="card">
-                <div class="card-header row m-0">
-                  <h5 class="font-weight-bold mb-0 pt-1 col-10">Group Stock Position - Regional Offices.pdf</h5>
-                  <div class="mr-2 col-1 ml-auto">
-                    <div class="btn btn-light" (click)="closeWorkspace()">
-                      <i class="fas fa-times"></i>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <div class="discription row">
-                    <div class="col-6 text-center">
-                      <img src="assets/images/discription.png">
-                    </div>
-                    <div class="col-6 align-self-center text-hi-dark work-div primary-bg-hover rounded p-2">
-                      <h6 class="font-weight-bold">
-                        DESCRIPTION
-                        <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
-                          <i class=" fas fa-edit"></i>
-                        </a>
-                      </h6>
-                      <div class="view">
-                        <P class="disc-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto cupiditate
-                          sequi
-                          accusantium
-                          temporibus necessitatibus, deserunt provid</P>
-                      </div>
-                      <div class="edit" style="display: none;">
-                        <form>
-                          <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Description">
-                          </div>
-                          <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm"
-                              (click)="closeEdit($event)">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="workspace-nav mt-5">
-                    <ul class="nav nav-tabs">
-                      <li class="nav-item">
-                        <a class="nav-link active text-hi-dark-grey" href="javascript:void(0);"
-                          onclick="togglePages(this)" id="props">PROPERTIES</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link text-hi-dark-grey" href="javascript:void(0);" onclick="togglePages(this)"
-                          id="info">INFO</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link text-hi-dark-grey" href="javascript:void(0);" onclick="togglePages(this)"
-                          id="comments">COMMENTS</a>
-                      </li>
-                      <div class="dropdown ml-auto align-self-center dropleft">
-                        <a class="text-hi-dark-grey" type="button" id="optionsDD" data-toggle="dropdown"
-                          aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-ellipsis-h"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="optionsDD">
-                          <a class="dropdown-item" href="#"><i class="fas fa-upload mr-1"></i>Upload New Version</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-download mr-1"></i>Download</a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item text-danger" href="#"><i class="fas fa-trash-alt mr-1"></i>Move to
-                            Trash</a>
-                        </div>
-                      </div>
-                    </ul>
-                  </div>
-                  <div class="properties">
-                    <div class="tags mt-3 work-div primary-bg-hover rounded p-2">
-                      <div class="font-weight-bold mb-1">
-                        Tags
-                        <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
-                          <i class=" fas fa-edit"></i>
-                        </a>
-                      </div>
-                      <div class="view">
-                        <span class="badge badge-light text-success">Stock</span>
-                      </div>
-                      <div class="edit" style="display: none;">
-                        <form>
-                          <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Tags">
-                          </div>
-                          <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm"
-                              (click)="closeEdit($event)">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <div class="row mt-3 px-3">
-                      <div class="author col-6 work-div primary-bg-hover rounded p-2">
-                        <div class="font-weight-bold mb-1">
-                          Author
-                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
-                            <i class="fas fa-edit"></i>
+
+              <div class="row mt-4">
+                <div class="sub-tab-nav col-md-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                          <a class="nav-link text-hi-dark-grey active" href="#">
+                            All
+                            <small>
+                              <span class="badge badge-secondary">253</span>
+                            </small>
                           </a>
-                        </div>
-                        <div class="view">
-                          <div class="text-hi-dark-grey">
-                            Andrea D'Souza
-                          </div>
-                        </div>
-                        <div class="edit" style="display: none;">
-                          <form>
-                            <div class="form-group">
-                              <input type="text" class="form-control" placeholder="Author">
-                            </div>
-                            <div class="form-group text-right">
-                              <button type="reset" class="btn btn-secondary btn-sm"
-                                (click)="closeEdit($event)">Cancel</button>
-                              <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                      <div class="availibility col-6 work-div primary-bg-hover rounded p-2">
-                        <div class="font-weight-bold mb-1">
-                          Availibility
-                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
-                            <i class="fas fa-edit"></i>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link text-hi-dark-grey" href="#">
+                            Processing
+                            <small>
+                              <span class="badge badge-secondary">253</span>
+                            </small>
                           </a>
-                        </div>
-                        <div class="view">
-                          <div class="text-hi-dark-grey">
-                            Released : Yes<br />
-                            Expired : Never
-                          </div>
-                        </div>
-                        <div class="edit" style="display: none;">
-                          <form>
-                            <div class="form-group">
-                              <input type="text" class="form-control" placeholder="Released">
-                            </div>
-                            <div class="form-group">
-                              <input type="text" class="form-control" placeholder="Expired">
-                            </div>
-                            <div class="form-group text-right">
-                              <button type="reset" class="btn btn-secondary btn-sm"
-                                (click)="closeEdit($event)">Cancel</button>
-                              <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link text-hi-dark-grey" href="#">
+                            Trash
+                            <small>
+                              <span class="badge badge-secondary">253</span>
+                            </small>
+                          </a>
+                        </li>
+                      </ul>
                     </div>
-                    <div class="language work-div primary-bg-hover rounded p-2">
-                      <div class="font-weight-bold mb-1">
-                        Language
-                        <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                      </div>
-                      <div class="view">
-                        <div class="text-hi-dark-grey">No Language</div>
-                      </div>
-                      <div class="edit" style="display: none;">
-                        <form>
-                          <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Language">
-                          </div>
-                          <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm"
-                              (click)="closeEdit($event)">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <div class="country work-div primary-bg-hover rounded p-2">
-                      <div class="font-weight-bold mb-1">
-                        Country
-                        <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                      </div>
-                      <div class="view">
-                        <div class="text-hi-dark-grey">No Country</div>
-                      </div>
-                      <div class="edit" style="display: none;">
-                        <form>
-                          <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Country">
-                          </div>
-                          <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm"
-                              (click)="closeEdit($event)">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="info" style="display: none;">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="history mt-3 work-div primary-bg-hover rounded p-2">
-                          <div class="font-weight-bold mb-1">
-                            History
-                          </div>
-                          <div class="view">
-                            <div class="text-hi-dark-grey">
-                              Added : 04-11-2018<br />
-                              Last Upload : 04-11-2020<br />
-                              Last Updated : 29-09-2020
-                            </div>
-                          </div>
-                        </div>
-                        <div class="crm mt-3 work-div primary-bg-hover rounded p-2">
-                          <div class="font-weight-bold mb-1">
-                            CRM Recommendations
-                          </div>
-                          <div class="view">
-                            <div class="text-hi-dark-grey">
-                              No CRM Recommendations
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="experiences mt-3 work-div primary-bg-hover rounded p-2">
-                          <div class="font-weight-bold mb-1">
-                            Used in Experiences
-                          </div>
-                          <div class="view">
-                            <div class="text-hi-dark-grey">
-                              Stock
-                            </div>
-                          </div>
-                        </div>
-                        <div class="extId mt-3 work-div primary-bg-hover rounded p-2">
-                          <div class="font-weight-bold mb-1">
-                            External ID
-                            <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
-                              <i class=" fas fa-edit"></i>
-                            </a>
-                          </div>
-                          <div class="view">
-                            <div class="text-hi-dark-grey">
-                              No external ID
-                            </div>
-                          </div>
-                          <div class="edit" style="display: none;">
-                            <form>
-                              <div class="form-group">
-                                <input type="text" class="form-control" placeholder="External ID">
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        <div class="row heading">
+                          <div class="search col-lg-8 col-sm-7">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text bg-transparent"><i class="fas fa-search"></i></span>
                               </div>
-                              <div class="form-group text-right">
-                                <button type="reset" class="btn btn-secondary btn-sm"
-                                  (click)="closeEdit($event)">Cancel</button>
-                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                              <input type="text" class="form-control border-left-0 border-right-0"
+                                placeholder="Search ...">
+                              <div class="input-group-append">
+                                <span class="input-group-text bg-transparent primary-bg-hover"><i
+                                    class="fas fa-sliders-h"></i></span>
                               </div>
-                            </form>
+                            </div>
                           </div>
-                        </div>
-                        <div class="appLink mt-3 work-div primary-bg-hover rounded p-2">
-                          <div class="font-weight-bold mb-1">
-                            App Link
-                          </div>
-                          <div class="view">
-                            <div class="text-hi-dark-grey">
-                              showpad://abc/sabcbibicbiecbei875
+                          <div class="add-content col-lg-4 col-sm-5 text-right">
+                            <div class="dropdown mt-3 mt-sm-0">
+                              <button class="btn btn-light border dropdown-toggle" type="button" id="actionsDD"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Add Content
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="actionsDD">
+                                <a class="dropdown-item" href="#">Upload Files</a>
+                                <a class="dropdown-item" href="#">Add a URL</a>
+                                <a class="dropdown-item" href="#">Import from</a>
+                              </div>
                             </div>
                           </div>
                         </div>
-
+                      </h5>
+                      <div class="card-text">
+                        <table class="table table-hover text-dark w-100">
+                          <thead>
+                            <tr>
+                              <th scope="col">NAME<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                              <th scope="col">SIZE<i class="fas fa-sort-down ml-1 align-top"></i>
+                              </th>
+                              <th scope="col">ADDED<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                              <th scope="col">AUTHORS<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr (click)="workspaceToggle($event)" id="doc">
+                              <td>
+                                Group Stock Position - Regional Offices<br />
+                                <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                                <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                              </td>
+                              <td class="text-hi-dark-grey">790 KB</td>
+                              <td>19 Aug 2020</td>
+                              <td class="text-hi-dark-grey">Andrea D'Souza</td>
+                            </tr>
+                            <tr (click)="workspaceToggle($event)" id="doc">
+                              <td>
+                                Group Stock Position - Regional Offices<br />
+                                <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                                <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                              </td>
+                              <td class="text-hi-dark-grey">790 KB</td>
+                              <td>19 Aug 2020</td>
+                              <td class="text-hi-dark-grey">Andrea D'Souza</td>
+                            </tr>
+                            <tr (click)="workspaceToggle($event)" id="doc">
+                              <td>
+                                Group Stock Position - Regional Offices<br />
+                                <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                                <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                              </td>
+                              <td class="text-hi-dark-grey">790 KB</td>
+                              <td>19 Aug 2020</td>
+                              <td class="text-hi-dark-grey">Andrea D'Souza</td>
+                            </tr>
+                            <tr (click)="workspaceToggle($event)" id="doc">
+                              <td>
+                                Group Stock Position - Regional Offices<br />
+                                <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                                <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                              </td>
+                              <td class="text-hi-dark-grey">790 KB</td>
+                              <td>19 Aug 2020</td>
+                              <td class="text-hi-dark-grey">Andrea D'Souza</td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                    </div>
-                  </div>
-                  <div class="comments" style="display: none;">
-                    <!-- comment -->
-                    <div class="file-comment row pl-3 mt-3">
-                      <div class="col-1 align-self-center p-0">
-                        <div class="dp"><i class="fa fa-user-circle"></i></div>
-                      </div>
-                      <div class="col-11 p-0">
-                        <div class="user-name">Mike Tilly <span class="date ml-3 text-hi-grey">Jan 17, 2020</span>
+                      <div class="card-footer bg-white row justify-content-between">
+                        <div class="pages">
+                          <div class="input-group mb-3">
+                            <select class="custom-select rounded" id="inputGroupSelect02">
+                              <option selected>10</option>
+                              <option>20</option>
+                            </select>
+                            <div class="input-group-append">
+                              <label class="input-group-text bg-white border-0 text-hi-dark-grey"
+                                for="inputGroupSelect02">Showing 1-10 of
+                                100</label>
+                            </div>
+                          </div>
                         </div>
-                        <div class="comment text-hi-dark-grey">Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit.
-                          Reprehenderit
-                          provident saepe amet ipsum</div>
+                        <ul class="pagination">
+                          <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i
+                                class="fas fa-chevron-left"></i></a>
+                          </li>
+                          <li class="page-item"><a class="page-link" href="#">1</a></li>
+                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                          <li class="page-item">
+                            <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                          </li>
+                        </ul>
                       </div>
-                    </div>
-                    <!-- add comment -->
-                    <div class="add-comment input-group mt-4">
-                      <input type="text" class="form-control border-right-0" placeholder="Write a comment..."
-                        aria-label="Write a comment..." aria-describedby="submit-comment">
-                      <div class="input-group-append">
-                        <span class="input-group-text bg-white border-left-0" id="submit-comment"><a href="#"
-                            class="text-hi-dark-grey">
-                            <i class="fa fa-angle-double-right"></i>
-                          </a></span>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-            <div class="worksp" [style.display]="workspDisp">
-              <div class="card">
-                <div class="card-header row m-0">
-                  <div class="form-group mb-0 exp">
-                    <select class="form-control bg-transparent border-0">
-                      <option selected hidden>Select an Experience</option>
-                      <option>English</option>
-                      <option>Stock</option>
-                    </select>
-                  </div>
-                  <div class="ml-auto mr-2">
-                    <div class="btn btn-light" (click)="closeWorkspace()">
-                      <i class="fas fa-times"></i>
                     </div>
                   </div>
                 </div>
-                <div class="card-header bg-hi-light-grey p-1 row m-0">
-                  <div class="dropdown dark-bg-hover rounded mr-2">
-                    <button class="btn btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown">
-                      Add
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnAddDD">
-                      <a class="dropdown-item" href="#">Add Folder</a>
-                      <a class="dropdown-item" href="#">Add Smart Folder</a>
-                    </div>
-                  </div>
-                  <div class="dropdown dark-bg-hover rounded">
-                    <button class="btn btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown">
-                      Users <span class="badge badge-light">11</span>
-                    </button>
-                    <div class="dropdown-menu large-dropdown-menu pt-0 overflow-hidden" aria-labelledby="btnUsersDD">
-                      <div class="bg-hi-dark-grey p-2">Assign Experience Users</div>
-                      <div class="p-3">
-                        <form>
-                          <div class="form-group mb-2">
-                            <input type="text" class="form-control form-control-sm" placeholder="Add User or Group">
+                <div class="workspace w-100 col-md-6" [style.display]="workSecDisp">
+                  <div class="document" [style.display]="docDisp">
+                    <div class="card">
+                      <div class="card-header row m-0">
+                        <h5 class="font-weight-bold mb-0 pt-1 col-10">Group Stock Position - Regional Offices.pdf</h5>
+                        <div class="mr-2 col-1 ml-auto">
+                          <div class="btn btn-light" (click)="closeWorkspace()">
+                            <i class="fas fa-times"></i>
                           </div>
-                          <div class="form-group text-right">
-                            <button type="submit" class="btn btn-success text-white btn-sm">Submit</button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div class="discription row">
+                          <div class="col-6 text-center">
+                            <img src="assets/images/discription.png">
                           </div>
-                        </form>
-                        <div class="border">
-                          <div class="bg-hi-light-grey row m-0 py-1">
-                            <div class="col-5 align-self-center">Name</div>
-                            <div class="col-7">
-                              <div class="input-group">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                          <div class="col-6 align-self-center text-hi-dark work-div primary-bg-hover rounded p-2">
+                            <h6 class="font-weight-bold">
+                              DESCRIPTION
+                              <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                                <i class=" fas fa-edit"></i>
+                              </a>
+                            </h6>
+                            <div class="view">
+                              <P class="disc-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto
+                                cupiditate
+                                sequi
+                                accusantium
+                                temporibus necessitatibus, deserunt provid</P>
+                            </div>
+                            <div class="edit" style="display: none;">
+                              <form>
+                                <div class="form-group">
+                                  <input type="text" class="form-control" placeholder="Description">
                                 </div>
-                                <input type="text" class="border-left-0 form-control form-control-sm"
-                                  placeholder="Search">
-                              </div>
+                                <div class="form-group text-right">
+                                  <button type="reset" class="btn btn-secondary btn-sm"
+                                    (click)="closeEdit($event)">Cancel</button>
+                                  <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                </div>
+                              </form>
                             </div>
                           </div>
-                          <ul class="list-unstyled p-2">
-                            <li><i class="fas fa-user-friends mr-1"></i>HES & Hi-Force
-                              <a href="#" class="text-hi-dark float-right"><i class="fas fa-times"></i></a>
+                        </div>
+                        <div class="workspace-nav mt-5">
+                          <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                              <a class="nav-link active text-hi-dark-grey" href="javascript:void(0);"
+                                onclick="togglePages(this)" id="props">PROPERTIES</a>
                             </li>
+                            <li class="nav-item">
+                              <a class="nav-link text-hi-dark-grey" href="javascript:void(0);"
+                                onclick="togglePages(this)" id="info">INFO</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link text-hi-dark-grey" href="javascript:void(0);"
+                                onclick="togglePages(this)" id="comments">COMMENTS</a>
+                            </li>
+                            <div class="dropdown ml-auto align-self-center dropleft">
+                              <a class="text-hi-dark-grey" type="button" id="optionsDD" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-ellipsis-h"></i>
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="optionsDD">
+                                <a class="dropdown-item" href="#"><i class="fas fa-upload mr-1"></i>Upload New
+                                  Version</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-download mr-1"></i>Download</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="#"><i class="fas fa-trash-alt mr-1"></i>Move
+                                  to
+                                  Trash</a>
+                              </div>
+                            </div>
                           </ul>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="dropdown dark-bg-hover rounded ml-auto">
-                    <button class="btn btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown">
-                      <i class="fas fa-cog"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDD">
-                      <a class="dropdown-item" href="#">Edit</a>
-                      <a class="dropdown-item" href="#">Duplicate</a>
-                      <a class="dropdown-item" href="#">Lock</a>
-                      <a class="dropdown-item" href="#">Hide from Experience App Link</a>
-                      <a class="dropdown-item" href="#">Tag Categories</a>
-                      <a class="dropdown-item text-danger" href="#">Delete Experience</a>
-                    </div>
-                  </div>
+                        <div class="properties">
+                          <div class="tags mt-3 work-div primary-bg-hover rounded p-2">
+                            <div class="font-weight-bold mb-1">
+                              Tags
+                              <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                                <i class=" fas fa-edit"></i>
+                              </a>
+                            </div>
+                            <div class="view">
+                              <span class="badge badge-light text-success">Stock</span>
+                            </div>
+                            <div class="edit" style="display: none;">
+                              <form>
+                                <div class="form-group">
+                                  <input type="text" class="form-control" placeholder="Tags">
+                                </div>
+                                <div class="form-group text-right">
+                                  <button type="reset" class="btn btn-secondary btn-sm"
+                                    (click)="closeEdit($event)">Cancel</button>
+                                  <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                          <div class="row mt-3 px-3">
+                            <div class="author col-6 work-div primary-bg-hover rounded p-2">
+                              <div class="font-weight-bold mb-1">
+                                Author
+                                <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                                  <i class="fas fa-edit"></i>
+                                </a>
+                              </div>
+                              <div class="view">
+                                <div class="text-hi-dark-grey">
+                                  Andrea D'Souza
+                                </div>
+                              </div>
+                              <div class="edit" style="display: none;">
+                                <form>
+                                  <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Author">
+                                  </div>
+                                  <div class="form-group text-right">
+                                    <button type="reset" class="btn btn-secondary btn-sm"
+                                      (click)="closeEdit($event)">Cancel</button>
+                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                            <div class="availibility col-6 work-div primary-bg-hover rounded p-2">
+                              <div class="font-weight-bold mb-1">
+                                Availibility
+                                <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                                  <i class="fas fa-edit"></i>
+                                </a>
+                              </div>
+                              <div class="view">
+                                <div class="text-hi-dark-grey">
+                                  Released : Yes<br />
+                                  Expired : Never
+                                </div>
+                              </div>
+                              <div class="edit" style="display: none;">
+                                <form>
+                                  <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Released">
+                                  </div>
+                                  <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Expired">
+                                  </div>
+                                  <div class="form-group text-right">
+                                    <button type="reset" class="btn btn-secondary btn-sm"
+                                      (click)="closeEdit($event)">Cancel</button>
+                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="language work-div primary-bg-hover rounded p-2">
+                            <div class="font-weight-bold mb-1">
+                              Language
+                              <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                                <i class="fas fa-edit"></i>
+                              </a>
+                            </div>
+                            <div class="view">
+                              <div class="text-hi-dark-grey">No Language</div>
+                            </div>
+                            <div class="edit" style="display: none;">
+                              <form>
+                                <div class="form-group">
+                                  <input type="text" class="form-control" placeholder="Language">
+                                </div>
+                                <div class="form-group text-right">
+                                  <button type="reset" class="btn btn-secondary btn-sm"
+                                    (click)="closeEdit($event)">Cancel</button>
+                                  <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                          <div class="country work-div primary-bg-hover rounded p-2">
+                            <div class="font-weight-bold mb-1">
+                              Country
+                              <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                                <i class="fas fa-edit"></i>
+                              </a>
+                            </div>
+                            <div class="view">
+                              <div class="text-hi-dark-grey">No Country</div>
+                            </div>
+                            <div class="edit" style="display: none;">
+                              <form>
+                                <div class="form-group">
+                                  <input type="text" class="form-control" placeholder="Country">
+                                </div>
+                                <div class="form-group text-right">
+                                  <button type="reset" class="btn btn-secondary btn-sm"
+                                    (click)="closeEdit($event)">Cancel</button>
+                                  <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="info" style="display: none;">
+                          <div class="row">
+                            <div class="col-6">
+                              <div class="history mt-3 work-div primary-bg-hover rounded p-2">
+                                <div class="font-weight-bold mb-1">
+                                  History
+                                </div>
+                                <div class="view">
+                                  <div class="text-hi-dark-grey">
+                                    Added : 04-11-2018<br />
+                                    Last Upload : 04-11-2020<br />
+                                    Last Updated : 29-09-2020
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="crm mt-3 work-div primary-bg-hover rounded p-2">
+                                <div class="font-weight-bold mb-1">
+                                  CRM Recommendations
+                                </div>
+                                <div class="view">
+                                  <div class="text-hi-dark-grey">
+                                    No CRM Recommendations
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div class="experiences mt-3 work-div primary-bg-hover rounded p-2">
+                                <div class="font-weight-bold mb-1">
+                                  Used in Experiences
+                                </div>
+                                <div class="view">
+                                  <div class="text-hi-dark-grey">
+                                    Stock
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="extId mt-3 work-div primary-bg-hover rounded p-2">
+                                <div class="font-weight-bold mb-1">
+                                  External ID
+                                  <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                                    <i class=" fas fa-edit"></i>
+                                  </a>
+                                </div>
+                                <div class="view">
+                                  <div class="text-hi-dark-grey">
+                                    No external ID
+                                  </div>
+                                </div>
+                                <div class="edit" style="display: none;">
+                                  <form>
+                                    <div class="form-group">
+                                      <input type="text" class="form-control" placeholder="External ID">
+                                    </div>
+                                    <div class="form-group text-right">
+                                      <button type="reset" class="btn btn-secondary btn-sm"
+                                        (click)="closeEdit($event)">Cancel</button>
+                                      <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              <div class="appLink mt-3 work-div primary-bg-hover rounded p-2">
+                                <div class="font-weight-bold mb-1">
+                                  App Link
+                                </div>
+                                <div class="view">
+                                  <div class="text-hi-dark-grey">
+                                    showpad://abc/sabcbibicbiecbei875
+                                  </div>
+                                </div>
+                              </div>
 
-                </div>
-                <div class="card-body">
-                  <h5>English</h5>
-                  <div class="main row py-4">
-                    <div class="col-3">
-                      <img src="assets/images/companyInfo.png" class="w-100">
-                      <div class="dropdown">
-                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                          data-toggle="dropdown">
-                          <i class="fas fa-cog"></i>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                          <a class="dropdown-item" href="#"><i class="fas fa-edit mr-1"></i>Edit Item</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-clone mr-1"></i>Duplicate Item</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-link mr-1"></i>App Link</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-trash-alt mr-1"></i>Delete Item</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-folder-plus mr-1"></i>Create New Channel
-                            from
-                            Folder</a>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-3">
-                      <img src="assets/images/brands.png" class="w-100">
-                      <div class="dropdown">
-                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                          data-toggle="dropdown">
-                          <i class="fas fa-cog"></i>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                          <a class="dropdown-item" href="#"><i class="fas fa-edit mr-1"></i>Edit Item</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-clone mr-1"></i>Duplicate Item</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-link mr-1"></i>App Link</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-trash-alt mr-1"></i>Delete Item</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-folder-plus mr-1"></i>Create New Channel
-                            from
-                            Folder</a>
+                        <div class="comments" style="display: none;">
+                          <!-- comment -->
+                          <div class="file-comment row pl-3 mt-3">
+                            <div class="col-1 align-self-center p-0">
+                              <div class="dp"><i class="fa fa-user-circle"></i></div>
+                            </div>
+                            <div class="col-11 p-0">
+                              <div class="user-name">Mike Tilly <span class="date ml-3 text-hi-grey">Jan 17, 2020</span>
+                              </div>
+                              <div class="comment text-hi-dark-grey">Lorem ipsum dolor sit amet consectetur adipisicing
+                                elit.
+                                Reprehenderit
+                                provident saepe amet ipsum</div>
+                            </div>
+                          </div>
+                          <!-- add comment -->
+                          <div class="add-comment input-group mt-4">
+                            <input type="text" class="form-control border-right-0" placeholder="Write a comment..."
+                              aria-label="Write a comment..." aria-describedby="submit-comment">
+                            <div class="input-group-append">
+                              <span class="input-group-text bg-white border-left-0" id="submit-comment"><a href="#"
+                                  class="text-hi-dark-grey">
+                                  <i class="fa fa-angle-double-right"></i>
+                                </a></span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-3">
-                      <img src="assets/images/services.png" class="w-100">
-                      <div class="dropdown">
-                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                          data-toggle="dropdown">
-                          <i class="fas fa-cog"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comInfoDD">
-                          <a class="dropdown-item" href="#"><i class="fas fa-edit mr-1"></i>Edit Item</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-clone mr-1"></i>Duplicate Item</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-link mr-1"></i>App Link</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-trash-alt mr-1"></i>Delete Item</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-folder-plus mr-1"></i>Create New Channel
-                            from
-                            Folder</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-3">
-                      <img src="assets/images/showpad.jpg" class="w-100">
-                      <div class="dropdown">
-                        <button class="btn btn-light btn-sm">
-                          <i class="fas fa-trash-alt"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- tags page -->
-      <div class="tags-page" style="display: none;">
-        <div class="sub-tab-nav">
-          <div class="card mt-4">
-            <div class="card-header">
-              <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                  <a class="nav-link text-hi-dark-grey active" href="#">
-                    All Tags
-                    <small>
-                      <span class="badge badge-secondary">253</span>
-                    </small>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link text-hi-dark-grey" href="#">
-                    Uncategorized Tags
-                    <small>
-                      <span class="badge badge-secondary">253</span>
-                    </small>
-                  </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="top" title="Add Category">
-                  <a class="nav-link text-hi-dark-grey" href="#">
-                    <i class="fas fa-plus-circle"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">
-                <div class="heading">
-                  <div class="search">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text bg-transparent"><i class="fas fa-search"></i></span>
                       </div>
-                      <input type="text" class="form-control border-left-0 border-right-0" placeholder="Search ...">
-                      <div class="input-group-append">
-                        <span class="input-group-text bg-transparent primary-bg-hover"><i
-                            class="fas fa-sliders-h"></i></span>
+                    </div>
+                  </div>
+                  <div class="worksp" [style.display]="workspDisp">
+                    <div class="card">
+                      <div class="card-header row m-0">
+                        <div class="form-group mb-0 exp">
+                          <select class="form-control bg-transparent border-0">
+                            <option selected hidden>Select an Experience</option>
+                            <option>English</option>
+                            <option>Stock</option>
+                          </select>
+                        </div>
+                        <div class="ml-auto mr-2">
+                          <div class="btn btn-light" (click)="closeWorkspace()">
+                            <i class="fas fa-times"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-header bg-hi-light-grey p-1 row m-0">
+                        <div class="dropdown dark-bg-hover rounded mr-2">
+                          <button class="btn btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown">
+                            Add
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="btnAddDD">
+                            <a class="dropdown-item" href="#">Add Folder</a>
+                            <a class="dropdown-item" href="#">Add Smart Folder</a>
+                          </div>
+                        </div>
+                        <div class="dropdown dark-bg-hover rounded">
+                          <button class="btn btn-sm dropdown-toggle" type="button" id="btnUsersDD"
+                            data-toggle="dropdown">
+                            Users <span class="badge badge-light">11</span>
+                          </button>
+                          <div class="dropdown-menu large-dropdown-menu pt-0 overflow-hidden"
+                            aria-labelledby="btnUsersDD">
+                            <div class="bg-hi-dark-grey p-2">Assign Experience Users</div>
+                            <div class="p-3">
+                              <form>
+                                <div class="form-group mb-2">
+                                  <input type="text" class="form-control form-control-sm"
+                                    placeholder="Add User or Group">
+                                </div>
+                                <div class="form-group text-right">
+                                  <button type="submit" class="btn btn-success text-white btn-sm">Submit</button>
+                                </div>
+                              </form>
+                              <div class="border">
+                                <div class="bg-hi-light-grey row m-0 py-1">
+                                  <div class="col-5 align-self-center">Name</div>
+                                  <div class="col-7">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                                      </div>
+                                      <input type="text" class="border-left-0 form-control form-control-sm"
+                                        placeholder="Search">
+                                    </div>
+                                  </div>
+                                </div>
+                                <ul class="list-unstyled p-2">
+                                  <li><i class="fas fa-user-friends mr-1"></i>HES & Hi-Force
+                                    <a href="#" class="text-hi-dark float-right"><i class="fas fa-times"></i></a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="dropdown dark-bg-hover rounded ml-auto">
+                          <button class="btn btn-sm dropdown-toggle" type="button" id="settingsDD"
+                            data-toggle="dropdown">
+                            <i class="fas fa-cog"></i>
+                          </button>
+                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDD">
+                            <a class="dropdown-item" href="#">Edit</a>
+                            <a class="dropdown-item" href="#">Duplicate</a>
+                            <a class="dropdown-item" href="#">Lock</a>
+                            <a class="dropdown-item" href="#">Hide from Experience App Link</a>
+                            <a class="dropdown-item" href="#">Tag Categories</a>
+                            <a class="dropdown-item text-danger" href="#">Delete Experience</a>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="card-body">
+                        <h5>English</h5>
+                        <div class="main row py-4">
+                          <div class="col-3">
+                            <img src="assets/images/companyInfo.png" class="w-100">
+                            <div class="dropdown">
+                              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                                data-toggle="dropdown">
+                                <i class="fas fa-cog"></i>
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="comInfoDD">
+                                <a class="dropdown-item" href="#"><i class="fas fa-edit mr-1"></i>Edit Item</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-clone mr-1"></i>Duplicate Item</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-link mr-1"></i>App Link</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-trash-alt mr-1"></i>Delete Item</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-folder-plus mr-1"></i>Create New
+                                  Channel
+                                  from
+                                  Folder</a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-3">
+                            <img src="assets/images/brands.png" class="w-100">
+                            <div class="dropdown">
+                              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                                data-toggle="dropdown">
+                                <i class="fas fa-cog"></i>
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="comInfoDD">
+                                <a class="dropdown-item" href="#"><i class="fas fa-edit mr-1"></i>Edit Item</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-clone mr-1"></i>Duplicate Item</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-link mr-1"></i>App Link</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-trash-alt mr-1"></i>Delete Item</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-folder-plus mr-1"></i>Create New
+                                  Channel
+                                  from
+                                  Folder</a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-3">
+                            <img src="assets/images/services.png" class="w-100">
+                            <div class="dropdown">
+                              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                                data-toggle="dropdown">
+                                <i class="fas fa-cog"></i>
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comInfoDD">
+                                <a class="dropdown-item" href="#"><i class="fas fa-edit mr-1"></i>Edit Item</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-clone mr-1"></i>Duplicate Item</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-link mr-1"></i>App Link</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-trash-alt mr-1"></i>Delete Item</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-folder-plus mr-1"></i>Create New
+                                  Channel
+                                  from
+                                  Folder</a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-3">
+                            <img src="assets/images/showpad.jpg" class="w-100">
+                            <div class="dropdown">
+                              <button class="btn btn-light btn-sm">
+                                <i class="fas fa-trash-alt"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </h5>
-              <div class="card-text">
-                <table class="table table-hover text-dark w-100">
-                  <thead>
-                    <tr>
-                      <th scope="col">NAME<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                      <th scope="col">STATUS<i class="fas fa-sort-down ml-1 align-top"></i>
-                      </th>
-                      <th scope="col">DATE MODIFIED<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        Group Stock Position - Regional Offices<br />
-                        <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                        <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                      </td>
-                      <td class="text-hi-dark-grey">Used in Filter</td>
-                      <td>19 Aug 2020</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Group Stock Position - Regional Offices<br />
-                        <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                        <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                      </td>
-                      <td class="text-hi-dark-grey">Used in Filter</td>
-                      <td>19 Aug 2020</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Group Stock Position - Regional Offices<br />
-                        <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                        <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                      </td>
-                      <td class="text-hi-dark-grey">Used in Filter</td>
-                      <td>19 Aug 2020</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Group Stock Position - Regional Offices<br />
-                        <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                        <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                      </td>
-                      <td class="text-hi-dark-grey">Used in Filter</td>
-                      <td>19 Aug 2020</td>
-                    </tr>
-                  </tbody>
-                </table>
               </div>
-              <div class="card-footer bg-white row justify-content-between">
-                <div class="pages">
-                  <div class="input-group mb-3">
-                    <select class="custom-select rounded" id="inputGroupSelect02">
-                      <option selected>10</option>
-                      <option>20</option>
-                    </select>
-                    <div class="input-group-append">
-                      <label class="input-group-text bg-white border-0 text-hi-dark-grey"
-                        for="inputGroupSelect02">Showing 1-10 of
-                        100</label>
+            </div>
+          </mat-tab>
+          <mat-tab label="Tags">
+            <!-- tags page -->
+            <div class="tags-page">
+              <div class="sub-tab-nav">
+                <div class="card mt-4">
+                  <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                      <li class="nav-item">
+                        <a class="nav-link text-hi-dark-grey active" href="#">
+                          All Tags
+                          <small>
+                            <span class="badge badge-secondary">253</span>
+                          </small>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link text-hi-dark-grey" href="#">
+                          Uncategorized Tags
+                          <small>
+                            <span class="badge badge-secondary">253</span>
+                          </small>
+                        </a>
+                      </li>
+                      <li class="nav-item" data-toggle="tooltip" data-placement="top" title="Add Category">
+                        <a class="nav-link text-hi-dark-grey" href="#">
+                          <i class="fas fa-plus-circle"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <div class="heading">
+                        <div class="search">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text bg-transparent"><i class="fas fa-search"></i></span>
+                            </div>
+                            <input type="text" class="form-control border-left-0 border-right-0"
+                              placeholder="Search ...">
+                            <div class="input-group-append">
+                              <span class="input-group-text bg-transparent primary-bg-hover"><i
+                                  class="fas fa-sliders-h"></i></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </h5>
+                    <div class="card-text">
+                      <table class="table table-hover text-dark w-100">
+                        <thead>
+                          <tr>
+                            <th scope="col">NAME<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                            <th scope="col">STATUS<i class="fas fa-sort-down ml-1 align-top"></i>
+                            </th>
+                            <th scope="col">DATE MODIFIED<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              Group Stock Position - Regional Offices<br />
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                            </td>
+                            <td class="text-hi-dark-grey">Used in Filter</td>
+                            <td>19 Aug 2020</td>
+                          </tr>
+                          <tr>
+                            <td>
+                              Group Stock Position - Regional Offices<br />
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                            </td>
+                            <td class="text-hi-dark-grey">Used in Filter</td>
+                            <td>19 Aug 2020</td>
+                          </tr>
+                          <tr>
+                            <td>
+                              Group Stock Position - Regional Offices<br />
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                            </td>
+                            <td class="text-hi-dark-grey">Used in Filter</td>
+                            <td>19 Aug 2020</td>
+                          </tr>
+                          <tr>
+                            <td>
+                              Group Stock Position - Regional Offices<br />
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                            </td>
+                            <td class="text-hi-dark-grey">Used in Filter</td>
+                            <td>19 Aug 2020</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="card-footer bg-white row justify-content-between">
+                      <div class="pages">
+                        <div class="input-group mb-3">
+                          <select class="custom-select rounded" id="inputGroupSelect02">
+                            <option selected>10</option>
+                            <option>20</option>
+                          </select>
+                          <div class="input-group-append">
+                            <label class="input-group-text bg-white border-0 text-hi-dark-grey"
+                              for="inputGroupSelect02">Showing 1-10 of
+                              100</label>
+                          </div>
+                        </div>
+                      </div>
+                      <ul class="pagination">
+                        <li class="page-item disabled">
+                          <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i
+                              class="fas fa-chevron-left"></i></a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                          <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
-                <ul class="pagination">
-                  <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i
-                        class="fas fa-chevron-left"></i></a>
-                  </li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item">
-                    <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                  </li>
-                </ul>
               </div>
             </div>
-          </div>
-        </div>
+          </mat-tab>
+        </mat-tab-group>
       </div>
     </div>
-
-
   </div>
 </div>
