@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { UserComponent } from './user.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
+import { UserComponent } from './user.component';
 const routes: Routes = [
   { path: '', component: UserComponent }
 ];
@@ -11,7 +14,10 @@ const routes: Routes = [
   declarations: [UserComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    MatTabsModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class UserModule { }

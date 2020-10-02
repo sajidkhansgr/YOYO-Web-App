@@ -1,1 +1,835 @@
-<p>user works!</p>
+<!-- header -->
+<header>
+  <nav class="navbar navbar-expand navbar-light bg-white">
+    <a class="navbar-brand ml-3 pr-5 border-right py-2" href="#"><img src="assets/images/logo.png" alt="Hi Force"></a>
+
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="javascript:void(0);" onclick="toggleSidebar()"><i
+              class="fas fa-bars align-middle"></i></a>
+        </li>
+      </ul>
+      <ul class="navbar-nav toggle-navbar">
+        <li class="nav-item align-self-center">
+          <a class="nav-link" href="#"><i class="fas fa-search align-bottom icon-size"></i></a>
+        </li>
+        <li class="nav-item align-self-center ml-2 dropdown notification">
+          <a class="nav-link" href="#" id="notificatioDD" data-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-bell align-bottom icon-size"></i>
+          </a>
+          <div class="dropdown-menu large-dropdown dropdown-menu-right" aria-labelledby="notificatioDD">
+            <h5 class="dropdown-item text-dark font-weight-bold no-bg-hover">Notifications<small
+                class="badge badge-danger float-right">8</small></h5>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item row m-0 mt-2" href="#">
+              <div class="col-3 align-self-center"><img src="assets/images/avatar.png" class="w-100"></div>
+              <div class="col-9 align-self-center row">
+                <div>
+                  <div class="name">Regina Cooper</div>
+                  <div class="time-active text-hi-dark-grey"><small>1 min ago</small></div>
+                </div>
+                <div class="ml-auto align-self-center">
+                  <i class="fas fa-times p-1"></i>
+                </div>
+              </div>
+            </a>
+            <a class="dropdown-item row m-0 mt-2" href="#">
+              <div class="col-3 align-self-center"><img src="assets/images/avatar.png" class="w-100"></div>
+              <div class="col-9 align-self-center row">
+                <div>
+                  <div class="name">Regina Cooper</div>
+                  <div class="time-active text-hi-dark-grey"><small>1 min ago</small></div>
+                </div>
+                <div class="ml-auto align-self-center">
+                  <i class="fas fa-times p-1"></i>
+                </div>
+              </div>
+            </a>
+          </div>
+        </li>
+        <li class="nav-item align-self-center dropdown ml-4 user">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+            aria-expanded="false">
+            <img src="assets/images/avatar.png"><span class="align-middle"> Art
+              Template</span>
+          </a>
+          <div class="dropdown-menu large-dropdown dropdown-menu-right" aria-labelledby="userDropdown">
+            <h6 class="dropdown-item row m-0 p-2 mt-2 no-bg-hover text-dark">
+              <div class="col-3"><img src="assets/images/avatar.png" class="w-100"></div>
+              <div class="col-9 align-self-center row">
+                <div>
+                  <div class="username">ArtTemplate</div>
+                  <div class="position text-hi-grey"><small>Manager</small></div>
+                </div>
+                <div class="ml-auto align-self-center">
+                  <span class="badge badge-danger">8</span>
+                </div>
+              </div>
+            </h6>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>My Profile</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-envelope mr-2"></i>My Messages</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-clipboard mr-2"></i>My Tasks</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Settings</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-lock mr-2"></i>Lock Screen</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="navbar-light toggle-navbar-bottom">
+    <ul class="navbar-nav toggle-navbar-bottom-nav list-unstyled justify-content-end mb-0 bg-white"></ul>
+  </div>
+</header>
+<div class="content">
+  <!-- sidebar -->
+  <div class="sidebar sticky-top border-right">
+    <div class="navbar-nav">
+      <a class="nav-item p-2 text-hi-dark pl-3" href="#">
+        <div class="link-icon pr-3 align-middle"><i class="fas fa-th-large"></i></div>
+        <div class="link-text align-middle">Dashboard</div>
+      </a>
+      <div class="dropright py-2">
+        <a class="nav-item text-hi-dark dropdown-toggle p-2 pl-3" href="#" id="navbarDropdown" role="button"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <div class="link-icon pr-3 align-middle w-100"><i class="fas fa-layer-group"></i></div>
+          <div class="link-text align-middle">Hub</div>
+        </a>
+        <div class="dropdown-menu ml-0" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item text-hi-dark" href="#">H.E.S. Sales Limited</a>
+          <a class="dropdown-item text-hi-dark" href="#">Hi-Force</a>
+          <a class="dropdown-item text-hi-dark" href="#">Protec SRL</a>
+        </div>
+      </div>
+      <a class="nav-item p-2 text-hi-dark pl-3 active" href="#">
+        <div class="link-icon pr-3 align-middle"><i class="fas fa-user"></i></div>
+        <div class="link-text align-middle">Users</div>
+      </a>
+      <a class="nav-item p-2 text-hi-dark pl-3" href="#">
+        <div class="link-icon pr-3 align-middle"><i class="far fa-envelope"></i></div>
+        <div class="link-text align-middle">Communication</div>
+      </a>
+      <a class="nav-item p-2 text-hi-dark pl-3" href="#">
+        <div class="link-icon pr-3 align-middle"><i class="fas fa-signal"></i></div>
+        <div class="link-text align-middle">Reports</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- main content -->
+  <div class="main main-hub p-3 w-100">
+    <h3 class="mb-4 clearfix heading">
+      Users
+    </h3>
+    <div class="mt-2">
+      <div class="main-tab-nav">
+        <mat-tab-group>
+          <mat-tab label="Users">
+            <!-- users page -->
+            <div class="users-section overflow-hidden">
+              <div class="buttons-row row mt-3 justify-content-between mx-2">
+                <div class="dropdown">
+                  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addCOntentDD"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="addCOntentDD">
+                    <a class="dropdown-item" href="#"><i class="fas fa-user-plus mr-1"></i>Create New User</a>
+                    <a class="dropdown-item" href="#"><i class="fas fa-file-import mr-1"></i>Import CSV File</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4">
+                <div [ngClass]="{'sub-tab-nav': true,'col-md-12' : !showDoc, 'col-md-8': showDoc}">
+                  <div class="card">
+                    <div class="card-header">
+                      <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                          <a class="nav-link text-hi-dark-grey active" href="#">
+                            All Users
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link text-hi-dark-grey" href="#">
+                            Active Users
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link text-hi-dark-grey" href="#">
+                            Deactive Users
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        <div class="row heading">
+                          <div class="search col-lg-8 col-sm-7">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text bg-transparent"><i class="fas fa-search"></i></span>
+                              </div>
+                              <input type="text" class="form-control border-left-0 border-right-0"
+                                placeholder="Search ...">
+                              <div class="input-group-append">
+                                <span class="input-group-text bg-transparent primary-bg-hover"><i
+                                    class="fas fa-sliders-h"></i></span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-5 align-self-center">
+                            <div class="float-left">
+                              <!-- Button trigger for send invitations modal -->
+                              <button type="button" class="btn btn-light" data-toggle="modal"
+                                data-target="#sendInvModal">
+                                Send Invitations
+                              </button>
+                            </div>
+                            <div class="float-right">
+                              <div class="dropdown">
+                                <button class="btn btn-light dropdown-toggle" type="button" id="settingsID"
+                                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-cog"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsID">
+                                  <button disabled class="dropdown-item">Visible Column</button>
+                                  <button class="dropdown-item">
+                                    <i class="fas fa-eye mr-2"></i>Role
+                                  </button>
+                                  <button disabled class="dropdown-item">Hidden Column</button>
+                                  <button class="dropdown-item">
+                                    <i class="fas fa-eye-slash mr-2"></i>Property
+                                  </button>
+                                  <button class="dropdown-item">
+                                    <i class="fas fa-eye-slash mr-2"></i>License Type
+                                  </button>
+                                  <button class="dropdown-item">
+                                    <i class="fas fa-eye-slash mr-2"></i>Groups
+                                  </button>
+                                  <button class="dropdown-item">
+                                    <i class="fas fa-eye-slash mr-2"></i>Division
+                                  </button>
+                                  <button class="dropdown-item">
+                                    <i class="fas fa-eye-slash mr-2"></i>Experience
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </h5>
+                      <div class="card-text">
+                        <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showDoc}">
+                          <thead>
+                            <tr>
+                              <th scope="col">NAME<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                              <th scope="col">Latest Activity<i class="fas fa-sort-down ml-1 align-top"></i>
+                              </th>
+                              <th scope="col">Content Updated<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                              <th scope="col">Role<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                              <th scope="col">Date Created<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr (click)="toggleDoc()">
+                              <td>
+                                User Full Name<br />
+                                <small>email@email.com</small>
+                              </td>
+                              <td class="text-hi-dark-grey">19 Aug 2020</td>
+                              <td>19 Aug 2020</td>
+                              <td class="text-hi-dark-grey">User</td>
+                              <td>19 Aug 2020</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="card-footer bg-white row justify-content-between">
+                        <div class="pages">
+                          <div class="input-group mb-3">
+                            <select class="custom-select rounded" id="inputGroupSelect02">
+                              <option selected>10</option>
+                              <option>20</option>
+                            </select>
+                            <div class="input-group-append">
+                              <label class="input-group-text bg-white border-0 text-hi-dark-grey"
+                                for="inputGroupSelect02">Showing 1-10 of
+                                100</label>
+                            </div>
+                          </div>
+                        </div>
+                        <ul class="pagination">
+                          <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i
+                                class="fas fa-chevron-left"></i></a>
+                          </li>
+                          <li class="page-item"><a class="page-link" href="#">1</a></li>
+                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                          <li class="page-item">
+                            <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div [ngClass]="{'workspace w-100 col-md-4': true,'hide' : !showDoc, 'show': showDoc}">
+                  <div class="doc">
+                    <div class="card">
+                      <div class="card-header row m-0">
+                        <h5 class="font-weight-bold mt-2">Laura Thompson</h5>
+                        <div class="ml-auto">
+                          <div class="btn btn-light" (click)="closeDoc()">
+                            <i class="fa fa-times"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-header bg-hi-light-grey p-1 row m-0">
+                        <button class="btn btn-light">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                        <button class="btn btn-light">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-light">
+                          <i class="fa fa-chart-line"></i>
+                        </button>
+                      </div>
+                      <div class="card-body">
+                        <div class="doc-details details border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Details</div>
+                          <div class="name">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Name</label>
+                            <div class="value">
+                              Laura Thompson
+                            </div>
+                          </div>
+                          <div class="email">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Email</label>
+                            <div class="value">
+                              laura.thomsp@email.co
+                            </div>
+                          </div>
+                          <div class="role">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Role</label>
+                            <div class="value">
+                              Owner
+                            </div>
+                          </div>
+                          <div class="password">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Password</label>
+                            <div class="value">
+                              *********
+                            </div>
+                          </div>
+                        </div>
+                        <div class="doc-details location border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Location</div>
+                          <div class="language">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Language</label>
+                            <div class="value">
+                              English
+                            </div>
+                          </div>
+                          <div class="time-zone">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Time Zone</label>
+                            <div class="value">
+                              Europe / London
+                            </div>
+                          </div>
+                        </div>
+                        <div class="doc-details status border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Status</div>
+                          <div class="activated">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Activated</label>
+                            <div class="value">
+                              Yes
+                            </div>
+                          </div>
+                        </div>
+                        <div class="doc-details prod-licenses border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Product Licenses</div>
+                          <div class="content_">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Content</label>
+                            <div class="value">
+                              Direct
+                            </div>
+                          </div>
+                        </div>
+                        <div class="doc-details in-groups border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">In Groups</div>
+                          <div class="value mt-2">
+                            <ul class="list-unstyled">
+                              <li>All Users</li>
+                              <li>HES & Hi-Force</li>
+                              <li>ABC</li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="doc-details assigned-experiences border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Assigned Experiences</div>
+                          <div class="individually">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Individually</label>
+                            <div class="value">
+                              <ul class="list-unstyled">
+                                <li>Charity</li>
+                                <li>Abc</li>
+                                <li>def</li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div class="via-group">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Via Group</label>
+                            <div class="value">
+                              <ul class="list-unstyled">
+                                <li>Charity</li>
+                                <li>Abc</li>
+                                <li>def</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="doc-details information border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Information</div>
+                          <div class="created">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Created</label>
+                            <div class="value">
+                              20 Jun 2016 2:03 PM
+                            </div>
+                          </div>
+                          <div class="last-login">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Last Login</label>
+                            <div class="value">
+                              20 Jun 2016 2:03 PM
+                            </div>
+                          </div>
+                        </div>
+                        <div class="doc-details device">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Device</div>
+                          <div class="receive-notifications">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Able to receive notifications</label>
+                            <div class="value">
+                              Yes
+                            </div>
+                          </div>
+                          <div class="device-model">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Device Model</label>
+                            <div class="value">
+                              Nokia the king
+                            </div>
+                          </div>
+                          <div class="os">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Operating System</label>
+                            <div class="value">
+                              Android 10
+                            </div>
+                          </div>
+                          <div class="app-ver">
+                            <label class="text-hi-dark-grey mb-0 mt-2">App Version</label>
+                            <div class="value">
+                              1.0.0
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Groups">
+            <!-- groups page -->
+            <div class="groups-section overflow-hidden">
+              <div class="buttons-row row mt-3 justify-content-between mx-2">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewGroupModal">
+                  Create New Group
+                </button>
+              </div>
+              <div class="row mt-4">
+                <div [ngClass]="{'sub-tab-nav': true,'col-md-12' : !showDoc, 'col-md-8': showDoc}">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        <div class="row heading">
+                          <div class="search col-lg-6">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text bg-transparent"><i class="fas fa-search"></i></span>
+                              </div>
+                              <input type="text" class="form-control border-left-0 border-right-0"
+                                placeholder="Search ...">
+                              <div class="input-group-append">
+                                <span class="input-group-text bg-transparent primary-bg-hover"><i
+                                    class="fas fa-sliders-h"></i></span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 align-self-center row justify-content-around">
+                            <div class="dropdown">
+                              <button class="btn btn-light dropdown-toggle" type="button" id="propTrigger"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Property
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="propTrigger">
+                                <button class="dropdown-item">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="propCheck1">
+                                    <label class="form-check-label" for="propCheck1">
+                                      Anonymized
+                                    </label>
+                                  </div>
+                                </button>
+                                <button class="dropdown-item">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="propCheck2">
+                                    <label class="form-check-label" for="propCheck2">
+                                      Not Assigned to an experience
+                                    </label>
+                                  </div>
+                                </button>
+                                <button class="dropdown-item">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="propCheck3">
+                                    <label class="form-check-label" for="propCheck3">
+                                      Not Assigned to a Division
+                                    </label>
+                                  </div>
+                                </button>
+                                <button class="dropdown-item">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="propCheck1">
+                                    <label class="form-check-label" for="propCheck1">
+                                      No Members
+                                    </label>
+                                  </div>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="dropdown">
+                              <button class="btn btn-light dropdown-toggle" type="button" id="divisionTrigger"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Division
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-right large-dropdown-menu"
+                                aria-labelledby="divisionTrigger">
+                                <div class="input-group mb-2 p-2">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white">
+                                      <i class="fa fa-search"></i>
+                                    </span>
+                                  </div>
+                                  <input type="text" class="form-control" placeholder="Search Division">
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="row justify-content-around m-0">
+                                  <button class="btn btn-light text-primary">Select all</button>
+                                  <button class="btn btn-light">Clear all</button>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <button class="dropdown-item">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="propCheck1">
+                                    <label class="form-check-label" for="propCheck1">
+                                      Anonymized
+                                    </label>
+                                  </div>
+                                </button>
+                                <button class="dropdown-item">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="propCheck1">
+                                    <label class="form-check-label" for="propCheck1">
+                                      Anonymized
+                                    </label>
+                                  </div>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="dropdown">
+                              <button class="btn btn-light dropdown-toggle" type="button" id="divisionTrigger"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Experience
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-right large-dropdown-menu"
+                                aria-labelledby="divisionTrigger">
+                                <div class="input-group mb-2 p-2">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white">
+                                      <i class="fa fa-search"></i>
+                                    </span>
+                                  </div>
+                                  <input type="text" class="form-control" placeholder="Search Experiences">
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="row justify-content-around m-0">
+                                  <button class="btn btn-light text-primary">Select all</button>
+                                  <button class="btn btn-light">Clear all</button>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <button class="dropdown-item">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="propCheck1">
+                                    <label class="form-check-label" for="propCheck1">
+                                      Anonymized
+                                    </label>
+                                  </div>
+                                </button>
+                                <button class="dropdown-item">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="propCheck1">
+                                    <label class="form-check-label" for="propCheck1">
+                                      Anonymized
+                                    </label>
+                                  </div>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </h5>
+                      <div class="card-text">
+                        <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showDoc}">
+                          <thead>
+                            <tr>
+                              <th scope="col">NAME<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                              <th scope="col">Latest Activity<i class="fas fa-sort-down ml-1 align-top"></i>
+                              </th>
+                              <th scope="col">Content Updated<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                              <th scope="col">Role<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                              <th scope="col">Date Created<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr (click)="toggleDoc()">
+                              <td>
+                                User Full Name<br />
+                                <small>email@email.com</small>
+                              </td>
+                              <td class="text-hi-dark-grey">19 Aug 2020</td>
+                              <td>19 Aug 2020</td>
+                              <td class="text-hi-dark-grey">User</td>
+                              <td>19 Aug 2020</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="card-footer bg-white row justify-content-between">
+                        <div class="pages">
+                          <div class="input-group mb-3">
+                            <select class="custom-select rounded" id="inputGroupSelect02">
+                              <option selected>10</option>
+                              <option>20</option>
+                            </select>
+                            <div class="input-group-append">
+                              <label class="input-group-text bg-white border-0 text-hi-dark-grey"
+                                for="inputGroupSelect02">Showing 1-10 of
+                                100</label>
+                            </div>
+                          </div>
+                        </div>
+                        <ul class="pagination">
+                          <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i
+                                class="fas fa-chevron-left"></i></a>
+                          </li>
+                          <li class="page-item"><a class="page-link" href="#">1</a></li>
+                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                          <li class="page-item">
+                            <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div [ngClass]="{'workspace w-100 col-md-4': true,'hide' : !showDoc, 'show': showDoc}">
+                  <div class="doc">
+                    <div class="card">
+                      <div class="card-header row m-0">
+                        <h5 class="font-weight-bold mt-2">All Users</h5>
+                        <div class="ml-auto">
+                          <div class="btn btn-light" (click)="closeDoc()">
+                            <i class="fa fa-times"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-header bg-hi-light-grey p-1 row m-0">
+                        <button class="btn btn-light">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+                      <div class="card-body">
+                        <div class="doc-details details border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Details</div>
+                          <div class="name">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Name</label>
+                            <div class="value">
+                              Laura Thompson
+                            </div>
+                          </div>
+                          <div class="description">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Description</label>
+                            <div class="value">
+                              d for description....
+                            </div>
+                          </div>
+                        </div>
+                        <div class="doc-details assigned-divisions border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Assigned Division(s)</div>
+                          <div class="value mt-2">
+                            <ul class="list-unstyled">
+                              <li>Hi-force</li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="doc-details information border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Information</div>
+                          <div class="creation-date">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Creation Date</label>
+                            <div class="value">
+                              20 Jun 2016
+                            </div>
+                          </div>
+                          <div class="deactivated-users">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Deactivated Users</label>
+                            <div class="value">
+                              0/364
+                            </div>
+                          </div>
+                          <div class="pending-invitations">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Pending Invitations</label>
+                            <div class="value">
+                              24/364
+                            </div>
+                          </div>
+                          <div class="not-logged-in">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Not Logged In</label>
+                            <div class="value">
+                              354/364
+                            </div>
+                          </div>
+                        </div>
+                        <div class="doc-details status border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Status</div>
+                          <div class="anonymized">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Anonymized</label>
+                            <div class="value">
+                              No
+                            </div>
+                          </div>
+                        </div>
+                        <div class="doc-details in-experiences border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">In Experiences</div>
+                          <div class="value mt-2">
+                            <ul class="list-unstyled">
+                              <li>All Users</li>
+                              <li>HES & Hi-Force</li>
+                              <li>ABC</li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="doc-details licenses border-bottom mb-3">
+                          <div class="heading text-hi-dark-grey font-weight-bold">Licenses</div>
+                          <div class="direct">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Direct</label>
+                            <div class="value">
+                              364
+                            </div>
+                          </div>
+                          <div class="partner">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Partner</label>
+                            <div class="value">
+                              01
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Send invitations Modal -->
+<div class="modal fade" id="sendInvModal" tabindex="-1" aria-labelledby="sendInvModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sendInvModalLabel">Send Invitations</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <small>Select from the oprions below to send invitations to corresponding
+          users:</small>
+        <ul class="list-unstyled mt-3">
+          <li class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="resendChk">
+            <label class="form-check-label" for="resendChk"><small>
+                Resend Pending Invitations
+              </small></label>
+          </li>
+          <li class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="sendChk">
+            <label class="form-check-label" for="sendChk"><small>
+                Send First Invitations
+              </small></label>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create New Group Modal -->
+<div class="modal fade" id="createNewGroupModal" tabindex="-1" aria-labelledby="createNewGroupModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createNewGroupModalLabel">Create New Group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Name Group">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Description</mat-label>
+          <textarea matInput placeholder="Type Description"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Assign to Divisions</mat-label>
+          <input matInput placeholder="Search Divisions">
+        </mat-form-field>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
