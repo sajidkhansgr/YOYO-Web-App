@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { UserComponent } from './user.component';
 const routes: Routes = [
@@ -17,7 +18,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MatTabsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatCheckboxModule
   ]
 })
 export class UserModule { }
