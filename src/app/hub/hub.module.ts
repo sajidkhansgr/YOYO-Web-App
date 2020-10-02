@@ -12,7 +12,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    MatTabsModule
+    MatTabsModule,
   ]
 })
 export class HubModule { }
