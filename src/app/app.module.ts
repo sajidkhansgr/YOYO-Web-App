@@ -19,6 +19,7 @@ import { DataService } from './shared/services/data.service';
 
 const appRoutes: Routes = [
     { path : 'hub', loadChildren: () => import('./hub/hub.module').then(m => m.HubModule) },
+    { path : 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
     { path : '**', loadChildren: () => import('./errors/404/error-404.module').then(m => m.Error404Module)}
 ];
 
