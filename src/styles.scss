@@ -207,9 +207,13 @@ header {
       }
     }
 
-    >.nav-item:hover,
     .active {
-      background-color: lighten($color: $primary, $amount: 10);
+      background-color: lighten($color: $primary, $amount: 8);
+      color: white !important;
+    }
+
+    >.nav-item:hover {
+      background-color: lighten($color: $primary, $amount: 14);
       color: white !important;
     }
 

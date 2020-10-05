@@ -5,7 +5,7 @@
   </div>
   <div class="card-body p-5">
     <div *ngIf="loginForm">
-      <form name="loginForm" (ngSubmit)="login()" [formGroup]="loginForm" novalidate>
+      <form class="w-75 mx-auto" name="loginForm" (ngSubmit)="login()" [formGroup]="loginForm" novalidate>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email">
@@ -33,6 +33,5 @@
         </div>
       </form>
     </div>
-
   </div>
 </div>
