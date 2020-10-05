@@ -16,10 +16,14 @@ import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
 import { AuthGuard } from './shared/guard/auth.guard';
 import { TokenDataService } from './shared/services/token-data.service';
 import { DataService } from './shared/services/data.service';
+import { HeaderModule } from './home-layout/header/header.module';
+import { SidebarModule } from './home-layout/sidebar/sidebar.module';
 
 const appRoutes: Routes = [
+
     { path : 'hub', loadChildren: () => import('./hub/hub.module').then(m => m.HubModule) },
     { path : 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
+    { path : 'communication', loadChildren: () => import('./commn/commn.module').then(m => m.CommnModule) },
     { path : '**', loadChildren: () => import('./errors/404/error-404.module').then(m => m.Error404Module)}
 ];
 
@@ -32,7 +36,8 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     HttpClientModule,
     ToastrModule.forRoot(), // ToastrModule added
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    HeaderModule, SidebarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
