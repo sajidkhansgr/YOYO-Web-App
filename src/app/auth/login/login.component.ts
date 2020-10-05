@@ -13,10 +13,13 @@ import { HttpHelper } from '../../shared/http-helper';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  host: {
+    class: 'w-100'
+  }
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup; disabled: boolean = false;
-  hide: boolean = true;redirectUrl!: string|null;
+  hide: boolean = true; redirectUrl!: string | null;
   constructor(
     private fb: FormBuilder,
     private authSer: AuthService,
@@ -48,7 +51,7 @@ export class LoginComponent implements OnInit {
             this.toastr.success('Login successfully', 'Success');
             this.router.navigate(['/hub']);
           } else {
-            this.toastr.error(HttpHelper.errMessage(data)|| 'Please check email or password!', 'Error!');
+            this.toastr.error(HttpHelper.errMessage(data) || 'Please check email or password!', 'Error!');
             this.disabled = false;
           }
         }, (err: any) => {

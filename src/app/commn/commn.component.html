@@ -6,7 +6,7 @@
     <div class="main-tab-nav">
       <mat-tab-group>
         <mat-tab label="Announcements">
-          <div class="content-workspace">
+          <div class="communication">
             <div class="buttons-row row mt-3 justify-content-between mx-2">
               <!-- new announcment trigger modal -->
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAnnouncements">
@@ -22,7 +22,7 @@
                       <mat-tab label="Sent">
                         <div class="card-body">
                           <div class="card-text">
-                            <table class="table table-hover text-dark w-100">
+                            <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showDoc}">
                               <thead>
                                 <tr>
                                   <th scope="col">SUBJECT<i class="fas fa-sort-down ml-1 align-top"></i></th>
@@ -44,7 +44,7 @@
                                   <td class="text-hi-dark-grey">01/01/2020</td>
                                   <td>10%</td>
                                   <td>
-                                    <button class="btn btn-primary btn-sm">Archived</button>
+                                    <button class="btn btn-primary btn-sm hover-btn">Archive</button>
                                   </td>
                                 </tr>
                                 <tr (click)="toggleDoc()">
@@ -56,7 +56,7 @@
                                   <td class="text-hi-dark-grey">01/01/2020</td>
                                   <td>10%</td>
                                   <td>
-                                    <button class="btn btn-primary btn-sm">Archived</button>
+                                    <button class="btn btn-primary btn-sm hover-btn">Archive</button>
                                   </td>
                                 </tr>
                               </tbody>

@@ -509,10 +509,11 @@ header {
 // users page
 // users section & groups section
 .users-section,
-.groups-section {
+.groups-section,
+.communication {
   .doc {
     .card-body {
-      height: 100vh;
+      height: 80vh;
       overflow-y: scroll;
 
       .doc-details {
