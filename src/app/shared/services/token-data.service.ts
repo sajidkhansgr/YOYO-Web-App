@@ -7,7 +7,8 @@ export class TokenDataService {
   constructor(private router: Router, private cookieServ: CookieService) { }
 
   getToken() {
-    return this.cookieServ.get('acsTkn');
+    // return this.cookieServ.get('acsTkn');
+    return true;
   }
 
   removeAll() {

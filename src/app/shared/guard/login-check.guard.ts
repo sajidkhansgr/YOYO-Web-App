@@ -10,7 +10,7 @@ export class LoginCheckGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       if (this.tokenDataServ.getToken()) {
-          this.router.navigate(['/categories']);
+          this.router.navigate(['/hub']);
         return false;
       } else
         return true;
