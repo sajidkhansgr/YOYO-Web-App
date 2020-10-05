@@ -227,10 +227,10 @@ header {
           border-left: 5px transparent solid;
         }
 
-        a:hover {
-          background-color: lighten($color: $primary, $amount: 10);
-          color: white !important;
-        }
+        // a:hover {
+        //   background-color: lighten($color: $primary, $amount: 10);
+        //   color: white !important;
+        // }
       }
 
       .nav-item {
@@ -248,8 +248,9 @@ header {
     }
 
     .dropright:hover {
+      background-color: lighten($color: $primary, $amount: 10);
+
       .nav-item {
-        background-color: lighten($color: $primary, $amount: 10);
         color: white !important;
       }
     }
