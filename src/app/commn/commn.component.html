@@ -260,16 +260,11 @@
         <br />
         <mat-form-field appearance="outline">
           <mat-label>Send To</mat-label>
-          <select matNativeControl>
-            <option>All Users</option>
-            <option>Selected Experiences</option>
-            <option>Selected User Groups</option>
-          </select>
-          <!-- <mat-select>
+          <mat-select>
             <mat-option>All Users</mat-option>
             <mat-option>Selected Experiences</mat-option>
             <mat-option>Selected User Groups</mat-option>
-          </mat-select> -->
+          </mat-select>
         </mat-form-field>
         <br />
         <mat-checkbox>Request user to update content</mat-checkbox><br />
@@ -279,21 +274,15 @@
           <mat-form-field appearance="outline">
             <mat-label>Choose a date</mat-label>
             <input matInput [matDatepicker]="picker">
-            <!-- <input type="date"> -->
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Time</mat-label>
-            <select matNativeControl>
-              <option value="volvo">00:00</option>
-              <option value="saab">01:00</option>
-            </select>
-            <!-- <mat-select>
-              <mat-option>All Users</mat-option>
-              <mat-option>Selected Experiences</mat-option>
-              <mat-option>Selected User Groups</mat-option>
-            </mat-select> -->
+            <mat-select>
+              <mat-option>00:00</mat-option>
+              <mat-option>01:00</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
       </div>

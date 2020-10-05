@@ -72,6 +72,10 @@ body {
   display: block !important;
 }
 
+.cdk-overlay-container {
+  z-index: 1051 !important;
+}
+
 
 // header/navbar
 header {
