@@ -1,0 +1,9 @@
+.hover-btn {
+  opacity: 0;
+}
+
+tr:hover {
+  .hover-btn {
+    opacity: 1;
+  }
+}

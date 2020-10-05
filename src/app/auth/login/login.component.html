@@ -1,30 +1,38 @@
-<div *ngIf="loginForm">
-  <div class="text-center"><img src="assets/images/logo.png" alt="Logo"></div>
-  <div>Login</div>
-  <form name="loginForm" (ngSubmit)="login()" [formGroup]="loginForm" novalidate>
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email">
-      <i matSuffix class="secondary-text fas fa-user"></i>
-      <mat-error *ngIf="loginForm.get('email')!.hasError('required')">
-        Email is required
-      </mat-error>
-      <mat-error *ngIf="!loginForm.get('email')!.hasError('required') && loginForm.get('email')!.hasError('invalidEmail')">
-        Please enter a valid email address
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Password</mat-label>
-      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
-      <i matSuffix (click)="hide = !hide" [ngClass]="{'fa-eye': hide, 'fa-eye-slash': !hide}" class="fas"></i>
-      <mat-error>
-        Password is required
-      </mat-error>
-    </mat-form-field>
-    <div class="text-center">
-      <button mat-raised-button color="primary" aria-label="LOG IN" [disabled]="loginForm!.invalid || disabled">
-        <img class="loader-gif" *ngIf="disabled" src="assets/images/loader.gif">LOGIN
-      </button>
+<div class="text-center mt-4"><img src="assets/images/logo.png" alt="Logo"></div>
+<div class="card w-50 mx-auto mt-4">
+  <div class="card-header text-center">
+    <h4 class="mb-0 font-weight-bold">Login</h4>
+  </div>
+  <div class="card-body p-5">
+    <div *ngIf="loginForm">
+      <form name="loginForm" (ngSubmit)="login()" [formGroup]="loginForm" novalidate>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email">
+          <i matSuffix class="secondary-text fas fa-user"></i>
+          <mat-error *ngIf="loginForm.get('email')!.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error
+            *ngIf="!loginForm.get('email')!.hasError('required') && loginForm.get('email')!.hasError('invalidEmail')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+          <i matSuffix (click)="hide = !hide" [ngClass]="{'fa-eye': hide, 'fa-eye-slash': !hide}" class="fas"></i>
+          <mat-error>
+            Password is required
+          </mat-error>
+        </mat-form-field>
+        <div class="text-center">
+          <button aria-label="LOG IN" [disabled]="loginForm!.invalid || disabled" class="mt-2 btn btn-primary">
+            <img class="loader-gif" *ngIf="disabled" src="assets/images/loader.gif">LOGIN
+          </button>
+        </div>
+      </form>
     </div>
-  </form>
+
+  </div>
 </div>
