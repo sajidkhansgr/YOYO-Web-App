@@ -10,6 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CommnComponent implements OnInit {
   showDoc: boolean = false;
+  showNewAnn: boolean = false;
 
   constructor() { }
 
@@ -22,4 +23,13 @@ export class CommnComponent implements OnInit {
   closeDoc = () => {
     this.showDoc = false;
   }
+
+  newAnnouncement = () => {
+    this.showNewAnn = true;
+  }
+
+  closeNewAnn = () => {
+    this.showNewAnn = false;
+  }
+
 }
