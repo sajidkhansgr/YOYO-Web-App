@@ -20,7 +20,8 @@ import { HeaderModule } from './home-layout/header/header.module';
 import { SidebarModule } from './home-layout/sidebar/sidebar.module';
 
 const appRoutes: Routes = [
-
+    { path : '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
+    { path : 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
     { path : 'hub', loadChildren: () => import('./hub/hub.module').then(m => m.HubModule) },
     { path : 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
     { path : 'communication', loadChildren: () => import('./commn/commn.module').then(m => m.CommnModule) },
