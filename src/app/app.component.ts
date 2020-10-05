@@ -37,7 +37,7 @@ export class AppComponent {
   }
 
   isAuthPage(): boolean{
-    return this.router.url.indexOf('auth/login')!==-1?true:false;
+    return this.router.url.indexOf('auth/login')!==-1||this.router.url.indexOf('login')!==-1?true:false;
   }
 
   ngOnDestroy(): void{
