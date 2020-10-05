@@ -1,9 +1,12 @@
-import { Component, OnInit,ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-hub',
   templateUrl: './hub.component.html',
   styleUrls: ['./hub.component.scss'],
+  host: {
+    class: 'w-100'
+  },
   encapsulation: ViewEncapsulation.None
 })
 export class HubComponent implements OnInit {
@@ -16,7 +19,7 @@ export class HubComponent implements OnInit {
   editDisp: string = 'none';
   viewDisp: string = 'block';
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
   }

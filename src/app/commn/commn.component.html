@@ -1,1 +1,306 @@
-<p>commn works!</p>
+<div class="main main-hub p-3">
+  <h3 class="mb-4 clearfix heading">
+    Announcements
+  </h3>
+  <div class="mt-2">
+    <div class="main-tab-nav">
+      <mat-tab-group>
+        <mat-tab label="Announcements">
+          <div class="content-workspace">
+            <div class="buttons-row row mt-3 justify-content-between mx-2">
+              <!-- new announcment trigger modal -->
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAnnouncements">
+                New Announcement
+              </button>
+            </div>
+
+            <div class="row mt-4 mx-0">
+              <div [ngClass]="{'sub-tab-nav': true,'col-md-12' : !showDoc, 'col-md-8': showDoc}">
+                <div class="card">
+                  <div class="card-header">
+                    <mat-tab-group>
+                      <mat-tab label="Sent">
+                        <div class="card-body">
+                          <div class="card-text">
+                            <table class="table table-hover text-dark w-100">
+                              <thead>
+                                <tr>
+                                  <th scope="col">SUBJECT<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col">AUTHOR<i class="fas fa-sort-down ml-1 align-top"></i>
+                                  </th>
+                                  <th scope="col">RECIPIENTS<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col">DATE SENT<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col">READ<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr (click)="toggleDoc()">
+                                  <td>
+                                    Updated Spare Partds<br />
+                                  </td>
+                                  <td class="text-hi-dark-grey">Andrea ABC</td>
+                                  <td>All Users</td>
+                                  <td class="text-hi-dark-grey">01/01/2020</td>
+                                  <td>10%</td>
+                                  <td>
+                                    <button class="btn btn-primary btn-sm">Archived</button>
+                                  </td>
+                                </tr>
+                                <tr (click)="toggleDoc()">
+                                  <td>
+                                    Updated Spare Partds<br />
+                                  </td>
+                                  <td class="text-hi-dark-grey">Andrea ABC</td>
+                                  <td>All Users</td>
+                                  <td class="text-hi-dark-grey">01/01/2020</td>
+                                  <td>10%</td>
+                                  <td>
+                                    <button class="btn btn-primary btn-sm">Archived</button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="card-footer bg-white row justify-content-between">
+                            <div class="pages">
+                              <div class="input-group mb-3">
+                                <select class="custom-select rounded" id="inputGroupSelect02">
+                                  <option selected>10</option>
+                                  <option>20</option>
+                                </select>
+                                <div class="input-group-append">
+                                  <label class="input-group-text bg-white border-0 text-hi-dark-grey"
+                                    for="inputGroupSelect02">Showing 1-10 of
+                                    100</label>
+                                </div>
+                              </div>
+                            </div>
+                            <ul class="pagination">
+                              <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i
+                                    class="fas fa-chevron-left"></i></a>
+                              </li>
+                              <li class="page-item"><a class="page-link" href="#">1</a></li>
+                              <li class="page-item"><a class="page-link" href="#">2</a></li>
+                              <li class="page-item"><a class="page-link" href="#">3</a></li>
+                              <li class="page-item">
+                                <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </mat-tab>
+                      <mat-tab label="Scheduled">Same Table</mat-tab>
+                      <mat-tab label="Archived">Same Table</mat-tab>
+                    </mat-tab-group>
+                  </div>
+                </div>
+              </div>
+              <div [ngClass]="{'workspace w-100 col-md-4': true,'hide' : !showDoc, 'show': showDoc}">
+                <div class="doc">
+                  <div class="card">
+                    <div class="card-header row m-0">
+                      <h5 class="font-weight-bold mt-2">Announcement details</h5>
+                      <div class="ml-auto">
+                        <div class="btn btn-light" (click)="closeDoc()">
+                          <i class="fa fa-times"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="doc-details details border-bottom mb-3 pb-3">
+                        <div class="subject">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Subject</label>
+                          <div class="value">
+                            Updated abc def ghi jkl
+                          </div>
+                        </div>
+                        <div class="created">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Created</label>
+                          <div class="value">
+                            01/01/2020 12:45
+                          </div>
+                        </div>
+                        <div class="author">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Author</label>
+                          <div class="value">
+                            Andrea Def Ghi
+                          </div>
+                        </div>
+                        <div class="recipients">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Recipients</label>
+                          <div class="value">
+                            All Users
+                          </div>
+                        </div>
+                        <div class="requestUpdate">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Request Update</label>
+                          <div class="value">
+                            Yes
+                          </div>
+                        </div>
+                        <div class="sendEmailReminders">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Send email reminders</label>
+                          <div class="value">
+                            Yes
+                          </div>
+                        </div>
+                        <div class="status">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Status</label>
+                          <div class="value">
+                            Sent 01/01/2020 12:45
+                          </div>
+                        </div>
+                        <div class="readRate">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Read Rate</label>
+                          <div class="value">
+                            10% (35 of 364)
+                          </div>
+                        </div>
+                      </div>
+                      <div class="announcement details border-bottom mb-3 pb-3">
+                        <div class="announcement">
+                          <div class="value">
+                            The Hi-Force Spare Parts price lists have been updated in Showpad. Please take note of the
+                            changes
+                            that have been made to the price lists;
+                          </div>
+                        </div>
+                      </div>
+                      <div class="additions details border-bottom mb-3 pb-3">
+                        <div class="heading text-hi-dark-grey font-weight-bold">Additions</div>
+                        <div class="partNoDesc">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Part No. Sescription</label>
+                          <div class="value">
+                            <ul class="list-unstyled mb-0">
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="amendmentsToThePrice details border-bottom mb-3 pb-3">
+                        <div class="heading text-hi-dark-grey font-weight-bold">Amendments To The Price</div>
+                        <div class="partNoDesc">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Part No. Sescription</label>
+                          <div class="value">
+                            <ul class="list-unstyled mb-0">
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="amendmentsToTheDesc details border-bottom mb-3 pb-3">
+                        <div class="heading text-hi-dark-grey font-weight-bold">Amendments To The Description</div>
+                        <div class="partNoDesc">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Part No. Sescription</label>
+                          <div class="value">
+                            <ul class="list-unstyled mb-0">
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="itemsRemoved details">
+                        <div class="heading text-hi-dark-grey font-weight-bold">Items Removed form the Price Lists</div>
+                        <div class="partNoDesc">
+                          <label class="text-hi-dark-grey mb-0 mt-2">Part No. Sescription</label>
+                          <div class="value">
+                            <ul class="list-unstyled mb-0">
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                              <li>IW25B-64A Cover</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>
+
+<!-- new announcment Modal -->
+<div class="modal fade" id="newAnnouncements" tabindex="-1" role="dialog" aria-labelledby="newAnnouncementsLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newAnnouncementsLabel">New Announcement</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Subject</mat-label>
+          <input matInput placeholder="Subject">
+        </mat-form-field>
+        <br />
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Announcement</mat-label>
+          <textarea matInput placeholder="Announcement"></textarea>
+        </mat-form-field>
+        <br />
+        <mat-form-field appearance="outline">
+          <mat-label>Send To</mat-label>
+          <select matNativeControl>
+            <option>All Users</option>
+            <option>Selected Experiences</option>
+            <option>Selected User Groups</option>
+          </select>
+          <!-- <mat-select>
+            <mat-option>All Users</mat-option>
+            <mat-option>Selected Experiences</mat-option>
+            <mat-option>Selected User Groups</mat-option>
+          </mat-select> -->
+        </mat-form-field>
+        <br />
+        <mat-checkbox>Request user to update content</mat-checkbox><br />
+        <mat-checkbox>Notify User by Email</mat-checkbox><br />
+        <mat-checkbox>Send Later</mat-checkbox><br />
+        <div class="row justify-content-between m-0">
+          <mat-form-field appearance="outline">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker">
+            <!-- <input type="date"> -->
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Time</mat-label>
+            <select matNativeControl>
+              <option value="volvo">00:00</option>
+              <option value="saab">01:00</option>
+            </select>
+            <!-- <mat-select>
+              <mat-option>All Users</mat-option>
+              <mat-option>Selected Experiences</mat-option>
+              <mat-option>Selected User Groups</mat-option>
+            </mat-select> -->
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
