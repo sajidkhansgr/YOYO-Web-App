@@ -72,17 +72,6 @@ export class HubComponent implements OnInit {
     if (document.querySelector('.sub-tab-nav table')) {
       document.querySelector('.sub-tab-nav table')!.classList.add('hide-rows');
     }
-    // search heading
-    if (document.querySelector('.sub-tab-nav .heading .search')) {
-      document.querySelector('.sub-tab-nav .heading .search')!.classList.remove('col-lg-8', 'col-sm-7');
-      document.querySelector('.sub-tab-nav .heading .search')!.classList.add('col-lg-6');
-    }
-
-    if (document.querySelector('.sub-tab-nav .heading .add-content')) {
-      document.querySelector('.sub-tab-nav .heading .add-content')!.classList.remove('col-lg-4', 'col-sm-5');
-      document.querySelector('.sub-tab-nav .heading .add-content')!.classList.add('col-lg-6');
-      document.querySelector('.sub-tab-nav .heading .add-content .dropdown')!.classList.replace('mt-sm-0', 'mt-lg-0');
-    }
 
     // for workspace
     this.workSecDisp = 'block';
@@ -97,17 +86,6 @@ export class HubComponent implements OnInit {
     }
     if (document.querySelector('.sub-tab-nav table')) {
       document.querySelector('.sub-tab-nav table')!.classList.remove('hide-rows');
-    }
-    // search heading
-    if (document.querySelector('.sub-tab-nav .heading .search')) {
-      document.querySelector('.sub-tab-nav .heading .search')!.classList.remove('col-lg-6');
-      document.querySelector('.sub-tab-nav .heading .search')!.classList.add('col-lg-8', 'col-sm-7');
-    }
-
-    if (document.querySelector('.sub-tab-nav .heading .add-content')) {
-      document.querySelector('.sub-tab-nav .heading .add-content')!.classList.remove('col-lg-6');
-      document.querySelector('.sub-tab-nav .heading .add-content')!.classList.add('col-lg-4', 'col-sm-5');
-      document.querySelector('.sub-tab-nav .heading .add-content .dropdown')!.classList.replace('mt-lg-0', 'mt-sm-0');
     }
 
     // for workspace
