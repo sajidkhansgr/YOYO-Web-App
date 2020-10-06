@@ -40,6 +40,10 @@ body {
   background-color: lighten($color: $hi-dark-grey, $amount: 10.8);
 }
 
+.bg-hi-grey {
+  background-color: lighten($color: $hi-dark-grey, $amount: 10);
+}
+
 .bg-hi-dark-grey {
   background-color: $hi-dark-grey;
 }
@@ -88,6 +92,11 @@ body {
     border-top-left-radius: 0.8rem;
     border-top-right-radius: 0.8rem;
   }
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar,
+.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background-color: $primary !important;
 }
 
 
