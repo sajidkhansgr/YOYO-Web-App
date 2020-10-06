@@ -1,11 +1,11 @@
 <div class="text-center mt-4"><img src="assets/images/logo.png" alt="Logo"></div>
-<div class="card w-50 mx-auto mt-4">
+<div class="card w-40 mx-auto mt-4">
   <div class="card-header text-center">
     <h4 class="mb-0 font-weight-bold">Login</h4>
   </div>
   <div class="card-body p-5">
     <div *ngIf="loginForm">
-      <form class="w-75 mx-auto" name="loginForm" (ngSubmit)="login()" [formGroup]="loginForm" novalidate>
+      <form class="w-75 mx-auto p-4" name="loginForm" (ngSubmit)="login()" [formGroup]="loginForm" novalidate>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email">

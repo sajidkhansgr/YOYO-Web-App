@@ -24,6 +24,10 @@ body {
   color: $hi-dark;
 }
 
+.w-40 {
+  width: 40%;
+}
+
 .text-hi-dark {
   color: $hi-dark !important;
 }
@@ -99,6 +103,41 @@ body {
   background-color: $primary !important;
 }
 
+.mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+
+.mat-form-field-infix {
+  border-top: 0 !important;
+}
+
+.mat-select-panel {
+  border-radius: 0.8rem !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+  box-shadow: none !important;
+  border: 1px $hi-dark-grey solid !important;
+  margin-top: 45px !important;
+}
+
+.mat-option {
+  height: auto !important;
+  line-height: 1.5 !important;
+  font-size: 1rem !important;
+  padding: 0.25rem 1.5rem !important;
+}
+
+.mat-option.mat-active,
+.mat-option:hover {
+  background-color: lighten($color: $primary, $amount: 9) !important;
+  color: white !important;
+}
+
+.custom-material-select {
+  .mat-form-field-underline {
+    display: none;
+  }
+}
 
 // header/navbar
 header {
@@ -212,7 +251,8 @@ header {
 
 .sidebar {
   background-color: #fff;
-  min-width: 250px;
+  max-width: 197px;
+  min-width: 197px;
   transition: min-width 0.5s linear;
   min-height: 100vh;
   height: 100%;
@@ -301,8 +341,8 @@ header {
 
     .dropdown-toggle::after {
       transition: opacity 0.5s linear;
-      margin-left: 6rem;
-      padding-right: 2.3rem;
+      margin-left: 5rem;
+      padding-right: 1.3rem;
     }
   }
 }

@@ -25,7 +25,7 @@
             </div>
 
             <div class="row mt-4 mx-0">
-              <div class="sub-tab-nav col-md-12">
+              <div class="sub-tab-nav col-md-6">
                 <div class="card overflow-hidden">
                   <div class="card-header border-0">
                     <mat-tab-group>
@@ -143,11 +143,12 @@
                   </div>
                 </div>
               </div>
-              <div class="workspace w-100 col-md-6" [style.display]="workSecDisp">
+              <div class="workspace w-100 col-md-6" [style.display]="!workSecDisp">
                 <div class="document" [style.display]="docDisp">
                   <div class="card">
                     <div class="card-header row m-0">
-                      <h5 class="font-weight-bold mb-0 pt-1 col-10">Group Stock Position - Regional Offices.pdf</h5>
+                      <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">Group Stock Position - Regional Offices.pdf
+                      </h5>
                       <div class="mr-2 col-1 ml-auto">
                         <div class="btn btn-light" (click)="closeWorkspace()">
                           <i class="fas fa-times"></i>
@@ -432,16 +433,23 @@
                     </div>
                   </div>
                 </div>
-                <div class="worksp" [style.display]="workspDisp">
+                <div class="worksp" [style.display]="!workspDisp">
                   <div class="card">
                     <div class="card-header row m-0">
-                      <div class="form-group mb-0 exp">
-                        <select class="form-control bg-transparent border-0">
+                      <mat-form-field class="custom-material-select align-self-center" [floatLabel]="'never'">
+                        <mat-label>Select a Workspace</mat-label>
+                        <mat-select>
+                          <mat-option value="English">English</mat-option>
+                          <mat-option value="English">English</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <!-- <div class="form-group mb-0 exp">
+                        <select class="custom-select bg-transparent border-0">
                           <option selected hidden>Select a Workspace</option>
                           <option>English</option>
                           <option>Stock</option>
                         </select>
-                      </div>
+                      </div> -->
                       <div class="ml-auto mr-2">
                         <div class="btn btn-light" (click)="closeWorkspace()">
                           <i class="fas fa-times"></i>
@@ -719,7 +727,7 @@
               <div class="document" [style.display]="docDisp">
                 <div class="card">
                   <div class="card-header row m-0">
-                    <h5 class="font-weight-bold mb-0 pt-1 col-10">Group Stock Position</h5>
+                    <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">Group Stock Position</h5>
                     <div class="mr-2 col-1 ml-auto">
                       <div class="btn btn-light" (click)="closeWorkspace()">
                         <i class="fas fa-times"></i>
