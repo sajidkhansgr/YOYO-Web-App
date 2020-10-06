@@ -231,8 +231,8 @@ header {
     }
 
     >.nav-item:hover {
-      background-color: lighten($color: $primary, $amount: 14);
-      color: white !important;
+      background-color: $hi-dark-grey;
+      color: darken($color: $hi-dark, $amount: 15) !important;
     }
 
     .dropright.active {
@@ -250,8 +250,8 @@ header {
         }
 
         a:hover {
-          background-color: lighten($color: $primary, $amount: 14);
-          color: white !important;
+          background-color: $hi-dark-grey;
+          color: darken($color: $hi-dark, $amount: 15) !important;
         }
       }
 
@@ -270,10 +270,10 @@ header {
     }
 
     .dropright:hover {
-      background-color: lighten($color: $primary, $amount: 14);
+      background-color: $hi-dark-grey;
 
       .nav-item {
-        color: white !important;
+        color: darken($color: $hi-dark, $amount: 15) !important;
       }
     }
 
