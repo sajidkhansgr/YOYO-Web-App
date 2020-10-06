@@ -25,7 +25,7 @@
             </div>
 
             <div class="row mt-4 mx-0">
-              <div class="sub-tab-nav col-md-6">
+              <div class="sub-tab-nav col-md-12">
                 <div class="card overflow-hidden">
                   <div class="card-header border-0">
                     <mat-tab-group>
@@ -52,11 +52,15 @@
                             <table class="table table-hover text-dark w-100">
                               <thead>
                                 <tr>
-                                  <th scope="col">NAME<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                                  <th scope="col">SIZE<i class="fas fa-sort-down ml-1 align-top"></i>
+                                  <th scope="col" class="cursor-pointer">NAME<i
+                                      class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col" class="cursor-pointer">SIZE<i
+                                      class="fas fa-sort-down ml-1 align-top"></i>
                                   </th>
-                                  <th scope="col">ADDED<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                                  <th scope="col">AUTHORS<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col" class="cursor-pointer">ADDED<i
+                                      class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col" class="cursor-pointer">AUTHORS<i
+                                      class="fas fa-sort-down ml-1 align-top"></i></th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -143,7 +147,7 @@
                   </div>
                 </div>
               </div>
-              <div class="workspace w-100 col-md-6" [style.display]="!workSecDisp">
+              <div class="workspace w-100 col-md-6" [style.display]="workSecDisp">
                 <div class="document" [style.display]="docDisp">
                   <div class="card">
                     <div class="card-header row m-0">
@@ -433,7 +437,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="worksp" [style.display]="!workspDisp">
+                <div class="worksp" [style.display]="workspDisp">
                   <div class="card">
                     <div class="card-header row m-0">
                       <mat-form-field class="custom-material-select align-self-center" [floatLabel]="'never'">
@@ -614,112 +618,138 @@
         <mat-tab label="Tags">
           <!-- tags page -->
           <div class="tags-page row mx-0">
-            <div class="sub-tab-nav col-md-12">
-              <div class="card mt-4 overflow-hidden">
-                <div class="card-header border-0">
-                  <mat-tab-group>
-                    <mat-tab label="All Tags">
-                      <div class="card-body bg-white rounded-bottom px-0 pb-0">
-                        <h5 class="card-title px-3">
-                          <div class="heading">
-                            <div class="search">
-                              <div class="input-group">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
-                                </div>
-                                <input type="text" class="form-control border-left-0 border-right-0"
-                                  placeholder="Search ...">
-                                <div class="input-group-append">
-                                  <span class="input-group-text bg-white primary-bg-hover"><i
-                                      class="fas fa-sliders-h"></i></span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </h5>
-                        <div class="card-text px-3">
-                          <table class="table table-hover text-dark w-100">
-                            <thead>
-                              <tr>
-                                <th scope="col">NAME<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                                <th scope="col">STATUS<i class="fas fa-sort-down ml-1 align-top"></i>
-                                </th>
-                                <th scope="col">DATE MODIFIED<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr (click)="workspaceToggle($event)" id="doc">
-                                <td>
-                                  Group Stock Position - Regional Offices<br />
-                                  <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                                  <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                                </td>
-                                <td class="text-hi-dark-grey">Used in Filter</td>
-                                <td>19 Aug 2020</td>
-                              </tr>
-                              <tr (click)="workspaceToggle($event)" id="doc">
-                                <td>
-                                  Group Stock Position - Regional Offices<br />
-                                  <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                                  <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                                </td>
-                                <td class="text-hi-dark-grey">Used in Filter</td>
-                                <td>19 Aug 2020</td>
-                              </tr>
-                              <tr (click)="workspaceToggle($event)" id="doc">
-                                <td>
-                                  Group Stock Position - Regional Offices<br />
-                                  <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                                  <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                                </td>
-                                <td class="text-hi-dark-grey">Used in Filter</td>
-                                <td>19 Aug 2020</td>
-                              </tr>
-                              <tr (click)="workspaceToggle($event)" id="doc">
-                                <td>
-                                  Group Stock Position - Regional Offices<br />
-                                  <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                                  <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                                </td>
-                                <td class="text-hi-dark-grey">Used in Filter</td>
-                                <td>19 Aug 2020</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <div class="card-footer row justify-content-between mx-0">
-                          <div class="pages">
-                            <div class="input-group mb-3">
-                              <select class="custom-select rounded" id="inputGroupSelect02">
-                                <option selected>10</option>
-                                <option>20</option>
-                              </select>
-                              <div class="input-group-append">
-                                <label class="input-group-text border-0 bg-transparent" for="inputGroupSelect02">Showing
-                                  1-10 of
-                                  100</label>
-                              </div>
-                            </div>
-                          </div>
-                          <ul class="pagination">
-                            <li class="page-item disabled">
-                              <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1"
-                                aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
-                            </li>
-                            <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">1</a></li>
-                            <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">2</a></li>
-                            <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">3</a></li>
-                            <li class="page-item">
-                              <a class="page-link bg-hi-grey" href="javascript:void(0)"><i
-                                  class="fas fa-chevron-right"></i></a>
-                            </li>
-                          </ul>
+            <div class="sub-tab-nav row mx-0 col-md-12 mt-4">
+              <div class="col-3">
+                <div class="card bg-hi-grey" style="min-height:100% !important;">
+                  <div class="card-body">
+                    <div class="text-hi-dark-grey">Tags</div>
+                    <ul class="list-unstyled ml-2 mt-1">
+                      <li class="dark-bg-hover px-2 py-1 rounded mt-2">All tags</li>
+                      <li class="dark-bg-hover px-2 py-1 rounded mt-2">Uncategorized Tags</li>
+                    </ul>
+                    <hr>
+                    <div class="text-hi-dark-grey">
+                      Categories
+                      <div class="float-right btn p-0" (click)="addCategoryInput()"><i
+                          class="fa fa-plus-circle text-primary"></i></div>
+                      <div class="input-group" [style.display]="showAddCatIp">
+                        <input type="text" class="form-control form-control-sm" placeholder="Add Category">
+                        <div class="input-group-append">
+                          <span class="input-group-text bg-white primary-bg-hover" (click)="closeAddCatIp()"><i
+                              class="fas fa-times"></i></span>
+                          <span class="input-group-text bg-white primary-bg-hover text-primary"><i
+                              class="fas fa-check-circle"></i></span>
                         </div>
                       </div>
-                    </mat-tab>
-                    <mat-tab label="Uncategorized">Same Table</mat-tab>
-                    <mat-tab label="Add">Add category</mat-tab>
-                  </mat-tab-group>
+                    </div>
+                    <ul class="list-unstyled ml-2 mt-1">
+                      <li class="dark-bg-hover px-2 py-1 rounded mt-2">Category 1</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-9">
+                <div class="card overflow-hidden">
+                  <div class="card-body rounded-bottom px-0 pb-0">
+                    <h5 class="card-title px-3">
+                      <div class="heading">
+                        <div class="search">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                            </div>
+                            <input type="text" class="form-control border-left-0 border-right-0"
+                              placeholder="Search ...">
+                            <div class="input-group-append">
+                              <span class="input-group-text bg-white primary-bg-hover"><i
+                                  class="fas fa-sliders-h"></i></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </h5>
+                    <div class="card-text px-3">
+                      <table class="table table-hover text-dark w-100">
+                        <thead>
+                          <tr>
+                            <th scope="col" class="cursor-pointer">NAME<i class="fas fa-sort-down ml-1 align-top"></i>
+                            </th>
+                            <th scope="col" class="cursor-pointer">STATUS<i class="fas fa-sort-down ml-1 align-top"></i>
+                            </th>
+                            <th scope="col" class="cursor-pointer">DATE MODIFIED<i
+                                class="fas fa-sort-down ml-1 align-top"></i></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr (click)="workspaceToggle($event)" id="doc">
+                            <td>
+                              Group Stock Position - Regional Offices<br />
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                            </td>
+                            <td class="text-hi-dark-grey">Used in Filter</td>
+                            <td>19 Aug 2020</td>
+                          </tr>
+                          <tr (click)="workspaceToggle($event)" id="doc">
+                            <td>
+                              Group Stock Position - Regional Offices<br />
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                            </td>
+                            <td class="text-hi-dark-grey">Used in Filter</td>
+                            <td>19 Aug 2020</td>
+                          </tr>
+                          <tr (click)="workspaceToggle($event)" id="doc">
+                            <td>
+                              Group Stock Position - Regional Offices<br />
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                            </td>
+                            <td class="text-hi-dark-grey">Used in Filter</td>
+                            <td>19 Aug 2020</td>
+                          </tr>
+                          <tr (click)="workspaceToggle($event)" id="doc">
+                            <td>
+                              Group Stock Position - Regional Offices<br />
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+                              <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+                            </td>
+                            <td class="text-hi-dark-grey">Used in Filter</td>
+                            <td>19 Aug 2020</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="card-footer row justify-content-between mx-0">
+                      <div class="pages">
+                        <div class="input-group mb-3">
+                          <select class="custom-select rounded" id="inputGroupSelect02">
+                            <option selected>10</option>
+                            <option>20</option>
+                          </select>
+                          <div class="input-group-append">
+                            <label class="input-group-text border-0 bg-transparent" for="inputGroupSelect02">Showing
+                              1-10 of
+                              100</label>
+                          </div>
+                        </div>
+                      </div>
+                      <ul class="pagination">
+                        <li class="page-item disabled">
+                          <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1"
+                            aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
+                        </li>
+                        <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">1</a></li>
+                        <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">2</a></li>
+                        <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">3</a></li>
+                        <li class="page-item">
+                          <a class="page-link bg-hi-grey" href="javascript:void(0)"><i
+                              class="fas fa-chevron-right"></i></a>
+                        </li>
+                      </ul>
+                    </div>
+
+                  </div>
                 </div>
               </div>
             </div>

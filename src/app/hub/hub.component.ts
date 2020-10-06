@@ -18,10 +18,20 @@ export class HubComponent implements OnInit {
   workSecDisp: string = 'none';
   editDisp: string = 'none';
   viewDisp: string = 'block';
+  showAddCatIp: string = 'none';
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  // add category input
+  addCategoryInput = () => {
+    this.showAddCatIp = 'flex';
+  }
+
+  closeAddCatIp = () => {
+    this.showAddCatIp = 'none';
   }
 
   // workspace

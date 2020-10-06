@@ -62,10 +62,12 @@ body {
 
 .primary-bg-hover:hover {
   background-color: rgba($primary, .075) !important;
+  cursor: pointer;
 }
 
 .dark-bg-hover:hover {
   background-color: rgba($black, .075) !important;
+  cursor: pointer;
 }
 
 .hide {
@@ -80,11 +82,15 @@ body {
   z-index: 1051 !important;
 }
 
-// material
-.mat-form-field-appearance-outline .mat-form-field-prefix,
-.mat-form-field-appearance-outline .mat-form-field-suffix {
-  top: -0.25em !important;
+.cursor-pointer {
+  cursor: pointer;
 }
+
+// material
+// .mat-form-field-appearance-outline .mat-form-field-prefix,
+// .mat-form-field-appearance-outline .mat-form-field-suffix {
+//   top: -0.25em !important;
+// }
 
 .mat-tab-label-active {
   opacity: 1 !important;
