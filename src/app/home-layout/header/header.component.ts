@@ -140,18 +140,4 @@ export class HeaderComponent implements OnInit {
       this.closeSidebar();
     }
   }
-
-
-  // edit options in documents (workspace)
-  openEdit = (event: any) => {
-    event = event.target;
-    (event.parentNode.parentNode.parentNode.childNodes[1] as HTMLElement).style.display = 'none';
-    (event.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'block';
-  }
-  closeEdit = (event: any) => {
-    event = event.target;
-    (event.parentNode.parentNode.parentNode.parentNode.childNodes[1] as HTMLElement).style.display = 'block';
-    (event.parentNode.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'none';
-  }
-
 }

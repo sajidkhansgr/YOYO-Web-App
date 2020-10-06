@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 //import url
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@200;400;600&display=swap");
 /// customized bootstrap
 @import './assets/scss/customizedBootstrap/bootstrap.scss';
 
@@ -11,10 +11,6 @@
 $hi-grey: #F7F7F7;
 $hi-dark-grey: darken($color: $hi-grey, $amount: 10);
 $hi-dark:#3E434A;
-
-* {
-  font-family: 'Poppins', sans-serif;
-}
 
 html,
 body {
@@ -74,6 +70,24 @@ body {
 
 .cdk-overlay-container {
   z-index: 1051 !important;
+}
+
+// material
+.mat-form-field-appearance-outline .mat-form-field-prefix,
+.mat-form-field-appearance-outline .mat-form-field-suffix {
+  top: -0.25em !important;
+}
+
+.mat-tab-label-active {
+  opacity: 1 !important;
+}
+
+.card-header {
+  .mat-tab-label-active {
+    background-color: white;
+    border-top-left-radius: 0.8rem;
+    border-top-right-radius: 0.8rem;
+  }
 }
 
 
@@ -235,10 +249,10 @@ header {
           border-left: 5px transparent solid;
         }
 
-        // a:hover {
-        //   background-color: lighten($color: $primary, $amount: 10);
-        //   color: white !important;
-        // }
+        a:hover {
+          background-color: lighten($color: $primary, $amount: 14);
+          color: white !important;
+        }
       }
 
       .nav-item {
@@ -256,7 +270,7 @@ header {
     }
 
     .dropright:hover {
-      background-color: lighten($color: $primary, $amount: 10);
+      background-color: lighten($color: $primary, $amount: 14);
 
       .nav-item {
         color: white !important;

@@ -65,12 +65,18 @@ export class HubComponent implements OnInit {
   // open workspace
   workspaceOpen = () => {
     // for view
-    document.querySelector('.sub-tab-nav')!.classList.remove('col-md-12');
-    document.querySelector('.sub-tab-nav')!.classList.add('col-md-6');
-    document.querySelector('.sub-tab-nav table')!.classList.add('hide-rows');
+    if (document.querySelector('.sub-tab-nav')) {
+      document.querySelector('.sub-tab-nav')!.classList.remove('col-md-12');
+      document.querySelector('.sub-tab-nav')!.classList.add('col-md-6');
+    }
+    if (document.querySelector('.sub-tab-nav table')) {
+      document.querySelector('.sub-tab-nav table')!.classList.add('hide-rows');
+    }
     // search heading
-    document.querySelector('.sub-tab-nav .heading .search')!.classList.remove('col-lg-8', 'col-sm-7');
-    document.querySelector('.sub-tab-nav .heading .search')!.classList.add('col-lg-6');
+    if (document.querySelector('.sub-tab-nav .heading .search')) {
+      document.querySelector('.sub-tab-nav .heading .search')!.classList.remove('col-lg-8', 'col-sm-7');
+      document.querySelector('.sub-tab-nav .heading .search')!.classList.add('col-lg-6');
+    }
 
     if (document.querySelector('.sub-tab-nav .heading .add-content')) {
       document.querySelector('.sub-tab-nav .heading .add-content')!.classList.remove('col-lg-4', 'col-sm-5');
@@ -85,12 +91,18 @@ export class HubComponent implements OnInit {
   // close workspace
   workspaceClose = () => {
     // for view
-    document.querySelector('.sub-tab-nav')!.classList.remove('col-md-6');
-    document.querySelector('.sub-tab-nav')!.classList.add('col-md-12');
-    document.querySelector('.sub-tab-nav table')!.classList.remove('hide-rows');
+    if (document.querySelector('.sub-tab-nav')) {
+      document.querySelector('.sub-tab-nav')!.classList.remove('col-md-6');
+      document.querySelector('.sub-tab-nav')!.classList.add('col-md-12');
+    }
+    if (document.querySelector('.sub-tab-nav table')) {
+      document.querySelector('.sub-tab-nav table')!.classList.remove('hide-rows');
+    }
     // search heading
-    document.querySelector('.sub-tab-nav .heading .search')!.classList.remove('col-lg-6');
-    document.querySelector('.sub-tab-nav .heading .search')!.classList.add('col-lg-8', 'col-sm-7');
+    if (document.querySelector('.sub-tab-nav .heading .search')) {
+      document.querySelector('.sub-tab-nav .heading .search')!.classList.remove('col-lg-6');
+      document.querySelector('.sub-tab-nav .heading .search')!.classList.add('col-lg-8', 'col-sm-7');
+    }
 
     if (document.querySelector('.sub-tab-nav .heading .add-content')) {
       document.querySelector('.sub-tab-nav .heading .add-content')!.classList.remove('col-lg-6');
