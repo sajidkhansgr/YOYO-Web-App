@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { HubComponent } from './hub.component';
 const routes: Routes = [
@@ -17,7 +19,9 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MatTabsModule,
     MatPaginatorModule,
-    MatSelectModule
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class HubModule { }

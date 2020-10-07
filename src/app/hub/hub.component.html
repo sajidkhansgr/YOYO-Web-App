@@ -34,17 +34,14 @@
                           <h5 class="card-title px-3">
                             <div class="heading">
                               <div class="search">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                                <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2"
+                                  [floatLabel]="'never'">
+                                  <i matPrefix class="fas fa-search"></i>
+                                  <input matInput placeholder="Search ...">
+                                  <div matSuffix class="curs-ptr">
+                                    <i class="fas fa-sliders-h"></i>
                                   </div>
-                                  <input type="text" class="form-control border-left-0 border-right-0"
-                                    placeholder="Search ...">
-                                  <div class="input-group-append">
-                                    <span class="input-group-text bg-white primary-bg-hover"><i
-                                        class="fas fa-sliders-h"></i></span>
-                                  </div>
-                                </div>
+                                </mat-form-field>
                               </div>
                             </div>
                           </h5>
@@ -653,17 +650,14 @@
                     <h5 class="card-title px-3">
                       <div class="heading">
                         <div class="search">
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2"
+                            [floatLabel]="'never'">
+                            <i matPrefix class="fas fa-search"></i>
+                            <input matInput placeholder="Search ...">
+                            <div matSuffix class="curs-ptr">
+                              <i class="fas fa-sliders-h"></i>
                             </div>
-                            <input type="text" class="form-control border-left-0 border-right-0"
-                              placeholder="Search ...">
-                            <div class="input-group-append">
-                              <span class="input-group-text bg-white primary-bg-hover"><i
-                                  class="fas fa-sliders-h"></i></span>
-                            </div>
-                          </div>
+                          </mat-form-field>
                         </div>
                       </div>
                     </h5>

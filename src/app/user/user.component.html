@@ -33,17 +33,14 @@
                           <h5 class="card-title px-3">
                             <div class="row heading">
                               <div class="search col-lg-8 col-sm-7">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                                <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2"
+                                  [floatLabel]="'never'">
+                                  <i matPrefix class="fas fa-search"></i>
+                                  <input matInput placeholder="Search ...">
+                                  <div matSuffix class="curs-ptr">
+                                    <i class="fas fa-sliders-h"></i>
                                   </div>
-                                  <input type="text" class="form-control border-left-0 border-right-0"
-                                    placeholder="Search ...">
-                                  <div class="input-group-append">
-                                    <span class="input-group-text bg-white primary-bg-hover"><i
-                                        class="fas fa-sliders-h"></i></span>
-                                  </div>
-                                </div>
+                                </mat-form-field>
                               </div>
                               <div class="col-lg-4 col-sm-5 align-self-center">
                                 <div class="float-left">
@@ -90,15 +87,15 @@
                             <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showDoc}">
                               <thead>
                                 <tr>
-                                  <th scope="col" class="curs-ptr">NAME<i
-                                      class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col" class="curs-ptr">NAME<i class="fas fa-sort-down ml-1 align-top"></i>
+                                  </th>
                                   <th scope="col" class="curs-ptr">Latest Activity<i
                                       class="fas fa-sort-down ml-1 align-top"></i>
                                   </th>
                                   <th scope="col" class="curs-ptr">Content Updated<i
                                       class="fas fa-sort-down ml-1 align-top"></i></th>
-                                  <th scope="col" class="curs-ptr">Role<i
-                                      class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col" class="curs-ptr">Role<i class="fas fa-sort-down ml-1 align-top"></i>
+                                  </th>
                                   <th scope="col" class="curs-ptr">Date Created<i
                                       class="fas fa-sort-down ml-1 align-top"></i></th>
                                 </tr>
@@ -334,20 +331,17 @@
                   <div class="card-body bg-white px-0 pb-0">
                     <h5 class="card-title px-3">
                       <div class="row heading">
-                        <div class="search col-md-5">
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text bg-transparent"><i class="fas fa-search"></i></span>
+                        <div class="search col-md-6">
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2"
+                            [floatLabel]="'never'">
+                            <i matPrefix class="fas fa-search"></i>
+                            <input matInput placeholder="Search ...">
+                            <div matSuffix class="curs-ptr">
+                              <i class="fas fa-sliders-h"></i>
                             </div>
-                            <input type="text" class="form-control border-left-0 border-right-0"
-                              placeholder="Search ...">
-                            <div class="input-group-append">
-                              <span class="input-group-text bg-transparent primary-bg-hover"><i
-                                  class="fas fa-sliders-h"></i></span>
-                            </div>
-                          </div>
+                          </mat-form-field>
                         </div>
-                        <div class="col-md-7 align-self-center row justify-content-end">
+                        <div class="col-md-6 align-self-center row justify-content-end">
                           <div class="dropdown mr-2">
                             <button class="btn btn-light dropdown-toggle" type="button" id="propTrigger"
                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -482,8 +476,8 @@
                                 class="fas fa-sort-down ml-1 align-top"></i></th>
                             <th scope="col" class="curs-ptr">Role<i class="fas fa-sort-down ml-1 align-top"></i>
                             </th>
-                            <th scope="col" class="curs-ptr">Date Created<i
-                                class="fas fa-sort-down ml-1 align-top"></i></th>
+                            <th scope="col" class="curs-ptr">Date Created<i class="fas fa-sort-down ml-1 align-top"></i>
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
