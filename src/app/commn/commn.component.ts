@@ -23,13 +23,4 @@ export class CommnComponent implements OnInit {
   closeDoc = () => {
     this.showDoc = false;
   }
-
-  newAnnouncement = () => {
-    this.showNewAnn = true;
-  }
-
-  closeNewAnn = () => {
-    this.showNewAnn = false;
-  }
-
 }

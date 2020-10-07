@@ -9,7 +9,7 @@
           <div class="communication">
             <div class="buttons-row row mt-3 justify-content-between mx-2">
               <!-- new announcment trigger modal -->
-              <button type="button" class="btn btn-primary" (click)="newAnnouncement()">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAnnouncements">
                 New Announcement
               </button>
             </div>
@@ -241,8 +241,8 @@
 </div>
 
 <!-- new announcment Modal -->
-<div [ngClass]="{'modal fade': true, 'show': showNewAnn}" id="newAnnouncements" tabindex="-1" role="dialog"
-  aria-labelledby="newAnnouncementsLabel" aria-hidden="true">
+<div class="modal fade" id="newAnnouncements" tabindex="-1" role="dialog" aria-labelledby="newAnnouncementsLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -291,7 +291,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeNewAnn()">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Send</button>
       </div>
     </div>
