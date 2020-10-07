@@ -19,10 +19,21 @@ export class HubComponent implements OnInit {
   editDisp: string = 'none';
   viewDisp: string = 'block';
   showAddCatIp: string = 'none';
+  custIconAddURL: string = 'none';
+  addURLIcon: string = '';
 
   constructor() { }
 
   ngOnInit(): void {
+
+  }
+
+  iconURLHandler = () => {
+    if (this.addURLIcon === 'cust-icon') {
+      this.custIconAddURL = 'block';
+    } else {
+      this.custIconAddURL = 'none';
+    }
   }
 
   // add category input

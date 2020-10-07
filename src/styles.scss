@@ -187,6 +187,30 @@ body {
   }
 }
 
+// custom file select
+.custom-file-select {
+  height: 80px;
+  border: 2px $hi-dark-grey dashed;
+
+  .input-group {
+    margin-top: 20px;
+  }
+
+  .custom-file-label {
+    border-width: 2px;
+    overflow: hidden;
+  }
+
+  .custom-file-input {
+
+    &:focus~.custom-file-label,
+    &:hover~.custom-file-label {
+      border-color: $hi-dark;
+      box-shadow: none;
+    }
+  }
+}
+
 // header/navbar
 header {
   .navbar {
