@@ -52,33 +52,37 @@
                                 </div>
                                 <div class="float-right">
                                   <div class="dropdown">
-                                    <button class="btn btn-light dropdown-toggle" type="button" id="settingsID"
-                                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                                       <i class="fas fa-cog"></i>
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsID">
-                                      <span>Visible Columns</span>
-                                      <ul cdkDropList id="cdk-vis-items"
-                                        #visbList="cdkDropList"
-                                        [cdkDropListData]="visbCols" class="min-ht"
-                                        [cdkDropListConnectedTo]="[hidList]"
-                                        (cdkDropListDropped)="drop($event)">
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                      <span class="ml-2">Visible Columns</span>
+                                      <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList"
+                                        [cdkDropListData]="visbCols" class="min-ht pl-0 mt-2"
+                                        [cdkDropListConnectedTo]="[hidList]" (cdkDropListDropped)="drop($event)">
                                         <button class="dropdown-item" *ngFor="let col of visbCols;let i=index" cdkDrag>
                                           <i class="fas fa-eye mr-2" (click)="showHideCols(col,'hide',i)"></i>{{col.n}}
                                         </button>
-                                        <span *ngIf="visbCols.length==0">No visbible columns</span>
+                                        <span *ngIf="visbCols.length==0" class="ml-2 text-secondary">No visbible
+                                          columns</span>
                                       </ul>
-                                      <span>Hidden Columns</span>
-                                      <ul cdkDropList id="cdk-hid-items"
-                                        #hidList="cdkDropList"
-                                        [cdkDropListData]="hidCols" class="min-ht"
-                                        [cdkDropListConnectedTo]="[visbList]"
-                                        (cdkDropListDropped)="drop($event)">
+                                      <span class="ml-2">Hidden Columns</span>
+                                      <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList"
+                                        [cdkDropListData]="hidCols" class="min-ht pl-0 mt-2 mb-0"
+                                        [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
                                         <button class="dropdown-item" *ngFor="let col of hidCols;let i=index" cdkDrag>
-                                          <i class="fas fa-eye-slash mr-2" (click)="showHideCols(col,'show',i)"></i>{{col.n}}
+                                          <i class="fas fa-eye-slash mr-2"
+                                            (click)="showHideCols(col,'show',i)"></i>{{col.n}}
                                         </button>
-                                        <span *ngIf="hidCols.length==0">No hidden columns</span>
+                                        <span *ngIf="hidCols.length==0" class="ml-2 text-secondary">No hidden
+                                          columns</span>
                                       </ul>
+                                      <hr class="mb-2">
+                                      <div class="float-right mr-2">
+                                        <button class="btn btn-secondary btn-sm mr-2"
+                                          (click)=closeDropdown($event)>Cancel</button>
+                                        <button class="btn btn-primary btn-sm">Save</button>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -91,7 +95,8 @@
                                 <tr>
                                   <ng-container *ngFor="let col of cols" class="curs-ptr">
                                     <th *ngIf="col.visb">
-                                      {{col.n}}<i class="fas fa-sort-down ml-1 align-top" [ngClass]="{'fa-sort-down': col.dir==1, 'fa-sort-up': col.dir==0}"></i>
+                                      {{col.n}}<i class="fas fa-sort-down ml-1 align-top"
+                                        [ngClass]="{'fa-sort-down': col.dir==1, 'fa-sort-up': col.dir==0}"></i>
                                     </th>
                                   </ng-container>
                                 </tr>
@@ -100,10 +105,10 @@
                                 <tr *ngFor="let d of data" (click)="toggleDoc()">
                                   <ng-container *ngFor="let col of cols">
                                     <td *ngIf="col.visb">
-                                        <span *ngIf="col.key=='name' else otherRow">
-                                          {{d.name}}<small>{{d.email}}</small>
-                                        </span>
-                                        <ng-template #otherRow>{{d[col.key]}}</ng-template>
+                                      <span *ngIf="col.key=='name' else otherRow">
+                                        {{d.name}}<small>{{d.email}}</small>
+                                      </span>
+                                      <ng-template #otherRow>{{d[col.key]}}</ng-template>
                                     </td>
                                   </ng-container>
                                   <!-- <td>
@@ -347,11 +352,10 @@
                         </div>
                         <div class="col-md-6 align-self-center row justify-content-end">
                           <div class="dropdown mr-2">
-                            <button class="btn btn-light dropdown-toggle" type="button" id="propTrigger"
-                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                               Property
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="propTrigger">
+                            <div class="dropdown-menu dropdown-menu-right">
                               <button class="dropdown-item">
                                 <div class="form-check">
                                   <input class="form-check-input" type="checkbox" value="" id="propCheck1">
@@ -387,8 +391,7 @@
                             </div>
                           </div>
                           <div class="dropdown mr-2">
-                            <button class="btn btn-light dropdown-toggle" type="button" id="divisionTrigger"
-                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                               Division
                             </button>
                             <div class="dropdown-menu dropdown-menu-right large-dropdown-menu"
@@ -426,8 +429,7 @@
                             </div>
                           </div>
                           <div class="dropdown mr-2">
-                            <button class="btn btn-light dropdown-toggle" type="button" id="divisionTrigger"
-                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                               Experience
                             </button>
                             <div class="dropdown-menu dropdown-menu-right large-dropdown-menu"
