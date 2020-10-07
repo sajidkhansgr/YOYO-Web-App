@@ -9,7 +9,7 @@
           <div class="communication">
             <div class="buttons-row row mt-3 justify-content-between mx-2">
               <!-- new announcment trigger modal -->
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAnnouncements">
+              <button type="button" class="btn btn-primary" (click)="openRegModal(anncModal)">
                 New Announcement
               </button>
             </div>
@@ -241,12 +241,11 @@
 </div>
 
 <!-- new announcment Modal -->
-<div class="modal fade" id="newAnnouncements" tabindex="-1" role="dialog" aria-labelledby="newAnnouncementsLabel"
-  aria-hidden="true">
+<ng-template #anncModal class="custom-modal" let-modal>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="newAnnouncementsLabel">New Announcement</h5>
+        <h5 class="modal-title" ngbAutofocus>New Announcement</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -296,4 +295,4 @@
       </div>
     </div>
   </div>
-</div>
+</ng-template>
