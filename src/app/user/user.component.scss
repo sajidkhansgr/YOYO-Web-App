@@ -3,15 +3,30 @@
 }
 
 .cog.dropdown-menu {
-  min-height: 100px;
+  min-height: 200px;
+
+  .scrollable {
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  span.heading {
+    font-size: 14px;
+  }
+
+  span.text-secondary {
+    font-size: 12px;
+  }
 
   .dropdown-item {
+    font-size: 13px;
+
+    i {
+      font-size: 11px;
+    }
+
     .ellipsis {
       opacity: 0;
-
-      i {
-        font-size: 12px;
-      }
     }
   }
 
