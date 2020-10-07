@@ -5,6 +5,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 import { UserComponent } from './user.component';
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
     MatTabsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    DragDropModule
   ]
 })
 export class UserModule { }
