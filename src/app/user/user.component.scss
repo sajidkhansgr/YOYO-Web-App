@@ -1,3 +1,23 @@
-.min-ht{
+.min-ht {
   min-height: 20px;
+}
+
+.cog.dropdown-menu {
+  min-height: 100px;
+
+  .dropdown-item {
+    .ellipsis {
+      opacity: 0;
+
+      i {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .dropdown-item:hover {
+    .ellipsis {
+      opacity: 1;
+    }
+  }
 }

@@ -8,9 +8,6 @@
 // custom styling
 
 // global
-$hi-grey: #F7F7F7;
-$hi-dark-grey: darken($color: $hi-grey, $amount: 10);
-$hi-dark:#3E434A;
 
 html,
 body {
@@ -126,8 +123,8 @@ body {
 
 .mat-option.mat-active,
 .mat-option:hover {
-  background-color: lighten($color: $primary, $amount: 9) !important;
-  color: white !important;
+  background-color: $hi-dark-grey !important;
+  color: darken($color: $hi-dark, $amount: 15) !important;
 }
 
 .custom-material-select {

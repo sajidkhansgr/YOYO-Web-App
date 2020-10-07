@@ -55,13 +55,19 @@
                                     <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                                       <i class="fas fa-cog"></i>
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="cog dropdown-menu dropdown-menu-right">
                                       <span class="ml-2">Visible Columns</span>
                                       <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList"
                                         [cdkDropListData]="visbCols" class="min-ht pl-0 mt-2"
                                         [cdkDropListConnectedTo]="[hidList]" (cdkDropListDropped)="drop($event)">
-                                        <button class="dropdown-item" *ngFor="let col of visbCols;let i=index" cdkDrag>
-                                          <i class="fas fa-eye mr-2" (click)="showHideCols(col,'hide',i)"></i>{{col.n}}
+                                        <button class="dropdown-item pl-2" *ngFor="let col of visbCols;let i=index"
+                                          cdkDrag>
+                                          <span class="ellipsis mr-3">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                            <i class="fa fa-ellipsis-v"></i>
+                                          </span>
+                                          <i class="text-primary fas fa-eye mr-2"
+                                            (click)="showHideCols(col,'hide',i)"></i>{{col.n}}
                                         </button>
                                         <span *ngIf="visbCols.length==0" class="ml-2 text-secondary">No visbible
                                           columns</span>
@@ -70,7 +76,12 @@
                                       <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList"
                                         [cdkDropListData]="hidCols" class="min-ht pl-0 mt-2 mb-0"
                                         [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
-                                        <button class="dropdown-item" *ngFor="let col of hidCols;let i=index" cdkDrag>
+                                        <button class="dropdown-item pl-2" *ngFor="let col of hidCols;let i=index"
+                                          cdkDrag>
+                                          <span class="ellipsis mr-3 mb-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                            <i class="fa fa-ellipsis-v"></i>
+                                          </span>
                                           <i class="fas fa-eye-slash mr-2"
                                             (click)="showHideCols(col,'show',i)"></i>{{col.n}}
                                         </button>
@@ -93,10 +104,10 @@
                             <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showDoc}">
                               <thead>
                                 <tr>
-                                  <ng-container *ngFor="let col of cols" class="curs-ptr">
-                                    <th *ngIf="col.visb">
-                                      {{col.n}}<i class="fas fa-sort-down ml-1 align-top"
-                                        [ngClass]="{'fa-sort-down': col.dir==1, 'fa-sort-up': col.dir==0}"></i>
+                                  <ng-container *ngFor="let col of cols">
+                                    <th *ngIf="col.visb" class="curs-ptr">
+                                      {{col.n}}<i class="fas ml-1"
+                                        [ngClass]="{'fa-sort-down align-top': col.dir==1, 'fa-sort-up align-bottom': col.dir==0}"></i>
                                     </th>
                                   </ng-container>
                                 </tr>
