@@ -6,6 +6,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { HubComponent } from './hub.component';
 const routes: Routes = [
@@ -21,7 +23,9 @@ const routes: Routes = [
     MatPaginatorModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatTooltipModule,
+    MatCheckboxModule
   ]
 })
 export class HubModule { }

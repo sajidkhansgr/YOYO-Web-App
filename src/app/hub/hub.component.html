@@ -15,15 +15,16 @@
                   Add Content
                 </button>
                 <div class="dropdown-menu" aria-labelledby="addCOntentDD">
-                  <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-file-alt mr-1"></i>Upload
+                  <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal"
+                    data-target="#uploadFileModal"><i class="fas fa-file-alt mr-1"></i>Upload
                     Files</a>
-                  <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>Add a URL</a>
+                  <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#addURLModal"><i
+                      class="fas fa-link mr-1"></i>Add a URL</a>
                 </div>
               </div>
               <div class="btn btn-primary btn-sm float" (click)="workspaceToggle($event)" id="worksp"><i
                   class="fas fa-chevron-right mr-1"></i>Workspace</div>
             </div>
-
             <div class="row mt-4 mx-0">
               <div class="sub-tab-nav col-md-12">
                 <div class="card overflow-hidden">
@@ -800,6 +801,114 @@
           </div>
         </mat-tab>
       </mat-tab-group>
+    </div>
+  </div>
+</div>
+
+
+<!-- Upload File Modal -->
+<div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadFileModalLabel">Upload File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="custom-file-select">
+          <div class="input-group w-50 mx-auto">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="uploadFileInput">
+              <label class="custom-file-label" for="uploadFileInput">Choose file</label>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="w-100 dark-bg-hover p-2 rounded" data-toggle="collapse" data-target="#collapseProps"
+          aria-expanded="false" aria-controls="collapseProps">
+          Properties
+          <div class="float-right">
+            <i class="fa fa-angle-down"></i>
+          </div>
+        </div>
+        <div class="collapse mt-2" id="collapseProps">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Add Tags</mat-label>
+            <input matInput placeholder="Add Tags">
+            <mat-hint>Tags help you filter content or create smart folders</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add URL Modal -->
+<div class="modal fade" id="addURLModal" tabindex="-1" aria-labelledby="addURLModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addURLModalLabel">Add a URL</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Icon</mat-label>
+          <mat-select [(value)]="addURLIcon" (selectionChange)="iconURLHandler()">
+            <mat-option value="def-icon">Default Icon</mat-option>
+            <mat-option value="cust-icon">Choose a Custom Icon</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="custom-file-select" [style.display]="custIconAddURL">
+          <div class="input-group w-50 mx-auto">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="addURLFileInput">
+              <label class="custom-file-label" for="addURLFileInput">Choose file</label>
+            </div>
+          </div>
+        </div>
+        <div class="image border mt-2 mb-4" style="height: 100px; width: auto;">
+        </div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Add a Name">
+          <div matSuffix>.url</div>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Description</mat-label>
+          <textarea matInput placeholder="Add a Description"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>URL *</mat-label>
+          <input matInput placeholder="Add a URL">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Tags</mat-label>
+          <input matInput placeholder="Add tags">
+        </mat-form-field>
+        <div class="options">
+          Options<br />
+          <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle"
+              matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br />
+          <mat-checkbox>Can be Shared <i class="fa fa-info-circle"
+              matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
+          <mat-checkbox>View in Showpad <i class="fa fa-info-circle"
+              matTooltip="This permission only works for https links"></i></mat-checkbox><br />
+          <mat-checkbox>Hide name in Workspace</mat-checkbox>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
     </div>
   </div>
 </div>
