@@ -30,12 +30,23 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  outsideCloseDD = () => {
+    let dd = document.querySelector('.cog.dropdown-menu');
+    if (dd!.classList.contains('show')) {
+      dd!.classList.remove('show');
+    }
+  }
+
   toggleDropdown = (event: any) => {
-    event.target.nextSibling.classList.toggle('show');
+    if (event.target!.classList.contains('fas')) {
+      event.target.parentNode.nextSibling!.classList.toggle('show');
+    } else {
+      event.target.nextSibling!.classList.toggle('show');
+    }
   }
 
   closeDropdown = (event: any) => {
-    event.target.parentNode.parentNode.classList.remove('show');
+    event.target.parentNode.parentNode!.classList.remove('show');
   }
 
   toggleDoc = () => {

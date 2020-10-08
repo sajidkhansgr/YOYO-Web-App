@@ -51,7 +51,7 @@
                                   </button>
                                 </div>
                                 <div class="float-right">
-                                  <div class="dropdown">
+                                  <div class="dropdown" (clickOutside)="outsideCloseDD()">
                                     <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                                       <i class="fas fa-cog"></i>
                                     </button>
