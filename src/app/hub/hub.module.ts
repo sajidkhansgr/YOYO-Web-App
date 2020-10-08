@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ContentWorkspaceModule } from './content-workspace/content-workspace.module';
+import { TagsModule } from './tags/tags.module';
 
 import { HubComponent } from './hub.component';
 const routes: Routes = [
@@ -25,7 +27,9 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    ContentWorkspaceModule,
+    TagsModule
   ]
 })
 export class HubModule { }
