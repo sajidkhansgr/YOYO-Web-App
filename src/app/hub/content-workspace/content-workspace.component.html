@@ -96,17 +96,13 @@
                 </div>
                 <div class="card-footer row justify-content-between mx-0">
                   <div class="pages">
-                    <div class="input-group mb-3">
-                      <select class="custom-select rounded" id="inputGroupSelect02">
-                        <option selected>10</option>
-                        <option>20</option>
-                      </select>
-                      <div class="input-group-append">
-                        <label class="input-group-text bg-transparent border-0 text-hi-dark-grey"
-                          for="inputGroupSelect02">Showing 1-10 of
-                          100</label>
-                      </div>
-                    </div>
+                    <mat-form-field appearance="outline" class="mr-2">
+                      <mat-select>
+                        <mat-option value="10">10</mat-option>
+                        <mat-option value="10">20</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <span>Showing 1-10 of 100 </span>
                   </div>
                   <ul class="pagination">
                     <li class="page-item disabled">
@@ -165,11 +161,13 @@
                 </div>
                 <div class="edit" style="display: none;">
                   <form>
-                    <div class="form-group">
-                      <input type="text" class="form-control" placeholder="Description">
-                    </div>
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                      [floatLabel]="'never'">
+                      <input matInput placeholder="Description" class="ml-0">
+                    </mat-form-field>
                     <div class="form-group text-right">
-                      <button type="reset" class="btn btn-secondary btn-sm" (click)="closeEdit($event)">Cancel</button>
+                      <button type="reset" class="btn btn-secondary btn-sm mr-2"
+                        (click)="closeEdit($event)">Cancel</button>
                       <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                     </div>
                   </form>
@@ -192,11 +190,12 @@
                       </div>
                       <div class="edit" style="display: none;">
                         <form>
-                          <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Tags">
-                          </div>
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                            [floatLabel]="'never'">
+                            <input matInput placeholder="Tags" class="ml-0">
+                          </mat-form-field>
                           <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm"
+                            <button type="reset" class="btn btn-secondary btn-sm mr-2"
                               (click)="closeEdit($event)">Cancel</button>
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                           </div>
@@ -218,11 +217,12 @@
                         </div>
                         <div class="edit" style="display: none;">
                           <form>
-                            <div class="form-group">
-                              <input type="text" class="form-control" placeholder="Author">
-                            </div>
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                              [floatLabel]="'never'">
+                              <input matInput placeholder="Author" class="ml-0">
+                            </mat-form-field>
                             <div class="form-group text-right">
-                              <button type="reset" class="btn btn-secondary btn-sm"
+                              <button type="reset" class="btn btn-secondary btn-sm mr-2"
                                 (click)="closeEdit($event)">Cancel</button>
                               <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                             </div>
@@ -244,14 +244,16 @@
                         </div>
                         <div class="edit" style="display: none;">
                           <form>
-                            <div class="form-group">
-                              <input type="text" class="form-control" placeholder="Released">
-                            </div>
-                            <div class="form-group">
-                              <input type="text" class="form-control" placeholder="Expired">
-                            </div>
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                              [floatLabel]="'never'">
+                              <input matInput placeholder="Released" class="ml-0">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                              [floatLabel]="'never'">
+                              <input matInput placeholder="Expired" class="ml-0">
+                            </mat-form-field>
                             <div class="form-group text-right">
-                              <button type="reset" class="btn btn-secondary btn-sm"
+                              <button type="reset" class="btn btn-secondary btn-sm mr-2"
                                 (click)="closeEdit($event)">Cancel</button>
                               <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                             </div>
@@ -271,11 +273,12 @@
                       </div>
                       <div class="edit" style="display: none;">
                         <form>
-                          <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Language">
-                          </div>
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                            [floatLabel]="'never'">
+                            <input matInput placeholder="Language" class="ml-0">
+                          </mat-form-field>
                           <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm"
+                            <button type="reset" class="btn btn-secondary btn-sm mr-2"
                               (click)="closeEdit($event)">Cancel</button>
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                           </div>
@@ -294,11 +297,12 @@
                       </div>
                       <div class="edit" style="display: none;">
                         <form>
-                          <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Country">
-                          </div>
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                            [floatLabel]="'never'">
+                            <input matInput placeholder="Country" class="ml-0">
+                          </mat-form-field>
                           <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm"
+                            <button type="reset" class="btn btn-secondary btn-sm mr-2"
                               (click)="closeEdit($event)">Cancel</button>
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                           </div>
@@ -359,11 +363,12 @@
                           </div>
                           <div class="edit" style="display: none;">
                             <form>
-                              <div class="form-group">
-                                <input type="text" class="form-control" placeholder="External ID">
-                              </div>
+                              <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                                [floatLabel]="'never'">
+                                <input matInput placeholder="External ID" class="ml-0">
+                              </mat-form-field>
                               <div class="form-group text-right">
-                                <button type="reset" class="btn btn-secondary btn-sm"
+                                <button type="reset" class="btn btn-secondary btn-sm mr-2"
                                   (click)="closeEdit($event)">Cancel</button>
                                 <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                               </div>
@@ -404,15 +409,12 @@
                       </div>
                     </div>
                     <!-- add comment -->
-                    <div class="add-comment input-group mt-4">
-                      <input type="text" class="form-control border-right-0" placeholder="Write a comment..."
-                        aria-label="Write a comment..." aria-describedby="submit-comment">
-                      <div class="input-group-append">
-                        <span class="input-group-text bg-white border-left-0" id="submit-comment"><a
-                            href="javascript:void(0)" class="text-hi-dark-grey">
-                            <i class="fa fa-angle-double-right"></i>
-                          </a></span>
-                      </div>
+                    <div class="add-comment mt-4">
+                      <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                        [floatLabel]="'never'">
+                        <input matInput placeholder="Write a comment..." class="ml-0">
+                        <i matSuffix class="fa fa-angle-double-right curs-ptr"></i>
+                      </mat-form-field>
                     </div>
                   </div>
                 </mat-tab>

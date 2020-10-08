@@ -102,8 +102,7 @@
           </mat-select>
         </mat-form-field>
         <div class="custom-file-select" appDnd (fileDropped)="onFileDropped($event)" *ngIf="showCustomIcon">
-          <input type="file" id="uploadFileInput" multiple (change)="fileBrowseHandler($event)"
-            accept="image/x-png,image/gif,image/jpeg">
+          <input type="file" id="uploadFileInput" multiple (change)="fileBrowseHandler($event)" accept="image/*">
           <div class="text-center my-5">
             <h2><i class="fa fa-upload"></i></h2>
             <h5>Drag & Drop file here</h5>
