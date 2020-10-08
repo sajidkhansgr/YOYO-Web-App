@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -30,10 +30,13 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  outsideCloseDD = () => {
-    let dd = document.querySelector('.cog.dropdown-menu');
-    if (dd!.classList.contains('show')) {
-      dd!.classList.remove('show');
+  toggleNgDropdown = (myDrop: any) => {
+    myDrop.toggle();
+  }
+
+  outsideCloseDD = (dropdown: any) => {
+    if (dropdown!.classList.contains('show')) {
+      dropdown!.classList.remove('show');
     }
   }
 

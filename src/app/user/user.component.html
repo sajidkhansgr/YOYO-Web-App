@@ -51,11 +51,11 @@
                                   </button>
                                 </div>
                                 <div class="float-right">
-                                  <div class="dropdown" (clickOutside)="outsideCloseDD()">
+                                  <div class="dropdown" (clickOutside)="outsideCloseDD(cogDropDown)">
                                     <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                                       <i class="fas fa-cog"></i>
                                     </button>
-                                    <div class="cog dropdown-menu dropdown-menu-right">
+                                    <div class="cog dropdown-menu dropdown-menu-right" #cogDropDown>
                                       <div class="scrollable">
                                         <span class="ml-2 heading">Visible Columns</span>
                                         <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList"
@@ -366,11 +366,11 @@
                           </mat-form-field>
                         </div>
                         <div class="col-md-6 align-self-center row justify-content-end">
-                          <div class="dropdown mr-2">
+                          <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(propDropDown)">
                             <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                               Property
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right">
+                            <div class="dropdown-menu dropdown-menu-right" #propDropDown>
                               <button class="dropdown-item">
                                 <div class="form-check">
                                   <input class="form-check-input" type="checkbox" value="" id="propCheck1">
@@ -405,11 +405,11 @@
                               </button>
                             </div>
                           </div>
-                          <div class="dropdown mr-2">
+                          <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(divisionDropDown)">
                             <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                               Division
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right large-dropdown-menu"
+                            <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" #divisionDropDown
                               aria-labelledby="divisionTrigger">
                               <div class="input-group mb-2 p-2">
                                 <div class="input-group-prepend">
@@ -443,11 +443,11 @@
                               </button>
                             </div>
                           </div>
-                          <div class="dropdown mr-2">
+                          <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(expDropDown)">
                             <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                               Experience
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right large-dropdown-menu"
+                            <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" #expDropDown
                               aria-labelledby="divisionTrigger">
                               <div class="input-group mb-2 p-2">
                                 <div class="input-group-prepend">
