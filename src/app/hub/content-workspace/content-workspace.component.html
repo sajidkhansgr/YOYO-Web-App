@@ -2,13 +2,13 @@
 <div class="content-workspace">
   <div class="buttons-row row mt-3 justify-content-between mx-2">
     <div class="dropdown">
-      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addCOntentDD"
-        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addCOntentDD" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
         Add Content
       </button>
       <div class="dropdown-menu" aria-labelledby="addCOntentDD">
-        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal"
-          data-target="#uploadFileModal"><i class="fas fa-file-alt mr-1"></i>Upload
+        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#uploadFileModal"><i
+            class="fas fa-file-alt mr-1"></i>Upload
           Files</a>
         <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#addURLModal"><i
             class="fas fa-link mr-1"></i>Add a URL</a>
@@ -27,8 +27,7 @@
                 <h5 class="card-title px-3">
                   <div class="heading">
                     <div class="search">
-                      <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2"
-                        [floatLabel]="'never'">
+                      <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
                         <i matPrefix class="fas fa-search"></i>
                         <input matInput placeholder="Search ...">
                         <div matSuffix class="curs-ptr">
@@ -48,8 +47,7 @@
                         </th>
                         <th scope="col" class="curs-ptr">Added<i class="fas fa-sort-down ml-1 align-top"></i>
                         </th>
-                        <th scope="col" class="curs-ptr">Authors<i
-                            class="fas fa-sort-down ml-1 align-top"></i></th>
+                        <th scope="col" class="curs-ptr">Authors<i class="fas fa-sort-down ml-1 align-top"></i></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -112,19 +110,17 @@
                   </div>
                   <ul class="pagination">
                     <li class="page-item disabled">
-                      <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1"
-                        aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
+                      <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true"><i
+                          class="fas fa-chevron-left"></i></a>
                     </li>
-                    <li class="page-item active"><a class="page-link bg-hi-grey"
-                        href="javascript:void(0)">1</a>
+                    <li class="page-item active"><a class="page-link bg-hi-grey" href="javascript:void(0)">1</a>
                     </li>
                     <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">2</a>
                     </li>
                     <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">3</a>
                     </li>
                     <li class="page-item">
-                      <a class="page-link bg-hi-grey" href="javascript:void(0)"><i
-                          class="fas fa-chevron-right"></i></a>
+                      <a class="page-link bg-hi-grey" href="javascript:void(0)"><i class="fas fa-chevron-right"></i></a>
                     </li>
                   </ul>
                 </div>
@@ -173,8 +169,7 @@
                       <input type="text" class="form-control" placeholder="Description">
                     </div>
                     <div class="form-group text-right">
-                      <button type="reset" class="btn btn-secondary btn-sm"
-                        (click)="closeEdit($event)">Cancel</button>
+                      <button type="reset" class="btn btn-secondary btn-sm" (click)="closeEdit($event)">Cancel</button>
                       <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                     </div>
                   </form>
@@ -463,8 +458,7 @@
               <button class="btn btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown">
                 Users <span class="badge badge-light">11</span>
               </button>
-              <div class="dropdown-menu large-dropdown-menu pt-0 overflow-hidden"
-                aria-labelledby="btnUsersDD">
+              <div class="dropdown-menu large-dropdown-menu pt-0 overflow-hidden" aria-labelledby="btnUsersDD">
                 <div class="bg-hi-dark-grey p-2">Assign Experience Users</div>
                 <div class="p-3">
                   <form>
@@ -483,15 +477,13 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
                           </div>
-                          <input type="text" class="border-left-0 form-control form-control-sm"
-                            placeholder="Search">
+                          <input type="text" class="border-left-0 form-control form-control-sm" placeholder="Search">
                         </div>
                       </div>
                     </div>
                     <ul class="list-unstyled p-2">
                       <li><i class="fas fa-user-friends mr-1"></i>HES & Hi-Force
-                        <a href="javascript:void(0)" class="text-hi-dark float-right"><i
-                            class="fas fa-times"></i></a>
+                        <a href="javascript:void(0)" class="text-hi-dark float-right"><i class="fas fa-times"></i></a>
                       </li>
                     </ul>
                   </div>
@@ -526,14 +518,13 @@
                   <div class="dropdown-menu" aria-labelledby="comInfoDD">
                     <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
                       Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i
-                        class="fas fa-clone mr-1"></i>Duplicate Item</a>
+                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
+                      Item</a>
                     <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
                       Link</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i
-                        class="fas fa-trash-alt mr-1"></i>Delete Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i
-                        class="fas fa-folder-plus mr-1"></i>Create New
+                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
+                      Item</a>
+                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create New
                       Channel
                       from
                       Folder</a>
@@ -550,14 +541,13 @@
                   <div class="dropdown-menu" aria-labelledby="comInfoDD">
                     <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
                       Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i
-                        class="fas fa-clone mr-1"></i>Duplicate Item</a>
+                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
+                      Item</a>
                     <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
                       Link</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i
-                        class="fas fa-trash-alt mr-1"></i>Delete Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i
-                        class="fas fa-folder-plus mr-1"></i>Create New
+                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
+                      Item</a>
+                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create New
                       Channel
                       from
                       Folder</a>
@@ -574,14 +564,13 @@
                   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comInfoDD">
                     <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
                       Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i
-                        class="fas fa-clone mr-1"></i>Duplicate Item</a>
+                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
+                      Item</a>
                     <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
                       Link</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i
-                        class="fas fa-trash-alt mr-1"></i>Delete Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i
-                        class="fas fa-folder-plus mr-1"></i>Create New
+                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
+                      Item</a>
+                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create New
                       Channel
                       from
                       Folder</a>
