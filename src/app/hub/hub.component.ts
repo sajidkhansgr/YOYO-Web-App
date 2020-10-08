@@ -13,9 +13,9 @@ import { DEF_ICON } from '../shared/constants';
 export class HubComponent implements OnInit {
 
   arr: Array<number> = [0];
-  showCustomIcon: boolean = false;
   addURLIcon: string = '';
-  iconUrl: any = DEF_ICON;
+  iconUrl: any = '';
+  defIcon: any = DEF_ICON;
   dispPropsSection: boolean = false;
   files: any[] = [];
   custIcon: any;
@@ -32,12 +32,9 @@ export class HubComponent implements OnInit {
   }
 
   iconURLHandler = () => {
-    if (this.addURLIcon === 'cust-icon') {
-      this.showCustomIcon = true;
-    } else {
-      this.showCustomIcon = false;
-    }
+
   }
+
   showPropsSection = () => {
     this.dispPropsSection = !this.dispPropsSection;
   }

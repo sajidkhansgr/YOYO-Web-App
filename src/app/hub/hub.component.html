@@ -101,7 +101,7 @@
             <mat-option value="cust-icon">Choose a Custom Icon</mat-option>
           </mat-select>
         </mat-form-field>
-        <div class="custom-file-select" appFileDnd [style.display]="custIconAddURL" (fileDropped)="onFileDropped($event,true)">
+        <div class="custom-file-select" appFileDnd *ngIf="addURLIcon=='cust-icon'" (fileDropped)="onFileDropped($event,true)">
           <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
           <div class="text-center my-5">
             <h2><i class="fa fa-upload"></i></h2>
@@ -110,7 +110,7 @@
             <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
           </div>
         </div>
-        <img [src]="iconUrl" class="border mt-2 mb-4" style="height: 130px; width: auto;">
+        <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon" class="border mt-2 mb-4" style="height: 130px; width: auto;">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Name</mat-label>
           <input matInput placeholder="Add a Name">
