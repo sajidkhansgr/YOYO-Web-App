@@ -18,6 +18,7 @@ import { TokenDataService } from './shared/services/token-data.service';
 import { DataService } from './shared/services/data.service';
 import { HeaderModule } from './home-layout/header/header.module';
 import { SidebarModule } from './home-layout/sidebar/sidebar.module';
+import { FileDndDirective } from './shared/directives/file-dnd.directive';
 
 const appRoutes: Routes = [
     { path : '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
@@ -31,7 +32,8 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FileDndDirective
   ],
   imports: [
     BrowserModule,

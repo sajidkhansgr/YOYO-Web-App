@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ContentWorkspaceModule } from './content-workspace/content-workspace.module';
 import { TagsModule } from './tags/tags.module';
+import { FileProgessModule } from '../shared/components/file-progess/file-progess.module';
 
 import { HubComponent } from './hub.component';
 const routes: Routes = [
@@ -29,7 +30,8 @@ const routes: Routes = [
     MatTooltipModule,
     MatCheckboxModule,
     ContentWorkspaceModule,
-    TagsModule
+    TagsModule,
+    FileProgessModule
   ]
 })
 export class HubModule { }
