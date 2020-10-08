@@ -14,6 +14,7 @@ export class HubComponent implements OnInit {
   arr: Array<number> = [0];
   custIconAddURL: string = 'none';
   addURLIcon: string = '';
+  iconUrl: any = 'assets/images/def-icon.png';
 
   files: any[] = [];
   constructor() { }
@@ -48,6 +49,17 @@ export class HubComponent implements OnInit {
   fileBrowseHandler($event: any) {
     if ($event.target && $event.target.files)
       this.prepareFilesList($event.target.files);
+
+    // preview image
+    let input = $event.target;
+    if (input.files && input.files[0]) {
+      let reader = new FileReader();
+      reader.onload = (event: any) => {
+        this.iconUrl = event.target.result;
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
   }
 
   /**
@@ -56,6 +68,7 @@ export class HubComponent implements OnInit {
    */
   deleteFile(index: number) {
     this.files.splice(index, 1);
+    this.iconUrl = 'assets/images/def-icon.png';
   }
 
   /**

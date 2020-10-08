@@ -21,7 +21,7 @@
 
 <!-- Upload File Modal -->
 <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="uploadFileModalLabel">Upload File</h5>
@@ -77,67 +77,84 @@
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Add URL Modal -->
-  <div class="modal fade" id="addURLModal" tabindex="-1" aria-labelledby="addURLModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addURLModalLabel">Add a URL</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+<!-- Add URL Modal -->
+<div class="modal fade" id="addURLModal" tabindex="-1" aria-labelledby="addURLModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addURLModalLabel">Add a URL</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Icon</mat-label>
+          <mat-select [(value)]="addURLIcon" (selectionChange)="iconURLHandler()">
+            <mat-option value="def-icon">Default Icon</mat-option>
+            <mat-option value="cust-icon">Choose a Custom Icon</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="custom-file-select" appDnd (fileDropped)="onFileDropped($event)" [style.display]="custIconAddURL">
+          <input type="file" id="uploadFileInput" multiple (change)="fileBrowseHandler($event)">
+          <div class="text-center my-5">
+            <h2><i class="fa fa-upload"></i></h2>
+            <h5>Drag & Drop file here</h5>
+            OR
+            <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
+          </div>
         </div>
-        <div class="modal-body">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Icon</mat-label>
-            <mat-select [(value)]="addURLIcon" (selectionChange)="iconURLHandler()">
-              <mat-option value="def-icon">Default Icon</mat-option>
-              <mat-option value="cust-icon">Choose a Custom Icon</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <div class="custom-file-select" [style.display]="custIconAddURL">
-            <div class="input-group w-50 mx-auto">
-              <div class="custom-file">
-                <input type="file" class="custom-file-input" id="addURLFileInput">
-                <label class="custom-file-label" for="addURLFileInput">Choose file</label>
-              </div>
+        <div class="files-list">
+          <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
+            <div class="info mx-auto">
+              <h6 class="name mb-0">
+                {{ file?.name }}
+              </h6>
+              <p class="size mb-0">
+                {{ formatBytes(file?.size) }}
+              </p>
+              <app-file-progess [progress]="file?.progress"></app-file-progess>
+            </div>
+            <div>
+              <i class="fas fa-trash" (click)="deleteFile(i)"></i>
             </div>
           </div>
-          <div class="image border mt-2 mb-4" style="height: 100px; width: auto;">
-          </div>
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Name</mat-label>
-            <input matInput placeholder="Add a Name">
-            <div matSuffix>.url</div>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Description</mat-label>
-            <textarea matInput placeholder="Add a Description"></textarea>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>URL *</mat-label>
-            <input matInput placeholder="Add a URL">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Tags</mat-label>
-            <input matInput placeholder="Add tags">
-          </mat-form-field>
-          <div class="options">
-            Options<br />
-            <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle"
-                matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br />
-            <mat-checkbox>Can be Shared <i class="fa fa-info-circle"
-                matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
-            <mat-checkbox>View in Showpad <i class="fa fa-info-circle"
-                matTooltip="This permission only works for https links"></i></mat-checkbox><br />
-            <mat-checkbox>Hide name in Workspace</mat-checkbox>
-          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+        <img [src]="iconUrl" class="border mt-2 mb-4" style="height: 130px; width: auto;">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Add a Name">
+          <div matSuffix>.url</div>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Description</mat-label>
+          <textarea matInput placeholder="Add a Description"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>URL *</mat-label>
+          <input matInput placeholder="Add a URL">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Tags</mat-label>
+          <input matInput placeholder="Add tags">
+        </mat-form-field>
+        <div class="options">
+          Options<br />
+          <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle"
+              matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br />
+          <mat-checkbox>Can be Shared <i class="fa fa-info-circle"
+              matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
+          <mat-checkbox>View in Showpad <i class="fa fa-info-circle"
+              matTooltip="This permission only works for https links"></i></mat-checkbox><br />
+          <mat-checkbox>Hide name in Workspace</mat-checkbox>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
+</div>
