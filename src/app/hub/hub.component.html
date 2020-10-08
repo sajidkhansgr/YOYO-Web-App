@@ -31,11 +31,26 @@
       </div>
       <div class="modal-body">
         <div class="custom-file-select">
-          <div class="input-group w-50 mx-auto">
+          <div class="input-group w-50 mx-auto" appDnd (fileDropped)="onFileDropped($event)">
             <div class="custom-file">
-              <input type="file" class="custom-file-input" id="uploadFileInput">
+              <input type="file" class="custom-file-input" id="uploadFileInput" multiple (change)="fileBrowseHandler($event)">
               <label class="custom-file-label" for="uploadFileInput">Choose file</label>
             </div>
+          </div>
+          <div class="files-list">
+           <div class="single-file" *ngFor="let file of files; let i = index">
+             <div class="info">
+               <h4 class="name">
+                 {{ file?.name }}
+               </h4>
+               <p class="size">
+                 {{ formatBytes(file?.size) }}
+               </p>
+               <app-file-progess [progress]="file?.progress"></app-file-progess>
+             </div>
+             <div>
+               <i class="fas fa-trash" (click)="deleteFile(i)"></i>
+             </div>
           </div>
         </div>
         <hr>
