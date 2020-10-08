@@ -187,12 +187,12 @@ body {
 
 // custom file select
 .custom-file-select {
-  height: 80px;
+  // height: 138px;
   border: 2px $hi-dark-grey dashed;
 
-  .input-group {
-    margin-top: 20px;
-  }
+  // .input-group {
+  //   margin-top: 50px;
+  // }
 
   .custom-file-label {
     border-width: 2px;
@@ -205,6 +205,23 @@ body {
     &:hover~.custom-file-label {
       border-color: $hi-dark;
       box-shadow: none;
+    }
+  }
+}
+
+// files list
+.files-list {
+
+  .single-file {
+    border: 2px $hi-dark-grey dashed;
+
+    .info {
+      width: 95%;
+    }
+
+    .progress {
+      height: 0.6rem !important;
+      background-color: $primary;
     }
   }
 }
