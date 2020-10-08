@@ -30,8 +30,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="custom-file-select" appDnd><!-- (fileDropped)="onFileDropped($event)" -->
-          <input type="file" id="uploadFileInput" multiple (change)="fileBrowseHandler($event)">
+        <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event)">
+          <input type="file" multiple (change)="fileBrowseHandler($event)">
           <div class="text-center my-5">
             <h2><i class="fa fa-upload"></i></h2>
             <h5>Drag & Drop file here</h5>
@@ -101,8 +101,8 @@
             <mat-option value="cust-icon">Choose a Custom Icon</mat-option>
           </mat-select>
         </mat-form-field>
-        <div class="custom-file-select" appDnd [style.display]="custIconAddURL">
-          <input type="file" id="uploadFileInput" multiple (change)="fileBrowseHandler($event ,true)" accept="image/*">
+        <div class="custom-file-select" appFileDnd [style.display]="custIconAddURL" (fileDropped)="onFileDropped($event,true)">
+          <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
           <div class="text-center my-5">
             <h2><i class="fa fa-upload"></i></h2>
             <h5>Drag & Drop file here</h5>

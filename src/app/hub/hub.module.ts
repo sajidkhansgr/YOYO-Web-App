@@ -11,6 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ContentWorkspaceModule } from './content-workspace/content-workspace.module';
 import { TagsModule } from './tags/tags.module';
 import { FileProgessModule } from '../shared/components/file-progess/file-progess.module';
+import { CustomDirectiveModule } from '../shared/directives/custom-directive.module';
 
 import { HubComponent } from './hub.component';
 const routes: Routes = [
@@ -31,7 +32,8 @@ const routes: Routes = [
     MatCheckboxModule,
     ContentWorkspaceModule,
     TagsModule,
-    FileProgessModule
+    FileProgessModule,
+    CustomDirectiveModule
   ]
 })
 export class HubModule { }

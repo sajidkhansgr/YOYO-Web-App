@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FileDndHelper} from '../shared/file-helper';
-
+import { DEF_ICON } from '../shared/constants';
 @Component({
   selector: 'app-hub',
   templateUrl: './hub.component.html',
@@ -15,11 +15,10 @@ export class HubComponent implements OnInit {
   arr: Array<number> = [0];
   showCustomIcon: boolean = false;
   addURLIcon: string = '';
-  iconUrl: any = 'assets/images/def-icon.png';
+  iconUrl: any = DEF_ICON;
   dispPropsSection: boolean = false;
-
   files: any[] = [];
-  defIcon: any[] = [];
+  custIcon: any;
   constructor() { }
 
   ngOnInit(): void {
@@ -45,9 +44,13 @@ export class HubComponent implements OnInit {
   // /**
   // * on file drop handler
   // */
-  // onFileDropped($event: any) {
-  //   this.prepareFilesList($event);
-  // }
+  onFileDropped($event: any,isIcon: boolean=false) {
+    if(!isIcon)
+      this.prepareFilesList($event, isIcon);
+    else{
+      this.renderImg($event[0])
+    }
+  }
 
   /**
    * handle file from browsing
@@ -58,11 +61,19 @@ export class HubComponent implements OnInit {
     // preview image
     let input = $event.target;
     if (input.files && input.files && isIcon) {
+      this.renderImg(input.files[0])
+    }
+  }
+
+  renderImg(file:any){
+    if (file) {
       let reader = new FileReader();
       reader.onload = (event: any) => {
+        console.log("sd")
         this.iconUrl = event.target.result;
       };
-      reader.readAsDataURL(input.files[0]);
+      this.custIcon = file;
+      reader.readAsDataURL(file);
     }
   }
 
@@ -72,7 +83,6 @@ export class HubComponent implements OnInit {
    */
   deleteFile(index: number) {
     this.files.splice(index, 1);
-    this.iconUrl = 'assets/images/def-icon.png';
   }
 
   /**
@@ -88,11 +98,11 @@ export class HubComponent implements OnInit {
             clearInterval(progressInterval);
             this.uploadFilesSimulator(index + 1);
           } else {
-            this.files[index].progress += 5;
+            this.files[index].progress += 20;
           }
-        }, 200);
+        }, 100);
       }
-    }, 1000);
+    }, 300);
   }
 
   /**
