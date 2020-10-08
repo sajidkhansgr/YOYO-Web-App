@@ -102,7 +102,7 @@
           </mat-select>
         </mat-form-field>
         <div class="custom-file-select" appDnd [style.display]="custIconAddURL">
-          <input type="file" id="uploadFileInput" multiple (change)="fileBrowseHandler($event ,true)">
+          <input type="file" id="uploadFileInput" multiple (change)="fileBrowseHandler($event ,true)" accept="image/*">
           <div class="text-center my-5">
             <h2><i class="fa fa-upload"></i></h2>
             <h5>Drag & Drop file here</h5>
