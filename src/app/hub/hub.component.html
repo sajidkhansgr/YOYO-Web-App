@@ -30,18 +30,13 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="custom-file-select">
-          <div class="text-center mt-5">
+        <div class="custom-file-select" appDnd (fileDropped)="onFileDropped($event)">
+          <input type="file" id="uploadFileInput" multiple (change)="fileBrowseHandler($event)">
+          <div class="text-center my-5">
             <h2><i class="fa fa-upload"></i></h2>
             <h5>Drag & Drop file here</h5>
             OR
-          </div>
-          <div class="input-group w-50 mx-auto mb-5 mt-2" appDnd (fileDropped)="onFileDropped($event)">
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="uploadFileInput" multiple
-                (change)="fileBrowseHandler($event)">
-              <label class="custom-file-label" for="uploadFileInput">Choose file</label>
-            </div>
+            <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
           </div>
         </div>
         <div class="files-list">
