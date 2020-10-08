@@ -12,9 +12,10 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 export class HubComponent implements OnInit {
 
   arr: Array<number> = [0];
-  custIconAddURL: string = 'none';
+  showCustomIcon: boolean = false;
   addURLIcon: string = '';
   iconUrl: any = 'assets/images/def-icon.png';
+  dispPropsSection: boolean = false;
 
   files: any[] = [];
   constructor() { }
@@ -31,10 +32,13 @@ export class HubComponent implements OnInit {
 
   iconURLHandler = () => {
     if (this.addURLIcon === 'cust-icon') {
-      this.custIconAddURL = 'block';
+      this.showCustomIcon = true;
     } else {
-      this.custIconAddURL = 'none';
+      this.showCustomIcon = false;
     }
+  }
+  showPropsSection = () => {
+    this.dispPropsSection = !this.dispPropsSection;
   }
   /**
   * on file drop handler
