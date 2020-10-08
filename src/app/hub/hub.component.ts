@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { FileDndHelper} from '../shared/file-helper';
 
 @Component({
   selector: 'app-hub',
@@ -18,6 +19,7 @@ export class HubComponent implements OnInit {
   dispPropsSection: boolean = false;
 
   files: any[] = [];
+  defIcon: any[] = [];
   constructor() { }
 
   ngOnInit(): void {
@@ -40,28 +42,26 @@ export class HubComponent implements OnInit {
   showPropsSection = () => {
     this.dispPropsSection = !this.dispPropsSection;
   }
-  /**
-  * on file drop handler
-  */
-  onFileDropped($event: any) {
-    this.prepareFilesList($event);
-  }
+  // /**
+  // * on file drop handler
+  // */
+  // onFileDropped($event: any) {
+  //   this.prepareFilesList($event);
+  // }
 
   /**
    * handle file from browsing
    */
-  fileBrowseHandler($event: any) {
+  fileBrowseHandler($event: any, isIcon: boolean=false) {
     if ($event.target && $event.target.files)
-      this.prepareFilesList($event.target.files);
-
+      this.prepareFilesList($event.target.files, isIcon);
     // preview image
     let input = $event.target;
-    if (input.files && input.files[0]) {
+    if (input.files && input.files && isIcon) {
       let reader = new FileReader();
       reader.onload = (event: any) => {
         this.iconUrl = event.target.result;
       };
-
       reader.readAsDataURL(input.files[0]);
     }
   }
@@ -99,28 +99,18 @@ export class HubComponent implements OnInit {
    * Convert Files list to normal array list
    * @param files (Files List)
    */
-  prepareFilesList(files: Array<any>) {
-    for (const item of files) {
-      item.progress = 0;
-      this.files.push(item);
+  prepareFilesList(files: Array<any>, isIcon: boolean) {
+    if(!isIcon){
+      for (const item of files) {
+        item.progress = 0;
+        this.files.push(item);
+      }
+      this.uploadFilesSimulator(0);
     }
-    this.uploadFilesSimulator(0);
   }
 
-  /**
-   * format bytes
-   * @param bytes (File size in bytes)
-   * @param decimals (Decimals point)
-   */
-  formatBytes(bytes: any, decimals?: any) {
-    if (bytes === 0) {
-      return '0 Bytes';
-    }
-    const k = 1024;
-    const dm = decimals <= 0 ? 0 : decimals || 2;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  getSize(bytes:any){
+    return FileDndHelper.formatBytes(bytes,2);
   }
 
 }
