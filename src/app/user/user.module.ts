@@ -5,7 +5,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-// import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatSelectModule } from '@angular/material/select';
 

@@ -24,6 +24,7 @@ const appRoutes: Routes = [
     { path : 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
     { path : 'hub', loadChildren: () => import('./hub/hub.module').then(m => m.HubModule) },
     { path : 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
+    { path : 'user/import', loadChildren: () => import('./user/import/import.module').then(m => m.ImportModule) },
     { path : 'communication', loadChildren: () => import('./commn/commn.module').then(m => m.CommnModule) },
     { path : 'reports', loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule) },
     { path : '**', loadChildren: () => import('./errors/404/error-404.module').then(m => m.Error404Module)}

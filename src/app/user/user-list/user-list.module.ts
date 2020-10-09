@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,7 +12,7 @@ import { UserListComponent } from './user-list.component';
 @NgModule({
   declarations: [UserListComponent],
   imports: [
-    CommonModule,
+    CommonModule,RouterModule,
     MatTabsModule,
     MatFormFieldModule,
     MatInputModule,
