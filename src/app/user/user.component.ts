@@ -11,13 +11,10 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 })
 export class UserComponent implements OnInit {
   showDoc: boolean = false;
-  visbCols: any[] = [{ n: "Role", key: "role" }]
-  hidCols: any[] = [{ n: "Property", key: "prop" }, { n: "License Type", key: "lic" }, { n: "License Type", key: "lic" }, { n: "License Type", key: "lic" }, { n: "License Type", key: "lic" }]
-  cols: any[] = [{ n: "Name", dir: 1, key: "name", visb: true }, { n: "Latest Activity", dir: 0, key: "date", visb: false },
-  { n: "Role", dir: 0, key: "role", visb: true }, { n: "Property", dir: 0, key: "prop", visb: false },
-  { n: "License Type", dir: 0, key: "lic", visb: false }, { n: "Groups", dir: 0, key: "gr", visb: false }, { n: "Division", dir: 0, key: "div", visb: false },
-  { n: "Experience", dir: 0, key: "exp", visb: false }
-  ]
+  visbCols: any[] = [{ n: "Role", key: "role",dir: 1, }];
+  hidCols: any[] = [{ n: "Property", key: "prop",dir: 1, }, { n: "License Type", key: "lic",dir: 1, }, { n: "License Type", key: "lic",dir: 1, },
+  { n: "License Type", key: "lic",dir: 1, }, { n: "License Type", key: "lic",dir: 1, }];
+  cols: any[] = [{ n: "Name", dir: 1, key: "name" }];
 
   data: any[] = [
     { name: "test", email: "email@email.com", date: "19 Aug 2020", date2: "19 Aug 2020", role: "User" },
@@ -28,6 +25,7 @@ export class UserComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.cols.push(...this.visbCols);
   }
 
   toggleNgDropdown = (myDrop: any) => {
@@ -38,6 +36,12 @@ export class UserComponent implements OnInit {
     if (dropdown!.classList.contains('show')) {
       dropdown!.classList.remove('show');
     }
+  }
+
+  saveHdrChngs= (event: any) => {
+    let nData = this.cols.slice(0, 1);
+    this.cols = [...nData, ...this.visbCols];
+    this.closeDropdown(event);
   }
 
   toggleDropdown = (event: any) => {
@@ -59,7 +63,7 @@ export class UserComponent implements OnInit {
     this.showDoc = false;
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop = (event: CdkDragDrop<string[]>) => {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -70,7 +74,7 @@ export class UserComponent implements OnInit {
     }
   }
 
-  showHideCols(col: any, type: string, i: number) {
+  showHideCols = (col: any, type: string, i: number) => {
     if (type === 'show') {
       this.hidCols.splice(i, 1);
       this.visbCols.push(col);
