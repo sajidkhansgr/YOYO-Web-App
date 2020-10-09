@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { UserListModule } from './user-list/user-list.module';
 import { GroupModule } from './group/group.module';
@@ -28,7 +29,8 @@ const routes: Routes = [
     ClickOutsideModule,
     MatSelectModule,
     UserListModule,
-    GroupModule
+    GroupModule,
+    MatRadioModule
   ]
 })
 export class UserModule { }

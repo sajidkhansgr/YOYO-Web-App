@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common'
 import { RouterModule, Routes } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FileProgessModule } from '../../shared/components/file-progess/file-progess.module';
+
 import { ImportComponent } from './import.component';
 const routes: Routes = [
   { path: '', component: ImportComponent }
@@ -11,6 +15,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    MatCheckboxModule,
+    MatFormFieldModule,
+    FileProgessModule
   ]
 })
 export class ImportModule { }

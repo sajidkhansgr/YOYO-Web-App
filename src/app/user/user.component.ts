@@ -10,6 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserComponent implements OnInit {
   arr: Array<number> = [0];
+  selectedOption: string = '';
   constructor() { }
 
   ngOnInit(): void {
