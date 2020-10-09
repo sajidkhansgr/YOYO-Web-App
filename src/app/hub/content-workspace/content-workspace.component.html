@@ -14,11 +14,12 @@
             class="fas fa-link mr-1"></i>Add a URL</a>
       </div>
     </div>
-    <div class="btn btn-primary btn-sm float" (click)="workspaceToggle($event)" id="worksp"><i
-        class="fas fa-chevron-right mr-1"></i>Workspace</div>
+    <div class="btn btn-primary btn-sm float" (click)="workspaceToggle()">
+      <i class="fas fa-chevron-right mr-1"></i>Workspace
+    </div>
   </div>
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav col-md-12">
+    <div [ngClass]="{'sub-tab-nav': true, 'col-md-12': !showDoc && !showWork, 'col-md-6': showDoc || showWork}">
       <div class="card overflow-hidden">
         <div class="card-header border-0">
           <mat-tab-group>
@@ -38,7 +39,7 @@
                   </div>
                 </h5>
                 <div class="card-text px-3">
-                  <table class="table table-hover text-dark w-100">
+                  <table class="table table-hover text-dark w-100" [class.hide-rows]="showDoc || showWork">
                     <thead>
                       <tr>
                         <th scope="col" class="curs-ptr">Name<i class="fas fa-sort-down ml-1 align-top"></i>
@@ -51,7 +52,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr (click)="workspaceToggle($event)" id="doc">
+                      <tr (click)="documentToggle()">
                         <td>
                           Group Stock Position - Regional Offices<br />
                           <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -61,7 +62,7 @@
                         <td>19 Aug 2020</td>
                         <td class="text-hi-dark-grey">Andrea D'Souza</td>
                       </tr>
-                      <tr (click)="workspaceToggle($event)" id="doc">
+                      <tr (click)="documentToggle()">
                         <td>
                           Group Stock Position - Regional Offices<br />
                           <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -71,7 +72,7 @@
                         <td>19 Aug 2020</td>
                         <td class="text-hi-dark-grey">Andrea D'Souza</td>
                       </tr>
-                      <tr (click)="workspaceToggle($event)" id="doc">
+                      <tr (click)="documentToggle()">
                         <td>
                           Group Stock Position - Regional Offices<br />
                           <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -81,7 +82,7 @@
                         <td>19 Aug 2020</td>
                         <td class="text-hi-dark-grey">Andrea D'Souza</td>
                       </tr>
-                      <tr (click)="workspaceToggle($event)" id="doc">
+                      <tr (click)="documentToggle()">
                         <td>
                           Group Stock Position - Regional Offices<br />
                           <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -128,8 +129,8 @@
         </div>
       </div>
     </div>
-    <div class="workspace w-100 col-md-6" [style.display]="workSecDisp">
-      <div class="document" [style.display]="docDisp">
+    <div class="workspace-container col-md-6" *ngIf="showDoc || showWork">
+      <div class="document" *ngIf="showDoc">
         <div class="card">
           <div class="card-header row m-0">
             <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">Group Stock Position - Regional Offices.pdf
@@ -423,7 +424,7 @@
           </div>
         </div>
       </div>
-      <div class="worksp" [style.display]="workspDisp">
+      <div class="worksp" *ngIf="showWork">
         <div class="card">
           <div class="card-header row m-0">
             <mat-form-field class="custom-material-select align-self-center" [floatLabel]="'never'">
@@ -433,13 +434,6 @@
                 <mat-option value="English">English</mat-option>
               </mat-select>
             </mat-form-field>
-            <!-- <div class="form-group mb-0 exp">
-              <select class="custom-select bg-transparent border-0">
-                <option selected hidden>Select a Workspace</option>
-                <option>English</option>
-                <option>Stock</option>
-              </select>
-            </div> -->
             <div class="ml-auto mr-2">
               <div class="btn btn-light" (click)="closeWorkspace()">
                 <i class="fas fa-times"></i>
@@ -452,8 +446,9 @@
                 Add
               </button>
               <div class="dropdown-menu" aria-labelledby="btnAddDD">
-                <a class="dropdown-item" href="javascript:void(0)">Add Folder</a>
-                <a class="dropdown-item" href="javascript:void(0)">Add Smart Folder</a>
+                <a class="dropdown-item" data-toggle="modal" data-target="#addFolderModal">Add
+                  Folder</a>
+                <a class="dropdown-item" data-toggle="modal" data-target="#addSmartFolderModal">Add Smart Folder</a>
               </div>
             </div>
             <div class="dropdown dark-bg-hover rounded">
@@ -464,23 +459,23 @@
                 <div class="bg-hi-dark-grey p-2">Assign Experience Users</div>
                 <div class="p-3">
                   <form>
-                    <div class="form-group mb-2">
-                      <input type="text" class="form-control form-control-sm" placeholder="Add User or Group">
-                    </div>
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
+                      [floatLabel]="'never'">
+                      <input matInput placeholder="Add User or Group" class="ml-0">
+                    </mat-form-field>
                     <div class="form-group text-right">
                       <button type="submit" class="btn btn-success text-white btn-sm">Submit</button>
                     </div>
                   </form>
                   <div class="border">
                     <div class="bg-hi-light-grey row m-0 py-1">
-                      <div class="col-5 align-self-center">Name</div>
-                      <div class="col-7">
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
-                          </div>
-                          <input type="text" class="border-left-0 form-control form-control-sm" placeholder="Search">
-                        </div>
+                      <div class="col-4 align-self-center">Name</div>
+                      <div class="col-8">
+                        <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white"
+                          [floatLabel]="'never'">
+                          <input matInput placeholder="Add User or Group" class="ml-0">
+                          <i matPrefix class="fas fa-search"></i>
+                        </mat-form-field>
                       </div>
                     </div>
                     <ul class="list-unstyled p-2">

@@ -12,6 +12,7 @@ import { ContentWorkspaceModule } from './content-workspace/content-workspace.mo
 import { TagsModule } from './tags/tags.module';
 import { FileProgessModule } from '../shared/components/file-progess/file-progess.module';
 import { CustomDirectiveModule } from '../shared/directives/custom-directive.module';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { HubComponent } from './hub.component';
 const routes: Routes = [
@@ -33,7 +34,8 @@ const routes: Routes = [
     ContentWorkspaceModule,
     TagsModule,
     FileProgessModule,
-    CustomDirectiveModule
+    CustomDirectiveModule,
+    MatRadioModule
   ]
 })
 export class HubModule { }

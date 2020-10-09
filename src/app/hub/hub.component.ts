@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FileDndHelper} from '../shared/file-helper';
+import { FileDndHelper } from '../shared/file-helper';
 import { DEF_ICON } from '../shared/constants';
 @Component({
   selector: 'app-hub',
@@ -17,6 +17,7 @@ export class HubComponent implements OnInit {
   iconUrl: any = '';
   defIcon: any = DEF_ICON;
   dispPropsSection: boolean = false;
+  dispSmartFolderSection: boolean = true;
   files: any[] = [];
   custIcon: any;
   constructor() { }
@@ -38,13 +39,17 @@ export class HubComponent implements OnInit {
   showPropsSection = () => {
     this.dispPropsSection = !this.dispPropsSection;
   }
+
+  showSmartFolderSection = () => {
+    this.dispSmartFolderSection = !this.dispSmartFolderSection;
+  }
   // /**
   // * on file drop handler
   // */
-  onFileDropped($event: any,isIcon: boolean=false) {
-    if(!isIcon)
+  onFileDropped($event: any, isIcon: boolean = false) {
+    if (!isIcon)
       this.prepareFilesList($event, isIcon);
-    else{
+    else {
       this.renderImg($event[0])
     }
   }
@@ -52,7 +57,7 @@ export class HubComponent implements OnInit {
   /**
    * handle file from browsing
    */
-  fileBrowseHandler($event: any, isIcon: boolean=false) {
+  fileBrowseHandler($event: any, isIcon: boolean = false) {
     if ($event.target && $event.target.files)
       this.prepareFilesList($event.target.files, isIcon);
     // preview image
@@ -62,7 +67,7 @@ export class HubComponent implements OnInit {
     }
   }
 
-  renderImg(file:any){
+  renderImg(file: any) {
     if (file) {
       let reader = new FileReader();
       reader.onload = (event: any) => {
@@ -107,7 +112,7 @@ export class HubComponent implements OnInit {
    * @param files (Files List)
    */
   prepareFilesList(files: Array<any>, isIcon: boolean) {
-    if(!isIcon){
+    if (!isIcon) {
       for (const item of files) {
         item.progress = 0;
         this.files.push(item);
@@ -116,8 +121,8 @@ export class HubComponent implements OnInit {
     }
   }
 
-  getSize(bytes:any){
-    return FileDndHelper.formatBytes(bytes,2);
+  getSize(bytes: any) {
+    return FileDndHelper.formatBytes(bytes, 2);
   }
 
 }

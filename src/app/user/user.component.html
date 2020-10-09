@@ -407,14 +407,11 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" #divisionDropDown
                               aria-labelledby="divisionTrigger">
-                              <div class="input-group mb-2 p-2">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text bg-white">
-                                    <i class="fa fa-search"></i>
-                                  </span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="Search Division">
-                              </div>
+                              <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
+                                [floatLabel]="'never'">
+                                <i matPrefix class="fas fa-search"></i>
+                                <input matInput placeholder="Search ...">
+                              </mat-form-field>
                               <div class="dropdown-divider"></div>
                               <div class="row justify-content-around m-0">
                                 <button class="btn btn-light text-primary">Select all</button>
@@ -445,14 +442,11 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" #expDropDown
                               aria-labelledby="divisionTrigger">
-                              <div class="input-group mb-2 p-2">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text bg-white">
-                                    <i class="fa fa-search"></i>
-                                  </span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="Search Experiences">
-                              </div>
+                              <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
+                                [floatLabel]="'never'">
+                                <i matPrefix class="fas fa-search"></i>
+                                <input matInput placeholder="Search ...">
+                              </mat-form-field>
                               <div class="dropdown-divider"></div>
                               <div class="row justify-content-around m-0">
                                 <button class="btn btn-light text-primary">Select all</button>
