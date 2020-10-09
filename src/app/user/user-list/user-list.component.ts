@@ -28,9 +28,11 @@ export class UserListComponent implements OnInit {
     myDrop.toggle();
   }
 
-  outsideCloseDD = (dropdown: any) => {
-    if (dropdown!.classList.contains('show')) {
-      dropdown!.classList.remove('show');
+  outsideCloseDD = (dropdown: any, event?: any) => {
+    if (!event.target!.classList.contains('fas')) {
+      if (dropdown!.classList.contains('show')) {
+        dropdown!.classList.remove('show');
+      }
     }
   }
 
