@@ -27,7 +27,9 @@ export class CommnComponent implements OnInit {
   closeDoc = () => {
     this.showDoc = false;
   }
-  openRegModal(content:any) {
+
+  openRegModal(content: any) {
+    console.log('abc');
     this.anncModalRef = this.modalService.open(content, { centered: true }).result
       .then((result) => {
         // console.log(`Closed with: ${result}`);
@@ -36,8 +38,8 @@ export class CommnComponent implements OnInit {
       });
   }
 
-  disMissMdodal(){
-    if(this.modalService)
+  disMissMdodal() {
+    if (this.modalService)
       this.modalService.dismissAll();
   }
 
