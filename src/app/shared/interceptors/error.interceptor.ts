@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TokenDataService } from '../services/token-data.service';
-import { HttpHelper } from '../http-helper';
+import { HttpHelper } from '../services/http-helper';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

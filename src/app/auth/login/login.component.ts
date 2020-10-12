@@ -7,7 +7,7 @@ import { AuthService } from '../auth.service';
 import { TokenDataService } from '../../shared/services/token-data.service';
 import { DataService } from '../../shared/services/data.service';
 import { CommonValidations } from '../../shared/validations/common-validations';
-import { HttpHelper } from '../../shared/http-helper';
+import { HttpHelper } from '../../shared/services/http-helper';
 
 @Component({
   selector: 'app-login',

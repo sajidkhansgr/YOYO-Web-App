@@ -1,51 +1,31 @@
 export class HttpHelper{
 
-  public static errMessage(data: any){
-    // console.log(data.Messages[0]!='', 'data');
-    if(data && data.Messages && Array.isArray(data.Messages) && data.Messages.length>0 && data.Messages[0]!=''){
+  public static errMessage(err: any){
+    if(err && err.error && Array.isArray(err.error.responseException) && err.error.responseException.length>0 && err.error.responseException[0]!=''){
       let msg: string = '';
-      // console.log("data.Messages",data.Messages);
-      for(let k=0;k<data.Messages.length;k++){
-        msg+=data.Messages[k];
-        if(data.Messages.length-1>k)
-        msg+=' ';
+      for(let k=0;k<err.error.responseException.length;k++){
+        msg+=err.error.responseException[k];
+        if(err.error.responseException.length-1>k)
+          msg+=' ';
       }
       return msg;
+    }else if(err && err.error && typeof (err.error.responseException)==='string'){
+      return err.error.responseException;
     }else{
       return 'Please try after some time';
     }
   }
 
-  public static saveData(data: any){
-    localStorage.setItem("acsTkn", data.Data.Token);
-    localStorage.setItem("mT", data.Data.MemberType == 'Patient' ? '1' : '2');
-    localStorage.setItem("id", data.Data.EId);
-    localStorage.setItem("eId", data.Data.EncryptedEId);
-    localStorage.setItem("fN", data.Data.FullName);
-    localStorage.setItem("p", data.Data.IsProfileAdded);
-  }
-
-  public static redirectToUrl(url: any, type: number): any{
-    if(type==2){
-      //login
-      if(url){
-        window.location = url;
-      }else{
-        return '/clinician/home';
-      }
-    }else{
-      //patient
-      if(url){
-        window.location = url;
-      }else{
-        return '/patient/home';
-      }
-    }
-  }
-
   public static getBasePath(): string{
-    console.log(window.location.protocol)
     return window.location.protocol + "//" + window.location.hostname;
+  }
+
+  public static redirectToUrl(url: any): any{
+    if(url){
+      window.location = url;
+    }else{
+      return '/hub/1/list';
+    }
   }
 
 }
