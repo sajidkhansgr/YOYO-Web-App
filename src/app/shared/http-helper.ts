@@ -9,6 +9,8 @@ export class HttpHelper{
           msg+=' ';
       }
       return msg;
+    }else if(err && err.error && typeof (err.error.responseException)==='string'){
+      return err.error.responseException;
     }else{
       return 'Please try after some time';
     }
@@ -16,6 +18,14 @@ export class HttpHelper{
 
   public static getBasePath(): string{
     return window.location.protocol + "//" + window.location.hostname;
+  }
+
+  public static redirectToUrl(url: any): any{
+    if(url){
+      window.location = url;
+    }else{
+      return '/hub/1/list';
+    }
   }
 
 }

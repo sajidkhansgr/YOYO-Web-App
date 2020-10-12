@@ -13,6 +13,7 @@ export class AppComponent {
   title = 'HiForceAdminUI';
   isToken:boolean = false;isVisb: boolean=false;
   routerSubs: Subscription;
+  usrInfo: any | null;
 
   constructor(
     private tokenDataServ: TokenDataService,
@@ -34,6 +35,16 @@ export class AppComponent {
 
   getToken(){
     this.isToken = this.tokenDataServ.getToken()?true:false;
+    let usr = this.tokenDataServ.getUser();
+    try{
+      if(usr && JSON.parse(usr)){
+        this.usrInfo = JSON.parse(usr) || null;
+      }else{
+        this.usrInfo = null;
+      }
+    }catch(ex){
+      this.usrInfo = null;
+    }
   }
 
   isAuthPage(): boolean{

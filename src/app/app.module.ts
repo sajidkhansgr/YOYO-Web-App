@@ -22,11 +22,11 @@ import { SidebarModule } from './home-layout/sidebar/sidebar.module';
 const appRoutes: Routes = [
     { path : '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
     { path : 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
-    { path : 'hub', loadChildren: () => import('./hub/hub.module').then(m => m.HubModule) },
-    { path : 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
-    { path : 'user/import', loadChildren: () => import('./user/import/import.module').then(m => m.ImportModule) },
-    { path : 'communication', loadChildren: () => import('./commn/commn.module').then(m => m.CommnModule) },
-    { path : 'reports', loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule) },
+    { path : 'hub/:id/list', loadChildren: () => import('./hub/hub.module').then(m => m.HubModule),canActivate:[AuthGuard] },
+    { path : 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule),canActivate:[AuthGuard] },
+    { path : 'user/import', loadChildren: () => import('./user/import/import.module').then(m => m.ImportModule),canActivate:[AuthGuard] },
+    { path : 'communication', loadChildren: () => import('./commn/commn.module').then(m => m.CommnModule),canActivate:[AuthGuard] },
+    { path : 'reports', loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule),canActivate:[AuthGuard] },
     { path : '**', loadChildren: () => import('./errors/404/error-404.module').then(m => m.Error404Module)}
 ];
 

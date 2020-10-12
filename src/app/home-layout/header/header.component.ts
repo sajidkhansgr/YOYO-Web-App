@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { TokenDataService } from '../../shared/services/token-data.service';
+import { DataService } from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-header',
@@ -6,16 +9,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  isToken:boolean = false;isVisb: boolean=false;
+  @Input() userInfo: any | null;
   // sidebar variables
   temp: string = 'close';
   // header variables
   nav!: any;
 
-  constructor() { }
+  constructor(
+    private tokenDataServ: TokenDataService,
+    private dataServ: DataService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
+    if(this.userInfo)
+    console.log("userInfo",(this.userInfo) )
     this.nav = document.querySelector('.toggle-navbar');
-
     // on resizing the screen
     window.addEventListener('resize', () => {
       // sidebar
@@ -24,17 +34,20 @@ export class HeaderComponent implements OnInit {
       } else {
         this.openSidebar();
       }
-
       // header
       this.navbarHandler();
     })
-
     // for smaller screens (sidebar)
     if (window.screen.width <= 768) {
       this.closeSidebar();
     }
     // navbar
     this.navbarHandler();
+  }
+
+  logout() {
+    this.tokenDataServ.removeAll();
+    // this.dataServ.passDataSend('change');
   }
 
   // header
@@ -50,21 +63,16 @@ export class HeaderComponent implements OnInit {
   openSidebar = () => {
     let sidebarTexts = document.querySelectorAll('.link-text');
     let arrow = document.querySelector('.sidebar .dropdown-toggle');
-
     // for sidebar (width)
     document.querySelector('.sidebar')!.classList.remove('closeSidebar');
-
-
     setTimeout(() => {
       // for text (display)
       for (var i = 0; i < sidebarTexts.length; i++) {
         sidebarTexts[i].classList.remove('displaySidebarText');
       }
-
       // for arrow (display)
       arrow!.classList.remove('displayArrow');
     }, 500);
-
     setTimeout(() => {
       // for text (opacity)
       for (var i = 0; i < sidebarTexts.length; i++) {
@@ -73,21 +81,17 @@ export class HeaderComponent implements OnInit {
       // for arrow (opacity)
       arrow!.classList.remove('showArrow');
     }, 600);
-
     this.temp = 'close';
   }
-
 
   // function for closing the sidebar
   closeSidebar = () => {
     let sidebarTexts = document.querySelectorAll('.link-text');
     let arrow = document.querySelector('.sidebar .dropdown-toggle');
-
     // for text (opacity)
     for (var i = 0; i < sidebarTexts.length; i++) {
       sidebarTexts[i].classList.add('showSidebarText');
     }
-
     // for arrow (opacity)
     arrow!.classList.add('showArrow');
 
@@ -96,10 +100,8 @@ export class HeaderComponent implements OnInit {
       for (var i = 0; i < sidebarTexts.length; i++) {
         sidebarTexts[i].classList.add('displaySidebarText');
       }
-
       // for arrow (display)
       arrow!.classList.add('displayArrow');
-
       // for sidebar (width)
       document.querySelector('.sidebar')!.classList.add('closeSidebar');
     }, 500);
@@ -140,4 +142,5 @@ export class HeaderComponent implements OnInit {
       this.closeSidebar();
     }
   }
+
 }

@@ -7,8 +7,8 @@ export class TokenDataService {
   constructor(private router: Router, private cookieServ: CookieService) { }
 
   getToken() {
-    // return this.cookieServ.get('acsTkn');
-    return true;
+    return this.cookieServ.get('acsTkn');
+    // return true;
   }
 
   removeAll() {
@@ -17,13 +17,16 @@ export class TokenDataService {
     this.router.navigate(['/auth/login']);
   }
 
-  setTokenAndUser(data: any) {
-    this.cookieServ.set('acsTkn', data.tkn||'', undefined, '/');
-    this.cookieServ.set('usrn', data.usrn||'', undefined, '/');
+  setTokenAndUser(res: any) {
+    this.cookieServ.set('acsTkn', res.token||'', undefined, '/');
+    let usr: any = {
+      id: res.id, rid: res.roleId, fN: res.fullName
+    };
+    this.cookieServ.set('usr', JSON.stringify(usr), undefined, '/');
   }
 
   getUser(){
-    return this.cookieServ.get('usrn');
+    return this.cookieServ.get('usr');
   }
 
 }

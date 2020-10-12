@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, CommonValidations.emailValidator]],
       password: ['', Validators.required]
     });
-    console.log("dsa")
   }
 
   ngOnInit(): void {
@@ -44,24 +43,23 @@ export class LoginComponent implements OnInit {
   login() {
     this.disabled = true;
     if (this.loginForm.valid) {
-      this.dataServ.passDataSend('change');
-      this.toastr.success('Login successfully', 'Success');
-      this.router.navigate(['/hub']);
-      // this.authSer.login(this.loginForm.value)
-      //   .subscribe((data: any) => {
-      //     if (data) {
-      //       this.tokenDataServ.setTokenAndUser({ tkn: data });
-      //       // this.dataServ.passDataSend('change');
-      //       // this.toastr.success('Login successfully', 'Success');
-      //       // this.router.navigate(['/hub']);
-      //     } else {
-      //       this.toastr.error(HttpHelper.errMessage(data) || 'Please check email or password!', 'Error!');
-      //       this.disabled = false;
-      //     }
-      //   }, (err: any) => {
-      //     this.disabled = false;
-      //   })
-
+      this.authSer.login(this.loginForm.value)
+        .subscribe((data: any) => {
+          console.log(data, 'data')
+          if (data && data.result && data.result.token && data.result.id) {
+            this.tokenDataServ.setTokenAndUser(data.result);
+            this.toastr.success('Login successfully', 'Success');
+            this.dataServ.passDataSend('change');
+            let nav= HttpHelper.redirectToUrl(this.redirectUrl);
+            this.router.navigate([nav]);
+          } else {
+            this.toastr.error(HttpHelper.errMessage(data) || 'Please check email or password!', 'Error!');
+            this.disabled = false;
+          }
+        }, (err: any) => {
+          console.log(err, 'err')
+          this.disabled = false;
+        })
     }
   }
 }
