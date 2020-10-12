@@ -3,8 +3,8 @@
     Import
   </h3>
   <form class="container">
-    <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
-      <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
+    <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event)">
+      <input type="file" id="uploadFileInput" multiple (change)="fileBrowseHandler($event)" accept="image/*">
       <div class="text-center my-5">
         <h2><i class="fa fa-upload"></i></h2>
         <h5>Drag & Drop a user data file here</h5>
