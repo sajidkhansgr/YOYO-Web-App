@@ -21,7 +21,6 @@ export class ImportComponent implements OnInit {
   // * on file drop handler
   // */
   onFileDropped($event: any, isIcon: boolean = false) {
-    console.log("dsa")
     if (!isIcon)
       this.prepareFilesList($event, isIcon);
   }
@@ -67,7 +66,6 @@ export class ImportComponent implements OnInit {
    * @param files (Files List)
    */
   prepareFilesList(files: Array<any>, isIcon: boolean) {
-    console.log("dasdasads",files)
     if (!isIcon) {
       for (const item of files) {
         item.progress = 0;

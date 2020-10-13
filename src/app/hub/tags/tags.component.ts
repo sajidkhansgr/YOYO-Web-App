@@ -26,7 +26,6 @@ export class TagsComponent implements OnInit {
       this.rowInfo = row;
     else
       this.rowInfo = {};
-    console.log("ds")
     this.showRowInfo = !this.showRowInfo;
   }
 
