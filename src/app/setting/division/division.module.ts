@@ -7,7 +7,6 @@ const routes = [
     { path: '', component: DivisionComponent}
 ];
 
-console.log("division")
 @NgModule({
   declarations: [DivisionComponent],
   imports: [

@@ -5,7 +5,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { SettingComponent } from './setting.component';
 import { DivisionModule } from './division/division.module';
 import { ProfileModule } from './profile/profile.module';
-console.log("da")
+
 const routes: Routes = [
   {
     path: '',
