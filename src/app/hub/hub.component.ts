@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FileDndHelper } from '../shared/file-helper';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { DEF_ICON } from '../shared/constants';
 @Component({
   selector: 'app-hub',
@@ -11,7 +13,7 @@ import { DEF_ICON } from '../shared/constants';
   encapsulation: ViewEncapsulation.None
 })
 export class HubComponent implements OnInit {
-
+  id!: string;routerSubs!: Subscription;
   arr: Array<number> = [0];
   addURLIcon: string = '';
   iconUrl: any = '';
@@ -20,9 +22,20 @@ export class HubComponent implements OnInit {
   dispSmartFolderSection: boolean = true;
   files: any[] = [];
   custIcon: any;
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
+    this.routerSubs = this.route.params.subscribe(params => {
+      this.id = params['id']
+      this.initialiseState(); // reset and set based on new parameter this time
+    });
+  }
+
+  initialiseState(){
+
   }
 
   onTabChange = (event: any) => {

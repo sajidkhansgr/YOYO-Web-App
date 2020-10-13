@@ -27,6 +27,7 @@ const appRoutes: Routes = [
     { path : 'user/import', loadChildren: () => import('./user/import/import.module').then(m => m.ImportModule),canActivate:[AuthGuard] },
     { path : 'communication', loadChildren: () => import('./commn/commn.module').then(m => m.CommnModule),canActivate:[AuthGuard] },
     { path : 'reports', loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule),canActivate:[AuthGuard] },
+    { path : 'account', loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule),canActivate:[AuthGuard] },
     { path : '**', loadChildren: () => import('./errors/404/error-404.module').then(m => m.Error404Module)}
 ];
 

@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { ContentWorkspaceComponent } from './content-workspace.component';
+import { HubService } from '../hub.service';
 
 @NgModule({
   declarations: [ContentWorkspaceComponent],
@@ -15,5 +16,6 @@ import { ContentWorkspaceComponent } from './content-workspace.component';
   exports: [
     ContentWorkspaceComponent
   ],
+  providers: [HubService],
 })
 export class ContentWorkspaceModule { }

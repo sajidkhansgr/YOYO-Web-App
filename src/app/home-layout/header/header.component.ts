@@ -23,8 +23,6 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(this.userInfo)
-    console.log("userInfo",(this.userInfo) )
     this.nav = document.querySelector('.toggle-navbar');
     // on resizing the screen
     window.addEventListener('resize', () => {

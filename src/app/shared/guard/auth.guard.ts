@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    console.log("RouterStateSnapshot",window.location.href)
+    // console.log("RouterStateSnapshot",window.location.href);
     if (!this.tokenDataServ.getToken()) {
         this.router.navigate(['auth/login'],{queryParams:{redirect_uri: window.location.href}});
         return false;
