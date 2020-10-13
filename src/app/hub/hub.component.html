@@ -430,3 +430,123 @@
     </div>
   </div>
 </div>
+
+<!-- data-toggle="modal" data-target="#editWorkspaceModal" -->
+<!-- Edit Workspace Modal -->
+<div class="modal fade" id="editWorkspaceModal" tabindex="-1" role="dialog" aria-labelledby="editWorkspaceModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editWorkspaceModalLabel">Edit Workspace</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showGeneral()">
+          Smart Folder Settings
+          <div class="float-right">
+            <ng-container *ngIf="dispGeneral; else elseIcon">
+              <i class="fa fa-angle-up"></i>
+            </ng-container>
+            <ng-template #elseIcon>
+              <i class="fa fa-angle-down"></i>
+            </ng-template>
+          </div>
+        </div> -->
+        <div class="general">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Workspace Label</mat-label>
+            <input matInput type="text" placeholder="Workspace Label">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Description</mat-label>
+            <textarea matInput type="text" placeholder="Description"></textarea>
+          </mat-form-field>
+        </div>
+        <div class="settings">
+          <mat-label>Content</mat-label>
+          <mat-checkbox class="d-block">Hide empty folders <i class="fa fa-info-circle"
+              matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
+          <mat-label>
+            Default view
+            <mat-radio-group aria-label="Select an option" class="d-block">
+              <mat-radio-button value="1" class="mr-2">Grid View</mat-radio-button>
+              <mat-radio-button value="2">List View</mat-radio-button>
+            </mat-radio-group>
+          </mat-label>
+        </div>
+        <div class="smartFolders">
+          <div class="add">
+            <mat-checkbox>Add</mat-checkbox>
+            <div class="row mx-0 justify-content-between">
+              <mat-form-field appearance="outline">
+                <input matInput type="text" placeholder="Search tags, languagees, countries">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-select>
+                  <mat-option value='all'>Match All</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="remove">
+            <mat-checkbox>Remove</mat-checkbox>
+            <mat-form-field appearance="outline" class="d-block">
+              <input matInput type="text" placeholder="Search tags, languagees, countries">
+            </mat-form-field>
+          </div>
+          <div class="replace">
+            <mat-checkbox>Replace</mat-checkbox>
+            <div class="row mx-0 justify-content-between">
+              <mat-form-field appearance="outline">
+                <input matInput type="text" placeholder="Search tags, languagees, countries">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <input matInput type="text" placeholder="Search tags, languagees, countries">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- edit category modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Name</mat-label>
+          <input matInput type="text" placeholder="Name">
+        </mat-form-field>
+        <mat-label>Published</mat-label>
+        <mat-checkbox class="d-block">Published</mat-checkbox>
+        <p class="text-danger">
+          When published, a tag category becomes available to users for filtering content based on tags (e.g. in
+          advanced search). You can uncheck this option to prevent a tag category can be used for filtering. Tags that
+          are part of an unpublished category will never be shown to users.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
