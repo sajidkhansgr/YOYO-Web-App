@@ -1,0 +1,17 @@
+.disable-icon::after {
+  content: none !important;
+}
+
+.cat-list {
+  li {
+    .float-right {
+      opacity: 0;
+    }
+  }
+
+  li:hover {
+    .float-right {
+      opacity: 1;
+    }
+  }
+}

@@ -13,7 +13,7 @@ import { DEF_ICON } from '../shared/constants';
   encapsulation: ViewEncapsulation.None
 })
 export class HubComponent implements OnInit {
-  id!: string;routerSubs!: Subscription;
+  id!: string; routerSubs!: Subscription;
   arr: Array<number> = [0];
   addURLIcon: string = '';
   iconUrl: any = '';
@@ -22,6 +22,10 @@ export class HubComponent implements OnInit {
   dispSmartFolderSection: boolean = true;
   files: any[] = [];
   custIcon: any;
+  dispGeneral: boolean = true;
+  dispSettings: boolean = true;
+  dispSmart: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router
@@ -34,8 +38,19 @@ export class HubComponent implements OnInit {
     });
   }
 
-  initialiseState(){
+  initialiseState() {
 
+  }
+
+  showGeneral = () => {
+    this.dispGeneral = !this.dispGeneral;
+  }
+
+  showSettings = () => {
+    this.dispSettings = !this.dispSettings;
+  }
+  showSmart = () => {
+    this.dispSmart = !this.dispSmart;
   }
 
   onTabChange = (event: any) => {

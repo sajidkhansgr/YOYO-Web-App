@@ -21,6 +21,14 @@ export class TagsComponent implements OnInit {
     this.showCatgIn = !this.showCatgIn;
   }
 
+  showCatListIP = (event: any) => {
+    event.target.parentNode.nextSibling.style.display = 'block';
+  }
+
+  closeCatListIP = (event: any) => {
+    event.target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = 'none';
+  }
+
   toggleInfo(row: any) {
     if (!this.showRowInfo)
       this.rowInfo = row;

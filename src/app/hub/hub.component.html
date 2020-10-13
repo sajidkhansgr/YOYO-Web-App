@@ -431,7 +431,6 @@
   </div>
 </div>
 
-<!-- data-toggle="modal" data-target="#editWorkspaceModal" -->
 <!-- Edit Workspace Modal -->
 <div class="modal fade" id="editWorkspaceModal" tabindex="-1" role="dialog" aria-labelledby="editWorkspaceModalLabel"
   aria-hidden="true">
@@ -444,8 +443,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <!-- <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showGeneral()">
-          Smart Folder Settings
+        <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showGeneral()">
+          General
           <div class="float-right">
             <ng-container *ngIf="dispGeneral; else elseIcon">
               <i class="fa fa-angle-up"></i>
@@ -454,8 +453,8 @@
               <i class="fa fa-angle-down"></i>
             </ng-template>
           </div>
-        </div> -->
-        <div class="general">
+        </div>
+        <div class="general" *ngIf="dispGeneral">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Workspace Label</mat-label>
             <input matInput type="text" placeholder="Workspace Label">
@@ -465,21 +464,45 @@
             <textarea matInput type="text" placeholder="Description"></textarea>
           </mat-form-field>
         </div>
-        <div class="settings">
+        <hr>
+        <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showSettings()">
+          Settings
+          <div class="float-right">
+            <ng-container *ngIf="dispSettings; else elseIcon">
+              <i class="fa fa-angle-up"></i>
+            </ng-container>
+            <ng-template #elseIcon>
+              <i class="fa fa-angle-down"></i>
+            </ng-template>
+          </div>
+        </div>
+        <div class="settings" *ngIf="dispSettings">
           <mat-label>Content</mat-label>
-          <mat-checkbox class="d-block">Hide empty folders <i class="fa fa-info-circle"
+          <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle"
               matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
           <mat-label>
             Default view
-            <mat-radio-group aria-label="Select an option" class="d-block">
+            <mat-radio-group aria-label="Select an option" class="d-block ml-3">
               <mat-radio-button value="1" class="mr-2">Grid View</mat-radio-button>
               <mat-radio-button value="2">List View</mat-radio-button>
             </mat-radio-group>
           </mat-label>
         </div>
-        <div class="smartFolders">
+        <hr>
+        <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showSmart()">
+          Edit Contained Smart Folders (0)
+          <div class="float-right">
+            <ng-container *ngIf="dispSmart; else elseIcon">
+              <i class="fa fa-angle-up"></i>
+            </ng-container>
+            <ng-template #elseIcon>
+              <i class="fa fa-angle-down"></i>
+            </ng-template>
+          </div>
+        </div>
+        <div class="smartFolders" *ngIf="dispSmart">
           <div class="add">
-            <mat-checkbox>Add</mat-checkbox>
+            <mat-checkbox class="ml-3">Add</mat-checkbox>
             <div class="row mx-0 justify-content-between">
               <mat-form-field appearance="outline">
                 <input matInput type="text" placeholder="Search tags, languagees, countries">
@@ -492,13 +515,13 @@
             </div>
           </div>
           <div class="remove">
-            <mat-checkbox>Remove</mat-checkbox>
+            <mat-checkbox class="ml-3">Remove</mat-checkbox>
             <mat-form-field appearance="outline" class="d-block">
               <input matInput type="text" placeholder="Search tags, languagees, countries">
             </mat-form-field>
           </div>
           <div class="replace">
-            <mat-checkbox>Replace</mat-checkbox>
+            <mat-checkbox class="ml-3">Replace</mat-checkbox>
             <div class="row mx-0 justify-content-between">
               <mat-form-field appearance="outline">
                 <input matInput type="text" placeholder="Search tags, languagees, countries">

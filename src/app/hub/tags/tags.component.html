@@ -23,8 +23,32 @@
               </div>
             </mat-form-field>
           </div>
-          <ul class="list-unstyled ml-2 mt-1">
-            <li class="dark-bg-hover px-2 py-1 rounded mt-2">Category 1</li>
+          <ul class="list-unstyled ml-2 mt-1 cat-list">
+            <li class="dark-bg-hover px-2 py-1 rounded mt-2">
+              Category 1
+              <div class="float-right row mx-0">
+                <i class="fa fa-plus-circle align-self-center text-primary mr-2" (click)="showCatListIP($event)"></i>
+                <div class="dropdown">
+                  <div class="dropdown-toggle disable-icon" type="button" id="catEllipsis" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-ellipsis-h"></i>
+                  </div>
+                  <div class="dropdown-menu" aria-labelledby="catEllipsis">
+                    <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal"
+                      data-target="#editCategoryModal"><i class="fas fa-edit mr-1"></i>Edit</a>
+                    <a class="dropdown-item" href="javascript:void(0);"><i class="fas fa-trash-alt mr-1"></i>Delete</a>
+                  </div>
+                </div>
+              </div>
+              <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 flex" [floatLabel]="'never'"
+                style="display: none;">
+                <input matInput placeholder="Add Category" class="ml-0">
+                <div matSuffix class="curs-ptr">
+                  <i class="fas fa-times mr-2" (click)="closeCatListIP($event)"></i>
+                  <i class="fas fa-check-circle text-primary" (click)="closeCatListIP($event)"></i>
+                </div>
+              </mat-form-field>
+            </li>
           </ul>
         </div>
       </div>
