@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TagsComponent } from './tags.component';
 import { MatSelectModule } from '@angular/material/select';
+import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/confirm-dialog.module';
+import { TagsComponent } from './tags.component';
 
 @NgModule({
   declarations: [TagsComponent],
@@ -11,7 +12,8 @@ import { MatSelectModule } from '@angular/material/select';
     CommonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    ConfirmDialogModule
   ],
   exports: [
     TagsComponent
