@@ -1,6 +1,6 @@
 <div class="sidebar sticky-top border-right">
   <div class="navbar-nav">
-    <a class="nav-item p-2 text-hi-dark pl-3" href="javascript:void(0)">
+    <a class="nav-item p-2 text-hi-dark pl-3" [routerLinkActive]="['active']" [routerLink]="'/dashboard'">
       <div class="link-icon pr-3 align-middle"><i class="fas fa-th-large"></i></div>
       <div class="link-text align-middle">Dashboard</div>
     </a>
@@ -11,9 +11,9 @@
         <div class="link-text align-middle">Hub</div>
       </a>
       <div class="dropdown-menu ml-0" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item text-hi-dark" href="javascript:void(0)" [routerLinkActive]="['active']" [routerLink]="'/hub/1/list'">H.E.S. Sales Limited</a>
-        <a class="dropdown-item text-hi-dark" href="javascript:void(0)" [routerLinkActive]="['active']" [routerLink]="'/hub/2/list'">Hi-Force</a>
-        <a class="dropdown-item text-hi-dark" href="javascript:void(0)" [routerLinkActive]="['active']" [routerLink]="'/hub/3/list'">Protec SRL</a>
+        <a class="dropdown-item text-hi-dark" [routerLinkActive]="['active']" [routerLink]="'/hub/1/list'">H.E.S. Sales Limited</a>
+        <a class="dropdown-item text-hi-dark" [routerLinkActive]="['active']" [routerLink]="'/hub/2/list'">Hi-Force</a>
+        <a class="dropdown-item text-hi-dark" [routerLinkActive]="['active']" [routerLink]="'/hub/3/list'">Protec SRL</a>
       </div>
     </div>
     <a class="nav-item p-2 text-hi-dark pl-3" [routerLinkActive]="['active']" [routerLink]="'/user'">

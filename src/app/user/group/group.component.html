@@ -14,7 +14,7 @@
               <div class="search col-md-6">
                 <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
                   <i matPrefix class="fas fa-search"></i>
-                  <input matInput placeholder="Search ...">
+                  <input matInput placeholder="Search ..." autocomplete="disabled">
                   <div matSuffix class="curs-ptr">
                     <i class="fas fa-sliders-h"></i>
                   </div>
@@ -26,35 +26,11 @@
                     Property
                   </button>
                   <div class="dropdown-menu dropdown-menu-right" #propDropDown>
-                    <button class="dropdown-item">
+                    <button class="dropdown-item" *ngFor="let pr of props">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="propCheck1">
-                        <label class="form-check-label" for="propCheck1">
-                          Anonymized
-                        </label>
-                      </div>
-                    </button>
-                    <button class="dropdown-item">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="propCheck2">
-                        <label class="form-check-label" for="propCheck2">
-                          Not Assigned to an experience
-                        </label>
-                      </div>
-                    </button>
-                    <button class="dropdown-item">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="propCheck3">
-                        <label class="form-check-label" for="propCheck3">
-                          Not Assigned to a Division
-                        </label>
-                      </div>
-                    </button>
-                    <button class="dropdown-item">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="propCheck1">
-                        <label class="form-check-label" for="propCheck1">
-                          No Members
+                        <input class="form-check-input" type="checkbox" value="" id="{{pr.id}}">
+                        <label class="form-check-label" for="{{pr.id}}">
+                          {{pr.name}}
                         </label>
                       </div>
                     </button>
@@ -71,23 +47,15 @@
                     </mat-form-field>
                     <div class="dropdown-divider"></div>
                     <div class="row justify-content-around m-0">
-                      <button class="btn btn-light text-primary">Select all</button>
-                      <button class="btn btn-light">Clear all</button>
+                      <button class="btn btn-light text-primary" (click)="selClrAll(true)">Select all</button>
+                      <button class="btn btn-light" (click)="selClrAll(false)">Clear all</button>
                     </div>
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item">
+                    <button class="dropdown-item" *ngFor="let div of divisions">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="propCheck1">
-                        <label class="form-check-label" for="propCheck1">
-                          Anonymized
-                        </label>
-                      </div>
-                    </button>
-                    <button class="dropdown-item">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="propCheck1">
-                        <label class="form-check-label" for="propCheck1">
-                          Anonymized
+                        <input class="form-check-input" type="checkbox" value="" id="{{div.id}}">
+                        <label class="form-check-label" for="{{div.id}}">
+                          {{div.name}}
                         </label>
                       </div>
                     </button>
@@ -112,19 +80,11 @@
                       <button class="btn btn-light">Clear all</button>
                     </div>
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item">
+                    <button class="dropdown-item" *ngFor="let ex of exps">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="propCheck1">
-                        <label class="form-check-label" for="propCheck1">
-                          Anonymized
-                        </label>
-                      </div>
-                    </button>
-                    <button class="dropdown-item">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="propCheck1">
-                        <label class="form-check-label" for="propCheck1">
-                          Anonymized
+                        <input class="form-check-input" type="checkbox" value="" id="{{ex.id}}">
+                        <label class="form-check-label" for="{{ex.id}}">
+                          {{ex.name}}
                         </label>
                       </div>
                     </button>
@@ -137,7 +97,7 @@
             <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showDoc}">
               <thead>
                 <tr>
-                  <th scope="col" class="curs-ptr">NAME<i class="fas fa-sort-down ml-1 align-top"></i>
+                  <th scope="col" class="curs-ptr">Name<i class="fas fa-sort-down ml-1 align-top"></i>
                   </th>
                   <th scope="col" class="curs-ptr">Latest Activity<i class="fas fa-sort-down ml-1 align-top"></i>
                   </th>
@@ -149,15 +109,15 @@
                 </tr>
               </thead>
               <tbody>
-                <tr (click)="toggleDoc()">
+                <tr *ngFor="let d of data" (click)="toggleDoc()">
                   <td>
-                    User Full Name<br />
-                    <small>email@email.com</small>
+                    {{d.name}}<br />
+                    <small>{{d.email}}</small>
                   </td>
-                  <td class="text-hi-dark-grey">19 Aug 2020</td>
-                  <td>19 Aug 2020</td>
-                  <td class="text-hi-dark-grey">User</td>
-                  <td>19 Aug 2020</td>
+                  <td class="text-hi-dark-grey">{{d.date}}</td>
+                  <td>{{d.date}}</td>
+                  <td class="text-hi-dark-grey">{{d.role}}</td>
+                  <td>{{d.date2}}</td>
                 </tr>
               </tbody>
             </table>

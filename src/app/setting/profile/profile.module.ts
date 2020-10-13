@@ -8,7 +8,7 @@ import { ProfileComponent } from './profile.component';
 const routes = [
   { path: '', component: ProfileComponent }
 ];
-console.log("profile")
+
 @NgModule({
   declarations: [ProfileComponent],
   imports: [

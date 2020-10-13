@@ -4,10 +4,7 @@ const DEF_IMG: string = "assets/images/def-img";
 
 const DEF_ICON: string = "assets/images/def-icon.png";
 
-const DISB_FOOD: Array<any> = [ {n:'Enabled Foods',v:false},{n:'Disabled Foods',v:true}];
+const PRPS: Array<any> = [{id:1,name: "Anonymized"},{id:2,name: "Not Assigned to an experience"},{id:3,name: "Not Assigned to a Division"},
+  {id:4,name: "No members"}];
 
-enum EXCH_IMGS {
-  "exchangeFree"=2, "proteinCheck", "exchange", "avoid", "caution","info-only"
-}
-
-export {LMT_PAGE, DEF_IMG, DISB_FOOD, EXCH_IMGS, DEF_ICON}
+export {LMT_PAGE, DEF_IMG, PRPS, DEF_ICON};

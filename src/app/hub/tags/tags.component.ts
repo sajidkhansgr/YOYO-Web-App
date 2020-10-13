@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-tags',
@@ -10,7 +12,9 @@ export class TagsComponent implements OnInit {
   rowInfo: any;
   showRowInfo: boolean = false;
   showCatgIn: boolean = false;
-  constructor() { }
+  constructor(
+    public dialog: MatDialog
+  ) { }
 
 
   ngOnInit(): void {
@@ -39,6 +43,18 @@ export class TagsComponent implements OnInit {
 
   closeInfo = () => {
     this.showRowInfo = false
+  }
+
+  delCatg(catg:any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to delete this category? You can't undo this action.?`,
+        title: `Delete category`
+      }
+    }).afterClosed().subscribe(result => {
+      if (result) {
+      }
+    })
   }
 
 }
