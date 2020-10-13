@@ -6,7 +6,10 @@ import { map, filter, mergeMap, takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-setting',
   templateUrl: './setting.component.html',
-  styleUrls: ['./setting.component.scss']
+  styleUrls: ['./setting.component.scss'],
+  host: {
+    class: 'w-100'
+  }
 })
 export class SettingComponent implements OnInit {
   activeIndex!: number;
@@ -34,19 +37,19 @@ export class SettingComponent implements OnInit {
           this.checkAndGet();
         }
       )
-      this.checkAndGet();
+    this.checkAndGet();
   }
 
-  checkAndGet(){
+  checkAndGet() {
     this.activeIndex = this.route.snapshot.firstChild!.data['type'];
     console.log(this.activeIndex)
   }
 
-  onTabChange(event: any){
+  onTabChange(event: any) {
     let url = 'account/';
-    switch(event.index){
-      case 0: this.router.navigate([url+'profile']);break;
-      case 1: this.router.navigate([url+'divisions/list']);break;
+    switch (event.index) {
+      case 0: this.router.navigate([url + 'profile']); break;
+      case 1: this.router.navigate([url + 'divisions/list']); break;
     }
   }
 }
