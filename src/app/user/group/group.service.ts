@@ -31,4 +31,10 @@ export class GroupService {
   addGroup(data: any) {
     return this.http.post(`${AppSettings.ADD_GRP}`, data)
   }
+
+  viewGroup(id: string) {
+    return this.http.get(`${AppSettings.GET_GRP}`, {
+      params: { id }
+    });
+  }
 }

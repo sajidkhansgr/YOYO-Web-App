@@ -21,9 +21,6 @@ import { Hub } from '../../shared/models/hub';
 export class GroupComponent implements OnInit {
   showDoc: boolean = false;
   props: any = PRPS;
-  divisions: any = [
-    { id: 1, name: "Hub A" }, { id: 2, name: "Hub B" }, { id: 3, name: "Hub C" }
-  ];
   exps: any = [
     { id: 1, name: "Exp 1" }, { id: 2, name: "Exp 2" }, { id: 3, name: "Exp 3" }
   ];
@@ -32,6 +29,9 @@ export class GroupComponent implements OnInit {
   groupForm!: FormGroup;
   disabled: boolean = false;
   loading: boolean = true;
+  docId: string = '';
+  groupDetail: any;
+  docLoading: boolean = true;
 
   constructor(
     private modalService: NgbModal,
@@ -102,15 +102,48 @@ export class GroupComponent implements OnInit {
       });
   }
 
-  toggleDoc = () => {
-    this.showDoc = !this.showDoc;
+  getGroup(id: string) {
+    this.groupService.viewGroup(id).subscribe((data: any) => {
+      if (data && data.result) {
+        this.groupDetail = data.result;
+        this.docLoading = false;
+      }
+    }, (err: any) => {
+      this.docLoading = false;
+      console.log(err);
+    });
   }
+
+  toggleDoc = (event: any) => {
+    let id;
+    this.docLoading = true;
+    if (event.target.id) {
+      id = event.target.id;
+    } else if (event.target.parentNode.id) {
+      id = event.target.parentNode.id;
+    } else {
+      id = event.target.parentNode.parentNode.id;
+    }
+    if (id == this.docId) {
+      this.docId = '';
+      this.groupDetail = null;
+      this.showDoc = false;
+    } else {
+      this.docId = id;
+      this.getGroup(id);
+      this.showDoc = true;
+    }
+  }
+
   closeDoc = () => {
+    this.docId = '';
+    this.groupDetail = null;
+    this.docLoading = true;
     this.showDoc = false;
   }
 
-  outsideCloseDD = (dropdown: any) => {
-    if (dropdown!.classList.contains('show')) {
+  outsideCloseDD = (dropdown: any, event: any) => {
+    if (dropdown!.classList.contains('show') && !event.target!.classList.contains('form-check-input')) {
       dropdown!.classList.remove('show');
     }
   }
@@ -122,6 +155,7 @@ export class GroupComponent implements OnInit {
       event.target.nextSibling!.classList.toggle('show');
     }
   }
+
   selClrAll(isAll: boolean) {
     if (isAll) {
       //all select
