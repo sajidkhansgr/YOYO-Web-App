@@ -1,17 +1,27 @@
-<div class="main main-hub p-3">
+<div *ngIf="loading" style="min-height: 70vh; padding-top: 30vh;">
+  <mat-spinner color="accent" class="mx-auto page-spinner"></mat-spinner>
+</div>
+
+<div class="main main-hub p-3" *ngIf="!loading">
   <h3 class="mb-4 clearfix heading">
     <div class="float-left">
       <div class="dropdown">
         <div class="curs-ptr dropdown-toggle" id="divisionsDD" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
-          Hi-Force
+          {{hubDispName}}
         </div>
         <div class="dropdown-menu" aria-labelledby="divisionsDD">
-          <a class="dropdown-item" href="#">H.E.S Sales Limited</a>
-          <a class="dropdown-item" href="#">Hi-Force</a>
-          <a class="dropdown-item" href="#">ABC</a>
+          <ng-container *ngIf="hubs[0]; else noHubs">
+            <a class="dropdown-item curs-ptr" *ngFor="let hub of hubs" [attr.id]="hub.id"
+              (click)="divChange($event)">{{hub.name}}</a>
+          </ng-container>
+          <ng-template #noHubs>
+            <h6 class="dropdown-item text-secondary">No Hubs Found</h6>
+          </ng-template>
+
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#addDivisionModal">New Division</a>
+          <a class="dropdown-item text-primary curs-ptr" (click)="openModal(addDivision)">Add New
+            Division</a>
         </div>
       </div>
     </div>
@@ -22,7 +32,7 @@
           <i class="fa fa-cog"></i>
         </button>
         <div class="dropdown-menu" aria-labelledby="cogDD">
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editDivisionModal">Edit</a>
+          <a class="dropdown-item curs-ptr" (click)=openModal(editDivision)>Edit</a>
         </div>
       </div>
     </div>
@@ -33,7 +43,7 @@
         <div class="card-header">
           Assigned Groups
           <div class="float-right">
-            <i class="fas fa-edit curs-ptr" data-toggle="modal" data-target="#updateGroupsModal"></i>
+            <i class="fas fa-edit curs-ptr" (click)=openModal(updateGroups)></i>
           </div>
         </div>
         <div class="card-body">
@@ -73,7 +83,7 @@
         <div class="card-header">
           Promoted Members
           <div class="float-right">
-            <div class="btn btn-primary" data-toggle="modal" data-target="#promoteMemberModal">Promote a Member</div>
+            <div class="btn btn-primary btn-sm" (click)=openModal(promoteMember)>Promote a Member</div>
           </div>
         </div>
         <div class="card-body">
@@ -104,3 +114,123 @@
     </div>
   </div>
 </div>
+
+<!-- add division modal  -->
+<ng-template #addDivision let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Create New Division</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" placeholder="Name">
+    </mat-form-field>
+    <mat-checkbox class="ml-3 w-100">This division can share selected content globally. Global content can
+      be viewed (but not edited) by all other divisions.</mat-checkbox>
+    <hr>
+    <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
+    <mat-checkbox class="d-block ml-3">All Users</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">HES & Hi-Force</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">Hi-Force</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">Hi-Force Distributors</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">Protec & Hi-Force</mat-checkbox>
+  </div>
+  <div class="modal-footer">
+    <button type="button" ngbAutofocus class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
+
+<!-- edit divison modal -->
+<ng-template #editDivision let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Edit Division</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" placeholder="Name">
+    </mat-form-field>
+    <mat-checkbox class="ml-3 w-100">This division can share selected content globally. Global content can
+      be viewed (but not edited) by all other divisions.</mat-checkbox>
+    <hr>
+    <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
+    <mat-checkbox class="d-block ml-3">All Users</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">HES & Hi-Force</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">Hi-Force</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">Hi-Force Distributors</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">Protec & Hi-Force</mat-checkbox>
+  </div>
+  <div class="modal-footer">
+    <button type="button" ngbAutofocus class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
+
+<!-- update groups modal -->
+<ng-template #updateGroups let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Update Groups</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
+    <mat-checkbox class="d-block ml-3">All Users</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">HES & Hi-Force</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">Hi-Force</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">Hi-Force Distributors</mat-checkbox>
+    <mat-checkbox class="d-block ml-3">Protec & Hi-Force</mat-checkbox>
+  </div>
+  <div class="modal-footer">
+    <button type="button" ngbAutofocus class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
+
+<!-- promote member modal -->
+<ng-template #promoteMember let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Promote Division Member</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Select a Member to Promote</mat-label>
+      <mat-select>
+        <mat-option value="abc">ABC</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="contnt">
+      <mat-label class="font-weight-bold mb-2">Content</mat-label>
+      <mat-checkbox class="d-block ml-3">Manage Content</mat-checkbox>
+      <mat-checkbox class="d-block ml-3">Manage Tags</mat-checkbox>
+    </div>
+    <div class="collab">
+      <mat-label class="font-weight-bold mb-2">Collaboration</mat-label>
+      <mat-checkbox class="d-block ml-3">Manage Spotlights and Announcements</mat-checkbox>
+    </div>
+    <div class="userMngmnt">
+      <mat-label class="font-weight-bold mb-2">User Management</mat-label>
+      <mat-checkbox class="d-block ml-3">Manage Users & Groups</mat-checkbox>
+    </div>
+    <div class="reporting">
+      <mat-label class="font-weight-bold mb-2">Reporting</mat-label>
+      <mat-checkbox class="d-block ml-3">View Content Reports</mat-checkbox>
+    </div>
+    <hr>
+    <div class="settings">
+      <mat-label class="font-weight-bold mb-2">Settings</mat-label>
+      <mat-checkbox class="d-block ml-3">Notify user by email</mat-checkbox>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" ngbAutofocus class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>

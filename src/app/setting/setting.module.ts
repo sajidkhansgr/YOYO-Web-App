@@ -2,10 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { SettingComponent } from './setting.component';
 import { DivisionModule } from './division/division.module';
@@ -39,11 +35,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MatTabsModule,
     ProfileModule,
-    DivisionModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatCheckboxModule
+    DivisionModule
   ]
 })
 export class SettingModule { }
