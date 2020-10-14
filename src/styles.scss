@@ -84,6 +84,20 @@ body {
 }
 
 // material
+.page-spinner {
+  height: 60px !important;
+  width: 60px !important;
+
+  svg {
+    height: 60px !important;
+    width: 60px !important;
+
+    circle {
+      stroke-width: 2% !important;
+    }
+  }
+}
+
 .mat-checkbox-layout {
   white-space: normal !important;
 }
