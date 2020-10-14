@@ -103,6 +103,21 @@ button[aria-label="Close"]:focus {
   }
 }
 
+.btn-spinner {
+  height: 15px !important;
+  width: 15px !important;
+
+  svg {
+    height: 15px !important;
+    width: 15px !important;
+
+    circle {
+      stroke: white !important;
+      stroke-width: 20% !important;
+    }
+  }
+}
+
 .mat-checkbox-layout {
   white-space: normal !important;
 }
