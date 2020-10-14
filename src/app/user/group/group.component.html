@@ -57,9 +57,9 @@
                       <button class="btn btn-light" (click)="selClrAll(false)">Clear all</button>
                     </div>
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" *ngFor="let div of divisions">
+                    <button class="dropdown-item" *ngFor="let div of divArr">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="{{div.id}}">
+                        <input class="form-check-input" type="checkbox" id="{{div.id}}">
                         <label class="form-check-label" for="{{div.id}}">
                           {{div.name}}
                         </label>
@@ -104,18 +104,22 @@
             <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showDoc}">
               <thead>
                 <tr>
-                  <th scope="col" class="curs-ptr">Name<i class="fas fa-sort-down ml-1 align-top"></i>
+                  <th scope="col" class="curs-ptr">
+                    Name<i class="fas fa-sort-down ml-1 align-top"></i>
                   </th>
-                  <th scope="col" class="curs-ptr">Date Created<i class="fas fa-sort-down ml-1 align-top"></i>
+                  <th scope="col" class="curs-ptr">
+                    Date Created<i class="fas fa-sort-down ml-1 align-top"></i>
                   </th>
-                  <th scope="col" class="curs-ptr">Members<i class="fas fa-sort-down ml-1 align-top"></i>
+                  <th scope="col" class="curs-ptr">
+                    Members<i class="fas fa-sort-down ml-1 align-top"></i>
                   </th>
-                  <th scope="col" class="curs-ptr">Anonymized<i class="fas fa-sort-down ml-1 align-top"></i>
+                  <th scope="col" class="curs-ptr">
+                    Anonymized<i class="fas fa-sort-down ml-1 align-top"></i>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let d of data" (click)="toggleDoc()" [attr.id]="d.id">
+                <tr *ngFor="let d of data" (click)="toggleDoc($event)" [attr.id]="d.id">
                   <td>
                     <span class="d-block">{{d.name}}</span>
                     <small>{{d.email}}</small>
@@ -155,10 +159,13 @@
       </div>
     </div>
     <div [ngClass]="{'workspace w-100 col-md-4': true,'hide' : !showDoc, 'show': showDoc}">
-      <div class="doc">
+      <div *ngIf="docLoading" style="min-height: 50vh; padding-top: 30vh;">
+        <mat-spinner color="accent" class="mx-auto page-spinner"></mat-spinner>
+      </div>
+      <div class="doc" *ngIf="groupDetail && !docLoading">
         <div class="card">
           <div class="card-header row m-0">
-            <h5 class="mb-0 pl-0 align-self-center">All Users</h5>
+            <h5 class="mb-0 pl-0 align-self-center">{{groupDetail.name}}</h5>
             <div class="ml-auto">
               <div class="btn btn-light" (click)="closeDoc()">
                 <i class="fa fa-times"></i>
@@ -176,7 +183,7 @@
               <div class="name">
                 <label class="text-hi-dark-grey mb-0 mt-2">Name</label>
                 <div class="value">
-                  Laura Thompson
+                  {{groupDetail.name}}
                 </div>
               </div>
               <div class="description">
