@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { HubService } from '../../hub/hub.service';
 import { Hub } from '../../shared/models/hub';
+import { DataService } from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-division',
@@ -16,12 +18,25 @@ export class DivisionComponent implements OnInit {
   loading: boolean = true;
   hubForm!: FormGroup; disabled: boolean = false;
   type!: string | undefined;
+  routerSubs: Subscription;
   constructor(
     private hubServ: HubService,
     private modalService: NgbModal,
     private fb: FormBuilder,
-    private toastr: ToastrService
-  ) { }
+    private toastr: ToastrService,
+    private dataServ: DataService
+  ) {
+    this.routerSubs = this.dataServ.currentInfo
+      .subscribe((data: any) => {
+        if(this.hubs.length>0 && Array.isArray(data) && data.length>0){
+          this.hubs = data;
+          const index = this.hubs.findIndex(ele => ele.id==this.selHub!.id);
+          if (index >= 0) {
+            this.selHub = this.hubs[index];
+          }
+        }
+      })
+  }
 
   ngOnInit(): void {
     this.getHubs();
@@ -95,6 +110,7 @@ export class DivisionComponent implements OnInit {
     this.hubServ.addHub(hubData)
       .subscribe((data: any) => {
         if (data) {
+          this.dataServ.passDataSend('hub-add');
           this.toastr.success(data.message||'Hub added successfully', 'Success!');
           this.disMissMdodal();
         } else {
@@ -112,6 +128,7 @@ export class DivisionComponent implements OnInit {
     this.hubServ.updateHub(hubData)
       .subscribe((data: any) => {
         if (data) {
+          this.dataServ.passDataSend('hub-upd');
           this.toastr.success(data.message||'Hub updated successfully', 'Success!');
           this.disMissMdodal();
         } else {
@@ -131,6 +148,9 @@ export class DivisionComponent implements OnInit {
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this.disMissMdodal();
+    if(!!this.routerSubs){
+      this.routerSubs.unsubscribe();
+    }
   }
 
 }

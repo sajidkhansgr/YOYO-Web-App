@@ -45,6 +45,7 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.tokenDataServ.removeAll();
+    this.nav = null;
     // this.dataServ.passDataSend('change');
   }
 
@@ -62,7 +63,8 @@ export class HeaderComponent implements OnInit {
     let sidebarTexts = document.querySelectorAll('.link-text');
     let arrow = document.querySelector('.sidebar .dropdown-toggle');
     // for sidebar (width)
-    document.querySelector('.sidebar')!.classList.remove('closeSidebar');
+    if(document.querySelector('.sidebar'))
+      document.querySelector('.sidebar')!.classList.remove('closeSidebar');
     setTimeout(() => {
       // for text (display)
       for (var i = 0; i < sidebarTexts.length; i++) {

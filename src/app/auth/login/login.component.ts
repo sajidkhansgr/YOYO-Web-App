@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
           if (data && data.result && data.result.token && data.result.id) {
             this.tokenDataServ.setTokenAndUser(data.result);
             this.toastr.success('Login successfully', 'Success');
-            this.dataServ.passDataSend('change');
+            this.dataServ.passDataSend('login');
             let nav= HttpHelper.redirectToUrl(this.redirectUrl);
             this.router.navigate([nav]);
           } else {

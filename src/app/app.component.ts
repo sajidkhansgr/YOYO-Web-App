@@ -22,7 +22,8 @@ export class AppComponent {
   ){
     this.routerSubs = this.dataServ.currentInfo
       .subscribe((msg: any) => {
-        this.getToken();
+        if(msg==='login')
+          this.getToken();
       })
   }
 

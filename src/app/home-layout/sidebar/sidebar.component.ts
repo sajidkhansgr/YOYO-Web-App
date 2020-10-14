@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HubService } from '../../hub/hub.service';
+import { Subscription } from 'rxjs';
 import { navigation, Navigation } from '../../shared/navigation';
+import { DataService } from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,10 +10,18 @@ import { navigation, Navigation } from '../../shared/navigation';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
-
   navigation!: Navigation[];
-  constructor(private hubServ: HubService) {
+  routerSubs: Subscription;
+  constructor(
+    private hubServ: HubService,
+    private dataServ: DataService
+  ) {
     this.navigation = navigation
+    this.routerSubs = this.dataServ.currentInfo
+      .subscribe((msg: any) => {
+        if(msg==='hub-add' || msg==='hub-upd')
+          this.getHubs();
+      })
   }
 
   ngOnInit(): void {
@@ -23,6 +33,7 @@ export class SidebarComponent implements OnInit {
     .subscribe((data: any) => {
       if(data && data.result && Array.isArray(data.result.results) && data.result.results.length>0){
         let res: any = [];
+        this.dataServ.passDataSend(data.result.results);
         for(let k=0;k<data.result.results.length;k++){
           res.push({ id:data.result.results[k].id.toString(), title: data.result.results[k].name, type: 'item',url: '/hub/'+data.result.results[k].id+'/list'});
         }
@@ -33,4 +44,9 @@ export class SidebarComponent implements OnInit {
     });
   }
 
+    ngOnDestroy(): void{
+      // Unsubscribe from all subscriptions
+      if(!!this.routerSubs)
+        this.routerSubs.unsubscribe();
+    }
 }
