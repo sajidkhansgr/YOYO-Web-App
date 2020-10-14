@@ -1,6 +1,8 @@
 <h1 matDialogTitle>{{title}}</h1>
-<div mat-dialog-content>{{msg}}</div>
-<div mat-dialog-actions>
-  <button class="btn btn-primary mr-3" (click)="dialogRef.close(true)">Confirm</button>
-  <button class="btn btn-danger" (click)="dialogRef.close(false)">Cancel</button>
+<hr>
+<div mat-dialog-content style="min-height: 50px;">{{msg}}</div>
+<hr class="mb-2">
+<div mat-dialog-actions class="mb-0">
+  <button class="btn btn-secondary mr-3 ml-auto" (click)="dialogRef.close(false)">Cancel</button>
+  <button class="btn btn-primary" (click)="dialogRef.close(true)">Confirm</button>
 </div>
