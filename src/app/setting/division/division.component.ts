@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { HubService } from '../../hub/hub.service';
 import { Hub } from '../../shared/models/hub';
 
@@ -12,14 +14,20 @@ export class DivisionComponent implements OnInit {
   selHub!: Hub | null;
   hubs: Hub[] = [];
   loading: boolean = true;
-
+  hubForm!: FormGroup; disabled: boolean = false;
+  type!: string | undefined;
   constructor(
     private hubServ: HubService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private fb: FormBuilder,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
     this.getHubs();
+    this.hubForm = this.fb.group({
+      name: ['', Validators.required]
+    });
   }
 
   getHubs() {
@@ -40,12 +48,17 @@ export class DivisionComponent implements OnInit {
     this.selHub = hub;
   }
 
-  openModal(content: any) {
+  openModal(content: any, formType?: string) {
+    this.type = formType;
+    if(this.type=='add' ||this.type=='edit'){
+      this.hubForm.reset();
+      if(this.type=='edit'){
+        this.setHubVal();
+      }
+    }
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result
       .then((result) => {
-
       }, (reason) => {
-
       });
   }
 
@@ -57,6 +70,67 @@ export class DivisionComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  setHubVal(){
+    this.hubForm.patchValue({...this!.selHub})
+  }
+
+  submit(){
+    if(this.hubForm.valid){
+      this.disabled = true;
+      let hubData: any = {
+        ...this.hubForm.value
+      }
+      if(this.type=='add'){
+        this.addHub(hubData);
+      }else{
+        this.updHub(hubData);
+      }
+    }
+  }
+
+  // ADD Hub
+  addHub(hubData: any) {
+    this.hubServ.addHub(hubData)
+      .subscribe((data: any) => {
+        if (data) {
+          this.toastr.success(data.message||'Hub added successfully', 'Success!');
+          this.disMissMdodal();
+        } else {
+          this.toastr.error('Unable to add Hub', 'Error!');
+        }
+        this.disabled = false;
+      }, (err:any) => {
+        this.disabled = false;
+      });
+  }
+
+  // EDIT Hub
+  updHub(hubData: any) {
+    hubData.id = this.selHub!.id;
+    this.hubServ.updateHub(hubData)
+      .subscribe((data: any) => {
+        if (data) {
+          this.toastr.success(data.message||'Hub updated successfully', 'Success!');
+          this.disMissMdodal();
+        } else {
+          this.toastr.error(data.result.data || 'Unable to update Hub', 'Error!');
+        }
+        this.disabled = false;
+      }, (err:any) => {
+        this.disabled = false;
+      });
+  }
+
+  disMissMdodal(){
+    if(this.modalService)
+      this.modalService.dismissAll();
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this.disMissMdodal();
   }
 
 }

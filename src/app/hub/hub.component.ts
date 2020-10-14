@@ -176,4 +176,10 @@ export class HubComponent implements OnInit {
     return FileDndHelper.formatBytes(bytes, 2);
   }
 
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    if(!!this.routerSubs)
+      this.routerSubs.unsubscribe();
+  }
+
 }

@@ -18,7 +18,7 @@
           </ng-template>
 
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item text-primary curs-ptr" (click)="openModal(addDivision)">Add New
+          <a class="dropdown-item text-primary curs-ptr" (click)="openModal(addDivision,'add')">Add New
             Division</a>
         </div>
       </div>
@@ -29,7 +29,7 @@
           <i class="fa fa-cog"></i>
         </button>
         <div class="dropdown-menu" aria-labelledby="cogDD">
-          <a class="dropdown-item curs-ptr" (click)=openModal(editDivision)>Edit</a>
+          <a class="dropdown-item curs-ptr" (click)="openModal(addDivision,'edit')">Edit</a>
         </div>
       </div>
     </div>
@@ -115,57 +115,36 @@
 <!-- add division modal  -->
 <ng-template #addDivision let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Create New Division</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{type=='add'?'Create New':'Edit'}} Division</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Name</mat-label>
-      <input matInput type="text" placeholder="Name">
-    </mat-form-field>
-    <mat-checkbox class="ml-3 w-100">This division can share selected content globally. Global content can
-      be viewed (but not edited) by all other divisions.</mat-checkbox>
-    <hr>
-    <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
-    <mat-checkbox class="d-block ml-3">All Users</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">HES & Hi-Force</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">Hi-Force</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">Hi-Force Distributors</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">Protec & Hi-Force</mat-checkbox>
-  </div>
-  <div class="modal-footer">
-    <button type="button" ngbAutofocus class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
-</ng-template>
-
-<!-- edit divison modal -->
-<ng-template #editDivision let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Edit Division</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Name</mat-label>
-      <input matInput type="text" placeholder="Name">
-    </mat-form-field>
-    <mat-checkbox class="ml-3 w-100">This division can share selected content globally. Global content can
-      be viewed (but not edited) by all other divisions.</mat-checkbox>
-    <hr>
-    <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
-    <mat-checkbox class="d-block ml-3">All Users</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">HES & Hi-Force</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">Hi-Force</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">Hi-Force Distributors</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">Protec & Hi-Force</mat-checkbox>
-  </div>
-  <div class="modal-footer">
-    <button type="button" ngbAutofocus class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
+  <form name="hubForm" (ngSubmit)="submit()" [formGroup]="hubForm" novalidate>
+    <div class="modal-body" ngbAutofocus>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="Name" formControlName="name">
+        <mat-error *ngIf="hubForm.get('name')!.hasError('required')">
+          Name is required
+        </mat-error>
+      </mat-form-field>
+      <mat-checkbox class="ml-3 w-100">This division can share selected content globally. Global content can
+        be viewed (but not edited) by all other divisions.</mat-checkbox>
+      <hr>
+      <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
+      <mat-checkbox class="d-block ml-3">All Users</mat-checkbox>
+      <mat-checkbox class="d-block ml-3">HES & Hi-Force</mat-checkbox>
+      <mat-checkbox class="d-block ml-3">Hi-Force</mat-checkbox>
+      <mat-checkbox class="d-block ml-3">Hi-Force Distributors</mat-checkbox>
+      <mat-checkbox class="d-block ml-3">Protec & Hi-Force</mat-checkbox>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" [disabled]="hubForm!.invalid || disabled">
+          <img class="loader-gif" *ngIf="disabled" src="assets/images/loader.gif">{{type=='add'?'Save':'Update'}}
+      </button>
+    </div>
+  </form>
 </ng-template>
 
 <!-- update groups modal -->

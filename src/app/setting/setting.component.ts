@@ -20,7 +20,6 @@ export class SettingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("sas")
     this.routerSubs = this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -51,5 +50,11 @@ export class SettingComponent implements OnInit {
       case 0: this.router.navigate([url + 'profile']); break;
       case 1: this.router.navigate([url + 'divisions/list']); break;
     }
+  }
+  
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    if(!!this.routerSubs)
+      this.routerSubs.unsubscribe();
   }
 }
