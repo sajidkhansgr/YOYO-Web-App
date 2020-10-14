@@ -6,7 +6,6 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { HubService } from '../hub.service';
 import { DEF_ICON } from '../../shared/constants';
 import { FileDndHelper } from '../../shared/file-helper';
-import { Hub } from '../../shared/models/hub';
 
 
 @Component({
@@ -25,9 +24,6 @@ export class ContentWorkspaceComponent implements OnInit {
   defIcon: any = DEF_ICON; custIcon: any; files!: any[];
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
-  hubInfo!: Hub | null;
-
-
 
   constructor(
     private hubServ: HubService,
@@ -37,10 +33,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   ngOnInit(): void {
     // this.getHubs()
-    this.routerSubs = this.route.params.subscribe(params => {
-      this.id = params['id']
-      this.initialiseState(); // reset and set based on new parameter this time
-    });
+    this.initialiseState(); // reset and set based on new parameter this time
   }
 
   initialiseState() {
@@ -48,7 +41,6 @@ export class ContentWorkspaceComponent implements OnInit {
     this.dispGnrl = true; this.dispSettings = true; this.dispSmart = false;
     this.dispPropsSec = false; this.dispSmFolderSec = true;
     this.custIcon = undefined;
-    this.hubInfo = null;
   }
 
   // workspace
