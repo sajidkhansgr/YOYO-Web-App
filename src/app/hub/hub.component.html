@@ -1,10 +1,10 @@
-<div class="main main-hub p-3">
+<div class="main main-hub p-3" *ngIf="hubInfo">
   <h3 class="mb-4 clearfix heading">
-    HUB > H.E.S. Sales Limited
+    {{hubInfo.name}}
   </h3>
   <div class="mt-2">
     <div>
-      <mat-tab-group (selectedTabChange)="onTabChange($event)">
+      <mat-tab-group [selectedIndex]="activeIndex" (selectedTabChange)="onTabChange($event)">
         <mat-tab label="Content & Workspace">
           <!-- content and workspace page -->
           <app-content-workspace></app-content-workspace>
@@ -59,7 +59,7 @@
         <div class="w-100 dark-bg-hover p-2 rounded" (click)="showPropsSection()">
           Properties
           <div class="float-right">
-            <ng-container *ngIf="dispPropsSection; else elseIcon">
+            <ng-container *ngIf="dispPropsSec; else elseIcon">
               <i class="fa fa-angle-up"></i>
             </ng-container>
             <ng-template #elseIcon>
@@ -67,7 +67,7 @@
             </ng-template>
           </div>
         </div>
-        <div class="mt-2" *ngIf="dispPropsSection">
+        <div class="mt-2" *ngIf="dispPropsSec">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Add Tags</mat-label>
             <input matInput placeholder="Add Tags">
@@ -282,7 +282,7 @@
         <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showSmartFolderSection()">
           Smart Folder Settings
           <div class="float-right">
-            <ng-container *ngIf="dispSmartFolderSection; else elseIcon">
+            <ng-container *ngIf="dispSmFolderSec; else elseIcon">
               <i class="fa fa-angle-up"></i>
             </ng-container>
             <ng-template #elseIcon>
@@ -290,7 +290,7 @@
             </ng-template>
           </div>
         </div>
-        <div *ngIf="dispSmartFolderSection">
+        <div *ngIf="dispSmFolderSec">
           <div class="card">
             <div class="card-header row">
               <div class="dropdown mr-2">
@@ -446,7 +446,7 @@
         <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showGeneral()">
           General
           <div class="float-right">
-            <ng-container *ngIf="dispGeneral; else elseIcon">
+            <ng-container *ngIf="dispGnrl; else elseIcon">
               <i class="fa fa-angle-up"></i>
             </ng-container>
             <ng-template #elseIcon>
@@ -454,7 +454,7 @@
             </ng-template>
           </div>
         </div>
-        <div class="general" *ngIf="dispGeneral">
+        <div class="general" *ngIf="dispGnrl">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Workspace Label</mat-label>
             <input matInput type="text" placeholder="Workspace Label">

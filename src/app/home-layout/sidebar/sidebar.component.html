@@ -1,32 +1,20 @@
 <div class="sidebar sticky-top border-right">
   <div class="navbar-nav">
-    <a class="nav-item p-2 text-hi-dark pl-3" [routerLinkActive]="['active']" [routerLink]="'/dashboard'">
-      <div class="link-icon pr-3 align-middle"><i class="fas fa-th-large"></i></div>
-      <div class="link-text align-middle">Dashboard</div>
-    </a>
-    <div class="dropright py-2" [routerLinkActive]="['active']">
-      <a class="nav-item text-hi-dark dropdown-toggle p-2 pl-3" id="navbarDropdown" role="button" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
-        <div class="link-icon pr-3 align-middle w-100"><i class="fas fa-layer-group"></i></div>
-        <div class="link-text align-middle">Hub</div>
+    <ng-container *ngFor="let item of navigation">
+      <a *ngIf="item.url" class="nav-item p-2 text-hi-dark pl-3" [routerLinkActive]="['active']" [routerLink]="[item.url]">
+        <div class="link-icon pr-3 align-middle"><i class="fas" [ngClass]="item.icon?item.icon:''"></i></div>
+        <div class="link-text align-middle">{{item.title}}</div>
       </a>
-      <div class="dropdown-menu ml-0" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item text-hi-dark" [routerLinkActive]="['active']" [routerLink]="'/hub/1/list'">H.E.S. Sales Limited</a>
-        <a class="dropdown-item text-hi-dark" [routerLinkActive]="['active']" [routerLink]="'/hub/2/list'">Hi-Force</a>
-        <a class="dropdown-item text-hi-dark" [routerLinkActive]="['active']" [routerLink]="'/hub/3/list'">Protec SRL</a>
+      <div *ngIf="!item.url" class="dropright py-2" [routerLinkActive]="['active']">
+        <a class="nav-item text-hi-dark dropdown-toggle p-2 pl-3" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <div class="link-icon pr-3 align-middle w-100"><i class="fas fa-layer-group"></i></div>
+          <div class="link-text align-middle">{{item.title}}</div>
+        </a>
+        <div class="dropdown-menu ml-0" aria-labelledby="navbarDropdown" *ngIf="item?.children">
+          <a class="dropdown-item text-hi-dark" [routerLinkActive]="['active']" [routerLink]="[itm.url]" *ngFor="let itm of item?.children">{{itm.title}}</a>
+        </div>
       </div>
-    </div>
-    <a class="nav-item p-2 text-hi-dark pl-3" [routerLinkActive]="['active']" [routerLink]="'/user'">
-      <div class="link-icon pr-3 align-middle"><i class="fas fa-user"></i></div>
-      <div class="link-text align-middle">Users</div>
-    </a>
-    <a class="nav-item p-2 text-hi-dark pl-3" [routerLinkActive]="['active']" [routerLink]="'/communication'">
-      <div class="link-icon pr-3 align-middle"><i class="fas fa-envelope"></i></div>
-      <div class="link-text align-middle">Communication</div>
-    </a>
-    <a class="nav-item p-2 text-hi-dark pl-3" [routerLinkActive]="['active']" [routerLink]="'/reports'">
-      <div class="link-icon pr-3 align-middle"><i class="fas fa-signal"></i></div>
-      <div class="link-text align-middle">Reports</div>
-    </a>
+    </ng-container>
   </div>
 </div>

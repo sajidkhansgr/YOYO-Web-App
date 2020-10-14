@@ -8,11 +8,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 import { ContentWorkspaceModule } from './content-workspace/content-workspace.module';
 import { TagsModule } from './tags/tags.module';
 import { FileProgessModule } from '../shared/components/file-progess/file-progess.module';
 import { CustomDirectiveModule } from '../shared/directives/custom-directive.module';
-import { MatRadioModule } from '@angular/material/radio';
+import { HubService } from './hub.service';
 
 import { HubComponent } from './hub.component';
 const routes: Routes = [
@@ -36,6 +37,7 @@ const routes: Routes = [
     FileProgessModule,
     CustomDirectiveModule,
     MatRadioModule
-  ]
+  ],
+  providers: [HubService]
 })
 export class HubModule { }
