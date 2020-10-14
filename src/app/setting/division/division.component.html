@@ -6,14 +6,12 @@
   <h3 class="mb-4 clearfix heading">
     <div class="float-left">
       <div class="dropdown">
-        <div class="curs-ptr dropdown-toggle" id="divisionsDD" data-toggle="dropdown" aria-haspopup="true"
-          aria-expanded="false">
-          {{hubDispName}}
+        <div class="curs-ptr dropdown-toggle" id="divisionsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{selHub && selHub.id?selHub.name:'No Hub'}}
         </div>
         <div class="dropdown-menu" aria-labelledby="divisionsDD">
           <ng-container *ngIf="hubs[0]; else noHubs">
-            <a class="dropdown-item curs-ptr" *ngFor="let hub of hubs" [attr.id]="hub.id"
-              (click)="divChange($event)">{{hub.name}}</a>
+            <a class="dropdown-item curs-ptr" *ngFor="let hub of hubs" (click)="hubChange(hub)">{{hub.name}}</a>
           </ng-container>
           <ng-template #noHubs>
             <h6 class="dropdown-item text-secondary">No Hubs Found</h6>
@@ -27,8 +25,7 @@
     </div>
     <div class="float-right">
       <div class="dropdown">
-        <button class="btn btn-light dropdown-toggle" type="button" id="cogDD" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-light dropdown-toggle" type="button" id="cogDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-cog"></i>
         </button>
         <div class="dropdown-menu" aria-labelledby="cogDD">

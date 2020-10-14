@@ -57,7 +57,6 @@ export class HubComponent implements OnInit {
           this.toastr.error("invalid Hub")
           this.router.navigate(['/dashboard']);
         }
-        console.log("err",data)
       }, (err: any) => {
         this.toastr.error("Unable to fetch hub, so please try after some time")
         this.router.navigate(['/dashboard']);

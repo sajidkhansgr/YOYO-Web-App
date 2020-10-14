@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-
-import { LMT_PAGE } from '../../shared/constants'
 import { HubService } from '../../hub/hub.service';
+import { Hub } from '../../shared/models/hub';
 
 @Component({
   selector: 'app-division',
@@ -10,30 +9,25 @@ import { HubService } from '../../hub/hub.service';
   styleUrls: ['./division.component.scss']
 })
 export class DivisionComponent implements OnInit {
-  hubDispName: string = 'No Hub';
-  currentDivId: string = '';
-  hubs: Array<any> = [];
+  selHub!: Hub | null;
+  hubs: Hub[] = [];
   loading: boolean = true;
-  closeResult: any = '';
 
-  constructor(private hubServ: HubService, private modalService: NgbModal) { }
+  constructor(
+    private hubServ: HubService,
+    private modalService: NgbModal
+  ) { }
 
   ngOnInit(): void {
     this.getHubs();
   }
 
   getHubs() {
-    this.hubServ.hubList({ pageNo: 1, pageSize: LMT_PAGE[0] })
+    this.hubServ.hubList({ pageNo: 0 })
       .subscribe((data: any) => {
-        // console.log(data);
-        if (!data.isError) {
-          let res = data.result.results;
-          this.hubDispName = res[0].name;
-          this.currentDivId = res[0].id;
-          for (let i = 0; i < data.result.results.length; i++) {
-            let hub = { id: res[i].id, name: res[i].name };
-            this.hubs.push(hub);
-          }
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          this.hubs = data.result.results;
+          this.selHub = data.result.results[0];
         }
         this.loading = false;
       }, (err: any) => {
@@ -42,17 +36,17 @@ export class DivisionComponent implements OnInit {
       });
   }
 
-  divChange(event: any) {
-    this.hubDispName = event.target.innerText;
-    this.currentDivId = event.target.id;
+  hubChange(hub: Hub) {
+    this.selHub = hub;
   }
 
   openModal(content: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result
+      .then((result) => {
+
+      }, (reason) => {
+
+      });
   }
 
   private getDismissReason(reason: any): string {

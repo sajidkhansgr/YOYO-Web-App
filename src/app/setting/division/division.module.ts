@@ -8,6 +8,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 
 import { DivisionComponent } from './division.component';
+import { HubService } from '../../hub/hub.service';
 const routes = [
   { path: '', component: DivisionComponent }
 ];
@@ -23,6 +24,7 @@ const routes = [
     MatCheckboxModule,
     MatSelectModule
   ],
+  providers: [HubService],
   exports: [DivisionComponent]
 })
 export class DivisionModule { }
