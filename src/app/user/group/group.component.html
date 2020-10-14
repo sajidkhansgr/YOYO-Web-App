@@ -25,7 +25,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-6 align-self-center row justify-content-end">
-                <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(propDropDown)">
+                <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(propDropDown, $event)">
                   <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                     Property
                   </button>
@@ -40,7 +40,7 @@
                     </button>
                   </div>
                 </div>
-                <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(divisionDropDown)">
+                <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(divisionDropDown, $event)">
                   <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                     Division
                   </button>
@@ -67,7 +67,7 @@
                     </button>
                   </div>
                 </div>
-                <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(expDropDown)">
+                <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(expDropDown, $event)">
                   <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                     Experience
                   </button>

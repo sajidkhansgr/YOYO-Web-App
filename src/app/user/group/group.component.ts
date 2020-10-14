@@ -142,8 +142,8 @@ export class GroupComponent implements OnInit {
     this.showDoc = false;
   }
 
-  outsideCloseDD = (dropdown: any) => {
-    if (dropdown!.classList.contains('show')) {
+  outsideCloseDD = (dropdown: any, event: any) => {
+    if (dropdown!.classList.contains('show') && !event.target!.classList.contains('form-check-input')) {
       dropdown!.classList.remove('show');
     }
   }
@@ -155,6 +155,7 @@ export class GroupComponent implements OnInit {
       event.target.nextSibling!.classList.toggle('show');
     }
   }
+
   selClrAll(isAll: boolean) {
     if (isAll) {
       //all select
