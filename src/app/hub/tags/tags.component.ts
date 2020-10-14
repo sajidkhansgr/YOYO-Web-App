@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
+
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -13,7 +16,9 @@ export class TagsComponent implements OnInit {
   showRowInfo: boolean = false;
   showCatgIn: boolean = false;
   constructor(
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private modalService: NgbModal
+
   ) { }
 
 
@@ -45,7 +50,7 @@ export class TagsComponent implements OnInit {
     this.showRowInfo = false
   }
 
-  delCatg(catg:any) {
+  delCatg(catg: any) {
     this.dialog.open(ConfirmDialogComponent, {
       data: {
         msg: `Are you sure you want to delete this category? You can't undo this action.?`,
@@ -55,6 +60,25 @@ export class TagsComponent implements OnInit {
       if (result) {
       }
     })
+  }
+
+  openModal(content: any) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result
+      .then((result) => {
+
+      }, (reason) => {
+
+      });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
 }
