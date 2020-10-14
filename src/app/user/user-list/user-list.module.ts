@@ -8,17 +8,21 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSelectModule } from '@angular/material/select';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { UserListComponent } from './user-list.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [UserListComponent],
   imports: [
-    CommonModule,RouterModule,
+    CommonModule, RouterModule,
     MatTabsModule,
     MatFormFieldModule,
     MatInputModule,
     DragDropModule,
     ClickOutsideModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule,
+    MatRadioModule
   ],
   exports: [
     UserListComponent

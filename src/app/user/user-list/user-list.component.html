@@ -6,9 +6,8 @@
         Add
       </button>
       <div class="dropdown-menu" aria-labelledby="addCOntentDD">
-        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#createNewUserModal"><i
-            class="fas fa-user-plus mr-1"></i>Create New
-          User</a>
+        <a class="dropdown-item curs-ptr" (click)="openModal(createNewUser)"><i class="fas fa-user-plus mr-1"></i>Create
+          New User</a>
         <a class="dropdown-item" [routerLink]="'/user/import'"><i class="fas fa-file-import mr-1"></i>Import CSV
           File</a>
       </div>
@@ -36,7 +35,7 @@
                     <div class="col-lg-4 col-sm-5 align-self-center">
                       <div class="float-left">
                         <!-- Button trigger for send invitations modal -->
-                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#sendInvModal">
+                        <button type="button" class="btn btn-light" (click)="openModal(sendInvitation)">
                           Send Invitations
                         </button>
                       </div>
@@ -168,7 +167,7 @@
               <i class="fa fa-trash"></i>
             </button>
             <!-- Button trigger for edit user modal -->
-            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editUserModal">
+            <button type="button" class="btn btn-light" (click)="openModal(editUser)">
               <i class="fa fa-edit"></i>
             </button>
             <button class="btn btn-light">
@@ -317,3 +316,172 @@
     </div>
   </div>
 </div>
+
+<!-- send invitation modal  -->
+<ng-template #sendInvitation let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Send Invitations</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <small>Select from the oprions below to send invitations to corresponding
+      users:</small>
+    <ul class="list-unstyled mt-3">
+      <li class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="resendChk">
+        <label class="form-check-label" for="resendChk"><small>
+            Resend Pending Invitations
+          </small></label>
+      </li>
+      <li class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="sendChk">
+        <label class="form-check-label" for="sendChk"><small>
+            Send First Invitations
+          </small></label>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
+
+<!-- edit user modal  -->
+<ng-template #editUser let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row justify-content-between m-0">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput placeholder="Your First Name">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput placeholder="Your Last Name">
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>E-mail</mat-label>
+      <input matInput placeholder="Your E-mail">
+    </mat-form-field>
+    <div class="row justify-content-between m-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Language</mat-label>
+        <input matInput placeholder="Your Language">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Time Zone</mat-label>
+        <input matInput placeholder="Your Time Zone">
+      </mat-form-field>
+    </div>
+    <div class="border w-100 mb-4"></div>
+    <div class="row justify-content-between m-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Role</mat-label>
+        <input matInput placeholder="Your Role">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>User's Groups</mat-label>
+        <input matInput placeholder="Your Groups">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-label>Product Licenses</mat-label><br />
+      <mat-checkbox class="ml-3">Content</mat-checkbox>
+    </div>
+    <div>
+      <mat-label>Status</mat-label><br />
+      <mat-checkbox class="ml-3">Activated</mat-checkbox>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
+
+<!-- create new user modal  -->
+<ng-template #createNewUser let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Create New User</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row justify-content-between m-0">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput placeholder="Your First Name">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput placeholder="Your Last Name">
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>E-mail</mat-label>
+      <input matInput placeholder="Your E-mail">
+    </mat-form-field>
+    <div class="row justify-content-between m-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Language</mat-label>
+        <mat-select>
+          <mat-option value="English">English</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Time Zone</mat-label>
+        <mat-select>
+          <mat-option value="company-timezone">Company Timezone</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="border w-100 mb-4"></div>
+    <div class="row justify-content-between m-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Role</mat-label>
+        <mat-select>
+          <mat-option value="user">User</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>User's Groups</mat-label>
+        <input matInput placeholder="Your Groups">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-label>Product Licenses</mat-label>
+      <mat-checkbox class="ml-3 d-block">Content</mat-checkbox>
+    </div>
+    <div>
+      <mat-label>Status</mat-label>
+      <mat-checkbox class="ml-3 d-block">Activated</mat-checkbox>
+    </div>
+    <div>
+      <mat-label>Password</mat-label>
+      <mat-radio-group class="d-block ml-3" aria-label="Select an option">
+        <mat-radio-button [checked]="true" value="user">Let user choose password upon account confirmation
+        </mat-radio-button>
+        <mat-radio-button value="me">Specify password</mat-radio-button>
+        <mat-form-field class="d-block w-50 mx-auto" appearance="outline">
+          <mat-label>Password</mat-label>
+          <input type="password" matInput placeholder="Password">
+        </mat-form-field>
+      </mat-radio-group>
+      <div class="ml-3">
+        <mat-checkbox class="ml-3 d-block">Send me email with login instructions</mat-checkbox>
+        <mat-checkbox class="ml-3 d-block">Enforce user to reset password on first login</mat-checkbox>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
