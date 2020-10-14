@@ -83,6 +83,11 @@ body {
   cursor: pointer;
 }
 
+// angular bootstrap modal
+button[aria-label="Close"]:focus {
+  outline: none;
+}
+
 // material
 .page-spinner {
   height: 60px !important;

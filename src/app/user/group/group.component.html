@@ -1,7 +1,7 @@
 <div class="groups-section overflow-hidden">
   <div class="buttons-row row mt-3 justify-content-between mx-2">
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewGroupModal">
+    <button type="button" class="btn btn-primary" (click)="openModal(createNewGroup)">
       Create New Group
     </button>
   </div>
@@ -40,8 +40,10 @@
                   <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                     Division
                   </button>
-                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" #divisionDropDown aria-labelledby="divisionTrigger">
-                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3" [floatLabel]="'never'">
+                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" #divisionDropDown
+                    aria-labelledby="divisionTrigger">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
+                      [floatLabel]="'never'">
                       <i matPrefix class="fas fa-search"></i>
                       <input matInput placeholder="Search ...">
                     </mat-form-field>
@@ -65,7 +67,8 @@
                   <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                     Experience
                   </button>
-                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" #expDropDown aria-labelledby="divisionTrigger">
+                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" #expDropDown
+                    aria-labelledby="divisionTrigger">
                     <div class="input-group mb-2 p-2">
                       <div class="input-group-prepend">
                         <span class="input-group-text bg-white">
@@ -134,7 +137,8 @@
             </div>
             <ul class="pagination">
               <li class="page-item disabled">
-                <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
+                <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true"><i
+                    class="fas fa-chevron-left"></i></a>
               </li>
               <li class="page-item active"><a class="page-link bg-hi-grey" href="javascript:void(0)">1</a>
               </li>
@@ -255,3 +259,30 @@
     </div>
   </div>
 </div>
+
+<!-- create new group -->
+<ng-template #createNewGroup let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Create New Group</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name Group">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Description</mat-label>
+      <textarea matInput placeholder="Type Description"></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Assign to Divisions</mat-label>
+      <input matInput placeholder="Search Divisions">
+    </mat-form-field>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>

@@ -2,16 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatRadioModule } from '@angular/material/radio';
 import { ContentWorkspaceModule } from './content-workspace/content-workspace.module';
 import { TagsModule } from './tags/tags.module';
-import { FileProgessModule } from '../shared/components/file-progess/file-progess.module';
 import { CustomDirectiveModule } from '../shared/directives/custom-directive.module';
 import { HubService } from './hub.service';
 
@@ -26,17 +18,9 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     MatTabsModule,
-    MatPaginatorModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTooltipModule,
-    MatCheckboxModule,
     ContentWorkspaceModule,
     TagsModule,
-    FileProgessModule,
     CustomDirectiveModule,
-    MatRadioModule
   ],
   providers: [HubService]
 })
