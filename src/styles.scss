@@ -351,13 +351,13 @@ header {
     .toggle-button {
       display: none;
 
-      @media (max-width: 600px) {
+      @media (max-width: 650px) {
         display: inline;
       }
     }
 
     .toggle-navbar {
-      @media (max-width: 600px) {
+      @media (max-width: 650px) {
         display: none;
       }
     }
@@ -366,7 +366,7 @@ header {
   .toggle-navbar-bottom {
     display: none;
 
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
       display: inline;
     }
 
@@ -757,6 +757,40 @@ header {
     .dropdown {
       .large-dropdown-menu {
         min-width: 20rem;
+      }
+    }
+  }
+}
+
+
+// employee view
+.main-employee {
+  .workspaces {
+    .card-container {
+      max-width: 260px;
+
+      .card {
+        transition: box-shadow ease-out 0.6s, transform linear 0.5s;
+
+        .card-body {
+          position: relative;
+          min-height: 200px;
+          max-height: 250px;
+          background-size: cover;
+          background-position: bottom;
+
+          .icon {
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            width: 60px;
+          }
+        }
+      }
+
+      .card:hover {
+        transform: translate(-3px, -3px);
+        box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4), 5px 10px 11px rgba(0, 0, 0, 0.2), 5px 10px 11px rgba(0, 0, 0, 0.2);
       }
     }
   }
