@@ -9,7 +9,7 @@ import { DataService } from '../../shared/services/data.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  isToken:boolean = false;isVisb: boolean=false;
+  isToken: boolean = false; isVisb: boolean = false;
   @Input() userInfo: any | null;
   // sidebar variables
   temp: string = 'close';
@@ -51,7 +51,7 @@ export class HeaderComponent implements OnInit {
 
   // header
   navbarHandler = () => {
-    if (window.screen.width <= 600) {
+    if (window.screen.width <= 650) {
       this.smallScreen();
     } else {
       this.largeScreen();
@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit {
     let sidebarTexts = document.querySelectorAll('.link-text');
     let arrow = document.querySelector('.sidebar .dropdown-toggle');
     // for sidebar (width)
-    if(document.querySelector('.sidebar'))
+    if (document.querySelector('.sidebar'))
       document.querySelector('.sidebar')!.classList.remove('closeSidebar');
     setTimeout(() => {
       // for text (display)
@@ -80,7 +80,7 @@ export class HeaderComponent implements OnInit {
       }
       // for arrow (opacity)
       arrow!.classList.remove('showArrow');
-    }, 600);
+    }, 5);
     this.temp = 'close';
   }
 
