@@ -84,9 +84,9 @@ body {
 }
 
 // angular bootstrap modal
-button[aria-label="Close"]:focus {
-  outline: none;
-}
+// button[aria-label="Close"]:focus {
+//   outline: none;
+// }
 
 // material
 .page-spinner {
@@ -765,9 +765,11 @@ header {
 
 // employee view
 .main-employee {
+
+  // workspaces page
   .workspaces {
     .card-container {
-      max-width: 260px;
+      max-width: 280px;
 
       .card {
         transition: box-shadow ease-out 0.6s, transform linear 0.5s;
@@ -792,6 +794,101 @@ header {
         transform: translate(-3px, -3px);
         box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4), 5px 10px 11px rgba(0, 0, 0, 0.2), 5px 10px 11px rgba(0, 0, 0, 0.2);
       }
+    }
+  }
+
+  // collections page
+  .collections {
+    .card-container {
+      max-width: 280px;
+
+      .card {
+        transition: box-shadow ease-out 0.6s;
+
+        .card-body {
+          position: relative;
+
+          .imagePreview {
+            max-height: 200px;
+
+            img {
+              max-height: 200px;
+            }
+          }
+
+          .options {
+            opacity: 0;
+            transition: opacity linear 0.5s;
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            background-color: rgba($primary, 0.7);
+            width: 50px;
+            padding: 10px 5px;
+
+            .btn {
+              width: 40px;
+              height: 40px;
+              color: #fff;
+            }
+
+            .btn:hover {
+              background-color: rgba($primary, 0.5);
+            }
+
+            .dropdown-menu {
+              background-color: rgba($primary, 0.7);
+              margin-right: 5px;
+
+              .dropdown-item {
+                color: #fff;
+              }
+
+              .dd {
+                .dropdown-menu {
+                  top: 55%;
+                  left: 100%;
+                  width: fit-content;
+                  display: none !important;
+                }
+              }
+
+              .dd:hover {
+                .dropdown-menu {
+                  display: block !important;
+                }
+              }
+
+              .dropdown-item:hover {
+                background-color: rgba($primary, 0.5);
+              }
+            }
+          }
+        }
+
+        .card-footer {
+          .float-left {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .card:hover {
+        box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4), 5px 10px 11px rgba(0, 0, 0, 0.2), 5px 10px 11px rgba(0, 0, 0, 0.2);
+
+        .options {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.modal-body {
+  .search {
+
+    .mat-form-field-prefix {
+      top: -0.25em;
     }
   }
 }
