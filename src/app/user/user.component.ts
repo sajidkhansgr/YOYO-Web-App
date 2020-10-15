@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LMT_PAGE } from '../shared/constants';
 
 @Component({
   selector: 'app-user',
@@ -10,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserComponent implements OnInit {
   arr: Array<number> = [0];
-  selectedOption: string = '';
+  lmtPage: Array<number> = LMT_PAGE;
   constructor() { }
 
   ngOnInit(): void {
@@ -22,4 +23,5 @@ export class UserComponent implements OnInit {
     } else {
     }
   }
+
 }

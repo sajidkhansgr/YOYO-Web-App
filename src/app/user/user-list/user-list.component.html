@@ -124,8 +124,7 @@
                   <div class="pages">
                     <mat-form-field appearance="outline" class="mr-2">
                       <mat-select>
-                        <mat-option value="10">10</mat-option>
-                        <mat-option value="10">20</mat-option>
+                        <mat-option *ngFor="let lP of lmtPage" value="lP">{{lP}}</mat-option>
                       </mat-select>
                     </mat-form-field>
                     <span>Showing 1-10 of 100 </span>

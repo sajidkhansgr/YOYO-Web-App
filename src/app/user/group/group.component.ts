@@ -1,17 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-
-
+import { MatDialog } from '@angular/material/dialog';
 import { PRPS } from '../../shared/constants';
 import { GroupService } from './group.service';
 import { HubService } from '../../hub/hub.service';
 import { DataService } from '../../shared/services/data.service';
-
-
 import { Hub } from '../../shared/models/hub';
-
+import { Group } from '../../shared/models/group';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-group',
@@ -20,17 +18,17 @@ import { Hub } from '../../shared/models/hub';
 })
 export class GroupComponent implements OnInit {
   showDoc: boolean = false;
+  @Input() lmtPage: any;
   props: any = PRPS;
   exps: any = [
     { id: 1, name: "Exp 1" }, { id: 2, name: "Exp 2" }, { id: 3, name: "Exp 3" }
   ];
-  data: any[] = [];
+  grps: Group[] = [];
   divArr: Hub[] = [];
   groupForm!: FormGroup;
   disabled: boolean = false;
   loading: boolean = true;
-  docId: string = '';
-  groupDetail: any;
+  grpDetail!: Group | null;
   docLoading: boolean = true;
 
   constructor(
@@ -40,6 +38,7 @@ export class GroupComponent implements OnInit {
     private dataServ: DataService,
     private toastr: ToastrService,
     private fb: FormBuilder,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -53,21 +52,19 @@ export class GroupComponent implements OnInit {
   addGroup() {
     if (this.groupForm.valid) {
       this.disabled = true;
-      let formData: any = {
+      let grpData: any = {
         ...this.groupForm.value
       }
-      this.groupService.addGroup(formData).subscribe((data: any) => {
+      this.groupService.addGroup(grpData).subscribe((data: any) => {
         if (data) {
-          this.dataServ.passDataSend('hub-upd');
           this.toastr.success(data.message || 'Group added successfully', 'Success!');
           this.disMissMdodal();
           this.getGroups();
         } else {
-          this.toastr.error(data.result.data || 'Unable to update Hub', 'Error!');
+          this.toastr.error(data.result.data || 'Unable to update Group', 'Error!');
         }
         this.disabled = false;
       }, (err: any) => {
-        this.toastr.error(err.message || 'Something Went Wrong', 'Error!');
         this.disabled = false;
       });
     }
@@ -79,10 +76,10 @@ export class GroupComponent implements OnInit {
   }
 
   getGroups() {
-    this.groupService.groupList({ pageNo: 0 })
+    this.groupService.groupList({ pageNo: 1, })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          this.data = data.result.results;
+          this.grps = data.result.results;
         }
       }, (err: any) => {
         console.log(err);
@@ -102,10 +99,10 @@ export class GroupComponent implements OnInit {
       });
   }
 
-  getGroup(id: string) {
-    this.groupService.viewGroup(id).subscribe((data: any) => {
-      if (data && data.result) {
-        this.groupDetail = data.result;
+  getGroup() {
+    this.groupService.viewGroup(this.grpDetail!.id.toString()).subscribe((data: any) => {
+      if (data && data.result && data.result.id) {
+        this.grpDetail = data.result;
         this.docLoading = false;
       }
     }, (err: any) => {
@@ -114,31 +111,31 @@ export class GroupComponent implements OnInit {
     });
   }
 
-  toggleDoc = (event: any) => {
-    let id;
+  delGrp() {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to delete this group? You can't undo this action.?`,
+        title: `Delete Group`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+      }
+    })
+  }
+
+  toggleDoc = (grp: any) => {
     this.docLoading = true;
-    if (event.target.id) {
-      id = event.target.id;
-    } else if (event.target.parentNode.id) {
-      id = event.target.parentNode.id;
-    } else {
-      id = event.target.parentNode.parentNode.id;
-    }
-    if (id == this.docId) {
-      this.docId = '';
-      this.groupDetail = null;
-      this.showDoc = false;
-    } else {
-      this.docId = id;
-      this.getGroup(id);
-      this.showDoc = true;
+    this.showDoc = !this.showDoc;
+    if (this.showDoc) {
+      this.grpDetail = grp;
+      this.getGroup();
     }
   }
 
   closeDoc = () => {
-    this.docId = '';
-    this.groupDetail = null;
-    this.docLoading = true;
+    this.grpDetail = null;
+    this.docLoading = false;
     this.showDoc = false;
   }
 
@@ -163,6 +160,7 @@ export class GroupComponent implements OnInit {
       //clear All
     }
   }
+
   openModal(content: any) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result
       .then((result) => {
@@ -180,6 +178,11 @@ export class GroupComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this.disMissMdodal();
   }
 
 }

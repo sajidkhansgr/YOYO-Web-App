@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
@@ -9,11 +9,11 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class UserListComponent implements OnInit {
   showDoc: boolean = false;
+  @Input() lmtPage: any;
   visbCols: any[] = [{ n: "Role", key: "role", dir: 1, }];
   hidCols: any[] = [{ n: "Property", key: "prop", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, },
   { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }];
   cols: any[] = [{ n: "Name", dir: 1, key: "name" }];
-
   data: any[] = [
     { name: "test", email: "email@email.com", date: "19 Aug 2020", date2: "19 Aug 2020", role: "User" },
     { name: "tes1t", email: "1email@email.com", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U1ser" },
@@ -100,6 +100,16 @@ export class UserListComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+  
+  disMissMdodal() {
+    if (this.modalService)
+      this.modalService.dismissAll();
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this.disMissMdodal();
   }
 
 }
