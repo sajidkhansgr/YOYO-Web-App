@@ -14,11 +14,9 @@ export class TagsComponent implements OnInit {
   showRowInfo: boolean = false;
   showCatgIn: boolean = false;
   constructor(
-    public dialog: MatDialog,
+    private dialog: MatDialog,
     private modalService: NgbModal
-
   ) { }
-
 
   ngOnInit(): void {
     console.log("load")
@@ -53,7 +51,8 @@ export class TagsComponent implements OnInit {
       data: {
         msg: `Are you sure you want to delete this category? You can't undo this action.?`,
         title: `Delete category`
-      }
+      },
+      autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
       }

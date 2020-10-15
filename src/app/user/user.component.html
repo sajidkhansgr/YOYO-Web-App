@@ -6,11 +6,11 @@
     <div class="main-tab-nav">
       <mat-tab-group (selectedTabChange)="onTabChange($event)">
         <mat-tab label="Users">
-          <app-user-list></app-user-list>
+          <app-user-list [lmtPage]="lmtPage"></app-user-list>
         </mat-tab>
         <mat-tab label="Groups">
           <div *ngIf="arr.indexOf(1)!==-1">
-            <app-group></app-group>
+            <app-group [lmtPage]="lmtPage"></app-group>
           </div>
         </mat-tab>
       </mat-tab-group>
