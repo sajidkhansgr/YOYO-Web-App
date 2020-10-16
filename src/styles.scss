@@ -799,6 +799,8 @@ header {
 
   // collections page
   .collections {
+
+    // grid view
     .card-container {
       max-width: 280px;
 
@@ -881,12 +883,63 @@ header {
         }
       }
     }
+
+    // list view
+    table {
+      tbody {
+        tr {
+          .imagePreview {
+            img {
+              width: 60px;
+            }
+          }
+
+          td {
+
+            .btn,
+            .dropleft {
+              width: 40px;
+              height: 40px;
+            }
+
+            .btn:hover {
+              background-color: darken(#fff, 10);
+            }
+
+            .dd {
+              .dropdown-menu {
+                top: 55%;
+                left: 100%;
+                width: fit-content;
+                display: none !important;
+              }
+            }
+
+            .dd:hover {
+              .dropdown-menu {
+                display: block !important;
+              }
+            }
+          }
+
+          .options {
+            opacity: 0;
+            transition: opacity linear 0.4s;
+          }
+        }
+
+        tr:hover {
+          .options {
+            opacity: 1;
+          }
+        }
+      }
+    }
   }
 }
 
 .modal-body {
   .search {
-
     .mat-form-field-prefix {
       top: -0.25em;
     }
