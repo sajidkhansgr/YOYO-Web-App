@@ -426,8 +426,8 @@ header {
     }
 
     .active {
-      background-color: lighten($color: $primary, $amount: 8);
       color: white !important;
+      background-color: lighten($color: $primary, $amount: 8);
     }
 
     >.nav-item:hover:not(.active) {
@@ -797,8 +797,9 @@ header {
     }
   }
 
-  // collections page
-  .collections {
+  // collections page and my files page
+  .collections,
+  .my-files {
 
     // grid view
     .card-container {
@@ -933,6 +934,21 @@ header {
             opacity: 1;
           }
         }
+      }
+    }
+  }
+
+  // my files side bar
+  .files-side {
+    ul {
+      li.active {
+        color: #fff;
+        background-color: lighten($color: $primary, $amount: 8);
+      }
+
+      li:hover:not(.active) {
+        color: darken($color: $hi-dark, $amount: 15) !important;
+        background-color: $hi-dark-grey;
       }
     }
   }
