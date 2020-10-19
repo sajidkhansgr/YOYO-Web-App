@@ -1,0 +1,28 @@
+<p>test works!</p>
+
+<div>
+
+Total Pages in PDf {{totalPages}}
+CurrentPage {{currPage}}
+
+<div>
+  <button [disabled]="currPage==1 || totalPages<=1" (click)="getPage('prev')"><i class="fas arrow-left">Prev Page</i></button>
+  <button [disabled]="currPage==totalPages || totalPages<=1" (click)="getPage('next')"><i class="fas arrow-right">Next Page</i></button>
+  PDF URL  <input type="text" [(ngModel)]="pdfURL" /> <button (click)="pdfRender()">Render PDF</button>
+  <!-- Go to <input type="text" [(ngModel)]="goTo" (change)="gotoPage($event)"/> -->
+  <!-- <div id="wrapper"></div>
+  <div id="text-layer"></div> -->
+  <!-- <div id="pdfContainer" class = "pdf-content"> -->
+  <!-- <div *ngFor='let in of counter(totalPages) ;let i = index'>
+    <div [attr.id]="'page-d-'+i"></div>
+  </div> -->
+  <!-- <div id="page-d-1">
+  </div> -->
+
+  <ng-container *ngFor='let in of counter(totalPages) ;let i = index'>
+    <div class="page" style="display:none" [attr.id]="'page-d-'+i"></div>
+  </ng-container>
+  <!-- <div class="page" [attr.id]="'page-d-0'"></div> -->
+  <!-- <div id="pdf-wrapper"></div> -->
+
+</div>
