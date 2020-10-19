@@ -46,4 +46,15 @@ export class FilesComponent implements OnInit {
     }
   }
 
+  // upload button
+  uploadBtn = (uf: any) => {
+    uf?.click();
+  }
+
+  // copy link button
+  copyLink = (link: any) => {
+    link.select();
+    link.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+  }
 }
