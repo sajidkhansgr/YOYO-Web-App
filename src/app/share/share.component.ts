@@ -7,7 +7,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./share.component.scss']
 })
 export class ShareComponent implements OnInit {
-  testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
+  testArr = [1, 2, 3, 4]; // test array
 
 
   constructor(private modalService: NgbModal) { }
@@ -39,6 +39,13 @@ export class ShareComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  // copy link button
+  copyLink = (link: any) => {
+    link.select();
+    link.setSelectionRange(0, 99999);
+    document.execCommand("copy");
   }
 
 }

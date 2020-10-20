@@ -967,3 +967,12 @@ header {
     top: -0.25em !important;
   }
 }
+
+// shares
+.modal-body {
+  .main-body {
+    .mat-expansion-panel-header {
+      height: 60px;
+    }
+  }
+}

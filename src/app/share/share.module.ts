@@ -5,6 +5,8 @@ import { ShareComponent } from './share.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const routes: Routes = [
   { path: '', component: ShareComponent }
@@ -17,7 +19,9 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MatCheckboxModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSlideToggleModule,
+    MatExpansionModule
   ]
 })
 export class ShareModule { }
