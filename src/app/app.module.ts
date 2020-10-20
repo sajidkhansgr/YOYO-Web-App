@@ -33,6 +33,7 @@ const appRoutes: Routes = [
     { path : 'experience', loadChildren: () => import('./exp/exp.module').then(m => m.ExpModule),canActivate:[AuthGuard] },
     { path : 'share', loadChildren: () => import('./share/share.module').then(m => m.ShareModule),canActivate:[AuthGuard] },
     { path : 'my-files', loadChildren: () => import('./files/files.module').then(m => m.FilesModule),canActivate:[AuthGuard] },
+    { path : 'test', loadChildren: () => import('./test/test.module').then(m => m.TestModule),canActivate:[AuthGuard] },
     { path : '**', loadChildren: () => import('./errors/404/error-404.module').then(m => m.Error404Module)}
 ];
 
