@@ -1,0 +1,12 @@
+.dd {
+  .dropdown-menu {
+    top: 55%;
+    left: -120%;
+  }
+}
+
+.dd:hover {
+  .dropdown-menu {
+    display: block;
+  }
+}

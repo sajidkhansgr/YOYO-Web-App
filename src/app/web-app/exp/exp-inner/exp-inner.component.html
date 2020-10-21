@@ -10,11 +10,15 @@
 </nav>
 <!-- grid view -->
 <div class="row mx-0 expid-grid" *ngIf="view">
-  <div class="col-md-3 text-center folder">
+  <div class="col-md-3 text-center folder curs-ptr">
     <div class="icon"><img src="assets/images/brands.png" style="max-width:100%; max-height: 200px;"></div>
   </div>
-  <div class="col-md-3 text-center file">
+  <div class="col-md-3 text-center file curs-ptr">
     <div class="icon"><img src="assets/images/discription.png" style="max-width:100%; max-height: 200px;"></div>
+    <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
+      <i class="fa fa-file ml-3 align-self-center"></i>
+      <div class="mx-auto">Borkey</div>
+    </div>
     <div class="options rounded">
       <div class="dropleft">
         <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"

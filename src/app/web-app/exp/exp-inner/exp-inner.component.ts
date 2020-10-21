@@ -9,7 +9,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ExpInnerComponent implements OnInit {
   testArr = [1, 2, 3, 4, 5]; // test array
-  view: boolean = false;
+  view: boolean = true;
 
 
   constructor(private modalService: NgbModal) { }
