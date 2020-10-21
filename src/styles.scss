@@ -976,3 +976,65 @@ header {
     }
   }
 }
+
+// experience inner page
+.expid-grid {
+  .file {
+    position: relative;
+
+    .options {
+      opacity: 0;
+      transition: opacity linear 0.5s;
+      position: absolute;
+      top: 50px;
+      right: 110px;
+      background-color: rgba($primary, 0.7);
+      width: 50px;
+      padding: 10px 5px;
+
+      .btn {
+        width: 40px;
+        height: 40px;
+        color: #fff;
+      }
+
+      .btn:hover {
+        background-color: rgba($primary, 0.5);
+      }
+
+      .dropdown-menu {
+        background-color: rgba($primary, 0.7);
+        margin-right: 5px;
+
+        .dropdown-item {
+          color: #fff;
+        }
+
+        .dropdown-item:hover {
+          background-color: rgba($primary, 0.5);
+        }
+      }
+    }
+  }
+
+  .file:hover {
+    .options {
+      opacity: 1;
+    }
+  }
+}
+
+.expid-list {
+  .file {
+    .options {
+      opacity: 0;
+      transition: opacity linear 0.5s;
+    }
+  }
+
+  .file:hover {
+    .options {
+      opacity: 1;
+    }
+  }
+}

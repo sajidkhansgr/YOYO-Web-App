@@ -1,1 +1,306 @@
-<p>exp-inner works!</p>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb rounded-0">
+    <li class="breadcrumb-item active align-self-center" aria-current="page">English</li>
+    <span class="ml-auto">
+      <div class="curs-ptr" (click)="toggleView()">
+        <i [ngClass]="{'fa': true, 'fa-list-ul' : view, 'fa-th-large': !view}" style="font-size:1.75rem;"></i>
+      </div>
+    </span>
+  </ol>
+</nav>
+<!-- grid view -->
+<div class="row mx-0 expid-grid" *ngIf="view">
+  <div class="col-md-3 text-center folder">
+    <div class="icon"><img src="assets/images/brands.png" style="max-width:100%; max-height: 200px;"></div>
+  </div>
+  <div class="col-md-3 text-center file">
+    <div class="icon"><img src="assets/images/discription.png" style="max-width:100%; max-height: 200px;"></div>
+    <div class="options rounded">
+      <div class="dropleft">
+        <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          <i class="fas fa-share-square"></i>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="shareDD">
+          <a class="dropdown-item curs-ptr" (click)="openLgModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+          <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+        </div>
+      </div>
+      <div class="btn my-1" (click)="openModal(addtoCollection)">
+        <i class="fas fa-folder-plus"></i>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- list view -->
+<div class="row mx-0 expid-list" *ngIf="!view">
+  <div class="col-md-3">
+    <mat-accordion>
+      <mat-expansion-panel class="my-2">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="align-self-center">
+            Type (0)
+          </mat-panel-title>
+          <mat-panel-description>
+            <div class="btn btn-light">Clear</div>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <ul class="list-unstyled mb-0">
+            <li class="dark-bg-hover pt-2 px-2" *ngFor="let t of testArr">
+              <mat-checkbox>Document</mat-checkbox>
+              <span class="float-right text-secondary">92</span>
+            </li>
+          </ul>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel class="my-2">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="align-self-center">
+            Tags (0)
+          </mat-panel-title>
+          <mat-panel-description>
+            <div class="btn btn-light">Clear</div>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <div class="search">
+            <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white" [floatLabel]="'never'">
+              <i matPrefix class="fas fa-search"></i>
+              <input matInput placeholder="Search for tags">
+            </mat-form-field>
+          </div>
+          <hr>
+          <ul class="list-unstyled mb-0">
+            <li class="dark-bg-hover pt-2 px-2" *ngFor="let t of testArr">
+              <mat-checkbox>Document</mat-checkbox>
+              <span class="float-right text-secondary">92</span>
+            </li>
+          </ul>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="col-md-9">
+    <div class="folder d-flex bg-white rounded p-3 curs-ptr my-2">
+      <mat-checkbox class="align-self-center"></mat-checkbox>
+      <div class="icon align-self-center mx-4">
+        <div class="rounded-circle p-3 bg-hi-grey">
+          <i class="fa fa-folder text-primary" style="font-size: 40px;"></i>
+        </div>
+      </div>
+      <div class="info align-self-center">
+        <h5 class="mb-0">Company Information</h5>
+        <i class="fa fa-folder mr-2"></i>Folder in English
+      </div>
+    </div>
+    <div class="file d-flex bg-white rounded p-3 curs-ptr my-2">
+      <mat-checkbox class="align-self-center"></mat-checkbox>
+      <div class="icon align-self-center mx-4">
+        <img src="assets/images/discription.png" style="max-width: 72px;">
+      </div>
+      <div class="info align-self-center">
+        <h5 class="mb-0">ABC.pdf</h5>
+        <i class="fa fa-file mr-2"></i>Document in English
+        <div class="text-secondary" style="font-size: 12px;">Updated Jan 26,2020</div>
+      </div>
+      <div class="options d-flex align-self-center ml-auto mr-3">
+        <div class="dropleft mr-2">
+          <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            <i class="fas fa-share-square"></i>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="shareDD">
+            <a class="dropdown-item curs-ptr" (click)="openLgModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+            <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+          </div>
+        </div>
+        <div class="btn btn-light" (click)="openModal(addtoCollection)">
+          <i class="fas fa-folder-plus"></i>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <ul class="pagination justify-content-end mr-3">
+      <li class="page-item disabled">
+        <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true"><i
+            class="fas fa-chevron-left"></i></a>
+      </li>
+      <li class="page-item active"><a class="page-link bg-hi-grey" href="javascript:void(0)">1</a>
+      </li>
+      <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">2</a>
+      </li>
+      <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">3</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link bg-hi-grey" href="javascript:void(0)"><i class="fas fa-chevron-right"></i></a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- add to collection -->
+<ng-template #addtoCollection let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add to Collection</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" ngbAutofocus>
+    <ul class="list-unstyled">
+      <li (click)="openModal(newCollection)" class="d-flex text-primary px-3 curs-ptr">
+        <div class="icon mr-2"><i class="fas fa-folder-plus" style="font-size:40px;"></i></div>
+        <div class="info align-self-center">Create a new Collection</div>
+      </li>
+      <li class="d-flex border-top px-3 py-2 curs-ptr" *ngFor="let t of testArr">
+        <div class="icon mr-2">
+          <img src="assets/images/discription.png" style="max-height:50px;">
+        </div>
+        <div class="info align-self-center">
+          <div class="name">ABC</div>
+          <div class="text-secondary" style="font-size:12px;">
+            <span class="modified">4 Days ago</span>
+            <span class="mx-2">|</span>
+            <span class="items">1 Item</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Share</button>
+  </div>
+</ng-template>
+
+<!-- email modal -->
+<ng-template #email let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Email</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" ngbAutofocus>
+    <div class="row">
+      <div class="col-9 border-right">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>To</mat-label>
+          <input matInput type="text" placeholder="Recipients">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Subject</mat-label>
+          <input matInput type="text" placeholder="Subject">
+        </mat-form-field>
+        <div class="row">
+          <mat-form-field appearance="outline" class="col-8">
+            <mat-label>Message</mat-label>
+            <input matInput type="text" placeholder="Search Content">
+          </mat-form-field>
+          <div class="col-4 mt-3">
+            <div class="btn btn-primary" (click)="openModal(addResource)">
+              <i class="fas fa-file-medical mr-1"></i>Add resource
+            </div>
+          </div>
+        </div>
+        <mat-form-field appearance="outline" class="w-100">
+          <textarea matInput type="text" placeholder=""></textarea>
+        </mat-form-field>
+      </div>
+      <div class="col-3">
+        <h5>Sharing Settings</h5>
+        <mat-checkbox class="ml-2">Allow downloads</mat-checkbox>
+        <mat-checkbox class="ml-2">Send me a copy</mat-checkbox>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
+
+<!-- get a link modal -->
+<ng-template #getLink let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Get a Link</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" ngbAutofocus>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Name</mat-label>
+      <input type="text" matInput placeholder="Name">
+    </mat-form-field>
+    <mat-checkbox>Allow downloads</mat-checkbox>
+    <mat-label class="d-block mt-3">Content</mat-label>
+    <div class="row">
+      <div class="col-9">
+        <mat-form-field appearance="outline" class="w-100 search">
+          <mat-label class="ml-2">Search for content</mat-label>
+          <input class="ml-2" type="text" matInput placeholder="Search for content">
+          <i class="fa fa-search text-secondary" matPrefix style="font-size: 18px;"></i>
+        </mat-form-field>
+      </div>
+      <div class="col-3 mt-3">
+        <div class="btn btn-primary">Browse</div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
+
+<!-- add resource modal -->
+<ng-template #addResource let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Select Resource</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" ngbAutofocus>
+    <div class="search">
+      <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white" [floatLabel]="'never'">
+        <i matPrefix class="fas fa-search"></i>
+        <input matInput placeholder="Search">
+      </mat-form-field>
+    </div>
+    <!-- experiences -->
+    <div class="text-secondary font-weight-bold my-2">Experiences</div>
+    <div class="exp d-flex border-bottom py-2 dark-bg-hover">
+      <div class="icon align-self-center mr-2">
+        <img src="assets/images/discription.png" style="max-height:50px;">
+      </div>
+      <div class="name align-self-center">
+        English
+      </div>
+      <div class="arrow align-self-center ml-auto mr-3">
+        <i class="fa fa-angle-right"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">0 Items Selected</button>
+  </div>
+</ng-template>
+
+<!-- new collection modal -->
+<ng-template #newCollection let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Create a Collection</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" ngbAutofocus>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" placeholder="New Collection Name">
+    </mat-form-field>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
