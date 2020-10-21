@@ -1,6 +1,4 @@
-<div *ngIf="loading" style="min-height: 70vh; padding-top: 30vh;">
-  <mat-spinner color="accent" class="mx-auto page-spinner"></mat-spinner>
-</div>
+<app-loader [type]="'page'" *ngIf="loading"></app-loader> <!-- loader -->
 
 <div class="main main-hub p-3" *ngIf="!loading">
   <h3 class="mb-4 clearfix heading">
@@ -143,7 +141,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" [disabled]="hubForm!.invalid || disabled">
-          <img class="loader-gif" *ngIf="disabled" src="assets/images/loader.gif">{{type=='add'?'Save':'Update'}}
+        <img class="loader-gif" *ngIf="disabled" src="assets/images/loader.gif">{{type=='add'?'Save':'Update'}}
       </button>
     </div>
   </form>

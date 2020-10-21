@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 
+import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { DivisionComponent } from './division.component';
 import { HubService } from '../../hub/hub.service';
 const routes = [
@@ -24,7 +25,8 @@ const routes = [
     MatFormFieldModule,
     MatInputModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    LoaderModule
   ],
   providers: [HubService],
   exports: [DivisionComponent]

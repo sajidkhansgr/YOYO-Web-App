@@ -90,30 +90,41 @@ body {
 
 // material
 .page-spinner {
-  height: 60px !important;
-  width: 60px !important;
+  padding-top: 30vh;
 
-  svg {
+  mat-spinner {
     height: 60px !important;
     width: 60px !important;
 
-    circle {
-      stroke-width: 2% !important;
+    svg {
+      height: 60px !important;
+      width: 60px !important;
+
+      circle {
+        stroke-width: 2% !important;
+      }
     }
   }
 }
 
 .btn-spinner {
-  height: 15px !important;
-  width: 15px !important;
+  display: inline-block;
+  padding: 1px;
+  vertical-align: middle;
 
-  svg {
-    height: 15px !important;
-    width: 15px !important;
+  mat-spinner {
+    height: 14px !important;
+    width: 14px !important;
+    margin-bottom: 3px;
 
-    circle {
-      stroke: white !important;
-      stroke-width: 20% !important;
+    svg {
+      height: 14px !important;
+      width: 14px !important;
+
+      circle {
+        stroke: white !important;
+        stroke-width: 18% !important;
+      }
     }
   }
 }
