@@ -70,28 +70,58 @@ export class TestComponent implements OnInit {
     });
   }
 
-  getPageID() {
-    return "page-d-" + (this.currPage - 1);
+  getPageID(type='page') {
+    return type+"-d-" + (this.currPage - 1);
   }
 
   handlePages = (page: any) => {
-    const scale = 1.5;
+    const scale = 1.0;
     console.log(page, "page")
     let pageId: any = this.getPageID();
-    var viewport = page.getViewport(scale);
-    var canvas:any = this.document.getElementById("");
+    let viewport = page.getViewport({scale});
+    // const container: any = this.document.querySelector('#' + pageId);
+    // container.style.display = "block";
+    const canvas: any = this.document.querySelector('#' + this.getPageID('canv'));
+    canvas.style.display = "block";
+    // const pdfPageView = new pdfjs.PDFPageView({
+    //   container: container,
+    //   id: this.currPage,
+    //   scale,
+    //   defaultViewport: page.getViewport({ scale }),
+    //   // Enable text/annotations layers, if needed
+    //   textLayerFactory: new pdfjs.DefaultTextLayerFactory(),
+    //   annotationLayerFactory: new pdfjs.DefaultAnnotationLayerFactory(),
+    // });
+    // // Associates the actual page with the view, and drawing it
+    // pdfPageView.setPdfPage(page);
+    // pdfPageView.draw();
     var context = canvas.getContext('2d');
     canvas.height = viewport.height;
     canvas.width = viewport.width;
-    // Render PDF page into canvas context
-     var renderContext = {
-         canvasContext: context,
-         viewport: viewport
-     };
-    var renderTask = page.render(renderContext);
-                 renderTask.promise.then(function () {
-                     console.log('Page rendered');
-                 })
+    page.render({canvasContext: context, viewport: viewport})
+    .then( ()=> {
+
+    })
+    // const scale = 1;
+    // console.log(page, "page")
+    // let pageId: any = this.getPageID();
+    // var viewport = page.getViewport({scale});
+    // var canvas:any = this.document.getElementById("canvas-id");
+    // var context = canvas.getContext('2d');
+    // canvas.height = viewport.height;
+    // canvas.width = viewport.width;
+    // // Render PDF page into canvas context
+    //  var renderContext = {
+    //      canvasContext: context,
+    //      viewport: viewport
+    //  };
+    // var renderTask = page.render(renderContext);
+    //              renderTask.promise.then(function () {
+    //                  console.log('Page rendered');
+    //                  //Now you can draw new rectangle
+    //                  context.strokeStyle = "red";
+    //                  context.strokeRect(10, 10, 100, 50);
+    //              })
     // page.render({
     //   canvasContext: context,
     //   viewport: viewport
@@ -136,6 +166,7 @@ export class TestComponent implements OnInit {
       }
     }
   }
+  
 
   counter(i: number) {
     return new Array(i);
