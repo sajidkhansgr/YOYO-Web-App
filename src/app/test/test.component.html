@@ -1,48 +1,13 @@
 <p>test works!</p>
 
-<div>
+<button [disabled]="currPage==1 || totalPages<=1" (click)="getPage('prev')"><i class="fas arrow-left">Prev Page</i></button>
+<button [disabled]="currPage==totalPages || totalPages<=1" (click)="getPage('next')"><i class="fas arrow-right">Next Page</i></button>
+PDF URL <input type="text" [(ngModel)]="pdfURL" /> <button (click)="pdfRender()">Render PDF</button>
 
-Total Pages in PDf {{totalPages}}
-CurrentPage {{currPage}}
-Annotation Content: <input placeholder="Content" [(ngModel)]="cont" type="text" />
-Annotation Author: <input placeholder="Author" [(ngModel)]="auth" type="text" /> <br>
-<div>
-  Coordinates:[<span id="coords"></span>]
-               <button id="clear" type="button">clear</button>
-               <!-- <button id="addTextAnnotation" type="button" (click)="addTextAnnotation()">Text Annotation</button> -->
-               <!-- <button id="addHighlightAnnotation" type="button" (click)="addHighlightAnnotation()">Highlight Annotation</button> -->
-               <!-- <button id="addUnderlineAnnotation" type="button" (click)="addUnderlineAnnotation()">Underline Annotation</button> -->
-               <!-- <button id="addSquigglyAnnotation" type="button" (click)="addSquigglyAnnotation()">Squiggly Annotation</button> -->
-               <!-- <button id="addStrikeOutAnnotation" type="button" (click)="addStrikeOutAnnotation()">StrikeOut Annotation</button> -->
-               <button id="addCircleAnnotation" type="button" (click)="addCircleAnnotation()">Circle Annotation</button>
-               <!-- <button id="addSquareAnnotation" type="button" (click)="addSquareAnnotation()">Square Annotation</button> -->
-               <button id="addPolygonAnnotation" type="button" (click)="addPolygonAnnotation()">Polygon Annotation</button>
-               <button id="addPolyLineAnnotation" type="button" (click)="addPolyLineAnnotation()">PolyLine Annotation</button>
-               <button id="addCaretAnnotation" type="button" (click)="addCaretAnnotation()">Caret Annotation</button>
-               <button id="addStampAnnotation" type="button" (click)="addStampAnnotation()">Stamp Annotation</button>
-               <button id="addFreeTextAnnotation" type="button" (click)="addFreeTextAnnotation()">FreeText Annotation</button>
-               <button id="download" type="button">Download</button>
-  <button [disabled]="currPage==1 || totalPages<=1" (click)="getPage('prev')"><i class="fas arrow-left">Prev Page</i></button>
-  <button [disabled]="currPage==totalPages || totalPages<=1" (click)="getPage('next')"><i class="fas arrow-right">Next Page</i></button>
-  PDF URL  <input type="text" [(ngModel)]="pdfURL" /> <button (click)="pdfRender()">Render PDF</button>
-  <!-- Go to <input type="text" [(ngModel)]="goTo" (change)="gotoPage($event)"/> -->
-  <!-- <div id="wrapper"></div>
-  <div id="text-layer"></div> -->
-  <!-- <div id="pdfContainer" class = "pdf-content"> -->
-  <!-- <div *ngFor='let in of counter(totalPages) ;let i = index'>
-    <div [attr.id]="'page-d-'+i"></div>
-  </div> -->
-  <!-- <div id="page-d-1">
-  </div> -->
 
-  <div id="viewerContainer">
+<canvas id="canvas-id"></canvas>
 
-    <ng-container *ngFor='let in of counter(totalPages) ;let i = index'>
-      <div class="page" style="display:none" [attr.id]="'page-d-'+i"></div>
-      <!-- <div class="annotation" style="display:none" [attr.id]="'annotation-'+i"></div> -->
-    </ng-container>
-  </div>
-  <!-- <div class="page" [attr.id]="'page-d-0'"></div> -->
-  <!-- <div id="pdf-wrapper"></div> -->
-
-</div>
+<ng-container *ngFor='let in of counter(totalPages) ;let i = index'>
+  <div class="page" style="display:none" [attr.id]="'page-d-'+i"></div>
+  <!-- <div class="annotation" style="display:none" [attr.id]="'annotation-'+i"></div> -->
+</ng-container>
