@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-collection',
-  templateUrl: './collection.component.html',
-  styleUrls: ['./collection.component.scss']
+  selector: 'app-collection-list',
+  templateUrl: './collection-list.component.html',
+  styleUrls: ['./collection-list.component.scss']
 })
-export class CollectionComponent implements OnInit {
+export class CollectionListComponent implements OnInit {
   view: boolean = true;
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
 
