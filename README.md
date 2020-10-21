@@ -37,3 +37,10 @@ npm install --save-dev @types/jquery
 
 npm i @types/node
 "types": ["node"] in tsconfig.app.json
+
+npm i pdf-annotate.js
+
+
+5659 in require('pdfjs-dist/web/pdf_viewer');
+if(this.viewer)
+  this.viewer.textContent = "";

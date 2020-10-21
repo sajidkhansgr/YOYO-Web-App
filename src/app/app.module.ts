@@ -29,12 +29,12 @@ const appRoutes: Routes = [
     { path : 'reports', loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule),canActivate:[AuthGuard] },
     { path : 'account', loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule),canActivate:[AuthGuard] },
     { path : 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),canActivate:[AuthGuard] },
-    { path : 'collections', loadChildren: () => import('./collection/collection.module').then(m => m.CollectionModule),canActivate:[AuthGuard] },
-    { path : 'experience', loadChildren: () => import('./exp/exp.module').then(m => m.ExpModule),canActivate:[AuthGuard] },
-    { path : 'share', loadChildren: () => import('./share/share.module').then(m => m.ShareModule),canActivate:[AuthGuard] },
-    { path : 'my-files', loadChildren: () => import('./files/files.module').then(m => m.FilesModule),canActivate:[AuthGuard] },
+
+    { path : 'web-app', loadChildren: () => import('./web-app/web-app.module').then(m => m.WebAppModule),canActivate:[AuthGuard] },
+
     { path : 'test', loadChildren: () => import('./test/test.module').then(m => m.TestModule),canActivate:[AuthGuard] },
     { path : '**', loadChildren: () => import('./errors/404/error-404.module').then(m => m.Error404Module)}
+
 ];
 
 @NgModule({

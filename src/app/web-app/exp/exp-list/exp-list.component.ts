@@ -1,23 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-exp',
-  templateUrl: './exp.component.html',
-  styleUrls: ['./exp.component.scss']
+  selector: 'app-exp-list',
+  templateUrl: './exp-list.component.html',
+  styleUrls: ['./exp-list.component.scss']
 })
-export class ExpComponent implements OnInit {
+export class ExpListComponent implements OnInit {
   temp = [1, 2, 3, 4, 5, 6, 7, 8, 9]; //temporary for static view
   nav!: any; // for header
 
   constructor() { }
 
   ngOnInit(): void {
-    // header
-    this.nav = document.querySelector('.toggle-navbar');
-    window.addEventListener('resize', () => {
-      this.navbarHandler();
-    })
-    this.navbarHandler();
   }
 
   // logout -> this.nav=null;

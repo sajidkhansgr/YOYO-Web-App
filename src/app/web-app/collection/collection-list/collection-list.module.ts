@@ -5,15 +5,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
-import { CollectionComponent } from './collection.component';
+import { CollectionListComponent } from './collection-list.component';
 
 const routes: Routes = [
-  { path: '', component: CollectionComponent }
+  { path: '', component: CollectionListComponent }
 ];
 
+
 @NgModule({
-  declarations: [CollectionComponent],
+  declarations: [CollectionListComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -23,4 +23,4 @@ const routes: Routes = [
     MatTooltipModule
   ]
 })
-export class CollectionModule { }
+export class CollectionListModule { }

@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { ExpComponent } from './exp.component';
+import { CollectionInnerComponent } from './collection-inner.component';
 
 const routes: Routes = [
-  { path: '', component: ExpComponent }
+  { path: '', component: CollectionInnerComponent }
 ];
 
 @NgModule({
-  declarations: [ExpComponent],
+  declarations: [CollectionInnerComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes)
   ]
 })
-export class ExpModule { }
+export class CollectionInnerModule { }
