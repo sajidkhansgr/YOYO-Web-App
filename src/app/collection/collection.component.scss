@@ -1,1 +1,12 @@
+.exp {
+  .arrow {
+    opacity: 0;
+    transition: opacity 0.5s linear;
+  }
+}
 
+.exp:hover {
+  .arrow {
+    opacity: 1;
+  }
+}
