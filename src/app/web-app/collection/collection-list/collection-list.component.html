@@ -189,7 +189,7 @@
             <input matInput type="text" placeholder="Search Content">
           </mat-form-field>
           <div class="col-4 mt-3">
-            <div class="btn btn-primary" (click)="openModal(addResource)">
+            <div class="btn btn-primary">
               <i class="fas fa-file-medical mr-1"></i>Add resource
             </div>
           </div>
@@ -278,39 +278,5 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
-</ng-template>
-
-<!-- add resource modal -->
-<ng-template #addResource let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Select Resource</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body" ngbAutofocus>
-    <div class="search">
-      <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white" [floatLabel]="'never'">
-        <i matPrefix class="fas fa-search"></i>
-        <input matInput placeholder="Search">
-      </mat-form-field>
-    </div>
-    <!-- experiences -->
-    <div class="text-secondary font-weight-bold my-2">Experiences</div>
-    <div class="exp d-flex border-bottom py-2 dark-bg-hover">
-      <div class="icon align-self-center mr-2">
-        <img src="assets/images/discription.png" style="max-height:50px;">
-      </div>
-      <div class="name align-self-center">
-        English
-      </div>
-      <div class="arrow align-self-center ml-auto mr-3">
-        <i class="fa fa-angle-right"></i>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">0 Items Selected</button>
   </div>
 </ng-template>
