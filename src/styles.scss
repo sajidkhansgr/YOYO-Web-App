@@ -83,6 +83,17 @@ body {
   cursor: pointer;
 }
 
+.input-btn {
+  padding: 0 !important;
+  border-radius: 50%;
+  width: 18px !important;
+  height: 18px !important;
+
+  i {
+    vertical-align: top !important;
+  }
+}
+
 // angular bootstrap modal
 // button[aria-label="Close"]:focus {
 //   outline: none;
@@ -126,6 +137,12 @@ body {
         stroke-width: 18% !important;
       }
     }
+  }
+}
+
+.align-spin-top {
+  .btn-spinner {
+    vertical-align: top;
   }
 }
 
@@ -231,6 +248,12 @@ body {
 
   .mat-form-field-label-wrapper {
     padding: 0 !important;
+  }
+}
+
+.sp-mat-input {
+  .mat-form-field-suffix {
+    top: 0 !important;
   }
 }
 
