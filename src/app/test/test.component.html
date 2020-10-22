@@ -1,6 +1,12 @@
-<p>test works!</p>
+<p>test works!</p>PDF URL <input type="text" [(ngModel)]="pdfURL" /> <button (click)="renderPDf2()">Render PDF</button>
 
-<button [disabled]="currPage==1 || totalPages<=1" (click)="getPage('prev')"><i class="fas arrow-left">Prev Page</i></button>
+<div class="row">
+  <div class="col-md-12">
+    <div id='pdf-div' class='pdf-view'></div>
+  </div>
+</div>
+
+<!-- <button [disabled]="currPage==1 || totalPages<=1" (click)="getPage('prev')"><i class="fas arrow-left">Prev Page</i></button>
 <button [disabled]="currPage==totalPages || totalPages<=1" (click)="getPage('next')"><i class="fas arrow-right">Next Page</i></button>
 PDF URL <input type="text" [(ngModel)]="pdfURL" /> <button (click)="pdfRender()">Render PDF</button>
 
@@ -37,5 +43,4 @@ PDF URL <input type="text" [(ngModel)]="pdfURL" /> <button (click)="pdfRender()"
 <ng-container *ngFor='let in of counter(totalPages) ;let i = index'>
   <canvas [attr.id]="'canv-d-'+i" style="display:none"></canvas>
   <div class="page" style="display:none" [attr.id]="'page-d-'+i"></div>
-  <!-- <div class="annotation" style="display:none" [attr.id]="'annotation-'+i"></div> -->
-</ng-container>
+</ng-container> -->

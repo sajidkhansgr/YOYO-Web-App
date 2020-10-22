@@ -6,6 +6,8 @@ import * as $ from 'jquery';
 var pdfjs = require('pdfjs-dist/web/pdf_viewer');
 // var PDFAnnotate = require('pdfAnnot/pdfannotate');
 
+import { ViewSDKClient } from '../shared/services/view-sdk.service';
+
 declare const fabric: any;
 
 @Component({
@@ -25,7 +27,7 @@ export class TestComponent implements OnInit {
   doCircle!: boolean;
   otherPdfRef!:any;
 
-  constructor(@Inject(DOCUMENT) document: any) {
+  constructor(@Inject(DOCUMENT) document: any, private viewSDKClient: ViewSDKClient) {
     this.document = document;
     // const pdfWorkerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.min.js`;
     const pdfWorkerSrc = 'assets/pdfjs/pdf.worker.min.js';
@@ -45,6 +47,18 @@ export class TestComponent implements OnInit {
     this.pdfFactory = null;
     this.coordinates = [0, 0];
     this.doCircle = false;
+  }
+
+  //showPageControls,showDownloadPDF,showPrintPDF,showLeftHandPanel
+  ngAfterViewInit() {
+  }
+
+  renderPDf2(){
+    this.viewSDKClient.ready().then(() => {
+        /* Invoke file preview */
+        /* By default the embed mode will be Full Window */
+        this.viewSDKClient.previewFile('pdf-div', {showLeftHandPanel:true,showPageControls:true},this.pdfURL);
+    });
   }
 
   clearPdfRef() {
@@ -166,7 +180,7 @@ export class TestComponent implements OnInit {
       }
     }
   }
-  
+
 
   counter(i: number) {
     return new Array(i);
