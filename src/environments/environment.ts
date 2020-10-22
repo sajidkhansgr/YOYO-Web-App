@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  API_ENDPOINT: "http://hiforceapi.imobisoft.eu/"
+  API_ENDPOINT: "http://hiforceapi.imobisoft.eu/",
+  CLNT_ID: "8c0cd670273d451cbc9b351b11d22318"
 };
 
 /*
