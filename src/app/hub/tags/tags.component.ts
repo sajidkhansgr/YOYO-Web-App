@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -8,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { TagsService } from './tags.service';
 import { Cat } from '../../shared/models/cat';
+import { Tag } from '../../shared/models/tag';
 import { DataService } from '../../shared/services/data.service';
 
 
@@ -17,15 +19,17 @@ import { DataService } from '../../shared/services/data.service';
   styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
+  hubID: number = 0;
   loading: boolean = true; modalLoading: boolean = true;
   showAddCatIp: string = 'none';
   rowInfo: any;
   showRowInfo: boolean = false;
   showCatgIn: boolean = false;
-  catForm!: FormGroup;
-  cats: Cat[] = [];
+  catForm!: FormGroup; tagForm!: FormGroup;
   disabled: boolean = false;
-  catData: any;
+  catData!: Cat | null;
+  cats: Cat[] = []; tags: Tag[] = []; allTags: Tag[] = [];
+  numUnCatTags: number = 0;
 
   constructor(
     private dialog: MatDialog,
@@ -33,14 +37,86 @@ export class TagsComponent implements OnInit {
     private tagServ: TagsService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private dataServ: DataService
+    private dataServ: DataService,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.hubID = parseInt(params['id']);
+    });
     this.getCats();
     this.catForm = this.fb.group({
       name: ['', Validators.required]
     });
+    this.tagForm = this.fb.group({
+      name: ['', Validators.required]
+    });
+    this.getTags();
+  }
+
+  // list of all tags
+  getTags() {
+    this.tagServ.tagList({ pageNo: 0, pageSize: 0 })
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          this.allTags = data.result.results;
+          this.tags = this.allTags;
+          this.numUnCatTags = 0;
+          for (let i = 0; i < this.allTags.length; i++) {
+            if (this.allTags[i].categoryId == 0) {
+              this.numUnCatTags++;
+            }
+          }
+        }
+        // this.loading = false;
+      }, (err: any) => {
+        console.log(err);
+        // this.loading = false;
+      });
+  }
+
+  getAllTags() {
+    this.tags = this.allTags;
+  }
+
+  // list of uncategorized tags
+  getUnCatTags() {
+    let tags: Tag[] = [];
+    for (let i = 0; i < this.allTags.length; i++) {
+      if (this.allTags[i].categoryId == 0) {
+        tags.push(this.allTags[i]);
+      }
+    }
+    this.tags = tags;
+  }
+
+  // add tag
+  addTag() {
+    if (this.tagForm.valid) {
+      this.disabled = true;
+      let tagData: any = {
+        ...this.tagForm.value,
+        categoryId: 1,
+        hubId: this.hubID
+      };
+
+      this.tagServ.addTag(tagData)
+        .subscribe((data: any) => {
+          if (data) {
+            this.dataServ.passDataSend('tag-add');
+            this.toastr.success(data.message || 'Category added successfully', 'Success!');
+            this.tagForm.reset();
+            this.getTags();
+          } else {
+            this.toastr.error('Unable to add Category', 'Error!');
+          }
+          this.disabled = false;
+        }, (err: any) => {
+          this.toastr.error('Unable to add Category', 'Error!');
+          this.disabled = false;
+        });
+    }
   }
 
   // list of categories

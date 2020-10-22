@@ -11,6 +11,30 @@ export class TagsService {
     private http: HttpClient
   ) { }
 
+  // list of tags
+  tagList(params: any): Observable<any[]> {
+    let queryParams = new HttpParams(), url: string;
+    for (let key in params) {
+      if (params[key] || key == 'isDisabled') {
+        queryParams = queryParams.set(key, params[key]);
+      }
+    }
+    return this.http.get(`${AppSettings.LIST_TAG}`, {
+      params: queryParams
+    }
+    ).pipe(
+      map((res: any) =>
+        res
+      )
+    );
+  }
+
+  // add tag
+  addTag(data: any) {
+    return this.http.post(`${AppSettings.ADD_TAG}`, data)
+  }
+
+  // ******** 
   // list of categories
   catList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
