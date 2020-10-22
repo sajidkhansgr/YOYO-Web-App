@@ -47,4 +47,12 @@ export class AppSettings {
   public static DEL_FLDR = `api/Folder/Delete`;
 
   public static GET_FLDR = `api/Folder/GetById`;
+
+  public static LIST_CAT = `api/Category/GetAll`;
+
+  public static ADD_CAT = `api/Category/Add`;
+
+  public static UPD_CAT = `api/Category/Update`;
+
+  public static GET_CAT = `api/Category/GetById`;
 }
