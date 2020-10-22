@@ -10,20 +10,13 @@ written permission of Adobe.
 */
 
 import { Injectable } from '@angular/core';
-
-// declare interface window {
-//   AdobeDC: any;
-// }
-declare global { interface Window { AdobeDC: any; } }
-
 import {environment} from '../../../environments/environment';
 
-// declare var AdobeDC: any;
+declare global { interface Window { AdobeDC: any; } }
 
 @Injectable({
     providedIn: 'root'
 })
-
 
 export class ViewSDKClient {
     readyPromise: Promise<any> = new Promise((resolve) => {
@@ -75,12 +68,12 @@ export class ViewSDKClient {
             /* Pass meta data of file */
             metaData: {
                 /* file name */
-                fileName: 'Bodea Brochure.pdf',
+                fileName: 'my file.pdf',
                 /* file ID */
                 id: '6d07d124-ac85-43b3-a867-36930f502ac6',
             }
         }, viewerConfig);
-
+        this.registerSaveApiHandler();
         return previewFilePromise;
     }
 
@@ -111,9 +104,9 @@ export class ViewSDKClient {
     registerSaveApiHandler() {
         /* Define Save API Handler */
         const saveApiHandler = (metaData: any, content: any, options: any) => {
-            console.log(metaData, content, options);
+            // console.log(metaData, content, options);
             return new Promise((resolve) => {
-              alert("Text Save")
+              alert("I saved the document don't worry")
                 /* Dummy implementation of Save API, replace with your business logic */
                 setTimeout(() => {
                     const response = {
