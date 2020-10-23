@@ -1,17 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
+// import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
-
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { TagsService } from './tags.service';
-import { Cat } from '../../shared/models/cat';
+import { Catg } from '../../shared/models/catg';
 import { Tag } from '../../shared/models/tag';
-import { DataService } from '../../shared/services/data.service';
-
+// import { DataService } from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-tags',
@@ -19,16 +17,17 @@ import { DataService } from '../../shared/services/data.service';
   styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
-  hubID: number = 0; catID: any = 'all';
-  loading: boolean = true; modalLoading: boolean = true;
+  @Input() hubid: any;
+  selTag: string = 'all';
+  loading: boolean = true; modalLoading: boolean = false;
   showAddCatIp: string = 'none';
   rowInfo: any;
   showRowInfo: boolean = false;
   showCatgIn: boolean = false;
-  catForm!: FormGroup; tagForm!: FormGroup;
+  catgForm!: FormGroup; tagForm!: FormGroup;
   disabled: boolean = false;
-  catData!: Cat | null;
-  cats: Cat[] = []; tags: Tag[] = []; allTags: Tag[] = [];
+  catgData!: Catg | null;
+  catgs: Catg[] = []; tags: Tag[] = []; allTags: Tag[] = [];
   pageSize: string = '10'; pageNum: string = '1';
   numAllTags: number = 0; paginationNum: number = 0;
 
@@ -38,40 +37,27 @@ export class TagsComponent implements OnInit {
     private tagServ: TagsService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private dataServ: DataService,
-    private route: ActivatedRoute,
+    // private dataServ: DataService,
+    // private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.hubID = parseInt(params['id']);
-    });
-    this.getCats();
-    this.catForm = this.fb.group({
-      name: ['', Validators.required]
+    this.catgForm = this.fb.group({
+      name: ['', [Validators.required]]
     });
     this.tagForm = this.fb.group({
-      name: ['', Validators.required]
+      name: ['', [Validators.required]]
     });
-    this.getTags('all');
-    this.getNumAllTags();
+    this.getCatgs();
+    this.getTags();
   }
 
-  // num of all tags ******* not needed after api done for numbers
-  getNumAllTags() {
-    this.tagServ.tagList({ pageNo: 0 })
-      .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          this.numAllTags = data.result.totalCount;
-          this.paginationNums();
-        }
-      }, (err: any) => {
-      });
+  resetCh(){
+    this.tagForm.reset()
   }
-
   // when changing page size
   pageSizeChange() {
-    this.getTags(this.catID);
+    this.getTags();
   }
 
   // numbers to be displayed for Pagination
@@ -79,47 +65,18 @@ export class TagsComponent implements OnInit {
     this.paginationNum = Math.ceil(this.numAllTags / parseInt(this.pageSize));
   }
 
-  // tags to be dialyed in table
-  getTags(el: any) {
-    let id = el;
-    if (el.target && el.target.id) {
-      id = el.target.id;
-    }
-    if (id == 'all') {
-      this.getAllTags();
-      this.catID = 'all';
-    } else if (id == 0) {
-      this.getUnCatTags();
-      this.catID = 0;
-    }
+  // tags listing
+  changeTag(type: string) {
+    this.selTag = type;
+    this.getTags();
   }
 
-  // list of all tags
-  getAllTags() {
+  // list of tags
+  getTags() {
     this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.tags = data.result.results;
-        }
-        // this.loading = false;
-      }, (err: any) => {
-        console.log(err);
-        // this.loading = false;
-      });
-  }
-
-  // list of uncategorized tags
-  getUnCatTags() {
-    this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize })
-      .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          let tags: Tag[] = [];
-          for (let i = 0; i < data.result.results.length; i++) {
-            if (data.result.results[i].categoryId == 0) {
-              tags.push(data.result.results[i]);
-            }
-          }
-          this.tags = tags;
         }
         // this.loading = false;
       }, (err: any) => {
@@ -135,33 +92,32 @@ export class TagsComponent implements OnInit {
       let tagData: any = {
         ...this.tagForm.value,
         categoryId: 0,
-        hubId: this.hubID
+        hubId: parseInt(this.hubid)
       };
-
       this.tagServ.addTag(tagData)
         .subscribe((data: any) => {
           if (data) {
-            this.dataServ.passDataSend('tag-add');
-            this.toastr.success(data.message || 'Category added successfully', 'Success!');
+            // this.dataServ.passDataSend('tag-add');
+            this.toastr.success(data.message || 'Tag added successfully', 'Success!');
             this.tagForm.reset();
-            this.getTags('all');
+            this.getTags();
           } else {
-            this.toastr.error('Unable to add Category', 'Error!');
+            this.toastr.error('Unable to add Tag', 'Error!');
           }
           this.disabled = false;
         }, (err: any) => {
-          this.toastr.error('Unable to add Category', 'Error!');
+          // this.toastr.error('Unable to add Tag', 'Error!');
           this.disabled = false;
         });
     }
   }
 
   // list of categories
-  getCats() {
-    this.tagServ.catList({ pageNo: 0 })
+  getCatgs() {
+    this.tagServ.catgList({ pageNo: 0 })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          this.cats = data.result.results;
+          this.catgs = data.result.results;
         }
         this.loading = false;
       }, (err: any) => {
@@ -171,19 +127,18 @@ export class TagsComponent implements OnInit {
   }
 
   // add category
-  addCat() {
-    if (this.catForm.valid) {
+  addCatg() {
+    if (this.catgForm.valid) {
       this.disabled = true;
-      let catData: any = {
-        ...this.catForm.value
+      let catgData: any = {
+        ...this.catgForm.value
       };
-
-      this.tagServ.addCat(catData)
+      this.tagServ.addCatg(catgData)
         .subscribe((data: any) => {
           if (data) {
-            this.dataServ.passDataSend('category-add');
+            // this.dataServ.passDataSend('category-add');
             this.toastr.success(data.message || 'Category added successfully', 'Success!');
-            this.getCats();
+            this.getCatgs();
           } else {
             this.toastr.error('Unable to add Category', 'Error!');
           }
@@ -198,66 +153,62 @@ export class TagsComponent implements OnInit {
   }
 
   // update category modal
-  updCatModal(content: any, el: any) {
-    let id;
-    if (el.target.classList.contains('fas')) {
-      id = el.target.parentNode.id;
-    } else {
-      id = el.target.id;
-    }
-    this.getCat(id);
-
+  updCatgModal(content: any, catg: Catg) {
+    // this.getCatg(catg.id);
+    this.catgData = catg;
+    this.setCatgData();
     this.modalService.open(content, { ariaLabelledBy: 'Update Category' }).result
-      .then((result) => {
+      .then((result:any) => {
       }, (reason) => {
-        this.modalLoading = true;
       });
   }
 
+  setCatgData(){
+    this.catgForm.patchValue({ ...this.catgData });
+  }
+
   // get category
-  getCat(id: string) {
-    this.tagServ.getCat(id)
+  getCatg(id: number) {
+    this.modalLoading = true;
+    this.tagServ.getCatg(id.toString())
       .subscribe((data: any) => {
         if (data && data.result && data.result.id) {
-          this.catData = data.result;
-          this.catForm.patchValue({ ...this.catData });
-          this.modalLoading = false;
+          this.catgData = data.result;
+          this.setCatgData();
         } else {
           this.toastr.error("Invalid Category");
         }
+          this.modalLoading = false;
       }, (err: any) => {
-        this.toastr.error("Unable to fetch Category, so please try after some time");
+        this.modalLoading = false;
+        // this.toastr.error("Unable to fetch Category, so please try after some time");
       });
   }
 
   // update category
-  updCat() {
-    if (this.catForm.valid) {
+  updCatg() {
+    if (this.catgForm.valid) {
       this.disabled = true;
-      let catData: any = {
-        ...this.catForm.value
+      let catgData: any = {
+        ...this.catgForm.value
       };
-      catData.id = this.catData!.id;
-
-      this.tagServ.updateCat(catData)
+      catgData.id = this.catgData!.id;
+      this.tagServ.updCatg(catgData)
         .subscribe((data: any) => {
           // console.log(data);
           if (data) {
-            this.dataServ.passDataSend('category-upd');
+            // this.dataServ.passDataSend('category-upd');
             this.toastr.success(data.message || 'Category updated successfully', 'Success!');
+            this.getCatgs();
           } else {
             this.toastr.error('Unable to update Category', 'Error!');
           }
           this.dismissModal();
-          this.getCats();
           this.disabled = false;
-          this.modalLoading = true;
         }, (err: any) => {
-          this.toastr.error('Unable to update Category', 'Error!');
+          // this.toastr.error('Unable to update Category', 'Error!');
           this.dismissModal();
-          this.getCats();
           this.disabled = false;
-          this.modalLoading = true;
         });
     }
   }
@@ -292,7 +243,6 @@ export class TagsComponent implements OnInit {
     }
   }
 
-
   toggleCatgInp() {
     this.showCatgIn = !this.showCatgIn;
   }
@@ -315,6 +265,11 @@ export class TagsComponent implements OnInit {
 
   closeInfo = () => {
     this.showRowInfo = false
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this.dismissModal();
   }
 
 }

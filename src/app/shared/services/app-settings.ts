@@ -48,11 +48,11 @@ export class AppSettings {
 
   public static GET_FLDR = `api/Folder/GetById`;
 
-  public static LIST_CAT = `api/Category/GetAll`;
+  public static LIST_CATG = `api/Category/GetAll`;
 
-  public static ADD_CAT = `api/Category/Add`;
+  public static ADD_CATG = `api/Category/Add`;
 
-  public static UPD_CAT = `api/Category/Update`;
+  public static UPD_CATG = `api/Category/Update`;
 
-  public static GET_CAT = `api/Category/GetById`;
+  public static GET_CATG = `api/Category/GetById`;
 }

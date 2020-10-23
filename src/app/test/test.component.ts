@@ -59,7 +59,7 @@ export class TestComponent implements OnInit {
         /* By default the embed mode will be Full Window */
         const canvas: any = this.document.querySelector('#pdf-div');
         canvas.style.display = "block";
-        this.viewSDKClient.previewFile('pdf-div', {showLeftHandPanel:true,showPageControls:true,showDisabledSaveButton:true},this.pdfURL);
+        this.viewSDKClient.previewFile('pdf-div', {showLeftHandPanel:true,showPageControls:true,showDisabledSaveButton:true},"assets/my-file.pdf");
     });
   }
 

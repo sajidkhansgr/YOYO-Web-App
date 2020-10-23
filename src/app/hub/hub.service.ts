@@ -12,9 +12,9 @@ export class HubService {
     ){ }
 
     hubList(params: any):  Observable<any[]> {
-        let queryParams = new HttpParams(), url:string;
+        let queryParams = new HttpParams();
         for(let key in params) {
-          if(params[key] || key=='isDisabled'){
+          if(params[key] || key=='pageNo'){
             queryParams = queryParams.set(key, params[key]);
           }
         }

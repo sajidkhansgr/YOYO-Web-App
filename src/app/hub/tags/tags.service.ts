@@ -34,16 +34,16 @@ export class TagsService {
     return this.http.post(`${AppSettings.ADD_TAG}`, data)
   }
 
-  // ******** 
+  // ********
   // list of categories
-  catList(params: any): Observable<any[]> {
+  catgList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
     for (let key in params) {
       if (params[key] || key == 'isDisabled') {
         queryParams = queryParams.set(key, params[key]);
       }
     }
-    return this.http.get(`${AppSettings.LIST_CAT}`, {
+    return this.http.get(`${AppSettings.LIST_CATG}`, {
       params: queryParams
     }
     ).pipe(
@@ -54,19 +54,19 @@ export class TagsService {
   }
 
   // add category
-  addCat(data: any) {
-    return this.http.post(`${AppSettings.ADD_CAT}`, data)
+  addCatg(data: any) {
+    return this.http.post(`${AppSettings.ADD_CATG}`, data)
   }
 
   // get category
-  getCat(id: string) {
-    return this.http.get(`${AppSettings.GET_CAT}`, {
+  getCatg(id: string) {
+    return this.http.get(`${AppSettings.GET_CATG}`, {
       params: { id }
     });
   }
 
   // update category
-  updateCat(data: any) {
-    return this.http.patch(`${AppSettings.UPD_CAT}`, data)
+  updCatg(data: any) {
+    return this.http.patch(`${AppSettings.UPD_CATG}`, data)
   }
 }
