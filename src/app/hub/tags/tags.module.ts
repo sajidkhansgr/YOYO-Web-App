@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/confirm-dialog.module';
@@ -21,7 +22,8 @@ import { TagsService } from './tags.service'
     MatSelectModule,
     ConfirmDialogModule,
     MatCheckboxModule,
-    LoaderModule
+    LoaderModule,
+    MatChipsModule
   ],
   exports: [
     TagsComponent

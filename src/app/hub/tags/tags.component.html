@@ -83,12 +83,24 @@
           <h5 class="card-title px-3">
             <div class="heading">
               <div class="search" *ngIf="tagForm">
-                <form name="tagForm" (ngSubmit)="addTag()" [formGroup]="tagForm" novalidate>
-                  <mat-form-field appearance="outline" class="custom-mat-input mb-2" [floatLabel]="'never'"
+                <form name="tagForm" (ngSubmit)="addTags()" [formGroup]="tagForm" novalidate>
+                  <mat-form-field class="custom-mat-input mb-2" appearance="outline" style="width:85%;"
+                    [floatLabel]="'never'">
+                    <mat-chip-list #tagList aria-label="tag selection" formControlName="name">
+                      <mat-chip *ngFor="let tag of tagNames" selectable removable (removed)="removeChip(tag)">
+                        {{tag}}
+                        <i class="fa fa-times" matChipRemove></i>
+                      </mat-chip>
+                      <input placeholder="Separate tags by comma or enter" [matChipInputFor]="tagList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" matChipInputAddOnBlur
+                        (matChipInputTokenEnd)="addChips($event)" formControlName="name">
+                    </mat-chip-list>
+                  </mat-form-field>
+                  <!-- <mat-form-field appearance="outline" class="custom-mat-input mb-2" [floatLabel]="'never'"
                     style="width:85%;">
                     <input matInput placeholder="Add Tag Name to Create New Tag" class="ml-0" formControlName="name"
                       required>
-                  </mat-form-field>
+                  </mat-form-field> -->
                   <button type="submit" class="btn btn-primary ml-3" [disabled]="tagForm!.invalid || tagAddDisabled">
                     <app-loader [type]="'btn'" *ngIf="tagAddDisabled"></app-loader>
                     Create

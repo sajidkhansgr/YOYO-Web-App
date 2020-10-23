@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
 
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { TagsService } from './tags.service';
@@ -28,6 +30,8 @@ export class TagsComponent implements OnInit {
   catgs: Catg[] = []; tags: Tag[] = []; allTags: Tag[] = [];
   pageSize: string = '10'; pageNum: string = '1';
   numAllTags: number = 0; paginationNum: number = 0;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  tagNames: string[] = [];
 
   constructor(
     private dialog: MatDialog,
@@ -51,6 +55,7 @@ export class TagsComponent implements OnInit {
   resetCh() {
     this.tagForm.reset()
   }
+
   // when changing page size
   pageSizeChange() {
     this.tagLoading = true;
@@ -83,29 +88,71 @@ export class TagsComponent implements OnInit {
       });
   }
 
-  // add tag
-  addTag() {
-    if (this.tagForm.valid) {
-      this.tagAddDisabled = true;
-      let tagData: any = {
-        ...this.tagForm.value,
-        categoryId: 0,
-        hubId: parseInt(this.hubid)
-      };
-      this.tagServ.addTag(tagData)
-        .subscribe((data: any) => {
-          if (data) {
-            this.toastr.success(data.message || 'Tag added successfully', 'Success!');
-            this.tagForm.reset();
-            this.getTags();
-          } else {
-            this.toastr.error('Unable to add Tag', 'Error!');
-          }
-          this.tagAddDisabled = false;
-        }, (err: any) => {
-          this.tagAddDisabled = false;
-        });
+  // add chips - tags
+  addChips(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()) {
+      this.tagNames.push(value.trim());
+    } else {
+      // this.tagForm.reset();
     }
+
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  // remove chip - tag
+  removeChip(fruit: any): void {
+    const index = this.tagNames.indexOf(fruit);
+
+    if (index >= 0) {
+      this.tagNames.splice(index, 1);
+      if (this.tagNames.length == 0) {
+        this.tagForm.reset();
+      }
+    }
+  }
+
+  // ******* need to be changed when api call for multiple add is done
+  // add tags
+  addTags() {
+    if (this.tagNames.length > 0 && this.tagForm.valid) {
+      this.tagAddDisabled = true;
+      for (let i = 0; i < this.tagNames.length; i++) {
+        let tagData: any = {
+          name: this.tagNames[i],
+          categoryId: 0,
+          hubId: parseInt(this.hubid)
+        };
+        setTimeout(() => {
+          this.addTag(tagData);
+        }, 500);
+        if (i == this.tagNames.length - 1) {
+          this.tagAddDisabled = false;
+          this.tagNames = [];
+          this.tagLoading = true;
+          this.getTags();
+        }
+      }
+    }
+  }
+
+  // add single tag
+  addTag(tagData: any) {
+    this.tagServ.addTag(tagData)
+      .subscribe((data: any) => {
+        if (data) {
+          this.toastr.success(data.message || 'Tag added successfully', 'Success!');
+        } else {
+          this.toastr.error('Unable to add Tag', 'Error!');
+        }
+
+      }, (err: any) => {
+
+      });
   }
 
   // list of categories

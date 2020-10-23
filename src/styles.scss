@@ -243,18 +243,30 @@ body {
 
   .mat-form-field-infix {
     padding-bottom: 0.7rem !important;
-    padding-top: 0.8rem !important;
+    padding-top: 1rem !important;
     border-top: 0 !important;
   }
 
   .mat-form-field-label-wrapper {
     padding: 0 !important;
   }
+
+  mat-chip {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    min-height: 25px !important;
+    // background-color: $primary !important;
+
+    .mat-chip-remove {
+      width: auto !important;
+      height: auto !important
+    }
+  }
 }
 
 .sp-mat-input {
   .mat-form-field-suffix {
-    top: 0 !important;
+    top: 0.09rem !important;
   }
 }
 
