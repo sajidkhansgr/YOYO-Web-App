@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -19,7 +19,7 @@ import { DataService } from '../../shared/services/data.service';
   styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
-  hubID: number = 0;
+  hubID: number = 0; catID: any = 'all';
   loading: boolean = true; modalLoading: boolean = true;
   showAddCatIp: string = 'none';
   rowInfo: any;
@@ -29,7 +29,8 @@ export class TagsComponent implements OnInit {
   disabled: boolean = false;
   catData!: Cat | null;
   cats: Cat[] = []; tags: Tag[] = []; allTags: Tag[] = [];
-  numUnCatTags: number = 0;
+  pageSize: string = '10'; pageNum: string = '1';
+  numAllTags: number = 0; paginationNum: number = 0;
 
   constructor(
     private dialog: MatDialog,
@@ -52,22 +53,53 @@ export class TagsComponent implements OnInit {
     this.tagForm = this.fb.group({
       name: ['', Validators.required]
     });
-    this.getTags();
+    this.getTags('all');
+    this.getNumAllTags();
+  }
+
+  // num of all tags ******* not needed after api done for numbers
+  getNumAllTags() {
+    this.tagServ.tagList({ pageNo: 0 })
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          this.numAllTags = data.result.totalCount;
+          this.paginationNums();
+        }
+      }, (err: any) => {
+      });
+  }
+
+  // when changing page size
+  pageSizeChange() {
+    this.getTags(this.catID);
+  }
+
+  // numbers to be displayed for Pagination
+  paginationNums() {
+    this.paginationNum = Math.ceil(this.numAllTags / parseInt(this.pageSize));
+  }
+
+  // tags to be dialyed in table
+  getTags(el: any) {
+    let id = el;
+    if (el.target && el.target.id) {
+      id = el.target.id;
+    }
+    if (id == 'all') {
+      this.getAllTags();
+      this.catID = 'all';
+    } else if (id == 0) {
+      this.getUnCatTags();
+      this.catID = 0;
+    }
   }
 
   // list of all tags
-  getTags() {
-    this.tagServ.tagList({ pageNo: 0, pageSize: 0 })
+  getAllTags() {
+    this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          this.allTags = data.result.results;
-          this.tags = this.allTags;
-          this.numUnCatTags = 0;
-          for (let i = 0; i < this.allTags.length; i++) {
-            if (this.allTags[i].categoryId == 0) {
-              this.numUnCatTags++;
-            }
-          }
+          this.tags = data.result.results;
         }
         // this.loading = false;
       }, (err: any) => {
@@ -76,19 +108,24 @@ export class TagsComponent implements OnInit {
       });
   }
 
-  getAllTags() {
-    this.tags = this.allTags;
-  }
-
   // list of uncategorized tags
   getUnCatTags() {
-    let tags: Tag[] = [];
-    for (let i = 0; i < this.allTags.length; i++) {
-      if (this.allTags[i].categoryId == 0) {
-        tags.push(this.allTags[i]);
-      }
-    }
-    this.tags = tags;
+    this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize })
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          let tags: Tag[] = [];
+          for (let i = 0; i < data.result.results.length; i++) {
+            if (data.result.results[i].categoryId == 0) {
+              tags.push(data.result.results[i]);
+            }
+          }
+          this.tags = tags;
+        }
+        // this.loading = false;
+      }, (err: any) => {
+        console.log(err);
+        // this.loading = false;
+      });
   }
 
   // add tag
@@ -97,7 +134,7 @@ export class TagsComponent implements OnInit {
       this.disabled = true;
       let tagData: any = {
         ...this.tagForm.value,
-        categoryId: 1,
+        categoryId: 0,
         hubId: this.hubID
       };
 
@@ -107,7 +144,7 @@ export class TagsComponent implements OnInit {
             this.dataServ.passDataSend('tag-add');
             this.toastr.success(data.message || 'Category added successfully', 'Success!');
             this.tagForm.reset();
-            this.getTags();
+            this.getTags('all');
           } else {
             this.toastr.error('Unable to add Category', 'Error!');
           }
