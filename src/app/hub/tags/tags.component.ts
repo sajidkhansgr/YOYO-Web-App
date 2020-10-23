@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-// import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -9,7 +8,6 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 import { TagsService } from './tags.service';
 import { Catg } from '../../shared/models/catg';
 import { Tag } from '../../shared/models/tag';
-// import { DataService } from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-tags',
@@ -19,13 +17,13 @@ import { Tag } from '../../shared/models/tag';
 export class TagsComponent implements OnInit {
   @Input() hubid: any;
   selTag: string = 'all';
-  loading: boolean = true; modalLoading: boolean = false;
+  loading: boolean = true; tagLoading: boolean = true;
   showAddCatIp: string = 'none';
   rowInfo: any;
   showRowInfo: boolean = false;
   showCatgIn: boolean = false;
   catgForm!: FormGroup; tagForm!: FormGroup;
-  disabled: boolean = false;
+  catgUpdDisabled: boolean = false; catgAddDisabled: boolean = false; tagAddDisabled: boolean = false;
   catgData!: Catg | null;
   catgs: Catg[] = []; tags: Tag[] = []; allTags: Tag[] = [];
   pageSize: string = '10'; pageNum: string = '1';
@@ -36,9 +34,7 @@ export class TagsComponent implements OnInit {
     private modalService: NgbModal,
     private tagServ: TagsService,
     private fb: FormBuilder,
-    private toastr: ToastrService,
-    // private dataServ: DataService,
-    // private route: ActivatedRoute
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -52,11 +48,12 @@ export class TagsComponent implements OnInit {
     this.getTags();
   }
 
-  resetCh(){
+  resetCh() {
     this.tagForm.reset()
   }
   // when changing page size
   pageSizeChange() {
+    this.tagLoading = true;
     this.getTags();
   }
 
@@ -67,6 +64,7 @@ export class TagsComponent implements OnInit {
 
   // tags listing
   changeTag(type: string) {
+    this.tagLoading = true;
     this.selTag = type;
     this.getTags();
   }
@@ -78,17 +76,17 @@ export class TagsComponent implements OnInit {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.tags = data.result.results;
         }
-        // this.loading = false;
+        this.tagLoading = false;
       }, (err: any) => {
         console.log(err);
-        // this.loading = false;
+        this.tagLoading = false;
       });
   }
 
   // add tag
   addTag() {
     if (this.tagForm.valid) {
-      this.disabled = true;
+      this.tagAddDisabled = true;
       let tagData: any = {
         ...this.tagForm.value,
         categoryId: 0,
@@ -97,17 +95,15 @@ export class TagsComponent implements OnInit {
       this.tagServ.addTag(tagData)
         .subscribe((data: any) => {
           if (data) {
-            // this.dataServ.passDataSend('tag-add');
             this.toastr.success(data.message || 'Tag added successfully', 'Success!');
             this.tagForm.reset();
             this.getTags();
           } else {
             this.toastr.error('Unable to add Tag', 'Error!');
           }
-          this.disabled = false;
+          this.tagAddDisabled = false;
         }, (err: any) => {
-          // this.toastr.error('Unable to add Tag', 'Error!');
-          this.disabled = false;
+          this.tagAddDisabled = false;
         });
     }
   }
@@ -129,24 +125,22 @@ export class TagsComponent implements OnInit {
   // add category
   addCatg() {
     if (this.catgForm.valid) {
-      this.disabled = true;
+      this.catgAddDisabled = true;
       let catgData: any = {
         ...this.catgForm.value
       };
       this.tagServ.addCatg(catgData)
         .subscribe((data: any) => {
           if (data) {
-            // this.dataServ.passDataSend('category-add');
             this.toastr.success(data.message || 'Category added successfully', 'Success!');
             this.getCatgs();
           } else {
             this.toastr.error('Unable to add Category', 'Error!');
           }
-          this.disabled = false;
+          this.catgAddDisabled = false;
           this.showCatgIn = false;
         }, (err: any) => {
-          this.toastr.error('Unable to add Category', 'Error!');
-          this.disabled = false;
+          this.catgAddDisabled = false;
           this.showCatgIn = false;
         });
     }
@@ -158,57 +152,55 @@ export class TagsComponent implements OnInit {
     this.catgData = catg;
     this.setCatgData();
     this.modalService.open(content, { ariaLabelledBy: 'Update Category' }).result
-      .then((result:any) => {
+      .then((result: any) => {
       }, (reason) => {
       });
   }
 
-  setCatgData(){
+  // set form value to update category form
+  setCatgData() {
     this.catgForm.patchValue({ ...this.catgData });
   }
 
   // get category
-  getCatg(id: number) {
-    this.modalLoading = true;
-    this.tagServ.getCatg(id.toString())
-      .subscribe((data: any) => {
-        if (data && data.result && data.result.id) {
-          this.catgData = data.result;
-          this.setCatgData();
-        } else {
-          this.toastr.error("Invalid Category");
-        }
-          this.modalLoading = false;
-      }, (err: any) => {
-        this.modalLoading = false;
-        // this.toastr.error("Unable to fetch Category, so please try after some time");
-      });
-  }
+  // getCatg(id: number) {
+  //   this.modalLoading = true;
+  //   this.tagServ.getCatg(id.toString())
+  //     .subscribe((data: any) => {
+  //       if (data && data.result && data.result.id) {
+  //         this.catgData = data.result;
+  //         this.setCatgData();
+  //       } else {
+  //         this.toastr.error("Invalid Category");
+  //       }
+  //       this.modalLoading = false;
+  //     }, (err: any) => {
+  //       this.modalLoading = false;
+  //       // this.toastr.error("Unable to fetch Category, so please try after some time");
+  //     });
+  // }
 
   // update category
   updCatg() {
     if (this.catgForm.valid) {
-      this.disabled = true;
+      this.catgUpdDisabled = true;
       let catgData: any = {
         ...this.catgForm.value
       };
       catgData.id = this.catgData!.id;
       this.tagServ.updCatg(catgData)
         .subscribe((data: any) => {
-          // console.log(data);
           if (data) {
-            // this.dataServ.passDataSend('category-upd');
             this.toastr.success(data.message || 'Category updated successfully', 'Success!');
             this.getCatgs();
           } else {
             this.toastr.error('Unable to update Category', 'Error!');
           }
           this.dismissModal();
-          this.disabled = false;
+          this.catgUpdDisabled = false;
         }, (err: any) => {
-          // this.toastr.error('Unable to update Category', 'Error!');
           this.dismissModal();
-          this.disabled = false;
+          this.catgUpdDisabled = false;
         });
     }
   }

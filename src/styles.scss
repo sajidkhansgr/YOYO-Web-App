@@ -102,6 +102,7 @@ body {
 // material
 .page-spinner {
   padding-top: 30vh;
+  min-height: 60vh;
 
   mat-spinner {
     height: 60px !important;
@@ -1070,5 +1071,13 @@ header {
     .options {
       opacity: 1;
     }
+  }
+}
+
+// tags page
+.tags-page {
+  .act-tag {
+    background-color: $primary !important;
+    color: #fff !important;
   }
 }

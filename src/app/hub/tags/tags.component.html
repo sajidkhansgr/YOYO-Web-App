@@ -7,8 +7,10 @@
         <div class="card-body">
           <div class="text-hi-dark-grey">Tags</div>
           <ul class="list-unstyled ml-2 mt-1">
-            <li class="dark-bg-hover px-2 py-1 rounded mt-2" [ngClass]="{'act-tag': selTag==='all'}" (click)="changeTag('all')">All tags</li>
-            <li class="dark-bg-hover px-2 py-1 rounded mt-2" [ngClass]="{'act-tag': selTag==='uncatg'}" (click)="changeTag('uncatg')">
+            <li class="dark-bg-hover px-2 py-1 rounded mt-2" [ngClass]="{'act-tag': selTag==='all'}"
+              (click)="changeTag('all')">All tags</li>
+            <li class="dark-bg-hover px-2 py-1 rounded mt-2" [ngClass]="{'act-tag': selTag==='uncatg'}"
+              (click)="changeTag('uncatg')">
               Uncategorized Tags
             </li>
           </ul>
@@ -25,9 +27,10 @@
                   <button type="submit" class="btn btn-secondary input-btn mr-1" (click)="toggleCatgInp()">
                     <i class="fas fa-times"></i>
                   </button>
-                  <button type="submit" class="btn btn-primary input-btn" [disabled]="catgForm!.invalid || disabled">
-                    <app-loader [type]="'btn'" *ngIf="disabled" class="align-spin-top"></app-loader>
-                    <i class="fas fa-check-circle" *ngIf="!disabled"></i>
+                  <button type="submit" class="btn btn-primary input-btn"
+                    [disabled]="catgForm!.invalid || catgAddDisabled">
+                    <app-loader [type]="'btn'" *ngIf="catgAddDisabled" class="align-spin-top"></app-loader>
+                    <i class="fas fa-check-circle" *ngIf="!catgAddDisabled"></i>
                   </button>
                 </div>
                 <mat-error *ngIf="catgForm.get('name')!.hasError('required')" class="mt-3">
@@ -58,7 +61,7 @@
               </div>
               <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 flex bg-white"
                 [floatLabel]="'never'" style="display: none;">
-                <input matInput placeholder="Add Category" class="ml-0" >
+                <input matInput placeholder="Add Category" class="ml-0">
                 <div matSuffix class="curs-ptr">
                   <i class="fas fa-times mr-2" (click)="closeCatListIP($event)"></i>
                   <i class="fas fa-check-circle text-primary" (click)="closeCatListIP($event)"></i>
@@ -83,10 +86,11 @@
                 <form name="tagForm" (ngSubmit)="addTag()" [formGroup]="tagForm" novalidate>
                   <mat-form-field appearance="outline" class="custom-mat-input mb-2" [floatLabel]="'never'"
                     style="width:85%;">
-                    <input matInput placeholder="Add Tag Name to Create New Tag" class="ml-0" formControlName="name" required>
+                    <input matInput placeholder="Add Tag Name to Create New Tag" class="ml-0" formControlName="name"
+                      required>
                   </mat-form-field>
-                  <button type="submit" class="btn btn-primary ml-3" [disabled]="tagForm!.invalid || disabled">
-                    <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+                  <button type="submit" class="btn btn-primary ml-3" [disabled]="tagForm!.invalid || tagAddDisabled">
+                    <app-loader [type]="'btn'" *ngIf="tagAddDisabled"></app-loader>
                     Create
                   </button>
                 </form>
@@ -94,7 +98,9 @@
             </div>
           </h5>
           <div class="card-text px-3">
-            <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showRowInfo}">
+            <app-loader [type]="'page'" *ngIf="tagLoading"></app-loader> <!-- loader -->
+            <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showRowInfo}"
+              *ngIf="!tagLoading">
               <thead>
                 <tr>
                   <th scope="col" class="curs-ptr">Name<i class="fas fa-sort-down ml-1 align-top"></i>
@@ -205,10 +211,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body" *ngIf="modalLoading" style="min-height:60vh;" ngbAutofocus>
-    <app-loader [type]="'page'"></app-loader> <!-- loader -->
-  </div>
-  <form name="catgForm" (ngSubmit)="updCatg()" [formGroup]="catgForm" novalidate *ngIf="!modalLoading">
+  <form name="catgForm" (ngSubmit)="updCatg()" [formGroup]="catgForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Name</mat-label>
@@ -226,8 +229,8 @@
       </p>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" [disabled]="catgForm!.invalid || disabled">
-        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+      <button type="submit" class="btn btn-primary" [disabled]="catgForm!.invalid || catgUpdDisabled">
+        <app-loader [type]="'btn'" *ngIf="catgUpdDisabled"></app-loader>
         Save
       </button>
     </div>
