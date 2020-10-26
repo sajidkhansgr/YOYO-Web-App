@@ -110,19 +110,17 @@
             </div>
           </h5>
           <div class="card-text px-3">
-            <app-loader [type]="'page'" *ngIf="tagLoading"></app-loader> <!-- loader -->
-            <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showRowInfo}"
-              *ngIf="!tagLoading">
+            <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showRowInfo}">
               <thead>
                 <tr>
-                  <th scope="col" class="curs-ptr">Name<i class="fas fa-sort-down ml-1 align-top"></i>
+                  <th [ngClass]="{'curs-ptr':true, 'font-weight-normal': !col.isSelected}" *ngFor="let col of columns"
+                    (click)="sort(col.key)">
+                    {{col.dispName}}<i class="fas ml-1"
+                      [ngClass]="{'fa-sort-down align-top': col.isAsc, 'fa-sort-up align-bottom': !col.isAsc}"></i>
                   </th>
-                  <th scope="col" class="curs-ptr">Status<i class="fas fa-sort-down ml-1 align-top"></i>
-                  </th>
-                  <th scope="col" class="curs-ptr">Date Modified<i class="fas fa-sort-down ml-1 align-top"></i></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody *ngIf="!tagLoading">
                 <tr (click)="toggleInfo(tag)" *ngFor="let tag of tags">
                   <td>
                     {{tag.name}}
@@ -132,6 +130,7 @@
                 </tr>
               </tbody>
             </table>
+            <app-loader [type]="'page'" *ngIf="tagLoading"></app-loader> <!-- loader -->
           </div>
           <div class="card-footer row justify-content-between mx-0">
             <div class="pages">

@@ -20,10 +20,10 @@ import { Tag } from '../../shared/models/tag';
 })
 export class TagsComponent implements OnInit {
   @Input() hubid: any;
-  input: any;searInit: boolean = false;
+  input: any; searInit: boolean = false;
   @ViewChild("sear", { static: false }) set altRefIn(el: ElementRef) {
     this.input = el;
-    if(this.input && this.input ?.nativeElement && !this.searInit){
+    if (this.input && this.input?.nativeElement && !this.searInit) {
       fromEvent(this.input.nativeElement, 'keyup')
         .pipe(
           debounceTime(1000),
@@ -33,7 +33,7 @@ export class TagsComponent implements OnInit {
           })
         )
         .subscribe();
-        this.searInit = true;
+      this.searInit = true;
     }
   }
   selTag: string = 'all';
@@ -46,11 +46,13 @@ export class TagsComponent implements OnInit {
   catgUpdDisabled: boolean = false; catgAddDisabled: boolean = false; tagAddDisabled: boolean = false;
   catgData!: Catg | null;
   catgs: Catg[] = []; tags: Tag[] = []; allTags: Tag[] = [];
-  pageSize: string = '10'; pageNum: string = '1';
+  pageSize: string = '10'; pageNum: string = '0';
   // numAllTags: number = 0; paginationNum: number = 0;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames: string[] = [];
   searchTxt: string = '';
+  sortColumn: string = ''; isAsc?: boolean = undefined;
+  columns: any[] = [{ dispName: "Name", isAsc: true, isSelected: false, key: "name" }, { dispName: "Status", isAsc: true, isSelected: false, key: "status" }, { dispName: "Date Modified", isAsc: true, isSelected: false, key: "date-mod" }];
 
   constructor(
     private dialog: MatDialog,
@@ -85,6 +87,22 @@ export class TagsComponent implements OnInit {
   //   this.paginationNum = Math.ceil(this.numAllTags / parseInt(this.pageSize));
   // }
 
+  // tags sorting
+  sort(col: string) {
+    this.sortColumn = col;
+    this.isAsc = !this.isAsc;
+    this.getTags();
+    this.columns.filter((val) => {
+      if (val.key == col) {
+        val.isAsc = !val.isAsc;
+        val.isSelected = true;
+      } else {
+        val.isAsc = true;
+        val.isSelected = false;
+      }
+    });
+  }
+
   // tags listing
   changeTag(type: string) {
     this.selTag = type;
@@ -94,12 +112,11 @@ export class TagsComponent implements OnInit {
   // list of tags
   getTags() {
     this.tagLoading = true;
-    // console.log(this.tagSearchName);
-    this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize, searchText: this.searchTxt })
+    this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize, searchText: this.searchTxt, isAscending: this.isAsc, sortColumn: this.sortColumn })
       .subscribe((data: any) => {
+        // console.log(data);
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.tags = data.result.results;
-          // console.log(data);
         }
         this.tagLoading = false;
       }, (err: any) => {
