@@ -331,11 +331,13 @@ export class TagsComponent implements OnInit {
   }
 
   toggleInfo(row: any) {
-    if (!this.showRowInfo)
-      this.rowInfo = row;
-    else
+    if (this.showRowInfo && this.rowInfo.id == row.id) {
+      this.showRowInfo = false;
       this.rowInfo = {};
-    this.showRowInfo = !this.showRowInfo;
+    } else {
+      this.rowInfo = row;
+      this.showRowInfo = true;
+    }
   }
 
   closeInfo = () => {

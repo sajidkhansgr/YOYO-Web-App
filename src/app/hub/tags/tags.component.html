@@ -87,10 +87,10 @@
                 <i matPrefix class="fa fa-search text-secondary"></i>
                 <input matInput placeholder="Search Tag ..." class="ml-0" #sear [(ngModel)]="searchTxt">
               </mat-form-field>
-              <div class="search" *ngIf="tagForm">
-                <form name="tagForm" (ngSubmit)="addTags()" [formGroup]="tagForm" novalidate>
-                  <mat-form-field class="custom-mat-input mb-2" appearance="outline" style="width:85%;"
-                    [floatLabel]="'never'">
+              <div class="search mb-2" *ngIf="tagForm">
+                <form name="tagForm" (ngSubmit)="addTags()" [formGroup]="tagForm" novalidate class="row w-100 mx-0">
+                  <mat-form-field class="custom-mat-input mr-3" appearance="outline" [floatLabel]="'never'"
+                    style="flex:1;">
                     <mat-chip-list #tagList aria-label="tag selection" formControlName="name">
                       <mat-chip *ngFor="let tag of tagNames" selectable removable (removed)="removeChip(tag)">
                         {{tag}}
@@ -101,7 +101,7 @@
                         (matChipInputTokenEnd)="addChips($event)" formControlName="name">
                     </mat-chip-list>
                   </mat-form-field>
-                  <button type="submit" class="btn btn-primary ml-3" [disabled]="tagForm!.invalid || tagAddDisabled">
+                  <button type="submit" class="btn btn-primary ml-auto" [disabled]="tagForm!.invalid || tagAddDisabled">
                     <app-loader [type]="'btn'" *ngIf="tagAddDisabled"></app-loader>
                     Create
                   </button>
@@ -165,25 +165,36 @@
     <div class="document">
       <div class="card">
         <div class="card-header row m-0">
-          <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">Group Stock Position</h5>
+          <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">{{rowInfo.name}}</h5>
           <div class="mr-2 col-1 ml-auto">
             <div class="btn btn-light" (click)="closeInfo()">
               <i class="fas fa-times"></i>
             </div>
           </div>
         </div>
+        <div class="card-header bg-hi-light-grey d-flex">
+          <div class="btn btn-sm btn-light mr-2"><i class="fas fa-trash-alt"></i></div>
+          <div class="btn btn-sm btn-light"><i class="fas fa-edit"></i></div>
+        </div>
         <div class="card-body">
           <div class="doc-details details border-bottom mb-3 pb-3">
+            <div class="heading text-hi-dark-grey font-weight-bold">Details</div>
             <div class="name">
-              <label class="text-hi-dark-grey mb-0 mt-2">Details</label>
+              <label class="text-hi-dark-grey mb-0 mt-2">Name</label>
               <div class="value">
-                3C Metal ABC
+                {{rowInfo.name}}
               </div>
             </div>
             <div class="orgCategories">
-              <label class="text-hi-dark-grey mb-0 mt-2">Organisation in Categories</label>
+              <label class="text-hi-dark-grey mb-0 mt-2">Organized in Categories</label>
               <div class="value">
                 No Catgories
+              </div>
+            </div>
+            <div class="orgCategories">
+              <label class="text-hi-dark-grey mb-0 mt-2">Assigned In</label>
+              <div class="value">
+                Not Assigned
               </div>
             </div>
             <div class="usedIn">
