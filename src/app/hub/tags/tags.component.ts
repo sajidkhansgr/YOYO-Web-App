@@ -29,9 +29,10 @@ export class TagsComponent implements OnInit {
   catgData!: Catg | null;
   catgs: Catg[] = []; tags: Tag[] = []; allTags: Tag[] = [];
   pageSize: string = '10'; pageNum: string = '1';
-  numAllTags: number = 0; paginationNum: number = 0;
+  // numAllTags: number = 0; paginationNum: number = 0;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames: string[] = [];
+  tagSearchName: string = '';
 
   constructor(
     private dialog: MatDialog,
@@ -52,34 +53,35 @@ export class TagsComponent implements OnInit {
     this.getTags();
   }
 
-  resetCh() {
-    this.tagForm.reset()
-  }
+  // resetCh() {
+  //   this.tagForm.reset()
+  // }
 
   // when changing page size
   pageSizeChange() {
-    this.tagLoading = true;
     this.getTags();
   }
 
   // numbers to be displayed for Pagination
-  paginationNums() {
-    this.paginationNum = Math.ceil(this.numAllTags / parseInt(this.pageSize));
-  }
+  // paginationNums() {
+  //   this.paginationNum = Math.ceil(this.numAllTags / parseInt(this.pageSize));
+  // }
 
   // tags listing
   changeTag(type: string) {
-    this.tagLoading = true;
     this.selTag = type;
     this.getTags();
   }
 
   // list of tags
   getTags() {
-    this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize })
+    this.tagLoading = true;
+    // console.log(this.tagSearchName);
+    this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize, searchText: this.tagSearchName })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.tags = data.result.results;
+          // console.log(data);
         }
         this.tagLoading = false;
       }, (err: any) => {
@@ -133,7 +135,6 @@ export class TagsComponent implements OnInit {
         if (i == this.tagNames.length - 1) {
           this.tagAddDisabled = false;
           this.tagNames = [];
-          this.tagLoading = true;
           this.getTags();
         }
       }
