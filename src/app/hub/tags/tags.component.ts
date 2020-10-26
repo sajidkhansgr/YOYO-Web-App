@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 import { TagsService } from './tags.service';
 import { Catg } from '../../shared/models/catg';
 import { Tag } from '../../shared/models/tag';
+import { LMT_PAGE } from '../../shared/constants'
 
 @Component({
   selector: 'app-tags',
@@ -46,7 +47,7 @@ export class TagsComponent implements OnInit {
   catgUpdDisabled: boolean = false; catgAddDisabled: boolean = false; tagAddDisabled: boolean = false;
   catgData!: Catg | null;
   catgs: Catg[] = []; tags: Tag[] = []; allTags: Tag[] = [];
-  pageSize: string = '10'; pageNum: string = '0';
+  pageNum: string = '0'; pageSizeArr: Array<number> = LMT_PAGE; pageSize: number = this.pageSizeArr[0];
   // numAllTags: number = 0; paginationNum: number = 0;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames: string[] = [];
@@ -122,8 +123,8 @@ export class TagsComponent implements OnInit {
     this.tagLoading = true;
     this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize, searchText: this.searchTxt, isAscending: this.isAsc, sortColumn: this.sortColumn })
       .subscribe((data: any) => {
-        // console.log(data);
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          console.log(data);
           this.tags = data.result.results;
         }
         this.tagLoading = false;
@@ -176,9 +177,12 @@ export class TagsComponent implements OnInit {
           this.addTag(tagData);
         }, 500);
         if (i == this.tagNames.length - 1) {
+          this.tagForm.reset();
           this.tagAddDisabled = false;
           this.tagNames = [];
-          this.getTags();
+          setTimeout(() => {
+            this.getTags();
+          }, 1500);
         }
       }
     }

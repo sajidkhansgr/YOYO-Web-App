@@ -136,10 +136,7 @@
             <div class="pages">
               <mat-form-field appearance="outline" class="mr-2">
                 <mat-select [(ngModel)]="pageSize" (selectionChange)="pageSizeChange()">
-                  <mat-option value="10">10</mat-option>
-                  <mat-option value="20">20</mat-option>
-                  <mat-option value="50">50</mat-option>
-                  <mat-option value="100">100</mat-option>
+                  <mat-option [value]="size" *ngFor="let size of pageSizeArr">{{size}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <!-- <span>Showing 1-10 of {{numAllTags}}</span> -->
