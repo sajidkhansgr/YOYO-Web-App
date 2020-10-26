@@ -5,10 +5,12 @@
   <div class="mt-2">
     <div>
       <mat-tab-group [selectedIndex]="activeIndex" (selectedTabChange)="onTabChange($event)">
-        <mat-tab label="Content & Workspace">
-          <app-content-workspace></app-content-workspace>
+        <mat-tab label="Content & Workspace" [disabled]="disabled">
+          <div *ngIf="arr.indexOf(0)!==-1">
+            <app-content-workspace [hubid]="id"></app-content-workspace>
+          </div>
         </mat-tab>
-        <mat-tab label="Tags">
+        <mat-tab label="Tags" [disabled]="disabled">
           <div *ngIf="arr.indexOf(1)!==-1">
             <app-tags [hubid]="id"></app-tags>
           </div>

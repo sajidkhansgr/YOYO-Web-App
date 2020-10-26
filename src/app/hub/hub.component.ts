@@ -16,7 +16,7 @@ import { Hub } from '../shared/models/hub';
 export class HubComponent implements OnInit {
   id!: string; routerSubs!: Subscription;
   arr!: Array<number>; activeIndex!: number;
-  hubInfo!: Hub | null;
+  hubInfo!: Hub | null;disabled!: boolean;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -32,9 +32,14 @@ export class HubComponent implements OnInit {
   }
 
   initialiseState() {
-    this.arr = [0];
-    this.activeIndex = 0;
-    this.getHub();
+    this.arr = [];
+    this.disabled = true;this.hubInfo = null;
+    setTimeout(()=>{
+      this.arr.push(0);
+      this.activeIndex = 0;
+      this.getHub();
+      this.disabled = false;
+    },900)
   }
 
   getHub() {
@@ -59,7 +64,7 @@ export class HubComponent implements OnInit {
     } else {
     }
   }
-  
+
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     if(!!this.routerSubs)

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -14,12 +14,8 @@ import { FileDndHelper } from '../../shared/file-helper';
   styleUrls: ['./content-workspace.component.scss']
 })
 export class ContentWorkspaceComponent implements OnInit {
-  editDisp: string = 'none';
-  viewDisp: string = 'block';
-  showAddCatIp: string = 'none';
-  showWork: boolean = false;
-  showDoc: boolean = false;
-  id!: string; routerSubs!: Subscription;
+  showWork!: boolean;showDoc!: boolean;
+  @Input() hubid: any;routerSubs!: Subscription;
   addURLIcon!: string; iconUrl!: any;
   defIcon: any = DEF_ICON; custIcon: any; files!: any[];
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
@@ -33,6 +29,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   ngOnInit(): void {
     // this.getHubs()
+    console.log("ds")
     this.initialiseState(); // reset and set based on new parameter this time
   }
 
@@ -40,7 +37,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.files = []; this.addURLIcon = ''; this.iconUrl = '';
     this.dispGnrl = true; this.dispSettings = true; this.dispSmart = false;
     this.dispPropsSec = false; this.dispSmFolderSec = true;
-    this.custIcon = undefined;
+    this.custIcon = undefined;this.showWork = false;this.showDoc = false;
   }
 
   // workspace

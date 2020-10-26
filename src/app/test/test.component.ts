@@ -8,7 +8,7 @@ var pdfjs = require('pdfjs-dist/web/pdf_viewer');
 
 import { ViewSDKClient } from '../shared/services/view-sdk.service';
 
-declare const fabric: any;
+// declare const fabric: any;
 
 @Component({
   selector: 'app-test',
