@@ -19,6 +19,8 @@ declare global { interface Window { AdobeDC: any; } }
 })
 
 export class ViewSDKClient {
+    annotList: any = [];
+    pdfRef: any;
     readyPromise: Promise<any> = new Promise((resolve) => {
         if (window.AdobeDC) {
             resolve();
@@ -35,7 +37,21 @@ export class ViewSDKClient {
         return this.readyPromise;
     }
 
-    previewFile(divId: string, viewerConfig: any, fileName: string) {
+    previewFile(divId: string, viewerConfig: any, fileName: string,list_of_annotations?:any) {
+      const eventOptions = {
+        // Pass the events to receive.
+        // If no event is passed in listenOn, then all the annotation events will be received.
+        listenOn: [
+            "ANNOTATION_ADDED", "ANNOTATION_CLICKED", "ANNOTATION_UPDATED", "ANNOTATION_DELETED"
+        ]
+      }
+      const customFlags = {
+          showToolbar: true,
+          showCommentsPanel: false,
+          downloadWithAnnotations: true,
+          showToolsOnTextSelection: true,
+          printWithAnnotations: true
+    }
         const config: any = {
             /* Pass your registered client id */
             clientId: environment.CLNT_ID, //'8c0cd670273d451cbc9b351b11d22318',
@@ -46,14 +62,14 @@ export class ViewSDKClient {
         }
         /* Initialize the AdobeDC View object */
         this.adobeDCView = new window.AdobeDC.View(config);
-
+        alert(fileName+"fileName")
         /* Invoke the file preview API on Adobe DC View object */
-        const previewFilePromise = this.adobeDCView.previewFile({
+        const previewFilePromise = this.pdfRef = this.adobeDCView.previewFile({
             /* Pass information on how to access the file */
             content: {
                 /* Location of file where it is hosted */
                 location: {
-                    url: fileName //'https://documentcloud.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf',
+                    url: fileName, //'https://documentcloud.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf',
                     /*
                     If the file URL requires some additional headers, then it can be passed as follows:-
                     headers: [
@@ -70,11 +86,62 @@ export class ViewSDKClient {
                 /* file name */
                 fileName: 'my file.pdf',
                 /* file ID */
-                id: '6d07d124-ac85-43b3-a867-36930f502ac6',
+                id: 'abc'
             }
         }, viewerConfig);
         this.registerSaveApiHandler();
+        this.registerEventsHandler();
+
+        previewFilePromise.then((adobeViewer:any) => {
+
+          adobeViewer.getAPIs().then((apis:any) => {
+                  apis.gotoLocation(3)
+                  .then(() => console.log("Success"))
+
+                  .catch((error:any) => console.log(error));
+           });
+
+
+
+          adobeViewer.getAnnotationManager().then((annotationManager:any) => {
+            console.log(annotationManager)
+            annotationManager.addAnnotations(list_of_annotations)
+
+                 .then(() => console.log("Success"))
+
+                 .catch((error:any) => console.log(error));
+            annotationManager.setConfig(customFlags)
+                                              .then(() => console.log("Success"))
+                                              .catch((error:any) => console.log(error));
+            annotationManager.registerEventListener( (event:any)=> {
+                console.log(event.type, event.data)
+                switch(event.type){
+                  case "ANNOTATION_ADDED": this.annotList.push(event.data);break;
+                  case "ANNOTATION_UPDATED": this.updRemAnnot(event.data, 'upd');break;
+                  case "ANNOTATION_DELETED": this.updRemAnnot(event.data, 'del');break;
+                  default:
+                }
+              },
+              eventOptions
+            );
+           // All annotation APIs can be invoked here
+          });
+         });
         return previewFilePromise;
+    }
+
+    updRemAnnot(annotData:any, type:string){
+      console.log(this.annotList, "before")
+      const index = this.annotList.findIndex((ele:any) => ele.id==annotData.id);
+      if (index >= 0) {
+        if(type==='upd'){
+          this.annotList[index] = annotData;
+        }else{
+          //deleted
+          this.annotList.splice(index, 1);
+        }
+        console.log(this.annotList, "after")
+      }
     }
 
     previewFileUsingFilePromise(divId: string, filePromise: Promise<string | ArrayBuffer>, fileName: any) {
@@ -83,7 +150,7 @@ export class ViewSDKClient {
             /* Pass your registered client id */
             clientId:environment.CLNT_ID, // '8c0cd670273d451cbc9b351b11d22318',
             /* Pass the div id in which PDF should be rendered */
-            divId,
+            divId
         });
 
         /* Invoke the file preview API on Adobe DC View object */
@@ -142,5 +209,18 @@ export class ViewSDKClient {
                 enablePDFAnalytics: true,
             }
         );
+    }
+
+    goToPage(pageNo: number){
+
+      this.pdfRef.then((adobeViewer:any) => {
+        adobeViewer.getAPIs().then((apis:any) => {
+                apis.gotoLocation(pageNo)
+                .then(() => console.log("Success"))
+
+                .catch((error:any) => console.log(error));
+         });
+       })
+
     }
 }
