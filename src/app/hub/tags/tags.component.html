@@ -174,7 +174,7 @@
         </div>
         <div class="card-header bg-hi-light-grey d-flex">
           <div class="btn btn-sm btn-light mr-2"><i class="fas fa-trash-alt"></i></div>
-          <div class="btn btn-sm btn-light"><i class="fas fa-edit"></i></div>
+          <div class="btn btn-sm btn-light" (click)="updTagModal(editTag)"><i class="fas fa-edit"></i></div>
         </div>
         <div class="card-body">
           <div class="doc-details details border-bottom mb-3 pb-3">
@@ -249,6 +249,49 @@
         advanced search). You can uncheck this option to prevent a tag category can be used for filtering. Tags that
         are part of an unpublished category will never be shown to users.
       </p>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" [disabled]="catgForm!.invalid || catgUpdDisabled">
+        <app-loader [type]="'btn'" *ngIf="catgUpdDisabled"></app-loader>
+        Save
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- edit tag modal  -->
+<ng-template #editTag let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Edit Tag</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form name="catgForm" (ngSubmit)="updCatg()" [formGroup]="catgForm" novalidate>
+    <div class="modal-body" ngbAutofocus>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="Name" formControlName="name" required>
+        <mat-error *ngIf="catgForm.get('name')!.hasError('required')">
+          Name is required
+        </mat-error>
+      </mat-form-field>
+      <!-- <mat-form-field>
+        <mat-chip-list #tagList aria-label="Tag selection" formControlName="name">
+          <mat-chip *ngFor="let tag of tagNames" selectable removable (removed)="removeChip(tag)">
+            {{tag}}
+            <i class="fa fa-times" matChipRemove></i>
+          </mat-chip>
+          <input placeholder="Add Tags (Separate tags by comma or enter)" [matChipInputFor]="tagList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" matChipInputAddOnBlur
+            (matChipInputTokenEnd)="addChips($event)" formControlName="name" [matAutocomplete]="auto">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+            {{tag}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field> -->
     </div>
     <div class="modal-footer">
       <button type="submit" class="btn btn-primary" [disabled]="catgForm!.invalid || catgUpdDisabled">

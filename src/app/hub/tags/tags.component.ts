@@ -87,6 +87,14 @@ export class TagsComponent implements OnInit {
   //   this.paginationNum = Math.ceil(this.numAllTags / parseInt(this.pageSize));
   // }
 
+  // update tag modal
+  updTagModal(content: any) {
+    this.modalService.open(content, { ariaLabelledBy: 'Update tag' }).result
+      .then((result: any) => {
+      }, (reason) => {
+      });
+  }
+
   // tags sorting
   sort(col: string) {
     this.sortColumn = col;
@@ -103,7 +111,7 @@ export class TagsComponent implements OnInit {
     });
   }
 
-  // tags listing
+  // change tags listing - table
   changeTag(type: string) {
     this.selTag = type;
     this.getTags();
@@ -142,8 +150,8 @@ export class TagsComponent implements OnInit {
   }
 
   // remove chip - tag
-  removeChip(fruit: any): void {
-    const index = this.tagNames.indexOf(fruit);
+  removeChip(tag: any): void {
+    const index = this.tagNames.indexOf(tag);
 
     if (index >= 0) {
       this.tagNames.splice(index, 1);
