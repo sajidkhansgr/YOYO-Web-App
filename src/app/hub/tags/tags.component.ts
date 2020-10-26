@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { fromEvent, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -18,6 +20,22 @@ import { Tag } from '../../shared/models/tag';
 })
 export class TagsComponent implements OnInit {
   @Input() hubid: any;
+  input: any;searInit: boolean = false;
+  @ViewChild("sear", { static: false }) set altRefIn(el: ElementRef) {
+    this.input = el;
+    if(this.input && this.input ?.nativeElement && !this.searInit){
+      fromEvent(this.input.nativeElement, 'keyup')
+        .pipe(
+          debounceTime(1000),
+          distinctUntilChanged(),
+          tap(() => {
+            this.getTags();
+          })
+        )
+        .subscribe();
+        this.searInit = true;
+    }
+  }
   selTag: string = 'all';
   loading: boolean = true; tagLoading: boolean = true;
   showAddCatIp: string = 'none';
@@ -32,7 +50,7 @@ export class TagsComponent implements OnInit {
   // numAllTags: number = 0; paginationNum: number = 0;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames: string[] = [];
-  tagSearchName: string = '';
+  searchTxt: string = '';
 
   constructor(
     private dialog: MatDialog,
@@ -77,7 +95,7 @@ export class TagsComponent implements OnInit {
   getTags() {
     this.tagLoading = true;
     // console.log(this.tagSearchName);
-    this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize, searchText: this.tagSearchName })
+    this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize, searchText: this.searchTxt })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.tags = data.result.results;

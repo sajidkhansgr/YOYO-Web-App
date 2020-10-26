@@ -85,8 +85,7 @@
               <mat-form-field appearance="outline" class="custom-mat-input float-right mb-3" [floatLabel]="'never'"
                 style="min-width: 300px;">
                 <i matPrefix class="fa fa-search text-secondary"></i>
-                <input matInput placeholder="Search Tag ..." class="ml-0" (keyup)="getTags()"
-                  [(ngModel)]="tagSearchName">
+                <input matInput placeholder="Search Tag ..." class="ml-0" #sear [(ngModel)]="searchTxt">
               </mat-form-field>
               <div class="search" *ngIf="tagForm">
                 <form name="tagForm" (ngSubmit)="addTags()" [formGroup]="tagForm" novalidate>
