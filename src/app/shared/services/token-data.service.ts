@@ -26,7 +26,16 @@ export class TokenDataService {
   }
 
   getUser(){
-    return this.cookieServ.get('usr');
+    let usr:any = this.cookieServ.get('usr');
+    try {
+      if (usr && JSON.parse(usr)) {
+        return JSON.parse(usr) || null;
+      } else {
+        return null;
+      }
+    } catch (ex) {
+      return null;
+    }
   }
 
 }

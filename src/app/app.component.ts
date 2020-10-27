@@ -11,7 +11,7 @@ import { DataService } from './shared/services/data.service';
 })
 export class AppComponent {
   title = 'HiForceAdminUI';
-  isToken:boolean = false;isVisb: boolean=false;
+  isToken: boolean = false; isVisb: boolean = false;
   routerSubs: Subscription;
   usrInfo: any | null;
 
@@ -19,46 +19,37 @@ export class AppComponent {
     private tokenDataServ: TokenDataService,
     private dataServ: DataService,
     private router: Router
-  ){
+  ) {
     this.routerSubs = this.dataServ.currentInfo
       .subscribe((msg: any) => {
-        if(msg==='login')
+        if (msg === 'login')
           this.getToken();
       })
   }
 
   ngOnInit(): void {
     this.getToken();
-    setTimeout( ()=>{
+    setTimeout(() => {
       this.isVisb = true;
-    },900)
+    }, 900)
   }
 
-  getToken(){
-    this.isToken = this.tokenDataServ.getToken()?true:false;
-    let usr = this.tokenDataServ.getUser();
-    try{
-      if(usr && JSON.parse(usr)){
-        this.usrInfo = JSON.parse(usr) || null;
-      }else{
-        this.usrInfo = null;
-      }
-    }catch(ex){
-      this.usrInfo = null;
-    }
+  getToken() {
+    this.isToken = this.tokenDataServ.getToken() ? true : false;
+    this.usrInfo = this.tokenDataServ.getUser();
   }
 
-  isAuthPage(): boolean{
-    return this.router.url.indexOf('auth/login')!==-1||this.router.url.indexOf('login')!==-1?true:false;
+  isAuthPage(): boolean {
+    return this.router.url.indexOf('auth/login') !== -1 || this.router.url.indexOf('login') !== -1 ? true : false;
   }
 
-  isWebApp(): boolean{
-    return this.router.url.indexOf('web-app')!==-1?true:false;
+  isWebApp(): boolean {
+    return this.router.url.indexOf('web-app') !== -1 ? true : false;
   }
 
-  ngOnDestroy(): void{
+  ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    if(!!this.routerSubs)
+    if (!!this.routerSubs)
       this.routerSubs.unsubscribe();
   }
 }

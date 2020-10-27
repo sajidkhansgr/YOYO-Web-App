@@ -71,7 +71,8 @@ export class HeaderComponent implements OnInit {
         sidebarTexts[i].classList.remove('displaySidebarText');
       }
       // for arrow (display)
-      arrow!.classList.remove('displayArrow');
+      if(arrow && arrow!.classList)
+        arrow!.classList.remove('displayArrow');
     }, 500);
     setTimeout(() => {
       // for text (opacity)
@@ -79,7 +80,8 @@ export class HeaderComponent implements OnInit {
         sidebarTexts[i].classList.remove('showSidebarText');
       }
       // for arrow (opacity)
-      arrow!.classList.remove('showArrow');
+      if(arrow && arrow!.classList)
+        arrow!.classList.remove('showArrow');
     }, 5);
     this.temp = 'close';
   }

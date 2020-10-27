@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TokenDataService } from '../shared/services/token-data.service';
 
 @Component({
   selector: 'app-web-app',
@@ -10,10 +11,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WebAppComponent implements OnInit {
   nav!: any; // for header
-  constructor() { }
+  usrInfo: any | null;
+  constructor(
+    private tokenDataServ: TokenDataService
+  ) { }
 
   ngOnInit(): void {
     // header
+    this.getToken();
     this.nav = document.querySelector('.toggle-navbar');
     window.addEventListener('resize', () => {
       this.navbarHandler();
@@ -21,7 +26,15 @@ export class WebAppComponent implements OnInit {
     this.navbarHandler();
   }
 
-  // logout -> this.nav=null;
+  getToken() {
+    this.usrInfo = this.tokenDataServ.getUser();
+  }
+
+  logout() {
+    this.tokenDataServ.removeAll();
+    this.nav = null;
+    // this.dataServ.passDataSend('change');
+  }
 
   // header
   navbarHandler = () => {
