@@ -43,7 +43,7 @@ export class TagsComponent implements OnInit {
   rowInfo: any;
   showRowInfo: boolean = false;
   showCatgIn: boolean = false;
-  catgForm!: FormGroup; tagForm!: FormGroup;
+  catgForm!: FormGroup; tagForm!: FormGroup; updTagForm!: FormGroup;
   updDisabled: boolean = false; catgAddDisabled: boolean = false; tagAddDisabled: boolean = false;
   catgData!: Catg | null;
   catgs: Catg[] = []; tags: Tag[] = []; allTags: Tag[] = [];
@@ -70,6 +70,10 @@ export class TagsComponent implements OnInit {
     this.tagForm = this.fb.group({
       name: ['', [Validators.required]]
     });
+    this.updTagForm = this.fb.group({
+      name: ['', [Validators.required]],
+      // catgs: [''] // needs to be added when multiple catgs api for tags is done
+    });
     this.getCatgs();
     this.getTags();
   }
@@ -88,14 +92,41 @@ export class TagsComponent implements OnInit {
   //   this.paginationNum = Math.ceil(this.numAllTags / parseInt(this.pageSize));
   // }
 
-  // update tag
+  // update tag => changes needed after update api is done
   updTag() {
-    console.log('abc');
+    if (this.updTagForm.valid) {
+      this.updDisabled = true;
+      let tagData: any = {
+        id: this.rowInfo.id,
+        ...this.updTagForm.value,
+        categoryId: 0,
+        hubId: parseInt(this.hubid)
+      };
+      // console.log(tagData);
+      // console.log(this.rowInfo);
+      this.tagServ.updTag(tagData)
+        .subscribe((data: any) => {
+          if (data) {
+            console.log(data);
+            this.toastr.success(data.message || 'Tag updated successfully', 'Success!');
+            this.getTags();
+          } else {
+            this.toastr.error('Unable to update Tag', 'Error!');
+          }
+          this.dismissModal();
+          this.updDisabled = false;
+        }, (err: any) => {
+          this.dismissModal();
+          this.updDisabled = false;
+        });
+    }
   }
 
   // update tag modal
   updTagModal(content: any) {
     // console.log(this.catgs);
+    this.updTagForm.patchValue({ ...this.rowInfo }); // set form value
+    // console.log(this.rowInfo);
     this.modalService.open(content, { ariaLabelledBy: 'Update tag' }).result
       .then((result: any) => {
       }, (reason) => {
@@ -251,17 +282,13 @@ export class TagsComponent implements OnInit {
   updCatgModal(content: any, catg: Catg) {
     // this.getCatg(catg.id);
     this.catgData = catg;
-    this.setCatgData();
+    this.catgForm.patchValue({ ...this.catgData }); // set form value
     this.modalService.open(content, { ariaLabelledBy: 'Update Category' }).result
       .then((result: any) => {
       }, (reason) => {
       });
   }
 
-  // set form value to update category form
-  setCatgData() {
-    this.catgForm.patchValue({ ...this.catgData });
-  }
 
   // get category
   // getCatg(id: number) {

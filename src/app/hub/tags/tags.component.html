@@ -116,7 +116,8 @@
                   <th class="curs-ptr" [ngClass]="{'font-weight-normal': !col.isSelected}" *ngFor="let col of columns"
                     (click)="sort(col.key)">
                     {{col.dispName}}
-                    <i class="fas ml-1" [ngClass]="{'fa-sort-down align-top': col.isAsc, 'fa-sort-up align-bottom': !col.isAsc}"></i>
+                    <i class="fas ml-1"
+                      [ngClass]="{'fa-sort-down align-top': col.isAsc, 'fa-sort-up align-bottom': !col.isAsc}"></i>
                   </th>
                 </tr>
               </thead>
@@ -264,7 +265,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="tagForm" (ngSubmit)="updTag()" [formGroup]="tagForm" novalidate>
+  <form name="updTagForm" (ngSubmit)="updTag()" [formGroup]="updTagForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Name</mat-label>
@@ -276,12 +277,13 @@
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Organized in Categories</mat-label>
         <mat-select multiple>
+          <!-- formControlName="catgs" -->
           <mat-option *ngFor="let catg of catgs" [value]="catg.id">{{catg.name}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" [disabled]="tagForm!.invalid || updDisabled">
+      <button type="submit" class="btn btn-primary" [disabled]="updTagForm!.invalid || updDisabled">
         <app-loader [type]="'btn'" *ngIf="updDisabled"></app-loader>
         Update
       </button>

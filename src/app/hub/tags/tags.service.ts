@@ -11,6 +11,11 @@ export class TagsService {
     private http: HttpClient
   ) { }
 
+  // update tag
+  updTag(data: any) {
+    return this.http.put(`${AppSettings.UPD_TAG}`, data)
+  }
+
   // list of tags
   tagList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
@@ -67,6 +72,6 @@ export class TagsService {
 
   // update category
   updCatg(data: any) {
-    return this.http.patch(`${AppSettings.UPD_CATG}`, data)
+    return this.http.put(`${AppSettings.UPD_CATG}`, data)
   }
 }
