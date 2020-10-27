@@ -25,7 +25,7 @@
       <h3 class="mb-4 clearfix heading align-self-center">
         My Files
         <div class="float-right d-flex">
-          <i [ngClass]="{'fa mr-3 curs-ptr align-self-center': true, 'fa-list-ul': view, 'fa-th-large': !view}"
+          <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
             (click)="switchView()" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" id="addBtnDD" data-toggle="dropdown"
@@ -34,12 +34,11 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="addBtnDD">
               <a class="dropdown-item curs-ptr" (click)="openModal(addFolder)"><i class="fas fa-folder-plus mr-1"></i>
-                Create
-                Folder</a>
+                Create Folder
+              </a>
               <a class="dropdown-item curs-ptr" (click)="openModal(addURL)"><i class="fa fa-link mr-1"></i>Add URL</a>
-              <a class="dropdown-item curs-ptr" (click)="uploadBtn(uploadFile)"><i class="fa fa-upload mr-1"></i>Upload
-                from hard
-                drive
+              <a class="dropdown-item curs-ptr" (click)="uploadBtn(uploadFile)"><i class="fa fa-upload mr-1"></i>
+                Upload from hard drive
                 <input type="file" style="display: none;" #uploadFile>
               </a>
             </div>

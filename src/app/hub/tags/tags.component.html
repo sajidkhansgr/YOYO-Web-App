@@ -1,7 +1,7 @@
 <app-loader [type]="'page'" *ngIf="loading"></app-loader> <!-- loader -->
 
 <div class="tags-page row mx-0" *ngIf="!loading">
-  <div [ngClass]="{'sub-tab-nav row mx-0 mt-4 px-0': true, 'col-md-12': !showRowInfo, 'col-md-8': showRowInfo}">
+  <div class="sub-tab-nav row mx-0 mt-4 px-0" [ngClass]="{'col-md-12': !showRowInfo, 'col-md-8': showRowInfo}">
     <div class="col" style="min-width: 240px; max-width: 240px;">
       <div class="card bg-hi-grey" style="min-height:100% !important;">
         <div class="card-body">
@@ -110,13 +110,13 @@
             </div>
           </h5>
           <div class="card-text px-3">
-            <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showRowInfo}">
+            <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
               <thead>
                 <tr>
-                  <th [ngClass]="{'curs-ptr':true, 'font-weight-normal': !col.isSelected}" *ngFor="let col of columns"
+                  <th class="curs-ptr" [ngClass]="{'font-weight-normal': !col.isSelected}" *ngFor="let col of columns"
                     (click)="sort(col.key)">
-                    {{col.dispName}}<i class="fas ml-1"
-                      [ngClass]="{'fa-sort-down align-top': col.isAsc, 'fa-sort-up align-bottom': !col.isAsc}"></i>
+                    {{col.dispName}}
+                    <i class="fas ml-1" [ngClass]="{'fa-sort-down align-top': col.isAsc, 'fa-sort-up align-bottom': !col.isAsc}"></i>
                   </th>
                 </tr>
               </thead>

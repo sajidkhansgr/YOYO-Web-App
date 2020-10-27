@@ -15,24 +15,21 @@
             </div>
 
             <div class="row mt-4 mx-0">
-              <div [ngClass]="{'sub-tab-nav': true,'col-md-12' : !showDoc, 'col-md-8': showDoc}">
+              <div class="sub-tab-nav" [ngClass]="{'col-md-12' : !showDoc, 'col-md-8': showDoc}">
                 <div class="card overflow-hidden">
                   <div class="card-header border-0">
                     <mat-tab-group>
                       <mat-tab label="Sent">
                         <div class="card-body bg-white rounded-bottom px-0 pb-0">
                           <div class="card-text px-3">
-                            <table [ngClass]="{'table table-hover text-dark w-100': true, 'hide-rows': showDoc}">
+                            <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showDoc}">
                               <thead>
                                 <tr>
-                                  <th scope="col" class="curs-ptr">SUBJECT<i
-                                      class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col" class="curs-ptr">SUBJECT<i class="fas fa-sort-down ml-1 align-top"></i></th>
                                   <th scope="col" class="curs-ptr">AUTHOR<i class="fas fa-sort-down ml-1 align-top"></i>
                                   </th>
-                                  <th scope="col" class="curs-ptr">RECIPIENTS<i
-                                      class="fas fa-sort-down ml-1 align-top"></i></th>
-                                  <th scope="col" class="curs-ptr">DATE SENT<i
-                                      class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col" class="curs-ptr">RECIPIENTS<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                                  <th scope="col" class="curs-ptr">DATE SENT<i class="fas fa-sort-down ml-1 align-top"></i></th>
                                   <th scope="col" class="curs-ptr">READ<i class="fas fa-sort-down ml-1 align-top"></i>
                                   </th>
                                   <th></th>
@@ -78,8 +75,7 @@
                             </div>
                             <ul class="pagination">
                               <li class="page-item disabled">
-                                <a class="page-link bg-hi-grey" href="#" tabindex="-1" aria-disabled="true"><i
-                                    class="fas fa-chevron-left"></i></a>
+                                <a class="page-link bg-hi-grey" href="#" tabindex="-1" aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
                               </li>
                               <li class="page-item"><a class="page-link bg-hi-grey" href="#">1</a></li>
                               <li class="page-item"><a class="page-link bg-hi-grey" href="#">2</a></li>
@@ -97,7 +93,7 @@
                   </div>
                 </div>
               </div>
-              <div [ngClass]="{'workspace w-100 col-md-4': true,'hide' : !showDoc, 'show': showDoc}">
+              <div class="workspace w-100 col-md-4" [ngClass]="{'hide': !showDoc, 'show': showDoc}">
                 <div class="doc">
                   <div class="card">
                     <div class="card-header row m-0">

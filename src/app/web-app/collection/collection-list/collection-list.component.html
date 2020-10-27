@@ -3,7 +3,7 @@
   <h3 class="mb-4 clearfix heading align-self-center">
     Collections
     <div class="float-right">
-      <i [ngClass]="{'fa mr-3 curs-ptr align-self-center': true, 'fa-list-ul': view, 'fa-th-large': !view}"
+      <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
         (click)="switchView()" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
       <button class="btn btn-primary mb-2" (click)="openModal(newCollection)">New Collection</button>
     </div>

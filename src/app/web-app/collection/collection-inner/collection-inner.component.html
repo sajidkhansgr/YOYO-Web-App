@@ -32,7 +32,7 @@
           </a>
         </div>
       </div>
-      <i [ngClass]="{'fa mr-4 curs-ptr align-self-center': true, 'fa-list-ul': view, 'fa-th-large': !view}"
+      <i class="fa mr-4 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
         (click)="switchView()"></i>
       <button class="btn btn-primary" (click)="openModal(addResource)">Add Resource</button>
     </div>
