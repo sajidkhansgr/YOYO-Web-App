@@ -3,7 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-web-app',
   templateUrl: './web-app.component.html',
-  styleUrls: ['./web-app.component.scss']
+  styleUrls: ['./web-app.component.scss'],
+  host: {
+    class: 'w-100'
+  }
 })
 export class WebAppComponent implements OnInit {
   nav!: any; // for header
