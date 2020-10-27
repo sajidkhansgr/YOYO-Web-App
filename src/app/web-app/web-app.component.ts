@@ -11,7 +11,7 @@ import { TokenDataService } from '../shared/services/token-data.service';
 })
 export class WebAppComponent implements OnInit {
   nav!: any; // for header
-  usrInfo: any | null;
+  userInfo: any | null;
   constructor(
     private tokenDataServ: TokenDataService
   ) { }
@@ -27,7 +27,7 @@ export class WebAppComponent implements OnInit {
   }
 
   getToken() {
-    this.usrInfo = this.tokenDataServ.getUser();
+    this.userInfo = this.tokenDataServ.getUser();
   }
 
   logout() {
