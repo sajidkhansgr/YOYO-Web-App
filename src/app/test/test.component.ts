@@ -97,9 +97,10 @@ export class TestComponent implements OnInit {
       // ];
       let defConfg = {
         enableAnnotationAPIs: true,
-        showLeftHandPanel:false,showPrintPDF: false
+        showLeftHandPanel:false,showPrintPDF: false,
+        // includePDFAnnotations:true // for the save button
         // ,showAnnotationTools: true,
-        //defaultViewMode: "FIT_WIDTH",showPageControls:true,
+        // defaultViewMode: "FIT_WIDTH",showPageControls:true,
       }
       this.viewSDKClient.previewFile('pdf-div',defConfg,this.pdfURL,this.annotData);
     });
