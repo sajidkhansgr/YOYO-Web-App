@@ -52,7 +52,7 @@ export class HubComponent implements OnInit {
           this.router.navigate(['/dashboard']);
         }
       }, (err: any) => {
-        this.toastr.error("Unable to fetch hub, so please try after some time")
+        // this.toastr.error("Unable to fetch hub, so please try after some time")
         this.router.navigate(['/dashboard']);
       });
   }

@@ -52,6 +52,10 @@ export class AppComponent {
     return this.router.url.indexOf('auth/login')!==-1||this.router.url.indexOf('login')!==-1?true:false;
   }
 
+  isWebApp(): boolean{
+    return this.router.url.indexOf('web-app')!==-1?true:false;
+  }
+
   ngOnDestroy(): void{
     // Unsubscribe from all subscriptions
     if(!!this.routerSubs)
