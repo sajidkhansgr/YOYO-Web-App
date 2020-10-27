@@ -43,7 +43,6 @@
             <li class="dark-bg-hover px-2 py-1 rounded mt-2" *ngFor="let catg of catgs">
               {{catg.name}}
               <div class="float-right row mx-0">
-                <i class="fa fa-plus-circle align-self-center text-primary mr-2" (click)="showCatListIP($event)"></i>
                 <div class="dropdown">
                   <div class="dropdown-toggle disable-icon" type="button" id="catEllipsis" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -59,14 +58,6 @@
                   </div>
                 </div>
               </div>
-              <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 flex bg-white"
-                [floatLabel]="'never'" style="display: none;">
-                <input matInput placeholder="Add Category" class="ml-0">
-                <div matSuffix class="curs-ptr">
-                  <i class="fas fa-times mr-2" (click)="closeCatListIP($event)"></i>
-                  <i class="fas fa-check-circle text-primary" (click)="closeCatListIP($event)"></i>
-                </div>
-              </mat-form-field>
             </li>
           </ul>
           <ng-template #noCatg>
@@ -231,12 +222,12 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="catgForm" (ngSubmit)="updCatg()" [formGroup]="catgForm" novalidate>
+  <form name="updCatgForm" (ngSubmit)="updCatg()" [formGroup]="updCatgForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Name</mat-label>
         <input matInput type="text" placeholder="Name" formControlName="name" required>
-        <mat-error *ngIf="catgForm.get('name')!.hasError('required')">
+        <mat-error *ngIf="updCatgForm.get('name')!.hasError('required')">
           Name is required
         </mat-error>
       </mat-form-field>
@@ -249,7 +240,7 @@
       </p>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" [disabled]="catgForm!.invalid || updDisabled">
+      <button type="submit" class="btn btn-primary" [disabled]="updCatgForm!.invalid || updDisabled">
         <app-loader [type]="'btn'" *ngIf="updDisabled"></app-loader>
         Update
       </button>

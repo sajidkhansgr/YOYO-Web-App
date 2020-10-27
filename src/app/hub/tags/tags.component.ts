@@ -43,7 +43,7 @@ export class TagsComponent implements OnInit {
   rowInfo: any;
   showRowInfo: boolean = false;
   showCatgIn: boolean = false;
-  catgForm!: FormGroup; tagForm!: FormGroup; updTagForm!: FormGroup;
+  catgForm!: FormGroup; tagForm!: FormGroup; updTagForm!: FormGroup; updCatgForm!: FormGroup;
   updDisabled: boolean = false; catgAddDisabled: boolean = false; tagAddDisabled: boolean = false;
   catgData!: Catg | null;
   catgs: Catg[] = []; tags: Tag[] = []; allTags: Tag[] = [];
@@ -66,6 +66,10 @@ export class TagsComponent implements OnInit {
   ngOnInit(): void {
     this.catgForm = this.fb.group({
       name: ['', [Validators.required]]
+    });
+    this.updCatgForm = this.fb.group({
+      name: ['', [Validators.required]],
+      // published: [''] // needs to be added when api for it is changed
     });
     this.tagForm = this.fb.group({
       name: ['', [Validators.required]]
@@ -113,9 +117,11 @@ export class TagsComponent implements OnInit {
           } else {
             this.toastr.error('Unable to update Tag', 'Error!');
           }
+          this.updTagForm.reset();
           this.dismissModal();
           this.updDisabled = false;
         }, (err: any) => {
+          this.updTagForm.reset();
           this.dismissModal();
           this.updDisabled = false;
         });
@@ -269,9 +275,11 @@ export class TagsComponent implements OnInit {
           } else {
             this.toastr.error('Unable to add Category', 'Error!');
           }
+          this.catgForm.reset();
           this.catgAddDisabled = false;
           this.showCatgIn = false;
         }, (err: any) => {
+          this.catgForm.reset();
           this.catgAddDisabled = false;
           this.showCatgIn = false;
         });
@@ -282,7 +290,7 @@ export class TagsComponent implements OnInit {
   updCatgModal(content: any, catg: Catg) {
     // this.getCatg(catg.id);
     this.catgData = catg;
-    this.catgForm.patchValue({ ...this.catgData }); // set form value
+    this.updCatgForm.patchValue({ ...this.catgData }); // set form value
     this.modalService.open(content, { ariaLabelledBy: 'Update Category' }).result
       .then((result: any) => {
       }, (reason) => {
@@ -310,12 +318,13 @@ export class TagsComponent implements OnInit {
 
   // update category
   updCatg() {
-    if (this.catgForm.valid) {
+    if (this.updCatgForm.valid) {
       this.updDisabled = true;
       let catgData: any = {
-        ...this.catgForm.value
+        ...this.updCatgForm.value
       };
       catgData.id = this.catgData!.id;
+      // console.log(catgData);
       this.tagServ.updCatg(catgData)
         .subscribe((data: any) => {
           if (data) {
@@ -324,9 +333,11 @@ export class TagsComponent implements OnInit {
           } else {
             this.toastr.error('Unable to update Category', 'Error!');
           }
+          this.updCatgForm.reset();
           this.dismissModal();
           this.updDisabled = false;
         }, (err: any) => {
+          this.updCatgForm.reset();
           this.dismissModal();
           this.updDisabled = false;
         });
@@ -365,14 +376,6 @@ export class TagsComponent implements OnInit {
 
   toggleCatgInp() {
     this.showCatgIn = !this.showCatgIn;
-  }
-
-  showCatListIP = (event: any) => {
-    event.target.parentNode.nextSibling.style.display = 'block';
-  }
-
-  closeCatListIP = (event: any) => {
-    event.target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = 'none';
   }
 
   toggleInfo(row: any) {
