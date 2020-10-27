@@ -76,7 +76,7 @@ export class TagsComponent implements OnInit {
     });
     this.updTagForm = this.fb.group({
       name: ['', [Validators.required]],
-      // catgs: [''] // needs to be added when multiple catgs api for tags is done
+      categoryId: [''] // needs to be changed when multiple catgs api for tags is done
     });
     this.getCatgs();
     this.getTags();
@@ -103,7 +103,7 @@ export class TagsComponent implements OnInit {
       let tagData: any = {
         id: this.rowInfo.id,
         ...this.updTagForm.value,
-        categoryId: 0,
+        // categoryId: 0,
         hubId: parseInt(this.hubid)
       };
       // console.log(tagData);
@@ -384,6 +384,10 @@ export class TagsComponent implements OnInit {
       this.rowInfo = {};
     } else {
       this.rowInfo = row;
+      let catg = this.catgs!.filter(catg => catg.id == row.categoryId);
+      this.rowInfo.catgName = catg.length > 0 ? catg[0].name : 'No Categories';
+      // console.log(row);
+      // console.log(this.rowInfo);
       this.showRowInfo = true;
     }
   }

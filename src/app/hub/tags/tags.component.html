@@ -177,19 +177,19 @@
             <div class="orgCategories">
               <label class="text-hi-dark-grey mb-0 mt-2">Organized in Categories</label>
               <div class="value">
-                No Catgories
+                {{rowInfo.catgName}}
               </div>
             </div>
             <div class="orgCategories">
               <label class="text-hi-dark-grey mb-0 mt-2">Assigned In</label>
               <div class="value">
-                Not Assigned
+                No data
               </div>
             </div>
             <div class="usedIn">
               <label class="text-hi-dark-grey mb-0 mt-2">Used In</label>
               <div class="value">
-                1 saved filter
+                No data
               </div>
             </div>
           </div>
@@ -198,13 +198,13 @@
             <div class="created">
               <label class="text-hi-dark-grey mb-0 mt-2">Date Created</label>
               <div class="value">
-                15 Oct 2019, 17:55
+                No data
               </div>
             </div>
             <div class="updated">
               <label class="text-hi-dark-grey mb-0 mt-2">Date Updated</label>
               <div class="value">
-                15 Oct 2019, 17:55
+                No data
               </div>
             </div>
           </div>
@@ -267,8 +267,8 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Organized in Categories</mat-label>
-        <mat-select multiple>
-          <!-- formControlName="catgs" -->
+        <mat-select formControlName="categoryId">
+          <!-- multiple -->
           <mat-option *ngFor="let catg of catgs" [value]="catg.id">{{catg.name}}</mat-option>
         </mat-select>
       </mat-form-field>
