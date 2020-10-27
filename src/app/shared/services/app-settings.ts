@@ -55,4 +55,8 @@ export class AppSettings {
   public static UPD_CATG = `api/Category/Update`;
 
   public static GET_CATG = `api/Category/GetById`;
+
+  public static LIST_ANNOT = `api/Annotation/GetAll`;
+
+  public static ADD_ANNOT = `/api/Annotation/Add`;
 }
