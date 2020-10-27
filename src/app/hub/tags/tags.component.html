@@ -248,9 +248,9 @@
       </p>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" [disabled]="catgForm!.invalid || catgUpdDisabled">
-        <app-loader [type]="'btn'" *ngIf="catgUpdDisabled"></app-loader>
-        Save
+      <button type="submit" class="btn btn-primary" [disabled]="catgForm!.invalid || updDisabled">
+        <app-loader [type]="'btn'" *ngIf="updDisabled"></app-loader>
+        Update
       </button>
     </div>
   </form>
@@ -264,7 +264,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="catgForm" (ngSubmit)="updCatg()" [formGroup]="catgForm" novalidate>
+  <form name="tagForm" (ngSubmit)="updTag()" [formGroup]="tagForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Name</mat-label>
@@ -273,27 +273,17 @@
           Name is required
         </mat-error>
       </mat-form-field>
-      <!-- <mat-form-field>
-        <mat-chip-list #tagList aria-label="Tag selection" formControlName="name">
-          <mat-chip *ngFor="let tag of tagNames" selectable removable (removed)="removeChip(tag)">
-            {{tag}}
-            <i class="fa fa-times" matChipRemove></i>
-          </mat-chip>
-          <input placeholder="Add Tags (Separate tags by comma or enter)" [matChipInputFor]="tagList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" matChipInputAddOnBlur
-            (matChipInputTokenEnd)="addChips($event)" formControlName="name" [matAutocomplete]="auto">
-        </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
-            {{tag}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field> -->
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Organized in Categories</mat-label>
+        <mat-select multiple>
+          <mat-option *ngFor="let catg of catgs" [value]="catg.id">{{catg.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" [disabled]="catgForm!.invalid || catgUpdDisabled">
-        <app-loader [type]="'btn'" *ngIf="catgUpdDisabled"></app-loader>
-        Save
+      <button type="submit" class="btn btn-primary" [disabled]="tagForm!.invalid || updDisabled">
+        <app-loader [type]="'btn'" *ngIf="updDisabled"></app-loader>
+        Update
       </button>
     </div>
   </form>

@@ -44,7 +44,7 @@ export class TagsComponent implements OnInit {
   showRowInfo: boolean = false;
   showCatgIn: boolean = false;
   catgForm!: FormGroup; tagForm!: FormGroup;
-  catgUpdDisabled: boolean = false; catgAddDisabled: boolean = false; tagAddDisabled: boolean = false;
+  updDisabled: boolean = false; catgAddDisabled: boolean = false; tagAddDisabled: boolean = false;
   catgData!: Catg | null;
   catgs: Catg[] = []; tags: Tag[] = []; allTags: Tag[] = [];
   pageNum: string = '0'; pageSizeArr: Array<number> = LMT_PAGE; pageSize: number = this.pageSizeArr[0];
@@ -88,8 +88,14 @@ export class TagsComponent implements OnInit {
   //   this.paginationNum = Math.ceil(this.numAllTags / parseInt(this.pageSize));
   // }
 
+  // update tag
+  updTag() {
+    console.log('abc');
+  }
+
   // update tag modal
   updTagModal(content: any) {
+    // console.log(this.catgs);
     this.modalService.open(content, { ariaLabelledBy: 'Update tag' }).result
       .then((result: any) => {
       }, (reason) => {
@@ -124,7 +130,7 @@ export class TagsComponent implements OnInit {
     this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize, searchText: this.searchTxt, isAscending: this.isAsc, sortColumn: this.sortColumn })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          console.log(data);
+          // console.log(data);
           this.tags = data.result.results;
         }
         this.tagLoading = false;
@@ -278,7 +284,7 @@ export class TagsComponent implements OnInit {
   // update category
   updCatg() {
     if (this.catgForm.valid) {
-      this.catgUpdDisabled = true;
+      this.updDisabled = true;
       let catgData: any = {
         ...this.catgForm.value
       };
@@ -292,10 +298,10 @@ export class TagsComponent implements OnInit {
             this.toastr.error('Unable to update Category', 'Error!');
           }
           this.dismissModal();
-          this.catgUpdDisabled = false;
+          this.updDisabled = false;
         }, (err: any) => {
           this.dismissModal();
-          this.catgUpdDisabled = false;
+          this.updDisabled = false;
         });
     }
   }
