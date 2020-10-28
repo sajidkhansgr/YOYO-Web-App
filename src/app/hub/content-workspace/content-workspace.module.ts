@@ -12,6 +12,7 @@ import { FileProgessModule } from '../../shared/components/file-progess/file-pro
 
 import { ContentWorkspaceComponent } from './content-workspace.component';
 import { HubService } from '../hub.service';
+import { ContentWorkspaceService } from './content-workspace.service'
 
 @NgModule({
   declarations: [ContentWorkspaceComponent],
@@ -27,6 +28,6 @@ import { HubService } from '../hub.service';
   exports: [
     ContentWorkspaceComponent
   ],
-  providers: [HubService],
+  providers: [ContentWorkspaceService],
 })
 export class ContentWorkspaceModule { }

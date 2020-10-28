@@ -3,9 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
-import { HubService } from '../hub.service';
 import { DEF_ICON } from '../../shared/constants';
 import { FileDndHelper } from '../../shared/file-helper';
+import { ContentWorkspaceService } from './content-workspace.service'
+import { WrkSpc } from '../../shared/models/workspace'
+import { stringify } from '@angular/compiler/src/util';
 
 
 @Component({
@@ -14,21 +16,21 @@ import { FileDndHelper } from '../../shared/file-helper';
   styleUrls: ['./content-workspace.component.scss']
 })
 export class ContentWorkspaceComponent implements OnInit {
-  showWork!: boolean;showDoc!: boolean;
-  @Input() hubid: any;routerSubs!: Subscription;
+  showWork!: boolean; showDoc!: boolean;
+  @Input() hubid: any; routerSubs!: Subscription;
   addURLIcon!: string; iconUrl!: any;
   defIcon: any = DEF_ICON; custIcon: any; files!: any[];
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
+  wrkspcs!: WrkSpc[]; wrkspc!: WrkSpc | undefined;
 
   constructor(
-    private hubServ: HubService,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private cwServ: ContentWorkspaceService,
   ) { }
 
   ngOnInit(): void {
-    // this.getHubs()
     console.log("ds")
     this.initialiseState(); // reset and set based on new parameter this time
   }
@@ -37,15 +39,41 @@ export class ContentWorkspaceComponent implements OnInit {
     this.files = []; this.addURLIcon = ''; this.iconUrl = '';
     this.dispGnrl = true; this.dispSettings = true; this.dispSmart = false;
     this.dispPropsSec = false; this.dispSmFolderSec = true;
-    this.custIcon = undefined;this.showWork = false;this.showDoc = false;
+    this.custIcon = undefined; this.showWork = false; this.showDoc = false;
+    this.wrkspcs = []; this.wrkspc = undefined;
   }
 
-  // workspace
+  // selected workspace
+  selectWrkspc(wrkspc: any) {
+    this.wrkspc = wrkspc;
+  }
+
+  // list of workspaces
+  getWrkspcList() {
+    // this.tagLoading = true;
+    this.cwServ.wrkspcList({})
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          // console.log(data);
+          this.wrkspcs = data.result.results;
+        }
+        // this.tagLoading = false;
+      }, (err: any) => {
+        console.log(err);
+        // this.tagLoading = false;
+      });
+  }
+
+  // toggle workspace
   workspaceToggle = () => {
     this.showDoc = false;
     this.showWork = !this.showWork;
+    if (this.showWork) {
+      this.getWrkspcList();
+    }
   }
 
+  // document toggle
   documentToggle = () => {
     this.showWork = false;
     this.showDoc = !this.showDoc;

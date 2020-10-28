@@ -425,13 +425,25 @@
       <div class="worksp" *ngIf="showWork">
         <div class="card">
           <div class="card-header row m-0">
-            <mat-form-field class="custom-material-select align-self-center" [floatLabel]="'never'">
+            <!-- <mat-form-field class="custom-material-select align-self-center" [floatLabel]="'never'">
               <mat-label>Select a Workspace</mat-label>
               <mat-select>
-                <mat-option value="English">English</mat-option>
-                <mat-option value="English">English</mat-option>
+                <mat-option hidden>Select a Workspace</mat-option>
+                <mat-option [value]="wrkspc.id" *ngFor="let wrkspc of wrkspcs">{{wrkspc.name}}</mat-option>
               </mat-select>
-            </mat-form-field>
+            </mat-form-field> -->
+            <div class="dropdown">
+              <button class="btn btn-light dropdown-toggle" type="button" id="wrkspcDD" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                {{wrkspc ? wrkspc.name : 'Select a Workspace'}}
+              </button>
+              <div class="dropdown-menu" aria-labelledby="wrkspcDD">
+                <a class="dropdown-item curs-ptr" [ngClass]="{'active': wrkspc == ws}" *ngFor="let ws of wrkspcs"
+                  (click)="selectWrkspc(ws)">{{ws.name}}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item curs-ptr">Create a new Workspace</a>
+              </div>
+            </div>
             <div class="ml-auto mr-2">
               <div class="btn btn-light" (click)="closeWorkspace()">
                 <i class="fas fa-times"></i>
@@ -500,88 +512,98 @@
             </div>
 
           </div>
-          <div class="card-body">
-            <h5>English</h5>
-            <div class="main row py-4">
-              <div class="col-3">
-                <img src="assets/images/companyInfo.png" class="w-100">
-                <div class="dropdown">
-                  <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                    data-toggle="dropdown">
-                    <i class="fas fa-cog"></i>
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
-                      Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
-                      Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
-                      Link</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
-                      Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create New
-                      Channel
-                      from
-                      Folder</a>
+          <ng-container *ngIf="wrkspc; else noWrkspc">
+            <div class="card-body">
+              <h5>{{wrkspc.name}}</h5>
+              <div class="main row py-4">
+                <div class="col-3">
+                  <img src="assets/images/companyInfo.png" class="w-100">
+                  <div class="dropdown">
+                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                      data-toggle="dropdown">
+                      <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="comInfoDD">
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
+                        Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
+                        Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
+                        Link</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
+                        Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
+                        New
+                        Channel
+                        from
+                        Folder</a>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-3">
-                <img src="assets/images/brands.png" class="w-100">
-                <div class="dropdown">
-                  <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                    data-toggle="dropdown">
-                    <i class="fas fa-cog"></i>
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
-                      Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
-                      Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
-                      Link</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
-                      Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create New
-                      Channel
-                      from
-                      Folder</a>
+                <div class="col-3">
+                  <img src="assets/images/brands.png" class="w-100">
+                  <div class="dropdown">
+                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                      data-toggle="dropdown">
+                      <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="comInfoDD">
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
+                        Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
+                        Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
+                        Link</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
+                        Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
+                        New
+                        Channel
+                        from
+                        Folder</a>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-3">
-                <img src="assets/images/services.png" class="w-100">
-                <div class="dropdown">
-                  <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                    data-toggle="dropdown">
-                    <i class="fas fa-cog"></i>
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comInfoDD">
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
-                      Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
-                      Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
-                      Link</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
-                      Item</a>
-                    <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create New
-                      Channel
-                      from
-                      Folder</a>
+                <div class="col-3">
+                  <img src="assets/images/services.png" class="w-100">
+                  <div class="dropdown">
+                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                      data-toggle="dropdown">
+                      <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comInfoDD">
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
+                        Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
+                        Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
+                        Link</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
+                        Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
+                        New
+                        Channel
+                        from
+                        Folder</a>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-3">
-                <img src="assets/images/showpad.jpg" class="w-100">
-                <div class="dropdown">
-                  <button class="btn btn-light btn-sm">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
+                <div class="col-3">
+                  <img src="assets/images/showpad.jpg" class="w-100">
+                  <div class="dropdown">
+                    <button class="btn btn-light btn-sm">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </ng-container>
+          <ng-template #noWrkspc>
+            <div class="card-body">
+              Select a Workspace
+            </div>
+          </ng-template>
         </div>
       </div>
     </div>
