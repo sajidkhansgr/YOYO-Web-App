@@ -47,7 +47,7 @@ export class TagsComponent implements OnInit {
   updDisabled!: boolean; catgAddDisabled!: boolean; tagAddDisabled!: boolean;
   catgData!: Catg | undefined;
   catgs!: Catg[]; tags!: Tag[]; allTags!: Tag[];
-  pageNum!: string; pageSizeArr!: Array<number>; pageSize!: number;
+  pageNum!: string; lmtPage!: Array<number>; pageSize!: number;
   // numAllTags!: number; paginationNum!: number;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames!: string[];
@@ -94,7 +94,7 @@ export class TagsComponent implements OnInit {
     this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
     this.catgData = undefined;
     this.catgs = []; this.tags = []; this.allTags = [];
-    this.pageNum = '0'; this.pageSizeArr = LMT_PAGE; this.pageSize = this.pageSizeArr[0];
+    this.pageNum = '0'; this.lmtPage = LMT_PAGE; this.pageSize = this.lmtPage[0];
     // numAllTags = 0; paginationNum = 0;
     this.tagNames = [];
     this.searchTxt = '';
