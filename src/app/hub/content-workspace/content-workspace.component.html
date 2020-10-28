@@ -434,14 +434,19 @@
             </mat-form-field> -->
             <div class="dropdown">
               <button class="btn btn-light dropdown-toggle" type="button" id="wrkspcDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+                aria-haspopup="true" aria-expanded="false" (click)="loadWrkspcs()">
                 {{wrkspc ? wrkspc.name : 'Select a Workspace'}}
               </button>
               <div class="dropdown-menu" aria-labelledby="wrkspcDD">
-                <a class="dropdown-item curs-ptr" [ngClass]="{'active': wrkspc == ws}" *ngFor="let ws of wrkspcs"
-                  (click)="selectWrkspc(ws)">{{ws.name}}</a>
+                <ng-container *ngIf="wrkspcLoading; else noLoading">
+                  <app-loader [type]="'div'"></app-loader> <!-- loader -->
+                </ng-container>
+                <ng-template #noLoading>
+                  <a class="dropdown-item curs-ptr" [ngClass]="{'active': wrkspc == ws}" *ngFor="let ws of wrkspcs"
+                    (click)="selectWrkspc(ws)">{{ws.name}}</a>
+                </ng-template>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item curs-ptr">Create a new Workspace</a>
+                <a class="dropdown-item curs-ptr" (click)="openModal(addWorkspace)">Create a new Workspace</a>
               </div>
             </div>
             <div class="ml-auto mr-2">
@@ -600,8 +605,8 @@
             </div>
           </ng-container>
           <ng-template #noWrkspc>
-            <div class="card-body">
-              Select a Workspace
+            <div class="card-body text-center text-secondary" style="min-height: 100px; padding-top:40px;">
+              No workspace selected
             </div>
           </ng-template>
         </div>
@@ -1102,4 +1107,33 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
   </div>
+</ng-template>
+
+<!-- add workspace modal  -->
+<ng-template #addWorkspace let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Create Workspace</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form name="addWrkspcForm" (ngSubmit)="addWorkSpc()" [formGroup]="addWrkspcForm" novalidate>
+    <div class="modal-body" ngbAutofocus>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Workspace Label</mat-label>
+        <input matInput type="text" placeholder="Workspace Label" formControlName="name" required>
+        <mat-error *ngIf="addWrkspcForm.get('name')!.hasError('required')">
+          Name is required
+        </mat-error>
+      </mat-form-field>
+      <mat-checkbox class="d-block ml-3">Open new Workspace</mat-checkbox>
+      <mat-checkbox class="d-block ml-3">Add me to this Workspace</mat-checkbox>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" [disabled]="addWrkspcForm!.invalid || disabled">
+        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+        Create
+      </button>
+    </div>
+  </form>
 </ng-template>

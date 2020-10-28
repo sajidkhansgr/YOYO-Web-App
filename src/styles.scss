@@ -141,6 +141,25 @@ body {
   }
 }
 
+.div-spinner {
+  padding-top: 30px;
+  min-height: 90px;
+
+  mat-spinner {
+    height: 40px !important;
+    width: 40px !important;
+
+    svg {
+      height: 40px !important;
+      width: 40px !important;
+
+      circle {
+        stroke-width: 2% !important;
+      }
+    }
+  }
+}
+
 .align-spin-top {
   .btn-spinner {
     vertical-align: top;

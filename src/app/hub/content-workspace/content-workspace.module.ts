@@ -8,7 +8,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { FileProgessModule } from '../../shared/components/file-progess/file-progess.module';
+import { LoaderModule } from '../../shared/components/loader/loader.module';
 
 import { ContentWorkspaceComponent } from './content-workspace.component';
 import { HubService } from '../hub.service';
@@ -23,7 +26,9 @@ import { ContentWorkspaceService } from './content-workspace.service'
     MatTooltipModule,
     MatCheckboxModule,
     MatRadioModule,
-    FileProgessModule
+    FileProgessModule,
+    LoaderModule,
+    FormsModule, ReactiveFormsModule
   ],
   exports: [
     ContentWorkspaceComponent

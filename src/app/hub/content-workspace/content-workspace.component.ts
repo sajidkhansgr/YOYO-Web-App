@@ -2,12 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 import { DEF_ICON } from '../../shared/constants';
 import { FileDndHelper } from '../../shared/file-helper';
 import { ContentWorkspaceService } from './content-workspace.service'
 import { WrkSpc } from '../../shared/models/workspace'
-import { stringify } from '@angular/compiler/src/util';
 
 
 @Component({
@@ -23,11 +24,16 @@ export class ContentWorkspaceComponent implements OnInit {
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: WrkSpc[]; wrkspc!: WrkSpc | undefined;
+  wrkspcLoading!: boolean;
+  addWrkspcForm!: FormGroup;
+  disabled!: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private cwServ: ContentWorkspaceService,
+    private fb: FormBuilder,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -41,6 +47,36 @@ export class ContentWorkspaceComponent implements OnInit {
     this.dispPropsSec = false; this.dispSmFolderSec = true;
     this.custIcon = undefined; this.showWork = false; this.showDoc = false;
     this.wrkspcs = []; this.wrkspc = undefined;
+    this.wrkspcLoading = true;
+    this.addWrkspcForm = this.fb.group({
+      name: ['', [Validators.required]]
+    });
+    this.disabled = false;
+  }
+
+  // add workspace
+  addWorkSpc() {
+    if (this.addWrkspcForm.valid) {
+      this.disabled = true;
+      let wrkspcData: any = {
+        ...this.addWrkspcForm.value,
+        hubId: parseInt(this.hubid)
+      };
+      this.cwServ.addWrkspc(wrkspcData)
+        .subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(data.message || 'Tag added successfully', 'Success!');
+            this.getWrkspcList();
+          } else {
+            this.toastr.error('Unable to add Tag', 'Error!');
+          }
+          this.dismissModal();
+          this.disabled = false;
+        }, (err: any) => {
+          this.dismissModal();
+          this.disabled = false;
+        });
+    }
   }
 
   // selected workspace
@@ -50,27 +86,31 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // list of workspaces
   getWrkspcList() {
-    // this.tagLoading = true;
+    this.wrkspcLoading = true;
     this.cwServ.wrkspcList({})
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           // console.log(data);
           this.wrkspcs = data.result.results;
         }
-        // this.tagLoading = false;
+        this.wrkspcLoading = false;
       }, (err: any) => {
         console.log(err);
-        // this.tagLoading = false;
+        this.wrkspcLoading = false;
       });
+  }
+
+  // show workspaces list
+  loadWrkspcs() {
+    if (this.wrkspcs.length == 0) {
+      this.getWrkspcList();
+    }
   }
 
   // toggle workspace
   workspaceToggle = () => {
     this.showDoc = false;
     this.showWork = !this.showWork;
-    if (this.showWork) {
-      this.getWrkspcList();
-    }
   }
 
   // document toggle
@@ -128,6 +168,11 @@ export class ContentWorkspaceComponent implements OnInit {
       }, (reason) => {
 
       });
+  }
+
+  dismissModal() {
+    if (this.modalService)
+      this.modalService.dismissAll();
   }
 
   private getDismissReason(reason: any): string {

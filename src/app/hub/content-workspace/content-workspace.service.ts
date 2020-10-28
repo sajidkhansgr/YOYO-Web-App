@@ -11,6 +11,7 @@ export class ContentWorkspaceService {
     private http: HttpClient
   ) { }
 
+  // get workspace list
   wrkspcList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
@@ -26,5 +27,10 @@ export class ContentWorkspaceService {
         res
       )
     );
+  }
+
+  // add category
+  addWrkspc(data: any) {
+    return this.http.post(`${AppSettings.ADD_WRKSPC}`, data)
   }
 }
