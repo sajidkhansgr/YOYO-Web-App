@@ -112,7 +112,7 @@
                   </th>
                 </tr>
               </thead>
-              <tbody *ngIf="!tagLoading">
+              <tbody *ngIf="!tagLoading && tags.length > 0">
                 <tr (click)="toggleInfo(tag)" *ngFor="let tag of tags">
                   <td>
                     {{tag.name}}
@@ -122,6 +122,9 @@
                 </tr>
               </tbody>
             </table>
+            <div class="text-center text-secondary" *ngIf="tags.length == 0">
+              No tags found
+            </div>
             <app-loader [type]="'page'" *ngIf="tagLoading"></app-loader> <!-- loader -->
           </div>
           <div class="card-footer row justify-content-between mx-0">
