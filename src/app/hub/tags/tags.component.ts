@@ -21,7 +21,7 @@ import { LMT_PAGE } from '../../shared/constants'
 })
 export class TagsComponent implements OnInit {
   @Input() hubid: any;
-  input: any; searInit: boolean = false;
+  input: any; searInit!: boolean;
   @ViewChild("sear", { static: false }) set altRefIn(el: ElementRef) {
     this.input = el;
     if (this.input && this.input?.nativeElement && !this.searInit) {
@@ -37,23 +37,23 @@ export class TagsComponent implements OnInit {
       this.searInit = true;
     }
   }
-  selTag: string = 'all';
-  loading: boolean = true; tagLoading: boolean = true;
-  showAddCatIp: string = 'none';
+  selTag!: string;
+  loading!: boolean; tagLoading!: boolean;
+  showAddCatIp!: string;
   rowInfo: any;
-  showRowInfo: boolean = false;
-  showCatgIn: boolean = false;
+  showRowInfo!: boolean;
+  showCatgIn!: boolean;
   catgForm!: FormGroup; tagForm!: FormGroup; updTagForm!: FormGroup; updCatgForm!: FormGroup;
-  updDisabled: boolean = false; catgAddDisabled: boolean = false; tagAddDisabled: boolean = false;
-  catgData!: Catg | null;
-  catgs: Catg[] = []; tags: Tag[] = []; allTags: Tag[] = [];
-  pageNum: string = '0'; pageSizeArr: Array<number> = LMT_PAGE; pageSize: number = this.pageSizeArr[0];
-  // numAllTags: number = 0; paginationNum: number = 0;
+  updDisabled!: boolean; catgAddDisabled!: boolean; tagAddDisabled!: boolean;
+  catgData!: Catg | undefined;
+  catgs!: Catg[]; tags!: Tag[]; allTags!: Tag[];
+  pageNum!: string; pageSizeArr!: Array<number>; pageSize!: number;
+  // numAllTags!: number; paginationNum!: number;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  tagNames: string[] = [];
-  searchTxt: string = '';
-  sortColumn: string = ''; isAsc?: boolean = undefined;
-  columns: any[] = [{ dispName: "Name", isAsc: true, isSelected: false, key: "name" }, { dispName: "Status", isAsc: true, isSelected: false, key: "status" }, { dispName: "Date Modified", isAsc: true, isSelected: false, key: "date-mod" }];
+  tagNames!: string[];
+  searchTxt!: string;
+  sortColumn!: string; isAsc!: boolean | undefined;
+  columns!: any[];
 
   constructor(
     private dialog: MatDialog,
@@ -64,6 +64,19 @@ export class TagsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getCatgs();
+    this.getTags();
+    this.initialiseState();
+  }
+
+  initialiseState() {
+    this.input = undefined; this.searInit = false;
+    this.selTag = 'all';
+    this.loading = true; this.tagLoading = true;
+    this.showAddCatIp = 'none';
+    this.rowInfo = undefined;
+    this.showRowInfo = false;
+    this.showCatgIn = false;
     this.catgForm = this.fb.group({
       name: ['', [Validators.required]]
     });
@@ -78,8 +91,15 @@ export class TagsComponent implements OnInit {
       name: ['', [Validators.required]],
       categoryId: [''] // needs to be changed when multiple catgs api for tags is done
     });
-    this.getCatgs();
-    this.getTags();
+    this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
+    this.catgData = undefined;
+    this.catgs = []; this.tags = []; this.allTags = [];
+    this.pageNum = '0'; this.pageSizeArr = LMT_PAGE; this.pageSize = this.pageSizeArr[0];
+    // numAllTags = 0; paginationNum = 0;
+    this.tagNames = [];
+    this.searchTxt = '';
+    this.sortColumn = ''; this.isAsc = undefined;
+    this.columns = [{ dispName: "Name", isAsc: true, isSelected: false, key: "name" }, { dispName: "Status", isAsc: true, isSelected: false, key: "status" }, { dispName: "Date Modified", isAsc: true, isSelected: false, key: "date-mod" }];
   }
 
   // resetCh() {
@@ -111,8 +131,9 @@ export class TagsComponent implements OnInit {
       this.tagServ.updTag(tagData)
         .subscribe((data: any) => {
           if (data) {
-            console.log(data);
+            // console.log(data);
             this.toastr.success(data.message || 'Tag updated successfully', 'Success!');
+            this.closeInfo();
             this.getTags();
           } else {
             this.toastr.error('Unable to update Tag', 'Error!');

@@ -188,10 +188,14 @@ body {
   padding: 0.25rem 1.5rem !important;
 }
 
-.mat-option.mat-active,
-.mat-option:hover {
+.mat-option:hover:not(.mat-option.mat-active) {
   background-color: $hi-dark-grey !important;
   color: darken($color: $hi-dark, $amount: 15) !important;
+}
+
+.mat-option.mat-active {
+  color: white !important;
+  background-color: lighten($color: $primary, $amount: 8) !important;
 }
 
 .custom-material-select {
