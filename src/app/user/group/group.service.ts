@@ -32,6 +32,10 @@ export class GroupService {
     return this.http.post(`${AppSettings.ADD_GRP}`, data)
   }
 
+  updGroup(data: any) {
+    return this.http.patch(`${AppSettings.UPD_GRP}`, data)
+  }
+
   viewGroup(id: string) {
     return this.http.get(`${AppSettings.GET_GRP}`, {
       params: { id }

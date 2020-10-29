@@ -207,12 +207,10 @@ export class ViewSDKClient {
   }
 
   goToPage(pageNo: number) {
-
     this.pdfRef.then((adobeViewer: any) => {
       adobeViewer.getAPIs().then((apis: any) => {
         apis.gotoLocation(pageNo)
           .then(() => console.log("Success"))
-
           .catch((error: any) => console.log(error));
       });
     })

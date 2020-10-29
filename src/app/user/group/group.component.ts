@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -23,13 +23,14 @@ export class GroupComponent implements OnInit {
   exps: any = [
     { id: 1, name: "Exp 1" }, { id: 2, name: "Exp 2" }, { id: 3, name: "Exp 3" }
   ];
-  grps: Group[] = [];
-  divArr: Hub[] = [];
-  groupForm!: FormGroup;
-  disabled: boolean = false;
-  loading: boolean = true;
-  grpDetail!: Group | null;
-  docLoading: boolean = true;
+  grps: Group[] = []; divArr: Hub[] = [];
+  groupForm!: FormGroup; grpDetail!: Group | null;
+  disabled: boolean = false; loading: boolean = true; docLoading: boolean = true;
+  selectable = true; removable = true;
+  selDiv: any = []; divNameInp: any;isEdit!: boolean;;
+  @ViewChild("divName", {static: false}) set divName(el: ElementRef) {
+    this.divNameInp = el;
+  }
 
   constructor(
     private modalService: NgbModal,
@@ -45,38 +46,13 @@ export class GroupComponent implements OnInit {
     this.getGroups();
     this.getHubs();
     this.groupForm = this.fb.group({
-      name: ['', Validators.required]
+      name: ['', Validators.required],
+      division: ['']
     });
   }
 
-  addGroup() {
-    if (this.groupForm.valid) {
-      this.disabled = true;
-      let grpData: any = {
-        ...this.groupForm.value
-      }
-      this.groupService.addGroup(grpData).subscribe((data: any) => {
-        if (data) {
-          this.toastr.success(data.message || 'Group added successfully', 'Success!');
-          this.disMissMdodal();
-          this.getGroups();
-        } else {
-          this.toastr.error(data.result.data || 'Unable to update Group', 'Error!');
-        }
-        this.disabled = false;
-      }, (err: any) => {
-        this.disabled = false;
-      });
-    }
-  }
-
-  disMissMdodal() {
-    if (this.modalService)
-      this.modalService.dismissAll();
-  }
-
   getGroups() {
-    this.groupService.groupList({ pageNo: 1, })
+    this.groupService.groupList({ pageNo: 1 })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.grps = data.result.results;
@@ -91,8 +67,8 @@ export class GroupComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.divArr = data.result.results;
-          this.loading = false;
         }
+        this.loading = false;
       }, (err: any) => {
         this.loading = false;
         console.log(err);
@@ -103,11 +79,58 @@ export class GroupComponent implements OnInit {
     this.groupService.viewGroup(this.grpDetail!.id.toString()).subscribe((data: any) => {
       if (data && data.result && data.result.id) {
         this.grpDetail = data.result;
-        this.docLoading = false;
       }
+      this.docLoading = false;
     }, (err: any) => {
       this.docLoading = false;
       console.log(err);
+    });
+  }
+
+  onSubmit(){
+    if (this.groupForm.valid) {
+      this.disabled = true;
+      let grpData: any = {
+        ...this.groupForm.value
+      }
+      if(this.isEdit){
+        this.editGrp(grpData)
+      }else{
+        this.addGrp(grpData);
+      }
+
+    }
+  }
+
+  addGrp(grpData: any) {
+    this.groupService.addGroup(grpData).subscribe((data: any) => {
+      if (data) {
+        this.toastr.success(data.message || 'Group added successfully', 'Success!');
+        this.disMissMdodal();
+        this.getGroups();
+      } else {
+        this.toastr.error(data.result.data || 'Unable to add Group', 'Error!');
+      }
+      this.disabled = false;
+    }, (err: any) => {
+      this.disabled = false;
+    });
+  }
+
+  editGrp(grpData: any) {
+    grpData.id = this.grpDetail!.id;
+    this.groupService.updGroup(grpData).subscribe((data: any) => {
+      if (data) {
+        this.toastr.success(data.message || 'Group updated successfully', 'Success!');
+        this.disMissMdodal();
+        this.getGroups();
+        this.closeDoc();
+      } else {
+        this.toastr.error(data.result.data || 'Unable to update Group', 'Error!');
+      }
+      this.disabled = false;
+    }, (err: any) => {
+      this.disabled = false;
     });
   }
 
@@ -129,7 +152,10 @@ export class GroupComponent implements OnInit {
     this.showDoc = !this.showDoc;
     if (this.showDoc) {
       this.grpDetail = grp;
-      this.getGroup();
+      // this.getGroup(); //if more detail need then use this function
+      this.docLoading = false;
+    }else{
+      this.closeDoc();
     }
   }
 
@@ -153,6 +179,28 @@ export class GroupComponent implements OnInit {
     }
   }
 
+  displayFn = (div: any) => {
+    return (div && div.id)?div.name:'';
+  }
+  selDivIds(div: any){ //div - dvision
+    const index = this.selDiv.findIndex((ele:any) => ele.id==div.id);
+    if (index >= 0) {
+      this.toastr.clear();
+      this.toastr.info("This division is already selected","Selected");
+    }else{
+      this.selDiv.push(div);
+      // this.msgForm.controls['RecipientName'].setValue({});
+      this.divNameInp.nativeElement.value = '';
+    }
+  }
+
+  remove(div: any): void {
+    const index = this.selDiv.findIndex((ele:any) => ele.id==div.id);
+    if (index >= 0) {
+      this.selDiv.splice(index, 1);
+    }
+  }
+
   selClrAll(isAll: boolean) {
     if (isAll) {
       //all select
@@ -161,13 +209,25 @@ export class GroupComponent implements OnInit {
     }
   }
 
-  openModal(content: any) {
+  openModal(content: any, type?: string) {
+    if(type==='edit'){
+      this.isEdit = true;
+      this.groupForm.patchValue({ ...this.grpDetail }); // set form value
+    }else{
+      this.isEdit = false;
+      this.groupForm.reset();
+    }
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result
       .then((result) => {
 
       }, (reason) => {
 
       });
+  }
+
+  disMissMdodal() {
+    if (this.modalService)
+      this.modalService.dismissAll();
   }
 
   private getDismissReason(reason: any): string {
