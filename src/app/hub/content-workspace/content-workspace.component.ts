@@ -53,7 +53,7 @@ export class ContentWorkspaceComponent implements OnInit {
     });
     this.updWrkspcForm = this.fb.group({
       name: ['', [Validators.required]]
-      // more feilds need to be addded when done in api
+      // more feilds need to be added when done in api
     });
     this.disabled = false;
   }
@@ -68,6 +68,7 @@ export class ContentWorkspaceComponent implements OnInit {
         hubId: this.wrkspc!.hubId
       };
       this.cwServ.updWrkspc(wrkspcData).subscribe((data: any) => {
+        // console.log(data);
         if (data) {
           this.toastr.success(data.message || 'Workspace updated successfully', 'Success!');
           this.wrkspc = wrkspcData;
@@ -101,10 +102,10 @@ export class ContentWorkspaceComponent implements OnInit {
       this.cwServ.addWrkspc(wrkspcData)
         .subscribe((data: any) => {
           if (data) {
-            this.toastr.success(data.message || 'Tag added successfully', 'Success!');
+            this.toastr.success(data.message || 'Workspace added successfully', 'Success!');
             this.getWrkspcList();
           } else {
-            this.toastr.error('Unable to add Tag', 'Error!');
+            this.toastr.error('Unable to add Workspace', 'Error!');
           }
           this.dismissModal();
           this.disabled = false;
@@ -116,7 +117,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // selected workspace
-  selectWrkspc(wrkspc: any) {
+  selectWrkspc(wrkspc: WrkSpc) {
     this.wrkspc = wrkspc;
   }
 
