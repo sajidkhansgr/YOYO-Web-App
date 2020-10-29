@@ -154,10 +154,7 @@ export class TagsComponent implements OnInit {
     // console.log(this.catgs);
     this.updTagForm.patchValue({ ...this.rowInfo }); // set form value
     // console.log(this.rowInfo);
-    this.modalService.open(content, { ariaLabelledBy: 'Update tag' }).result
-      .then((result: any) => {
-      }, (reason) => {
-      });
+    this.openModal(content);
   }
 
   // tags sorting
@@ -252,7 +249,7 @@ export class TagsComponent implements OnInit {
     }
   }
 
-  // add single tag
+  // add single tag // needs to be changed after multiple tags add api is done
   addTag(tagData: any) {
     this.tagServ.addTag(tagData)
       .subscribe((data: any) => {
@@ -312,10 +309,7 @@ export class TagsComponent implements OnInit {
     // this.getCatg(catg.id);
     this.catgData = catg;
     this.updCatgForm.patchValue({ ...this.catgData }); // set form value
-    this.modalService.open(content, { ariaLabelledBy: 'Update Category' }).result
-      .then((result: any) => {
-      }, (reason) => {
-      });
+    this.openModal(content);
   }
 
 
@@ -380,6 +374,14 @@ export class TagsComponent implements OnInit {
     })
   }
 
+  // open modal
+  openModal(content: any) {
+    this.modalService.open(content, { ariaLabelledBy: 'Update tag' }).result
+      .then((result: any) => {
+      }, (reason) => {
+      });
+  }
+
   dismissModal() {
     if (this.modalService)
       this.modalService.dismissAll();
@@ -399,7 +401,7 @@ export class TagsComponent implements OnInit {
     this.showCatgIn = !this.showCatgIn;
   }
 
-  toggleInfo(row: any) {
+  toggleInfo(row: Tag) {
     if (this.showRowInfo && this.rowInfo.id == row.id) {
       this.showRowInfo = false;
       this.rowInfo = {};
