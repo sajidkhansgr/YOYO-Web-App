@@ -3,7 +3,7 @@
 <div class="groups-section overflow-hidden" *ngIf="!loading">
   <div class="buttons-row row mt-3 justify-content-between mx-2">
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" (click)="openModal(createNewGroup)">
+    <button type="button" class="btn btn-primary" (click)="openModal(grpModal)">
       Create New Group
     </button>
   </div>
@@ -153,19 +153,19 @@
     </div>
     <div class="workspace w-100 col-md-4" [ngClass]="{'hide': !showDoc, 'show': showDoc}">
       <app-loader [type]="'page'" *ngIf="docLoading"></app-loader> <!-- loader -->
-
       <div class="doc" *ngIf="grpDetail && !docLoading">
         <div class="card">
           <div class="card-header row m-0">
             <h5 class="mb-0 pl-0 align-self-center">{{grpDetail.name}}</h5>
             <div class="ml-auto">
               <div class="btn btn-light" (click)="closeDoc()">
-                <i class="fa fa-times"></i>
+                <i class="fas fa-times"></i>
               </div>
             </div>
           </div>
           <div class="card-header bg-hi-light-grey p-1 row m-0">
             <button class="btn btn-light">
+              <span (click)="openModal(grpModal, 'edit');">Edit</span>
               <i class="fa fa-trash" (click)="delGrp();"></i>
             </button>
           </div>
@@ -262,14 +262,14 @@
 </div>
 
 <!-- create new group -->
-<ng-template #createNewGroup let-modal>
+<ng-template #grpModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Create New Group</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{isEdit?"Edit":"Create New"}} Group</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="groupForm" (ngSubmit)="addGroup()" [formGroup]="groupForm" novalidate>
+  <form name="groupForm" (ngSubmit)="onSubmit()" [formGroup]="groupForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Name</mat-label>
@@ -283,18 +283,40 @@
         <textarea matInput placeholder="Type Description"></textarea>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
+        <mat-chip-list #chipList aria-label="Recipient  Names *">
+            <mat-chip
+            *ngFor="let d of selDiv"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="remove(d)">
+            {{d.name}}
+              <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+            </mat-chip>
+            <input #divName
+              matInput formControlName="division"
+              placeholder="Add Division *"
+              [matAutocomplete]="auto"
+              (matChipInputTokenEnd)="add($event)">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selDivIds($event.option.value)" [displayWith]="displayFn">
+            <mat-option *ngFor="let div of divArr" [value]="div">
+                {{div.name}}
+            </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <!-- <mat-form-field appearance="outline" class="w-100">
         <mat-label>Assign to Divisons</mat-label>
         <mat-select>
           <mat-option *ngFor="let div of divArr" [attr.id]="div.id" [value]="div.name">
             {{div.name}}
           </mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
     </div>
     <div class="modal-footer">
       <button type="submit" class="btn btn-primary" [disabled]="groupForm!.invalid || disabled">
         <app-loader [type]="'btn'" *ngIf="disabled"></app-loader> <!-- loader -->
-        Save
+        {{isEdit?"Update":"Save"}}
       </button>
     </div>
   </form>
