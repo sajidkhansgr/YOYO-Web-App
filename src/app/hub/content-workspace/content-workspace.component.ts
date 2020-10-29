@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+// import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,7 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { DEF_ICON } from '../../shared/constants';
 import { FileDndHelper } from '../../shared/file-helper';
 import { ContentWorkspaceService } from './content-workspace.service'
-import { WrkSpc } from '../../shared/models/workspace'
+import { WrkSpc } from '../../shared/models/workspace';
+import { Folder } from '../../shared/models/folder';
 
 
 @Component({
@@ -23,13 +24,14 @@ export class ContentWorkspaceComponent implements OnInit {
   defIcon: any = DEF_ICON; custIcon: any; files!: any[];
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
-  wrkspcs!: WrkSpc[]; wrkspc!: WrkSpc | undefined;
-  wrkspcLoading!: boolean;
-  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup;
+  wrkspcs!: WrkSpc[]; selWrkspc!: WrkSpc | undefined;
+  wrkspcLoading!: boolean; folderLoading!: boolean;
+  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; addFolderForm!: FormGroup;
   disabled!: boolean;
+  folderArr!: Folder[];
 
   constructor(
-    private route: ActivatedRoute,
+    // private route: ActivatedRoute,
     private modalService: NgbModal,
     private cwServ: ContentWorkspaceService,
     private fb: FormBuilder,
@@ -46,8 +48,8 @@ export class ContentWorkspaceComponent implements OnInit {
     this.dispGnrl = true; this.dispSettings = true; this.dispSmart = false;
     this.dispPropsSec = false; this.dispSmFolderSec = true;
     this.custIcon = undefined; this.showWork = false; this.showDoc = false;
-    this.wrkspcs = []; this.wrkspc = undefined;
-    this.wrkspcLoading = true;
+    this.wrkspcs = []; this.selWrkspc = undefined;
+    this.wrkspcLoading = true; this.folderLoading = true;
     this.addWrkspcForm = this.fb.group({
       name: ['', [Validators.required]]
     });
@@ -55,23 +57,63 @@ export class ContentWorkspaceComponent implements OnInit {
       name: ['', [Validators.required]]
       // more feilds need to be added when done in api
     });
+    this.addFolderForm = this.fb.group({
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      folderIcon: ['', [Validators.required]],
+      hideLabelInWorkspace: ['true', [Validators.required]]
+    });
     this.disabled = false;
+    this.folderArr = [];
   }
 
+  // ---- folder ---- //
+  // add folder
+  addFolderFunc() {
+    if (this.addFolderForm.valid) {
+      let folderData: any = {
+        ...this.addFolderForm.value,
+        workspaceId: this.selWrkspc!.id
+      };
+      console.log(folderData);
+      this.cwServ.addFolder(folderData).subscribe((data: any) => {
+        console.log(data);
+      });
+    }
+  }
+
+  // get list of folders
+  getFolderList() {
+    this.folderLoading = true;
+    this.cwServ.folderListWrkspc({ workspaceId: this.selWrkspc!.id }).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        this.folderArr = data.result.results;
+        console.log(this.folderArr);
+      } else {
+        this.folderArr = [];
+        this.toastr.error('No folders found', 'Error!');
+      }
+      this.folderLoading = false;
+    }, (err: any) => {
+      this.folderLoading = false;
+    });
+  }
+
+  // ---- workspace ---- //
   // update workspace
   updWrkspc() {
     if (this.updWrkspcForm.valid) {
       this.disabled = true;
       let wrkspcData: any = {
-        id: this.wrkspc!.id,
+        id: this.selWrkspc!.id,
         ...this.updWrkspcForm.value,
-        hubId: this.wrkspc!.hubId
+        hubId: this.selWrkspc!.hubId
       };
       this.cwServ.updWrkspc(wrkspcData).subscribe((data: any) => {
         // console.log(data);
         if (data) {
           this.toastr.success(data.message || 'Workspace updated successfully', 'Success!');
-          this.wrkspc = wrkspcData;
+          this.selWrkspc = wrkspcData;
           this.getWrkspcList();
         } else {
           this.toastr.error('Unable to update workspace', 'Error!');
@@ -87,7 +129,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // open update workspace modal
   updWrkspcModal(content: any) {
-    this.updWrkspcForm.patchValue({ ...this.wrkspc });
+    this.updWrkspcForm.patchValue({ ...this.selWrkspc });
     this.openModal(content);
   }
 
@@ -118,7 +160,9 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // selected workspace
   selectWrkspc(wrkspc: WrkSpc) {
-    this.wrkspc = wrkspc;
+    this.selWrkspc = wrkspc;
+    // console.log(wrkspc);
+    this.getFolderList();
   }
 
   // list of workspaces
@@ -251,6 +295,7 @@ export class ContentWorkspaceComponent implements OnInit {
       let reader = new FileReader();
       reader.onload = (event: any) => {
         console.log("sd")
+        this.addURLIcon = 'cust-icon';
         this.iconUrl = event.target.result;
       };
       this.custIcon = file;

@@ -10,7 +10,31 @@ export class ContentWorkspaceService {
   constructor(
     private http: HttpClient
   ) { }
+  // ---- folder api's ---- //
+  // add workspace
+  addFolder(data: any) {
+    return this.http.post(`${AppSettings.ADD_FLDR}`, data)
+  }
 
+  // get folder list
+  folderListWrkspc(params: any): Observable<any[]> {
+    let queryParams = new HttpParams();
+    for (let key in params) {
+      if (params[key]) {
+        queryParams = queryParams.set(key, params[key]);
+      }
+    }
+    return this.http.get(`${AppSettings.LIST_FLDR_WRKSPC}`, {
+      params: queryParams
+    }
+    ).pipe(
+      map((res: any) =>
+        res
+      )
+    );
+  }
+
+  // ---- workspace api's ---- //
   // get workspace list
   wrkspcList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();

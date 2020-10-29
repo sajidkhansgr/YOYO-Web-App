@@ -435,7 +435,7 @@
             <div class="dropdown">
               <button class="btn btn-light dropdown-toggle" type="button" id="wrkspcDD" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false" (click)="loadWrkspcs()">
-                {{wrkspc ? wrkspc.name : 'Select a Workspace'}}
+                {{selWrkspc ? selWrkspc.name : 'Select a Workspace'}}
               </button>
               <div class="dropdown-menu" aria-labelledby="wrkspcDD">
                 <ng-container *ngIf="wrkspcLoading; else noLoading">
@@ -443,7 +443,7 @@
                 </ng-container>
                 <ng-template #noLoading>
                   <div class="overflow-auto" style="max-height:130px">
-                    <a class="dropdown-item curs-ptr" [ngClass]="{'active': wrkspc == ws}" *ngFor="let ws of wrkspcs"
+                    <a class="dropdown-item curs-ptr" [ngClass]="{'active': selWrkspc == ws}" *ngFor="let ws of wrkspcs"
                       (click)="selectWrkspc(ws)">{{ws.name}}</a>
                   </div>
                 </ng-template>
@@ -460,7 +460,7 @@
           <div class="card-header bg-hi-light-grey py-1 px-2 row m-0">
             <div class="dropdown dark-bg-hover rounded mr-2">
               <button class="btn btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown"
-                [disabled]="!wrkspc">
+                [disabled]="!selWrkspc">
                 Add
               </button>
               <div class="dropdown-menu" aria-labelledby="btnAddDD">
@@ -471,7 +471,7 @@
             </div>
             <div class="dropdown dark-bg-hover rounded">
               <button class="btn btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown"
-                [disabled]="!wrkspc">
+                [disabled]="!selWrkspc">
                 Users <span class="badge badge-light">11</span>
               </button>
               <div class="dropdown-menu large-dropdown-menu pt-0 overflow-hidden" aria-labelledby="btnUsersDD">
@@ -508,7 +508,7 @@
             </div>
             <div class="dropdown dark-bg-hover rounded ml-auto">
               <button class="btn btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown"
-                [disabled]="!wrkspc">
+                [disabled]="!selWrkspc">
                 <i class="fas fa-cog"></i>
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDD">
@@ -522,11 +522,13 @@
             </div>
 
           </div>
-          <ng-container *ngIf="wrkspc; else noWrkspc">
-            <div class="card-body">
-              <h5>{{wrkspc.name}}</h5>
-              <div class="main row py-4">
-                <div class="col-3">
+          <ng-container *ngIf="selWrkspc; else noWrkspc">
+            <app-loader [type]="'page'" *ngIf="folderLoading"></app-loader>
+            <div class="card-body" *ngIf="!folderLoading">
+              <h5>{{selWrkspc.name}}</h5>
+              <hr>
+              <div class="main row py-4" *ngIf="folderArr.length > 0">
+                <div class="col-3" *ngFor="let folder of folderArr">
                   <img src="assets/images/companyInfo.png" class="w-100">
                   <div class="dropdown">
                     <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
@@ -549,63 +551,94 @@
                         Folder</a>
                     </div>
                   </div>
+                  <div class="name bg-hi-dark-grey text-center rounded mt-2" *ngIf="!folder.hideLabelInWorkspace">
+                    {{folder.name}}
+                  </div>
                 </div>
-                <div class="col-3">
-                  <img src="assets/images/brands.png" class="w-100">
-                  <div class="dropdown">
-                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                      data-toggle="dropdown">
-                      <i class="fas fa-cog"></i>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
-                        Item</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
-                        Item</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
-                        Link</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
-                        Item</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
-                        New
-                        Channel
-                        from
-                        Folder</a>
+                <!-- <div class="col-3">
+                    <img src="assets/images/companyInfo.png" class="w-100">
+                    <div class="dropdown">
+                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                        data-toggle="dropdown">
+                        <i class="fas fa-cog"></i>
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="comInfoDD">
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
+                          Item</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
+                          Item</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
+                          Link</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
+                          Item</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
+                          New
+                          Channel
+                          from
+                          Folder</a>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-3">
-                  <img src="assets/images/services.png" class="w-100">
-                  <div class="dropdown">
-                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                      data-toggle="dropdown">
-                      <i class="fas fa-cog"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comInfoDD">
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
-                        Item</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
-                        Item</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
-                        Link</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
-                        Item</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
-                        New
-                        Channel
-                        from
-                        Folder</a>
+                  <div class="col-3">
+                    <img src="assets/images/brands.png" class="w-100">
+                    <div class="dropdown">
+                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                        data-toggle="dropdown">
+                        <i class="fas fa-cog"></i>
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="comInfoDD">
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
+                          Item</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
+                          Item</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
+                          Link</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
+                          Item</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
+                          New
+                          Channel
+                          from
+                          Folder</a>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-3">
-                  <img src="assets/images/showpad.jpg" class="w-100">
-                  <div class="dropdown">
-                    <button class="btn btn-light btn-sm">
-                      <i class="fas fa-trash-alt"></i>
-                    </button>
+                  <div class="col-3">
+                    <img src="assets/images/services.png" class="w-100">
+                    <div class="dropdown">
+                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                        data-toggle="dropdown">
+                        <i class="fas fa-cog"></i>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comInfoDD">
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
+                          Item</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
+                          Item</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
+                          Link</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
+                          Item</a>
+                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
+                          New
+                          Channel
+                          from
+                          Folder</a>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                  <div class="col-3">
+                    <img src="assets/images/showpad.jpg" class="w-100">
+                    <div class="dropdown">
+                      <button class="btn btn-light btn-sm">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div> -->
+              </div>
+              <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;"
+                *ngIf="folderArr.length == 0">
+                No folder found
               </div>
             </div>
           </ng-container>
@@ -764,51 +797,53 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
-      <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
-      <div class="text-center my-5">
-        <h2><i class="fa fa-upload"></i></h2>
-        <h5>Drag & Drop an icon image here</h5>
-        OR
-        <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
-      </div>
-    </div>
-    <div class="files-list">
-      <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
-        <div class="info mx-auto">
-          <h6 class="name mb-0 text-wrap">
-            {{ file?.name }}
-          </h6>
-          <p class="size mb-0">
-            {{ getSize(file?.size) }}
-          </p>
-          <app-file-progess [progress]="file?.progress"></app-file-progess>
-        </div>
-        <div>
-          <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
+  <form name="addFolderForm" (ngSubmit)="addFolderFunc()" [formGroup]="addFolderForm" novalidate>
+    <div class="modal-body" ngbAutofocus>
+      <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
+        <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*"
+          formControlName="folderIcon">
+        <div class="text-center my-5">
+          <h2><i class="fa fa-upload"></i></h2>
+          <h5>Drag & Drop an icon image here</h5>
+          OR
+          <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
         </div>
       </div>
+      <div class="files-list">
+        <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
+          <div class="info mx-auto">
+            <h6 class="name mb-0 text-wrap">
+              {{ file?.name }}
+            </h6>
+            <p class="size mb-0">
+              {{ getSize(file?.size) }}
+            </p>
+            <app-file-progess [progress]="file?.progress"></app-file-progess>
+          </div>
+          <div>
+            <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
+          </div>
+        </div>
+      </div>
+      <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon" class="border mt-2 mb-4"
+        style="height: 130px; width: auto;">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Folder Label</mat-label>
+        <input matInput placeholder="Folder Label" formControlName="name">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Description</mat-label>
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+      </mat-form-field>
+      <div class="options">
+        Options
+        <mat-checkbox class="d-block" formControlName="hideLabelInWorkspace">Hide label in Experience</mat-checkbox>
+      </div>
     </div>
-    <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon" class="border mt-2 mb-4"
-      style="height: 130px; width: auto;">
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Folder Label</mat-label>
-      <input matInput placeholder="Folder Label">
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Description</mat-label>
-      <textarea matInput placeholder="Description"></textarea>
-    </mat-form-field>
-    <div class="options">
-      Options
-      <mat-checkbox class="d-block">Hide label in Experience</mat-checkbox>
-      <mat-checkbox class="d-block">Hide in Kiosk Mode</mat-checkbox>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Save</button>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
+  </form>
 </ng-template>
 
 <!-- add smart folder modal  -->
