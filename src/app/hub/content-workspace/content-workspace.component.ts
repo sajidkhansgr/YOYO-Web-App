@@ -25,7 +25,7 @@ export class ContentWorkspaceComponent implements OnInit {
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: WrkSpc[]; wrkspc!: WrkSpc | undefined;
   wrkspcLoading!: boolean;
-  addWrkspcForm!: FormGroup;
+  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup;
   disabled!: boolean;
 
   constructor(
@@ -51,7 +51,43 @@ export class ContentWorkspaceComponent implements OnInit {
     this.addWrkspcForm = this.fb.group({
       name: ['', [Validators.required]]
     });
+    this.updWrkspcForm = this.fb.group({
+      name: ['', [Validators.required]]
+      // more feilds need to be addded when done in api
+    });
     this.disabled = false;
+  }
+
+  // update workspace
+  updWrkspc() {
+    if (this.updWrkspcForm.valid) {
+      this.disabled = true;
+      let wrkspcData: any = {
+        id: this.wrkspc!.id,
+        ...this.updWrkspcForm.value,
+        hubId: this.wrkspc!.hubId
+      };
+      this.cwServ.updWrkspc(wrkspcData).subscribe((data: any) => {
+        if (data) {
+          this.toastr.success(data.message || 'Workspace updated successfully', 'Success!');
+          this.wrkspc = wrkspcData;
+          this.getWrkspcList();
+        } else {
+          this.toastr.error('Unable to update workspace', 'Error!');
+        }
+        this.dismissModal();
+        this.disabled = false;
+      }, (err: any) => {
+        this.dismissModal();
+        this.disabled = false;
+      });
+    }
+  }
+
+  // open update workspace modal
+  updWrkspcModal(content: any) {
+    this.updWrkspcForm.patchValue({ ...this.wrkspc });
+    this.openModal(content);
   }
 
   // add workspace

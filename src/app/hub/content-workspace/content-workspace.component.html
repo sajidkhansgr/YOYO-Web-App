@@ -442,8 +442,10 @@
                   <app-loader [type]="'div'"></app-loader> <!-- loader -->
                 </ng-container>
                 <ng-template #noLoading>
-                  <a class="dropdown-item curs-ptr" [ngClass]="{'active': wrkspc == ws}" *ngFor="let ws of wrkspcs"
-                    (click)="selectWrkspc(ws)">{{ws.name}}</a>
+                  <div class="overflow-auto" style="max-height:130px">
+                    <a class="dropdown-item curs-ptr" [ngClass]="{'active': wrkspc == ws}" *ngFor="let ws of wrkspcs"
+                      (click)="selectWrkspc(ws)">{{ws.name}}</a>
+                  </div>
                 </ng-template>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item curs-ptr" (click)="openModal(addWorkspace)">Create a new Workspace</a>
@@ -455,9 +457,10 @@
               </div>
             </div>
           </div>
-          <div class="card-header bg-hi-light-grey p-1 row m-0">
+          <div class="card-header bg-hi-light-grey py-1 px-2 row m-0">
             <div class="dropdown dark-bg-hover rounded mr-2">
-              <button class="btn btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown">
+              <button class="btn btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown"
+                [disabled]="!wrkspc">
                 Add
               </button>
               <div class="dropdown-menu" aria-labelledby="btnAddDD">
@@ -467,7 +470,8 @@
               </div>
             </div>
             <div class="dropdown dark-bg-hover rounded">
-              <button class="btn btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown">
+              <button class="btn btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown"
+                [disabled]="!wrkspc">
                 Users <span class="badge badge-light">11</span>
               </button>
               <div class="dropdown-menu large-dropdown-menu pt-0 overflow-hidden" aria-labelledby="btnUsersDD">
@@ -503,11 +507,12 @@
               </div>
             </div>
             <div class="dropdown dark-bg-hover rounded ml-auto">
-              <button class="btn btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown">
+              <button class="btn btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown"
+                [disabled]="!wrkspc">
                 <i class="fas fa-cog"></i>
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDD">
-                <a class="dropdown-item" (click)="openModal(editWorkspace)">Edit</a>
+                <a class="dropdown-item" (click)="updWrkspcModal(editWorkspace)">Edit</a>
                 <a class="dropdown-item">Duplicate</a>
                 <a class="dropdown-item">Lock</a>
                 <a class="dropdown-item">Hide from Experience App Link</a>
@@ -605,7 +610,7 @@
             </div>
           </ng-container>
           <ng-template #noWrkspc>
-            <div class="card-body text-center text-secondary" style="min-height: 100px; padding-top:40px;">
+            <div class="card-body text-center text-secondary" style="min-height: 200px; padding-top:90px;">
               No workspace selected
             </div>
           </ng-template>
@@ -1013,100 +1018,108 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showGeneral()">
-      General
-      <div class="float-right">
-        <ng-container *ngIf="dispGnrl; else elseIcon">
-          <i class="fa fa-angle-up"></i>
-        </ng-container>
-        <ng-template #elseIcon>
-          <i class="fa fa-angle-down"></i>
-        </ng-template>
-      </div>
-    </div>
-    <div class="general" *ngIf="dispGnrl">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Workspace Label</mat-label>
-        <input matInput type="text" placeholder="Workspace Label">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Description</mat-label>
-        <textarea matInput type="text" placeholder="Description"></textarea>
-      </mat-form-field>
-    </div>
-    <hr>
-    <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showSettings()">
-      Settings
-      <div class="float-right">
-        <ng-container *ngIf="dispSettings; else elseIcon">
-          <i class="fa fa-angle-up"></i>
-        </ng-container>
-        <ng-template #elseIcon>
-          <i class="fa fa-angle-down"></i>
-        </ng-template>
-      </div>
-    </div>
-    <div class="settings" *ngIf="dispSettings">
-      <mat-label>Content</mat-label>
-      <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle"
-          matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
-      <mat-label>
-        Default view
-        <mat-radio-group aria-label="Select an option" class="d-block ml-3">
-          <mat-radio-button value="1" class="mr-2">Grid View</mat-radio-button>
-          <mat-radio-button value="2">List View</mat-radio-button>
-        </mat-radio-group>
-      </mat-label>
-    </div>
-    <hr>
-    <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showSmart()">
-      Edit Contained Smart Folders (0)
-      <div class="float-right">
-        <ng-container *ngIf="dispSmart; else elseIcon">
-          <i class="fa fa-angle-up"></i>
-        </ng-container>
-        <ng-template #elseIcon>
-          <i class="fa fa-angle-down"></i>
-        </ng-template>
-      </div>
-    </div>
-    <div class="smartFolders" *ngIf="dispSmart">
-      <div class="add">
-        <mat-checkbox class="ml-3">Add</mat-checkbox>
-        <div class="row mx-0 justify-content-between">
-          <mat-form-field appearance="outline">
-            <input matInput type="text" placeholder="Search tags, languagees, countries">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-select>
-              <mat-option value='all'>Match All</mat-option>
-            </mat-select>
-          </mat-form-field>
+  <form name="updWrkspcForm" (ngSubmit)="updWrkspc()" [formGroup]="updWrkspcForm" novalidate>
+    <div class="modal-body" ngbAutofocus>
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showGeneral()">
+        General
+        <div class="float-right">
+          <ng-container *ngIf="dispGnrl; else elseIcon">
+            <i class="fa fa-angle-up"></i>
+          </ng-container>
+          <ng-template #elseIcon>
+            <i class="fa fa-angle-down"></i>
+          </ng-template>
         </div>
       </div>
-      <div class="remove">
-        <mat-checkbox class="ml-3">Remove</mat-checkbox>
-        <mat-form-field appearance="outline" class="d-block">
-          <input matInput type="text" placeholder="Search tags, languagees, countries">
+      <div class="general" *ngIf="dispGnrl">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Workspace Label</mat-label>
+          <input matInput type="text" placeholder="Workspace Label" formControlName="name">
+          <mat-error *ngIf="updWrkspcForm.get('name')!.hasError('required')">
+            Name is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Description</mat-label>
+          <textarea matInput type="text" placeholder="Description"></textarea>
         </mat-form-field>
       </div>
-      <div class="replace">
-        <mat-checkbox class="ml-3">Replace</mat-checkbox>
-        <div class="row mx-0 justify-content-between">
-          <mat-form-field appearance="outline">
-            <input matInput type="text" placeholder="Search tags, languagees, countries">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
+      <hr>
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showSettings()">
+        Settings
+        <div class="float-right">
+          <ng-container *ngIf="dispSettings; else elseIcon">
+            <i class="fa fa-angle-up"></i>
+          </ng-container>
+          <ng-template #elseIcon>
+            <i class="fa fa-angle-down"></i>
+          </ng-template>
+        </div>
+      </div>
+      <div class="settings" *ngIf="dispSettings">
+        <mat-label>Content</mat-label>
+        <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle"
+            matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
+        <mat-label>
+          Default view
+          <mat-radio-group aria-label="Select an option" class="d-block ml-3">
+            <mat-radio-button value="1" class="mr-2">Grid View</mat-radio-button>
+            <mat-radio-button value="2">List View</mat-radio-button>
+          </mat-radio-group>
+        </mat-label>
+      </div>
+      <hr>
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showSmart()">
+        Edit Contained Smart Folders (0)
+        <div class="float-right">
+          <ng-container *ngIf="dispSmart; else elseIcon">
+            <i class="fa fa-angle-up"></i>
+          </ng-container>
+          <ng-template #elseIcon>
+            <i class="fa fa-angle-down"></i>
+          </ng-template>
+        </div>
+      </div>
+      <div class="smartFolders" *ngIf="dispSmart">
+        <div class="add">
+          <mat-checkbox class="ml-3">Add</mat-checkbox>
+          <div class="row mx-0 justify-content-between">
+            <mat-form-field appearance="outline">
+              <input matInput type="text" placeholder="Search tags, languagees, countries">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-select>
+                <mat-option value='all'>Match All</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="remove">
+          <mat-checkbox class="ml-3">Remove</mat-checkbox>
+          <mat-form-field appearance="outline" class="d-block">
             <input matInput type="text" placeholder="Search tags, languagees, countries">
           </mat-form-field>
         </div>
+        <div class="replace">
+          <mat-checkbox class="ml-3">Replace</mat-checkbox>
+          <div class="row mx-0 justify-content-between">
+            <mat-form-field appearance="outline">
+              <input matInput type="text" placeholder="Search tags, languagees, countries">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <input matInput type="text" placeholder="Search tags, languagees, countries">
+            </mat-form-field>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" [disabled]="updWrkspcForm!.invalid || disabled">
+        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+        Save
+      </button>
+    </div>
+  </form>
 </ng-template>
 
 <!-- add workspace modal  -->

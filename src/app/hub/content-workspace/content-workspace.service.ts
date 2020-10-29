@@ -29,8 +29,13 @@ export class ContentWorkspaceService {
     );
   }
 
-  // add category
+  // add workspace
   addWrkspc(data: any) {
     return this.http.post(`${AppSettings.ADD_WRKSPC}`, data)
+  }
+
+  // update category
+  updWrkspc(data: any) {
+    return this.http.put(`${AppSettings.UPD_WRKSPC}`, data)
   }
 }
