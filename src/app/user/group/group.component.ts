@@ -190,7 +190,7 @@ export class GroupComponent implements OnInit {
     }else{
       this.selDiv.push(div);
       // this.msgForm.controls['RecipientName'].setValue({});
-      this.divNameInp.nativeElement.value = '';
+      // this.divNameInp.nativeElement.value = '';
     }
   }
 
