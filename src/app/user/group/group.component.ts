@@ -27,7 +27,7 @@ export class GroupComponent implements OnInit {
   groupForm!: FormGroup; grpDetail!: Group | null;
   disabled: boolean = false; loading: boolean = true; docLoading: boolean = true;
   selectable = true; removable = true;
-  selDiv: any = []; divNameInp: any;isEdit!: boolean;;
+  selDiv: any = []; divNameInp: any;isEdit!: boolean;
   @ViewChild("divName", {static: false}) set divName(el: ElementRef) {
     this.divNameInp = el;
   }
