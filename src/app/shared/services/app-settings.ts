@@ -59,4 +59,12 @@ export class AppSettings {
   public static LIST_ANNOT = `api/Annotation/GetAll`;
 
   public static ADD_ANNOT = `/api/Annotation/Add`;
+
+  public static LIST_ANNCMNT = `api/Announcement/GetAll`;
+
+  public static ADD_ANNCMNT = `api/Announcement/Add`;
+
+  public static UPD_ANNCMNT = `api/Announcement/Update`;
+
+  public static GET_ANNCMNT = `api/Announcement/GetById`;
 }

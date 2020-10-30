@@ -9,7 +9,7 @@
           <div class="communication">
             <div class="buttons-row row mt-3 justify-content-between mx-2">
               <!-- new announcment trigger modal -->
-              <button type="button" class="btn btn-primary" (click)="openRegModal(anncModal)">
+              <button type="button" class="btn btn-primary" (click)="openModal(anncModal)">
                 New Announcement
               </button>
             </div>
@@ -240,49 +240,65 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Subject</mat-label>
-      <input matInput placeholder="Subject">
-    </mat-form-field>
-    <br />
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Announcement</mat-label>
-      <textarea matInput placeholder="Announcement"></textarea>
-    </mat-form-field>
-    <br />
-    <mat-form-field appearance="outline">
-      <mat-label>Send To</mat-label>
-      <mat-select>
-        <mat-option>All Users</mat-option>
-        <mat-option>Selected Experiences</mat-option>
-        <mat-option>Selected User Groups</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <br />
-    <mat-checkbox>Request user to update content</mat-checkbox><br />
-    <mat-checkbox>Notify User by Email</mat-checkbox><br />
-    <mat-checkbox>Send Later</mat-checkbox><br />
-    <div class="row justify-content-between m-0">
-      <mat-form-field appearance="outline">
-        <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="picker">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+  <form name="anncmntForm" (ngSubmit)="onSubmit()" [formGroup]="anncmntForm" novalidate>
+    <div class="modal-body" ngbAutofocus>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Subject</mat-label>
+        <input matInput placeholder="Subject" formControlName="subject" required/>
+        <mat-error *ngIf="anncmntForm.get('subject')!.hasError('required')">
+          Subject is required
+        </mat-error>
       </mat-form-field>
+      <br />
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Announcement</mat-label>
+        <textarea matInput placeholder="Announcement" formControlName="body" rows="3" required></textarea>
+        <mat-error *ngIf="anncmntForm.get('body')!.hasError('required')">
+          Announcement is required
+        </mat-error>
+      </mat-form-field>
+      <br />
       <mat-form-field appearance="outline">
-        <mat-label>Time</mat-label>
+        <mat-label>Send To</mat-label>
         <mat-select>
-          <mat-option>00:00</mat-option>
-          <mat-option>01:00</mat-option>
+          <mat-option value="0">All Users</mat-option>
+          <mat-option value="1">Selected Experiences</mat-option>
+          <mat-option value="2">Selected User Groups</mat-option>
         </mat-select>
       </mat-form-field>
+      <br />
+      <mat-checkbox formControlName="requestToUpdate">Request user to update content</mat-checkbox><br />
+      <mat-checkbox formControlName="notifyByEmail">Notify User by Email</mat-checkbox><br />
+      <mat-checkbox id="sendLater" formControlName="sendLater">Send Later</mat-checkbox><br />
+      <div class="row justify-content-between m-0">
+        <mat-form-field appearance="outline">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="anncmntForm.get('date')!.hasError('required')">
+            Date is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" required>
+          <mat-label>Time</mat-label>
+          <mat-select formControlName="time">
+            <mat-option value="00:00">00:00</mat-option>
+            <mat-option value="01:00">01:00</mat-option>
+          </mat-select>
+          <mat-error *ngIf="anncmntForm.get('time')!.hasError('required')">
+            Time is required
+          </mat-error>
+        </mat-form-field>
+      </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Close</button>
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Close</button>
+      <button class="btn btn-primary" [disabled]="anncmntForm!.invalid || disabled">
+        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>Save
+      </button>
+    </div>
+  </form>
 </ng-template>
 
 <!-- <ng-template #anncModal class="custom-modal" let-modal>
