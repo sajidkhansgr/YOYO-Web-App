@@ -28,7 +28,8 @@ export class ContentWorkspaceComponent implements OnInit {
   wrkspcLoading!: boolean; folderLoading!: boolean;
   addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; addFolderForm!: FormGroup;
   disabled!: boolean;
-  folderArr!: Folder[];
+  folderArr!: Folder[]; selFolder!: Folder | undefined;
+  gnrlCollapsed = false; editSmrtCollapsed = true; locationCollapsed = true;
 
   constructor(
     // private route: ActivatedRoute,
@@ -59,26 +60,64 @@ export class ContentWorkspaceComponent implements OnInit {
     });
     this.addFolderForm = this.fb.group({
       name: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-      folderIcon: ['', [Validators.required]],
-      hideLabelInWorkspace: ['true', [Validators.required]]
+      description: [''],
+      // folderIcon: [''],
+      hideLabelInWorkspace: ['true']
     });
     this.disabled = false;
-    this.folderArr = [];
+    this.folderArr = []; this.selFolder = undefined;
   }
 
   // ---- folder ---- //
+  // edit folder
+  // editFolderFunc() {
+  //   if (this.addFolderForm.valid) {
+  //     let folderData: any = {
+  //       id: this.selFolder!.id,
+  //       ...this.addFolderForm.value,
+  //       workspaceId: this.selWrkspc!.id
+  //     };
+  //     console.log(folderData);
+  //     this.cwServ.updFolder(folderData).subscribe((data: any) => {
+  //       console.log(data);
+  //     });
+  //   }
+  // }
+
+  // edit folder modal
+  // editFolder(modal: any, folder: Folder) {
+  //   this.selFolder = folder;
+  //   this.addFolderForm.patchValue({ ...this.selFolder });
+  //   this.openModal(modal);
+  // }
+
   // add folder
   addFolderFunc() {
     if (this.addFolderForm.valid) {
+      this.disabled = true;
       let folderData: any = {
+        id: 0, // bug at backend, not needed when bug fixed
         ...this.addFolderForm.value,
-        workspaceId: this.selWrkspc!.id
+        folderIcon: this.iconUrl,
+        workspaceId: this.selWrkspc!.id,
+        folderId: 0
       };
-      console.log(folderData);
-      this.cwServ.addFolder(folderData).subscribe((data: any) => {
-        console.log(data);
-      });
+      this.cwServ.addFolder(folderData)
+        .subscribe((data: any) => {
+          console.log(data);
+          if (data) {
+            this.toastr.success(data.message || 'Folder added successfully', 'Success!');
+            this.getFolderList();
+          } else {
+            this.toastr.error('Unable to add Folder', 'Error!');
+          }
+          this.disabled = false;
+          this.dismissModal();
+        }, (err: any) => {
+          console.log(err);
+          this.disabled = false;
+          this.dismissModal();
+        });
     }
   }
 
@@ -88,7 +127,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.cwServ.folderListWrkspc({ workspaceId: this.selWrkspc!.id }).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         this.folderArr = data.result.results;
-        console.log(this.folderArr);
+        // console.log(this.folderArr);
       } else {
         this.folderArr = [];
         this.toastr.error('No folders found', 'Error!');

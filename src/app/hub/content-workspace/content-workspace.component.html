@@ -536,8 +536,9 @@
                       <i class="fas fa-cog"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
-                        Item</a>
+                      <!-- <a class="dropdown-item curs-ptr" (click)="editFolder(editFolderModal, folder)"><i
+                          class="fas fa-edit mr-1"></i>Edit
+                        Item</a> -->
                       <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
                         Item</a>
                       <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
@@ -551,7 +552,8 @@
                         Folder</a>
                     </div>
                   </div>
-                  <div class="name bg-hi-dark-grey text-center rounded mt-2" *ngIf="!folder.hideLabelInWorkspace">
+                  <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
+                    *ngIf="!folder.hideLabelInWorkspace">
                     {{folder.name}}
                   </div>
                 </div>
@@ -800,8 +802,7 @@
   <form name="addFolderForm" (ngSubmit)="addFolderFunc()" [formGroup]="addFolderForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
-        <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*"
-          formControlName="folderIcon">
+        <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
         <div class="text-center my-5">
           <h2><i class="fa fa-upload"></i></h2>
           <h5>Drag & Drop an icon image here</h5>
@@ -830,6 +831,9 @@
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Folder Label</mat-label>
         <input matInput placeholder="Folder Label" formControlName="name">
+        <mat-error *ngIf="addFolderForm.get('name')!.hasError('required')">
+          Name is required
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Description</mat-label>
@@ -841,10 +845,147 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-primary" [disabled]="addFolderForm!.invalid || disabled">
+        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+        Save
+      </button>
     </div>
   </form>
 </ng-template>
+
+<!-- edit folder modal  -->
+<!-- <ng-template #editFolderModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Edit Folder</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form name="addFolderForm" (ngSubmit)="editFolderFunc()" [formGroup]="addFolderForm" novalidate>
+    <div class="modal-body" ngbAutofocus>
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
+        [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
+        General
+        <div class="float-right">
+          <ng-container *ngIf="!gnrlCollapsed; else elseIcon">
+            <i class="fa fa-angle-up"></i>
+          </ng-container>
+          <ng-template #elseIcon>
+            <i class="fa fa-angle-down"></i>
+          </ng-template>
+        </div>
+      </div>
+      <div class="general" id="generalFolder" [ngbCollapse]="gnrlCollapsed">
+        <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
+          <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*"
+            formControlName="folderIcon">
+          <div class="text-center my-5">
+            <h2><i class="fa fa-upload"></i></h2>
+            <h5>Drag & Drop an icon image here</h5>
+            OR
+            <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
+          </div>
+        </div>
+        <div class="files-list">
+          <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
+            <div class="info mx-auto">
+              <h6 class="name mb-0 text-wrap">
+                {{ file?.name }}
+              </h6>
+              <p class="size mb-0">
+                {{ getSize(file?.size) }}
+              </p>
+              <app-file-progess [progress]="file?.progress"></app-file-progess>
+            </div>
+            <div>
+              <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
+            </div>
+          </div>
+        </div>
+        <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon" class="border mt-2 mb-4"
+          style="height: 130px; width: auto;">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Folder Label</mat-label>
+          <input matInput placeholder="Folder Label" formControlName="name">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Description</mat-label>
+          <textarea matInput placeholder="Description" formControlName="description"></textarea>
+        </mat-form-field>
+        <div class="options">
+          Options
+          <mat-checkbox class="d-block ml-3" formControlName="hideLabelInWorkspace">Hide label in Experience
+          </mat-checkbox>
+        </div>
+      </div>
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed"
+        [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmartFolder">
+        Edit Contained Smart Folders (0)
+        <div class="float-right">
+          <ng-container *ngIf="editSmrtCollapsed; else elseIcon">
+            <i class="fa fa-angle-up"></i>
+          </ng-container>
+          <ng-template #elseIcon>
+            <i class="fa fa-angle-down"></i>
+          </ng-template>
+        </div>
+      </div>
+      <div class="smartFolders" id="editSmartFolder" [ngbCollapse]="editSmrtCollapsed">
+        <div class="add">
+          <mat-checkbox class="ml-3">Add</mat-checkbox>
+          <div class="row mx-0 justify-content-between">
+            <mat-form-field appearance="outline">
+              <input matInput type="text" placeholder="Search tags, languagees, countries">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-select>
+                <mat-option value='all'>Match All</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="remove">
+          <mat-checkbox class="ml-3">Remove</mat-checkbox>
+          <mat-form-field appearance="outline" class="d-block">
+            <input matInput type="text" placeholder="Search tags, languagees, countries">
+          </mat-form-field>
+        </div>
+        <div class="replace">
+          <mat-checkbox class="ml-3">Replace</mat-checkbox>
+          <div class="row mx-0 justify-content-between">
+            <mat-form-field appearance="outline">
+              <input matInput type="text" placeholder="Search tags, languagees, countries">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <input matInput type="text" placeholder="Search tags, languagees, countries">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="locationCollapsed = !locationCollapsed"
+        [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder">
+        Location
+        <div class="float-right">
+          <ng-container *ngIf="locationCollapsed; else elseIcon">
+            <i class="fa fa-angle-up"></i>
+          </ng-container>
+          <ng-template #elseIcon>
+            <i class="fa fa-angle-down"></i>
+          </ng-template>
+        </div>
+      </div>
+      <div class="location px-2" id="locationFolder" [ngbCollapse]="locationCollapsed">
+        <div class="dark-bg-hover rounded p-2">
+          <i class="fa fa-angle-right mr-3"></i>
+          abc
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</ng-template> -->
 
 <!-- add smart folder modal  -->
 <ng-template #addSmartFolder let-modal>

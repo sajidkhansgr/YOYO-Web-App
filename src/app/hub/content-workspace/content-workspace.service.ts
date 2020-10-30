@@ -11,9 +11,28 @@ export class ContentWorkspaceService {
     private http: HttpClient
   ) { }
   // ---- folder api's ---- //
-  // add workspace
+  // update folder
+  updFolder(data: any) {
+    return this.http.post(`${AppSettings.UPD_FLDR}`, data);
+  }
+
+  freezeFolderObj(data: any) {
+    const formData: FormData = new FormData();
+    for (let key in data) {
+      if (data[key]) {
+        if (key == 'folderIcon' && data.image && data.image.name) {
+          formData.append('folderIcon', data.image, data.image.name);
+        } else {
+          formData.append(key, data[key]);
+        }
+      }
+    }
+    return formData;
+  }
+
+  // add folder
   addFolder(data: any) {
-    return this.http.post(`${AppSettings.ADD_FLDR}`, data)
+    return this.http.post(`${AppSettings.ADD_FLDR}`, this.freezeFolderObj(data));
   }
 
   // get folder list
