@@ -29,7 +29,7 @@ export class ContentWorkspaceComponent implements OnInit {
   addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; addFolderForm!: FormGroup;
   disabled!: boolean;
   folderArr!: Folder[]; selFolder!: Folder | undefined;
-  gnrlCollapsed = false; editSmrtCollapsed = true; locationCollapsed = true;
+  gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
 
   constructor(
     // private route: ActivatedRoute,
@@ -66,30 +66,34 @@ export class ContentWorkspaceComponent implements OnInit {
     });
     this.disabled = false;
     this.folderArr = []; this.selFolder = undefined;
+    this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
   }
 
   // ---- folder ---- //
   // edit folder
-  // editFolderFunc() {
-  //   if (this.addFolderForm.valid) {
-  //     let folderData: any = {
-  //       id: this.selFolder!.id,
-  //       ...this.addFolderForm.value,
-  //       workspaceId: this.selWrkspc!.id
-  //     };
-  //     console.log(folderData);
-  //     this.cwServ.updFolder(folderData).subscribe((data: any) => {
-  //       console.log(data);
-  //     });
-  //   }
-  // }
+  editFolderFunc() {
+    if (this.addFolderForm.valid) {
+      let folderData: any = {
+        ...this.addFolderForm.value,
+        id: this.selFolder!.id,
+        folderIcon: this.iconUrl,
+        workspaceId: this.selWrkspc!.id,
+        folderId: 0
+      };
+      // console.log(this.selFolder);
+      // console.log(folderData);
+      this.cwServ.updFolder(folderData).subscribe((data: any) => {
+        console.log(data);
+      });
+    }
+  }
 
   // edit folder modal
-  // editFolder(modal: any, folder: Folder) {
-  //   this.selFolder = folder;
-  //   this.addFolderForm.patchValue({ ...this.selFolder });
-  //   this.openModal(modal);
-  // }
+  editFolder(modal: any, folder: Folder) {
+    this.selFolder = folder;
+    this.addFolderForm.patchValue({ ...this.selFolder });
+    this.openModal(modal);
+  }
 
   // add folder
   addFolderFunc() {

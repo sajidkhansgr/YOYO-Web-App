@@ -11,11 +11,8 @@ export class ContentWorkspaceService {
     private http: HttpClient
   ) { }
   // ---- folder api's ---- //
-  // update folder
-  updFolder(data: any) {
-    return this.http.post(`${AppSettings.UPD_FLDR}`, data);
-  }
 
+  // for images in form (folder)
   freezeFolderObj(data: any) {
     const formData: FormData = new FormData();
     for (let key in data) {
@@ -28,6 +25,11 @@ export class ContentWorkspaceService {
       }
     }
     return formData;
+  }
+
+  // update folder
+  updFolder(data: any) {
+    return this.http.put(`${AppSettings.UPD_FLDR}`, this.freezeFolderObj(data));
   }
 
   // add folder
