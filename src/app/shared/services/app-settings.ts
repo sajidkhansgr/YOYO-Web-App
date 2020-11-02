@@ -22,7 +22,7 @@ export class AppSettings {
 
   public static LIST_TAG = `api/Tag/GetAll`;
 
-  public static ADD_TAG = `api/Tag/Add`;
+  public static ADD_TAG = `api/Tag/AddBulk`;
 
   public static UPD_TAG = `api/Tag/Update`;
 

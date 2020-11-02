@@ -228,40 +228,32 @@ export class TagsComponent implements OnInit {
   addTags() {
     if (this.tagNames.length > 0 && this.tagForm.valid) {
       this.tagAddDisabled = true;
+      let tagDataArr = [];
       for (let i = 0; i < this.tagNames.length; i++) {
-        let tagData: any = {
+        tagDataArr.push({
           name: this.tagNames[i],
           categoryId: 0,
           hubId: parseInt(this.hubid)
-        };
-        setTimeout(() => {
-          this.addTag(tagData);
-        }, 500);
-        if (i == this.tagNames.length - 1) {
+        });
+      }
+
+      this.tagServ.addTag(tagDataArr)
+        .subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(data.message || 'Tags added successfully', 'Success!');
+            this.getTags();
+          } else {
+            this.toastr.error('Unable to add Tag', 'Error!');
+          }
           this.tagForm.reset();
           this.tagAddDisabled = false;
           this.tagNames = [];
-          setTimeout(() => {
-            this.getTags();
-          }, 1500);
-        }
-      }
+        }, (err: any) => {
+          this.tagForm.reset();
+          this.tagAddDisabled = false;
+          this.tagNames = [];
+        });
     }
-  }
-
-  // add single tag // needs to be changed after multiple tags add api is done
-  addTag(tagData: any) {
-    this.tagServ.addTag(tagData)
-      .subscribe((data: any) => {
-        if (data) {
-          this.toastr.success(data.message || 'Tag added successfully', 'Success!');
-        } else {
-          this.toastr.error('Unable to add Tag', 'Error!');
-        }
-
-      }, (err: any) => {
-
-      });
   }
 
   // list of categories
