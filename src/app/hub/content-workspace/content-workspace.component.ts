@@ -4,12 +4,14 @@ import { Subscription } from 'rxjs';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
 
 import { DEF_ICON } from '../../shared/constants';
 import { FileDndHelper } from '../../shared/file-helper';
 import { ContentWorkspaceService } from './content-workspace.service'
 import { WrkSpc } from '../../shared/models/workspace';
 import { Folder } from '../../shared/models/folder';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 
 @Component({
@@ -36,7 +38,8 @@ export class ContentWorkspaceComponent implements OnInit {
     private modalService: NgbModal,
     private cwServ: ContentWorkspaceService,
     private fb: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -70,14 +73,31 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- folder ---- //
-  // edit folder
+  // delete folder > not working
+  delFolder(id: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to delete this folder? You can't undo this action.`,
+        title: `Delete folder`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.cwServ.delFolder({ id: id }).subscribe((data: any) => {
+          console.log(data);
+        });
+      }
+    })
+  }
+
+  // edit folder > not working
   editFolderFunc() {
     if (this.addFolderForm.valid) {
       let folderData: any = {
         ...this.addFolderForm.value,
         id: this.selFolder!.id,
         folderIcon: this.iconUrl,
-        workspaceId: this.selWrkspc!.id,
+        workspaceId: this.selFolder!.workspaceId,
         folderId: 0
       };
       // console.log(this.selFolder);

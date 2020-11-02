@@ -11,6 +11,22 @@ export class ContentWorkspaceService {
     private http: HttpClient
   ) { }
   // ---- folder api's ---- //
+  // delete folder
+  delFolder(params: any) {
+    let queryParams = new HttpParams();
+    for (let key in params) {
+      if (params[key]) {
+        queryParams = queryParams.set(key, params[key]);
+      }
+    }
+    return this.http.patch(`${AppSettings.DEL_FLDR}`, {
+      params: queryParams
+    }).pipe(
+      map((res: any) =>
+        res
+      )
+    );
+  }
 
   // for images in form (folder)
   freezeFolderObj(data: any) {
