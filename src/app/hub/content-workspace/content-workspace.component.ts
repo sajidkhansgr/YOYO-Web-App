@@ -83,8 +83,14 @@ export class ContentWorkspaceComponent implements OnInit {
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.cwServ.delFolder({ id: id }).subscribe((data: any) => {
-          console.log(data);
+        this.cwServ.delFolder({ id: id })
+        .subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(data.message || 'Folder deleted successfully', 'Success!');
+            this.getFolderList();
+          } else {
+            this.toastr.error('Unable to delete Folder', 'Error!');
+          }
         });
       }
     })
@@ -96,12 +102,13 @@ export class ContentWorkspaceComponent implements OnInit {
       let folderData: any = {
         ...this.addFolderForm.value,
         id: this.selFolder!.id,
-        folderIcon: this.iconUrl,
+        // folderIcon: this.iconUrl,
+        folderIcon: this.custIcon,
         workspaceId: this.selFolder!.workspaceId,
         folderId: 0
       };
       // console.log(this.selFolder);
-      // console.log(folderData);
+      console.log(folderData);
       this.cwServ.updFolder(folderData).subscribe((data: any) => {
         console.log(data);
       });
@@ -122,7 +129,7 @@ export class ContentWorkspaceComponent implements OnInit {
       let folderData: any = {
         id: 0, // bug at backend, not needed when bug fixed
         ...this.addFolderForm.value,
-        folderIcon: this.iconUrl,
+        folderIcon: this.custIcon,
         workspaceId: this.selWrkspc!.id,
         folderId: 0
       };

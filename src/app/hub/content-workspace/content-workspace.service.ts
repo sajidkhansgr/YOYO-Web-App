@@ -19,7 +19,7 @@ export class ContentWorkspaceService {
         queryParams = queryParams.set(key, params[key]);
       }
     }
-    return this.http.patch(`${AppSettings.DEL_FLDR}`, {
+    return this.http.patch(`${AppSettings.DEL_FLDR}`, {}, {
       params: queryParams
     }).pipe(
       map((res: any) =>
@@ -30,11 +30,12 @@ export class ContentWorkspaceService {
 
   // for images in form (folder)
   freezeFolderObj(data: any) {
+    console.log("sdf")
     const formData: FormData = new FormData();
     for (let key in data) {
       if (data[key]) {
-        if (key == 'folderIcon' && data.image && data.image.name) {
-          formData.append('folderIcon', data.image, data.image.name);
+        if (key === 'folderIcon' && data[key] && data[key].name) {
+          formData.append('folderIcon', data[key], data[key].name);
         } else {
           formData.append(key, data[key]);
         }
