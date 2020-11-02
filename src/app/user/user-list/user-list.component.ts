@@ -84,7 +84,7 @@ export class UserListComponent implements OnInit {
   }
 
   openModal(content: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
 
       }, (reason) => {
@@ -101,7 +101,7 @@ export class UserListComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-  
+
   disMissMdodal() {
     if (this.modalService)
       this.modalService.dismissAll();

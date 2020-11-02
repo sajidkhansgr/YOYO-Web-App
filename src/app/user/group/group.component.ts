@@ -27,8 +27,8 @@ export class GroupComponent implements OnInit {
   groupForm!: FormGroup; grpDetail!: Group | null;
   disabled: boolean = false; loading: boolean = true; docLoading: boolean = true;
   selectable = true; removable = true;
-  selDiv: any = []; divNameInp: any;isEdit!: boolean;
-  @ViewChild("divName", {static: false}) set divName(el: ElementRef) {
+  selDiv: any = []; divNameInp: any; isEdit!: boolean;
+  @ViewChild("divName", { static: false }) set divName(el: ElementRef) {
     this.divNameInp = el;
   }
 
@@ -87,15 +87,15 @@ export class GroupComponent implements OnInit {
     });
   }
 
-  onSubmit(){
+  onSubmit() {
     if (this.groupForm.valid) {
       this.disabled = true;
       let grpData: any = {
         ...this.groupForm.value
       }
-      if(this.isEdit){
+      if (this.isEdit) {
         this.editGrp(grpData)
-      }else{
+      } else {
         this.addGrp(grpData);
       }
 
@@ -154,7 +154,7 @@ export class GroupComponent implements OnInit {
       this.grpDetail = grp;
       // this.getGroup(); //if more detail need then use this function
       this.docLoading = false;
-    }else{
+    } else {
       this.closeDoc();
     }
   }
@@ -180,14 +180,14 @@ export class GroupComponent implements OnInit {
   }
 
   displayFn = (div: any) => {
-    return (div && div.id)?div.name:'';
+    return (div && div.id) ? div.name : '';
   }
-  selDivIds(div: any){ //div - dvision
-    const index = this.selDiv.findIndex((ele:any) => ele.id==div.id);
+  selDivIds(div: any) { //div - dvision
+    const index = this.selDiv.findIndex((ele: any) => ele.id == div.id);
     if (index >= 0) {
       this.toastr.clear();
-      this.toastr.info("This division is already selected","Selected");
-    }else{
+      this.toastr.info("This division is already selected", "Selected");
+    } else {
       this.selDiv.push(div);
       // this.msgForm.controls['RecipientName'].setValue({});
       // this.divNameInp.nativeElement.value = '';
@@ -195,7 +195,7 @@ export class GroupComponent implements OnInit {
   }
 
   remove(div: any): void {
-    const index = this.selDiv.findIndex((ele:any) => ele.id==div.id);
+    const index = this.selDiv.findIndex((ele: any) => ele.id == div.id);
     if (index >= 0) {
       this.selDiv.splice(index, 1);
     }
@@ -210,14 +210,14 @@ export class GroupComponent implements OnInit {
   }
 
   openModal(content: any, type?: string) {
-    if(type==='edit'){
+    if (type === 'edit') {
       this.isEdit = true;
       this.groupForm.patchValue({ ...this.grpDetail }); // set form value
-    }else{
+    } else {
       this.isEdit = false;
       this.groupForm.reset();
     }
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
 
       }, (reason) => {

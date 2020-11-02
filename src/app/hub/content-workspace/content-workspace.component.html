@@ -922,7 +922,7 @@
         [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmartFolder">
         Edit Contained Smart Folders (0)
         <div class="float-right">
-          <ng-container *ngIf="editSmrtCollapsed; else elseIcon">
+          <ng-container *ngIf="!editSmrtCollapsed; else elseIcon">
             <i class="fa fa-angle-up"></i>
           </ng-container>
           <ng-template #elseIcon>
@@ -966,7 +966,7 @@
         [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder">
         Location
         <div class="float-right">
-          <ng-container *ngIf="locationCollapsed; else elseIcon">
+          <ng-container *ngIf="!locationCollapsed; else elseIcon">
             <i class="fa fa-angle-up"></i>
           </ng-container>
           <ng-template #elseIcon>
@@ -1037,10 +1037,11 @@
       <mat-checkbox class="d-block">Hide in Kiosk Mode</mat-checkbox>
     </div>
     <hr>
-    <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showSmartFolderSection()">
+    <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
+      [attr.aria-expanded]="!gnrlCollapsed" aria-controls="collapseExample">
       Smart Folder Settings
       <div class="float-right">
-        <ng-container *ngIf="dispSmFolderSec; else elseIcon">
+        <ng-container *ngIf="!gnrlCollapsed; else elseIcon">
           <i class="fa fa-angle-up"></i>
         </ng-container>
         <ng-template #elseIcon>
@@ -1048,9 +1049,9 @@
         </ng-template>
       </div>
     </div>
-    <div *ngIf="dispSmFolderSec">
+    <div [ngbCollapse]="gnrlCollapsed">
       <div class="card">
-        <div class="card-header row">
+        <div class="card-header row mx-auto w-100">
           <div class="dropdown mr-2">
             <button class="btn btn-light dropdown-toggle" type="button" id="fileTypeDD" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
@@ -1144,7 +1145,7 @@
             </div>
           </div>
         </div>
-        <div class="card-body row">
+        <div class="card-body row mx-auto w-100">
           <div class="col-4">
             Select the criteria for this smart folder, or:
           </div>

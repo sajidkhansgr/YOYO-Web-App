@@ -22,15 +22,7 @@ export class ExpInnerComponent implements OnInit {
   }
 
   openModal(content: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-
-    }, (reason) => {
-
-    });
-  }
-
-  openLgModal(content: any) {
-    this.modalService.open(content, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
 
     }, (reason) => {
 

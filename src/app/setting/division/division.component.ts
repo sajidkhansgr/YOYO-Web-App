@@ -28,9 +28,9 @@ export class DivisionComponent implements OnInit {
   ) {
     this.routerSubs = this.dataServ.currentInfo
       .subscribe((data: any) => {
-        if(this.hubs.length>0 && Array.isArray(data) && data.length>0){
+        if (this.hubs.length > 0 && Array.isArray(data) && data.length > 0) {
           this.hubs = data;
-          const index = this.hubs.findIndex(ele => ele.id==this.selHub!.id);
+          const index = this.hubs.findIndex(ele => ele.id == this.selHub!.id);
           if (index >= 0) {
             this.selHub = this.hubs[index];
           }
@@ -65,13 +65,13 @@ export class DivisionComponent implements OnInit {
 
   openModal(content: any, formType?: string) {
     this.type = formType;
-    if(this.type=='add' ||this.type=='edit'){
+    if (this.type == 'add' || this.type == 'edit') {
       this.hubForm.reset();
-      if(this.type=='edit'){
+      if (this.type == 'edit') {
         this.setHubVal();
       }
     }
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
       }, (reason) => {
       });
@@ -87,19 +87,19 @@ export class DivisionComponent implements OnInit {
     }
   }
 
-  setHubVal(){
-    this.hubForm.patchValue({...this!.selHub})
+  setHubVal() {
+    this.hubForm.patchValue({ ...this!.selHub })
   }
 
-  submit(){
-    if(this.hubForm.valid){
+  submit() {
+    if (this.hubForm.valid) {
       this.disabled = true;
       let hubData: any = {
         ...this.hubForm.value
       }
-      if(this.type=='add'){
+      if (this.type == 'add') {
         this.addHub(hubData);
-      }else{
+      } else {
         this.updHub(hubData);
       }
     }
@@ -111,13 +111,13 @@ export class DivisionComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.dataServ.passDataSend('hub-add');
-          this.toastr.success(data.message||'Hub added successfully', 'Success!');
+          this.toastr.success(data.message || 'Hub added successfully', 'Success!');
           this.disMissMdodal();
         } else {
           this.toastr.error('Unable to add Hub', 'Error!');
         }
         this.disabled = false;
-      }, (err:any) => {
+      }, (err: any) => {
         this.disabled = false;
       });
   }
@@ -129,26 +129,26 @@ export class DivisionComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.dataServ.passDataSend('hub-upd');
-          this.toastr.success(data.message||'Hub updated successfully', 'Success!');
+          this.toastr.success(data.message || 'Hub updated successfully', 'Success!');
           this.disMissMdodal();
         } else {
           this.toastr.error(data.result.data || 'Unable to update Hub', 'Error!');
         }
         this.disabled = false;
-      }, (err:any) => {
+      }, (err: any) => {
         this.disabled = false;
       });
   }
 
-  disMissMdodal(){
-    if(this.modalService)
+  disMissMdodal() {
+    if (this.modalService)
       this.modalService.dismissAll();
   }
 
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this.disMissMdodal();
-    if(!!this.routerSubs){
+    if (!!this.routerSubs) {
       this.routerSubs.unsubscribe();
     }
   }

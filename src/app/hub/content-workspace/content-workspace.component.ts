@@ -73,7 +73,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- folder ---- //
-  // delete folder > not working
+  // delete folder
   delFolder(id: any) {
     this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -84,14 +84,14 @@ export class ContentWorkspaceComponent implements OnInit {
     }).afterClosed().subscribe(result => {
       if (result) {
         this.cwServ.delFolder({ id: id })
-        .subscribe((data: any) => {
-          if (data) {
-            this.toastr.success(data.message || 'Folder deleted successfully', 'Success!');
-            this.getFolderList();
-          } else {
-            this.toastr.error('Unable to delete Folder', 'Error!');
-          }
-        });
+          .subscribe((data: any) => {
+            if (data) {
+              this.toastr.success(data.message || 'Folder deleted successfully', 'Success!');
+              this.getFolderList();
+            } else {
+              this.toastr.error('Unable to delete Folder', 'Error!');
+            }
+          });
       }
     })
   }
@@ -102,7 +102,6 @@ export class ContentWorkspaceComponent implements OnInit {
       let folderData: any = {
         ...this.addFolderForm.value,
         id: this.selFolder!.id,
-        // folderIcon: this.iconUrl,
         folderIcon: this.custIcon,
         workspaceId: this.selFolder!.workspaceId,
         folderId: 0
@@ -313,7 +312,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   openModal(content: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
 
       }, (reason) => {

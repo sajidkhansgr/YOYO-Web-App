@@ -27,7 +27,7 @@
                 <i class="fas fa-share-square"></i>
               </button>
               <div class="dropdown-menu" aria-labelledby="shareDD">
-                <a class="dropdown-item" (click)="openLgModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
                 <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
               </div>
             </div>
@@ -101,7 +101,7 @@
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item" (click)="openLgModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
                   <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
                 </div>
               </div>
@@ -138,7 +138,7 @@
   <div class="selected-items text-secondary align-self-center">1 item selected</div>
   <div class="mr-1 ml-3 align-self-center">|</div>
   <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
-  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openLgModal(email)"><i
+  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openModal(email)"><i
       class="fa fa-envelope mr-1"></i>Email</div>
   <div class="btn btn-light align-self-center bg-white" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i> a
     link</div>
