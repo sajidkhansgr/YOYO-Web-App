@@ -5,6 +5,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 import { DEF_ICON } from '../../shared/constants';
 import { FileDndHelper } from '../../shared/file-helper';
@@ -32,6 +33,15 @@ export class ContentWorkspaceComponent implements OnInit {
   disabled!: boolean;
   folderArr!: Folder[]; selFolder!: Folder | undefined;
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
+  visbCols: any[] = [{ n: "Role", key: "role", dir: 1, }];
+  hidCols: any[] = [{ n: "Property", key: "prop", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, },
+  { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }];
+  cols: any[] = [{ n: "Name", dir: 1, key: "name" }, { n: "Role", key: "role", dir: 1, }];
+  data: any[] = [
+    { name: "test", date: "19 Aug 2020", date2: "19 Aug 2020", role: "User" },
+    { name: "tes1t", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U1ser" },
+    { name: "tes2t", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U2ser" }
+  ];
 
   constructor(
     // private route: ActivatedRoute,
@@ -257,9 +267,35 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
+  // drag and drop
+  drop = (event: CdkDragDrop<string[]>) => {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
+  showHideCols = (col: any, type: string, i: number) => {
+    if (type === 'show') {
+      this.hidCols.splice(i, 1);
+      this.visbCols.push(col);
+    } else {
+      this.visbCols.splice(i, 1);
+      this.hidCols.push(col);
+    }
+  }
+  saveHdrChngs = (event: any) => {
+    let nData = this.cols.slice(0, 1);
+    this.cols = [...nData, ...this.visbCols];
+    this.closeDropdown(event);
+  }
+
   // outside click - dropdown
   outsideCloseDD = (dropdown: any, event: any) => {
-    if (dropdown!.classList.contains('show')) {
+    if (dropdown!.classList.contains('show') && !event.target!.classList.contains('fas')) {
       dropdown!.classList.remove('show');
     }
   }
@@ -271,6 +307,10 @@ export class ContentWorkspaceComponent implements OnInit {
     } else {
       event.target.nextSibling!.classList.toggle('show');
     }
+  }
+
+  closeDropdown = (event: any) => {
+    event.target.parentNode.parentNode!.classList.remove('show');
   }
 
   // toggle workspace
