@@ -17,7 +17,7 @@
     </div>
   </div>
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showDoc && !showWork, 'col-md-6': showDoc || showWork}">
+    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showDoc && !showWork, 'col-md-7': showDoc || showWork}">
       <div class="card overflow-hidden">
         <div class="card-header border-0">
           <mat-tab-group>
@@ -26,12 +26,11 @@
                 <h5 class="card-title px-3">
                   <div class="heading">
                     <div class="row mx-0 mb-3">
-                      <div class="dropdown mr-2">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="fileTypeDD"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(fileDropDown, $event)">
+                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                           File Type
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="fileTypeDD">
+                        <div class="dropdown-menu" #fileDropDown style="width:12rem;">
                           <mat-checkbox class="dropdown-item">Audio</mat-checkbox>
                           <mat-checkbox class="dropdown-item">Document</mat-checkbox>
                           <mat-checkbox class="dropdown-item">HTML Content</mat-checkbox>
@@ -40,23 +39,21 @@
                           <mat-checkbox class="dropdown-item">Video</mat-checkbox>
                         </div>
                       </div>
-                      <div class="dropdown mr-2">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(propertyDropDown, $event)">
+                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                           Property
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="propertyDD">
+                        <div class="dropdown-menu" #propertyDropDown style="width:14rem;">
                           <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
                           <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
                           <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
                         </div>
                       </div>
-                      <div class="dropdown mr-2">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(tagsDropDown, $event)">
+                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                           Tags
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="propertyDD" style="width:18rem;">
+                        <div class="dropdown-menu" #tagsDropDown style="width:18rem;">
                           <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
                             <mat-label>Match ALL of theese tags</mat-label>
                             <input matInput placeholder="Match ALL of theese tags">
@@ -71,12 +68,11 @@
                           </mat-form-field>
                         </div>
                       </div>
-                      <div class="dropdown mr-2">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(localeDropDown, $event)">
+                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                           Locale
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="propertyDD" style="width:18rem;">
+                        <div class="dropdown-menu" #localeDropDown style="width:18rem;">
                           <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
                             <mat-label>Match ALL of these languages</mat-label>
                             <input matInput placeholder="Match ALL of these languages" class="bg-white">
@@ -91,12 +87,11 @@
                           </mat-form-field>
                         </div>
                       </div>
-                      <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="authorDD" data-toggle="dropdown"
-                          aria-haspopup="true" aria-expanded="false">
+                      <div class="dropdown" (clickOutside)="outsideCloseDD(authorDropDown, $event)">
+                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                           Author
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="authorDD" style="width:18rem;">
+                        <div class="dropdown-menu" #authorDropDown style="width:18rem;">
                           <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
                             [floatLabel]="'never'">
                             <i matPrefix class="fas fa-search"></i>
@@ -192,6 +187,7 @@
                   <div class="pages">
                     <mat-form-field appearance="outline" class="mr-2">
                       <mat-select>
+                        <mat-option hidden></mat-option>
                         <mat-option value="10">10</mat-option>
                         <mat-option value="10">20</mat-option>
                       </mat-select>
@@ -222,7 +218,7 @@
         </div>
       </div>
     </div>
-    <div class="workspace-container col-md-6" *ngIf="showDoc || showWork">
+    <div class="workspace-container col-md-5" *ngIf="showDoc || showWork">
       <div class="document" *ngIf="showDoc">
         <div class="card">
           <div class="card-header row m-0">
@@ -623,7 +619,7 @@
               <h5>{{selWrkspc.name}}</h5>
               <hr>
               <div class="main row py-4" *ngIf="folderArr.length > 0">
-                <div class="col-3" *ngFor="let folder of folderArr">
+                <div class="col-4" *ngFor="let folder of folderArr">
                   <img src="assets/images/companyInfo.png" class="w-100">
                   <div class="dropdown">
                     <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"

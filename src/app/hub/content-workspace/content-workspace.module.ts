@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 import { FileProgessModule } from '../../shared/components/file-progess/file-progess.module';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
@@ -29,7 +30,8 @@ import { ContentWorkspaceService } from './content-workspace.service'
     FileProgessModule,
     LoaderModule,
     FormsModule, ReactiveFormsModule,
-    NgbCollapseModule
+    NgbCollapseModule,
+    ClickOutsideModule
   ],
   exports: [
     ContentWorkspaceComponent

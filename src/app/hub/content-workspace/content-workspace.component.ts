@@ -257,6 +257,22 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
+  // outside click - dropdown
+  outsideCloseDD = (dropdown: any, event: any) => {
+    if (dropdown!.classList.contains('show')) {
+      dropdown!.classList.remove('show');
+    }
+  }
+
+  // toggle dropdown
+  toggleDropdown = (event: any) => {
+    if (event.target!.classList.contains('fas')) {
+      event.target.parentNode.nextSibling!.classList.toggle('show');
+    } else {
+      event.target.nextSibling!.classList.toggle('show');
+    }
+  }
+
   // toggle workspace
   workspaceToggle = () => {
     this.showDoc = false;
