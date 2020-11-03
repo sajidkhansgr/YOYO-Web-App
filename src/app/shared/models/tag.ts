@@ -1,6 +1,10 @@
 export interface Tag {
   id: number;
   name: string;
-  categoryId: number;
+  categories: Array<number>;
   hubId: number;
+  createdDate: string;
+  updatedDate: string;
+  createdBy: string;
+  updatedBy: string;
 }

@@ -89,7 +89,7 @@ export class TagsComponent implements OnInit {
     });
     this.updTagForm = this.fb.group({
       name: ['', [Validators.required]],
-      categoryId: [''] // needs to be changed when multiple catgs api for tags is done
+      categories: [[]]
     });
     this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
     this.catgData = undefined;
@@ -123,10 +123,9 @@ export class TagsComponent implements OnInit {
       let tagData: any = {
         id: this.rowInfo.id,
         ...this.updTagForm.value,
-        // categoryId: 0,
         hubId: parseInt(this.hubid)
       };
-      // console.log(tagData);
+      console.log(tagData);
       // console.log(this.rowInfo);
       this.tagServ.updTag(tagData)
         .subscribe((data: any) => {
@@ -393,14 +392,20 @@ export class TagsComponent implements OnInit {
     this.showCatgIn = !this.showCatgIn;
   }
 
+  // toggle tags ---- needs change (bug at backend)
   toggleInfo(row: Tag) {
     if (this.showRowInfo && this.rowInfo.id == row.id) {
       this.showRowInfo = false;
       this.rowInfo = {};
     } else {
       this.rowInfo = row;
-      let catg = this.catgs!.filter(catg => catg.id == row.categoryId);
-      this.rowInfo.catgName = catg.length > 0 ? catg[0].name : 'No Categories';
+      // for (let i = 0; i < row.categories.length; i++) {
+      //   let catg = this.catgs!.filter(catg => catg.id == row.categories[i]);
+      //   this.rowInfo.catgName = catg.length > 0 ? catg[0].name : 'No Categories';
+      // }
+      // let catg = this.catgs!.filter(catg => catg.id == row.categoryId);
+      // this.rowInfo.catgName = catg.length > 0 ? catg[0].name : 'No Categories';
+      console.log(this.rowInfo);
       // console.log(row);
       // console.log(this.rowInfo);
       this.showRowInfo = true;

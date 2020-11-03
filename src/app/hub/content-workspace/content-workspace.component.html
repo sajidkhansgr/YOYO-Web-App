@@ -25,13 +25,108 @@
               <div class="card-body bg-white rounded-bottom px-0 pb-0">
                 <h5 class="card-title px-3">
                   <div class="heading">
+                    <div class="row mx-0 mb-3">
+                      <div class="dropdown mr-2">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="fileTypeDD"
+                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          File Type
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="fileTypeDD">
+                          <mat-checkbox class="dropdown-item">Audio</mat-checkbox>
+                          <mat-checkbox class="dropdown-item">Document</mat-checkbox>
+                          <mat-checkbox class="dropdown-item">HTML Content</mat-checkbox>
+                          <mat-checkbox class="dropdown-item">Photo</mat-checkbox>
+                          <mat-checkbox class="dropdown-item">URL</mat-checkbox>
+                          <mat-checkbox class="dropdown-item">Video</mat-checkbox>
+                        </div>
+                      </div>
+                      <div class="dropdown mr-2">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD"
+                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Property
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="propertyDD">
+                          <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
+                          <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
+                          <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
+                        </div>
+                      </div>
+                      <div class="dropdown mr-2">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD"
+                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Tags
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="propertyDD" style="width:18rem;">
+                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+                            <mat-label>Match ALL of theese tags</mat-label>
+                            <input matInput placeholder="Match ALL of theese tags">
+                          </mat-form-field>
+                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+                            <mat-label>Match ANY of theese tags</mat-label>
+                            <input matInput placeholder="Match ANY of theese tags">
+                          </mat-form-field>
+                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+                            <mat-label>Match NONE of theese tags</mat-label>
+                            <input matInput placeholder="Match NONE of theese tags">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="dropdown mr-2">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD"
+                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Locale
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="propertyDD" style="width:18rem;">
+                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+                            <mat-label>Match ALL of these languages</mat-label>
+                            <input matInput placeholder="Match ALL of these languages" class="bg-white">
+                          </mat-form-field>
+                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+                            <mat-label>Match ANY of these languages</mat-label>
+                            <input matInput placeholder="Match ANY of these languages">
+                          </mat-form-field>
+                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+                            <mat-label>Match NONE of theese languages</mat-label>
+                            <input matInput placeholder="Match NONE of theese languages">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="authorDD" data-toggle="dropdown"
+                          aria-haspopup="true" aria-expanded="false">
+                          Author
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="authorDD" style="width:18rem;">
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
+                            [floatLabel]="'never'">
+                            <i matPrefix class="fas fa-search"></i>
+                            <input matInput placeholder="Search ...">
+                          </mat-form-field>
+                          <div class="dropdown-divider"></div>
+                          <div class="row justify-content-around m-0">
+                            <button class="btn btn-light text-primary">Select all</button>
+                            <button class="btn btn-light">Clear all</button>
+                          </div>
+                          <div class="dropdown-divider"></div>
+                          <div style="max-height: 200px; overflow-y: auto;">
+                            <mat-checkbox class="dropdown-item">ABC (you)</mat-checkbox>
+                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
+                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
+                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
+                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
+                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
+                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="search">
                       <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
                         <i matPrefix class="fas fa-search"></i>
                         <input matInput placeholder="Search ...">
-                        <div matSuffix class="curs-ptr">
+                        <!-- <div matSuffix class="curs-ptr">
                           <i class="fas fa-sliders-h"></i>
-                        </div>
+                        </div> -->
                       </mat-form-field>
                     </div>
                   </div>

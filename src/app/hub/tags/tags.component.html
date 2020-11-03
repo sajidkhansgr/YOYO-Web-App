@@ -270,7 +270,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Organized in Categories</mat-label>
-        <mat-select formControlName="categoryId">
+        <mat-select formControlName="categories" multiple>
           <!-- multiple -->
           <mat-option *ngFor="let catg of catgs" [value]="catg.id">{{catg.name}}</mat-option>
         </mat-select>
