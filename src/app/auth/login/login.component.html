@@ -9,7 +9,7 @@
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email">
-          <i matSuffix class="secondary-text fas fa-user"></i>
+          <i matSuffix class="fas fa-envelope"></i>
           <mat-error *ngIf="loginForm.get('email')!.hasError('required')">
             Email is required
           </mat-error>
@@ -20,7 +20,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Password</mat-label>
-          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+          <input matInput [type]="hide?'password':'text'" formControlName="password">
           <i matSuffix (click)="hide = !hide" [ngClass]="{'fa-eye': hide, 'fa-eye-slash': !hide}" class="fas"></i>
           <mat-error>
             Password is required
