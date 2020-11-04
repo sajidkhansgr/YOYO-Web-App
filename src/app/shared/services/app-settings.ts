@@ -2,7 +2,7 @@ export class AppSettings {
 
   public static LOGIN = `api/User/Login`;
 
-  public static CHANGE_PASS = `api/Account/ChangePassword`;
+  public static CHANGE_PASS = `api/User/ChangePassword`;
 
   public static LIST_HUB = `api/Hub/GetAll`;
 
@@ -68,7 +68,7 @@ export class AppSettings {
 
   public static GET_ANNCMNT = `api/Announcement/GetById`;
 
-  public static FORG_PASS = `api/Account/ForgotPassword`;
+  public static FORG_PASS = `api/User/ForgotPassword`;
 
-  public static RESET_PASS = `api/Account/PasswordReset`;
+  public static RESET_PASS = `api/User/PasswordReset`; //get and post method both
 }

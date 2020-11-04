@@ -31,7 +31,7 @@ export class ForgotPasswordComponent implements OnInit {
 	forgotPassword() {
 		if (this.forgPassForm.valid) {
       this.disabled = true;
-      this.authSer.forgotPass({emailAddress: this.forgPassForm.value.email})
+      this.authSer.forgotPass(this.forgPassForm.value)
         .subscribe((data: any) => {
           this.disabled = false;
 

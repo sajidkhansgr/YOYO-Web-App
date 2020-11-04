@@ -10,7 +10,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/confirm-dialog.module';
 import { TagsComponent } from './tags.component';
-import { TagsService } from './tags.service'
+import { TagsService } from './tags.service';
 
 @NgModule({
   declarations: [TagsComponent],
