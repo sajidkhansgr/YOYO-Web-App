@@ -67,4 +67,8 @@ export class AppSettings {
   public static UPD_ANNCMNT = `api/Announcement/Update`;
 
   public static GET_ANNCMNT = `api/Announcement/GetById`;
+
+  public static FORG_PASS = `api/Account/ForgotPassword`;
+
+  public static RESET_PASS = `api/Account/PasswordReset`;
 }
