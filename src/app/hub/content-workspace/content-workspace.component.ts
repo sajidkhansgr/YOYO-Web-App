@@ -13,6 +13,7 @@ import { ContentWorkspaceService } from './content-workspace.service'
 import { WrkSpc } from '../../shared/models/workspace';
 import { Folder } from '../../shared/models/folder';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { PRPS } from '../../shared/constants';
 
 
 @Component({
@@ -33,15 +34,9 @@ export class ContentWorkspaceComponent implements OnInit {
   disabled!: boolean;
   folderArr!: Folder[]; selFolder!: Folder | undefined;
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
-  visbCols: any[] = [{ n: "Role", key: "role", dir: 1, }];
-  hidCols: any[] = [{ n: "Property", key: "prop", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, },
-  { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }];
-  cols: any[] = [{ n: "Name", dir: 1, key: "name" }, { n: "Role", key: "role", dir: 1, }];
-  data: any[] = [
-    { name: "test", date: "19 Aug 2020", date2: "19 Aug 2020", role: "User" },
-    { name: "tes1t", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U1ser" },
-    { name: "tes2t", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U2ser" }
-  ];
+  visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
+  props: any;
+  view!: boolean;
 
   constructor(
     // private route: ActivatedRoute,
@@ -80,6 +75,17 @@ export class ContentWorkspaceComponent implements OnInit {
     this.disabled = false;
     this.folderArr = []; this.selFolder = undefined;
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
+    this.visbCols = [{ n: "Role", key: "role", dir: 1, }];
+    this.hidCols = [{ n: "Property", key: "prop", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, },
+    { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }];
+    this.cols = [{ n: "Name", dir: 1, key: "name" }, { n: "Role", key: "role", dir: 1, }];
+    this.data = [
+      { name: "test", date: "19 Aug 2020", date2: "19 Aug 2020", role: "User" },
+      { name: "tes1t", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U1ser" },
+      { name: "tes2t", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U2ser" }
+    ];
+    this.props = PRPS;
+    this.view = true;
   }
 
   // ---- folder ---- //

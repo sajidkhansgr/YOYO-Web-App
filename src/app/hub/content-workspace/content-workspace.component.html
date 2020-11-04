@@ -25,9 +25,9 @@
               <div class="card-body bg-white rounded-bottom px-0 pb-0">
                 <h5 class="card-title px-3">
                   <div class="heading">
-                    <div class="float-right">
+                    <div class="float-right row mx-0">
                       <div class="dropdown" (clickOutside)="outsideCloseDD(cogDropDown, $event)">
-                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
+                        <button class="btn btn-light dropdown-toggle mr-2" (click)="toggleDropdown($event)">
                           <i class="fas fa-cog"></i>
                         </button>
                         <div class="cog dropdown-menu dropdown-menu-right" #cogDropDown>
@@ -66,14 +66,18 @@
                           </div>
                           <hr class="mb-2">
                           <div class="float-right mr-2">
-                            <button class="btn btn-secondary btn-sm mr-2" (click)=closeDropdown($event)>Cancel</button>
-                            <button class="btn btn-primary btn-sm" (click)=saveHdrChngs($event);>Save</button>
+                            <button class="btn btn-secondary btn-sm mr-2"
+                              (click)="closeDropdown($event)">Cancel</button>
+                            <button class="btn btn-primary btn-sm" (click)="saveHdrChngs($event)">Save</button>
                           </div>
                         </div>
                       </div>
+                      <div class="btn btn-light" (click)="view = !view">
+                        <i class="fa" [ngClass]="{'fa-th-large': view, 'fa-list-ul' : !view}"></i>
+                      </div>
                     </div>
                     <div class="row mx-0 mb-3">
-                      <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(fileDropDown, $event)">
+                      <div class="dropdown mr-2 mb-1" (clickOutside)="outsideCloseDD(fileDropDown, $event)">
                         <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                           File Type
                         </button>
@@ -86,17 +90,16 @@
                           <mat-checkbox class="dropdown-item">Video</mat-checkbox>
                         </div>
                       </div>
-                      <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(propertyDropDown, $event)">
+                      <div class="dropdown mr-2 mb-1" (clickOutside)="outsideCloseDD(propertyDropDown, $event)">
                         <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                           Property
                         </button>
-                        <div class="dropdown-menu" #propertyDropDown style="width:14rem;">
-                          <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
-                          <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
-                          <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
+                        <div class="dropdown-menu" #propertyDropDown style="width:18.5rem;">
+                          <mat-checkbox class="dropdown-item" *ngFor="let p of props" [attr.id]="p.id">{{p.name}}
+                          </mat-checkbox>
                         </div>
                       </div>
-                      <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(tagsDropDown, $event)">
+                      <div class="dropdown mr-2 mb-1" (clickOutside)="outsideCloseDD(tagsDropDown, $event)">
                         <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                           Tags
                         </button>
@@ -115,7 +118,7 @@
                           </mat-form-field>
                         </div>
                       </div>
-                      <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(localeDropDown, $event)">
+                      <div class="dropdown mr-2 mb-1" (clickOutside)="outsideCloseDD(localeDropDown, $event)">
                         <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                           Locale
                         </button>
@@ -134,7 +137,7 @@
                           </mat-form-field>
                         </div>
                       </div>
-                      <div class="dropdown" (clickOutside)="outsideCloseDD(authorDropDown, $event)">
+                      <div class="dropdown mb-1" (clickOutside)="outsideCloseDD(authorDropDown, $event)">
                         <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
                           Author
                         </button>
@@ -159,6 +162,12 @@
                             <mat-checkbox class="dropdown-item">def</mat-checkbox>
                             <mat-checkbox class="dropdown-item">def</mat-checkbox>
                           </div>
+                          <hr class="mb-2">
+                          <div class="float-right mr-2">
+                            <button class="btn btn-secondary btn-sm mr-2"
+                              (click)="closeDropdown($event)">Cancel</button>
+                            <button class="btn btn-primary btn-sm">Save</button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -174,7 +183,7 @@
                   </div>
                 </h5>
                 <div class="card-text px-3">
-                  <table class="table table-hover text-dark w-100" [class.hide-rows]="showDoc || showWork">
+                  <table class="table table-hover text-dark w-100" [class.hide-rows]="showDoc || showWork" *ngIf="view">
                     <thead>
                       <tr>
                         <th class="curs-ptr" *ngFor="let col of cols">
@@ -211,6 +220,13 @@
                       </tr>
                     </tbody>
                   </table>
+                  <div class="row justify-content-between" *ngIf="!view">
+                    <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-0" *ngFor="let d of data"
+                      (click)="documentToggle()" style="max-width:400px;">
+                      <img src="assets/images/discription.png" style="max-height:200px;">
+                      <div class="name bg-hi-grey rounded w-75 mx-auto px-2">{{d.name}}</div>
+                    </div>
+                  </div>
                 </div>
                 <div class="card-footer row justify-content-between mx-0">
                   <div class="pages">
