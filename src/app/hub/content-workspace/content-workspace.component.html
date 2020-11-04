@@ -578,10 +578,17 @@
                   <app-loader [type]="'div'"></app-loader> <!-- loader -->
                 </ng-container>
                 <ng-template #noLoading>
-                  <div class="overflow-auto" style="max-height:130px">
-                    <a class="dropdown-item curs-ptr" [ngClass]="{'active': selWrkspc == ws}" *ngFor="let ws of wrkspcs"
-                      (click)="selectWrkspc(ws)">{{ws.name}}</a>
-                  </div>
+                  <ng-container *ngIf="wrkspcs.length>0; else noWrkspc">
+                    <div class="overflow-auto" style="max-height:130px">
+                      <a class="dropdown-item curs-ptr" [ngClass]="{'active': selWrkspc == ws}"
+                        *ngFor="let ws of wrkspcs" (click)="selectWrkspc(ws)">{{ws.name}}</a>
+                    </div>
+                  </ng-container>
+                  <ng-template #noWrkspc>
+                    <div class="text-secondary text-center">
+                      No workspaces found
+                    </div>
+                  </ng-template>
                 </ng-template>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item curs-ptr" (click)="openModal(addWorkspace)">Create a new Workspace</a>

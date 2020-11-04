@@ -253,7 +253,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // list of workspaces
   getWrkspcList() {
     this.wrkspcLoading = true;
-    this.cwServ.wrkspcList({})
+    this.cwServ.wrkspcList({ hubid: this.hubid })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           // console.log(data);

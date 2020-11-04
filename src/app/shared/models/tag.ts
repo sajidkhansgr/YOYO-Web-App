@@ -7,4 +7,5 @@ export interface Tag {
   updatedDate: string;
   createdBy: string;
   updatedBy: string;
+  isActive: boolean;
 }
