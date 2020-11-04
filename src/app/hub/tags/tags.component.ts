@@ -64,9 +64,9 @@ export class TagsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.initialiseState();
     this.getCatgs();
     this.getTags();
-    this.initialiseState();
   }
 
   initialiseState() {
@@ -94,7 +94,7 @@ export class TagsComponent implements OnInit {
     this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
     this.catgData = undefined;
     this.catgs = []; this.tags = []; this.allTags = [];
-    this.pageNum = '0'; this.lmtPage = LMT_PAGE; this.pageSize = this.lmtPage[0];
+    this.pageNum = '1'; this.lmtPage = LMT_PAGE; this.pageSize = this.lmtPage[0];
     // numAllTags = 0; paginationNum = 0;
     this.tagNames = [];
     this.searchTxt = '';
@@ -125,7 +125,7 @@ export class TagsComponent implements OnInit {
         ...this.updTagForm.value,
         hubId: parseInt(this.hubid)
       };
-      console.log(tagData);
+      // console.log(tagData);
       // console.log(this.rowInfo);
       this.tagServ.updTag(tagData)
         .subscribe((data: any) => {
@@ -181,11 +181,20 @@ export class TagsComponent implements OnInit {
   // list of tags
   getTags() {
     this.tagLoading = true;
-    this.tagServ.tagList({ pageNo: this.pageNum, pageSize: this.pageSize, searchText: this.searchTxt, isAscending: this.isAsc, sortColumn: this.sortColumn })
+    let query = {
+      hubId: this.hubid,
+      pageNo: this.pageNum,
+      pageSize: this.pageSize,
+      searchText: this.searchTxt,
+      isAscending: this.isAsc,
+      sortColumn: this.sortColumn
+    }
+    console.log(query);
+    this.tagServ.tagList(query)
       .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          // console.log(data);
-          this.tags = data.result.results;
+        if (data && data.result && Array.isArray(data.result.lstTagViewModel) && data.result.lstTagViewModel.length > 0) {
+          console.log(data);
+          this.tags = data.result.lstTagViewModel;
         }
         this.tagLoading = false;
       }, (err: any) => {
@@ -222,7 +231,6 @@ export class TagsComponent implements OnInit {
     }
   }
 
-  // ******* need to be changed when api call for multiple add is done
   // add tags
   addTags() {
     if (this.tagNames.length > 0 && this.tagForm.valid) {
@@ -231,12 +239,11 @@ export class TagsComponent implements OnInit {
       for (let i = 0; i < this.tagNames.length; i++) {
         tagDataArr.push({
           name: this.tagNames[i],
-          categoryId: 0,
-          hubId: parseInt(this.hubid)
+          categoryId: 0
         });
       }
 
-      this.tagServ.addTag(tagDataArr)
+      this.tagServ.addTag({ lstTagDTO: tagDataArr, hubId: parseInt(this.hubid) })
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || 'Tags added successfully', 'Success!');
@@ -255,9 +262,11 @@ export class TagsComponent implements OnInit {
     }
   }
 
+  // -------- Category -------- //
+
   // list of categories
   getCatgs() {
-    this.tagServ.catgList({ pageNo: 0 })
+    this.tagServ.catgList({ hubId: this.hubid })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.catgs = data.result.results;
@@ -274,7 +283,9 @@ export class TagsComponent implements OnInit {
     if (this.catgForm.valid) {
       this.catgAddDisabled = true;
       let catgData: any = {
-        ...this.catgForm.value
+        ...this.catgForm.value,
+        hubId: parseInt(this.hubid),
+        isActive: true
       };
       this.tagServ.addCatg(catgData)
         .subscribe((data: any) => {
@@ -299,8 +310,9 @@ export class TagsComponent implements OnInit {
   updCatgModal(content: any, catg: Catg) {
     // this.getCatg(catg.id);
     this.catgData = catg;
-    this.updCatgForm.patchValue({ ...this.catgData }); // set form value
+    this.updCatgForm.patchValue({ ...this.catgData });
     this.openModal(content);
+    // console.log(catg);
   }
 
 
@@ -327,9 +339,11 @@ export class TagsComponent implements OnInit {
     if (this.updCatgForm.valid) {
       this.updDisabled = true;
       let catgData: any = {
-        ...this.updCatgForm.value
+        ...this.updCatgForm.value,
+        id: this.catgData!.id,
+        hubId: parseInt(this.hubid),
+        isActive: this.catgData!.isActive
       };
-      catgData.id = this.catgData!.id;
       // console.log(catgData);
       this.tagServ.updCatg(catgData)
         .subscribe((data: any) => {
