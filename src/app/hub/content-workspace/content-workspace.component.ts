@@ -185,6 +185,55 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- workspace ---- //
+  // activate workspace
+  actWrkspc(wrkspc: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to activate this workspace?`,
+        title: `Activate workspace`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.cwServ.wrkspcAct(wrkspc.id).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Workspace activated successfully', 'Success!');
+            // this.getWrkspcList();
+          } else {
+            this.toastr.error('Unable to activate workspace', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
+  // deactivate workspace
+  deactWrkspc(wrkspc: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to deactivate this workspace?`,
+        title: `Deactivate workspace`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // console.log(tag);
+        this.cwServ.wrkspcDeact(wrkspc.id).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Workspace deactivated successfully', 'Success!');
+            // this.getWrkspcList();
+          } else {
+            this.toastr.error('Unable to deactivate workspace', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
   // update workspace
   updWrkspc() {
     if (this.updWrkspcForm.valid) {

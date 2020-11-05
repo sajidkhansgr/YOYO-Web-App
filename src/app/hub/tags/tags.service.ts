@@ -11,11 +11,12 @@ export class TagsService {
     private http: HttpClient
   ) { }
   // -------- Tag --------
+  // activate tag
   tagAct(id: any) {
     return this.http.patch(`${AppSettings.ACT_TAG}?id=${id}`, {});
   }
 
-  // deactivate category
+  // deactivate tag
   tagDeact(id: any) {
     return this.http.patch(`${AppSettings.DEACT_TAG}?id=${id}`, {});
   }

@@ -40,6 +40,10 @@ export class AppSettings {
 
   public static GET_WRKSPC = `api/Workspace/GetById`;
 
+  public static DEACT_WRKSPC = `api/Workspace/Deactivate`;
+
+  public static ACT_WRKSPC = `api/Workspace/Activate`;
+
   public static LIST_FLDR_WRKSPC = `api/Folder/GetAllByWorkspace`;
 
   public static ADD_FLDR = `api/Folder/Add`;

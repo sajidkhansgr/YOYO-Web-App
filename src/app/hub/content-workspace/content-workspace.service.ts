@@ -73,6 +73,16 @@ export class ContentWorkspaceService {
   }
 
   // ---- workspace api's ---- //
+  // activate workspace
+  wrkspcAct(id: any) {
+    return this.http.patch(`${AppSettings.ACT_WRKSPC}?id=${id}`, {});
+  }
+
+  // deactivate workspace
+  wrkspcDeact(id: any) {
+    return this.http.patch(`${AppSettings.DEACT_WRKSPC}?id=${id}`, {});
+  }
+
   // get workspace list
   wrkspcList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();

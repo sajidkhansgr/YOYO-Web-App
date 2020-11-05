@@ -39,7 +39,6 @@ export class TagsComponent implements OnInit {
   }
   selTag!: string;
   loading!: boolean; tagLoading!: boolean;
-  showAddCatIp!: string;
   rowInfo: any;
   showRowInfo!: boolean;
   showCatgIn!: boolean;
@@ -73,7 +72,6 @@ export class TagsComponent implements OnInit {
     this.input = undefined; this.searInit = false;
     this.selTag = 'all';
     this.loading = true; this.tagLoading = true;
-    this.showAddCatIp = 'none';
     this.rowInfo = undefined;
     this.showRowInfo = false;
     this.showCatgIn = false;
@@ -288,7 +286,7 @@ export class TagsComponent implements OnInit {
       for (let i = 0; i < this.tagNames.length; i++) {
         tagDataArr.push({
           name: this.tagNames[i],
-          categoryId: 0
+          categories: [0]
         });
       }
 
