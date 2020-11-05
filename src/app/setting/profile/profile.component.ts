@@ -8,13 +8,13 @@ import { takeUntil } from 'rxjs/operators';
 
 import { CommonValidations } from '../../shared/validations/common-validations';
 import { PasswordService } from '../../shared/services/password.service';
+import { ChngPassComponent } from '../../shared/components/chng-pass/chng-pass.component';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  closeResult: any = '';
   chngPassForm!: FormGroup; passLoading: boolean = false;
   profileForm!: FormGroup; profLoading: boolean = false;
   hidePass = true; hideCPass = true; hideCurPass = true;
@@ -49,16 +49,16 @@ export class ProfileComponent implements OnInit {
       language: ['', [Validators.required]],
       timeZone: ['', [Validators.required]]
     });
-    this.chngPassForm = this.fb.group({
-      currPswd: ['', Validators.required],
-      pswd: ['', Validators.required],
-      confirmPswd: ['', [Validators.required, CommonValidations.MatchPassword]]
-    });
-    this.chngPassForm.get('pswd')!.valueChanges
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(() => {
-          this.chngPassForm.get('confirmPswd')!.updateValueAndValidity();
+      this.chngPassForm = this.fb.group({
+        currPswd: ['', Validators.required],
+        pswd: ['', Validators.required],
+        confirmPswd: ['', [Validators.required, CommonValidations.MatchPassword]]
       });
+      this.chngPassForm.get('pswd')!.valueChanges
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(() => {
+            this.chngPassForm.get('confirmPswd')!.updateValueAndValidity();
+        });
   }
 
   // change password
@@ -72,6 +72,10 @@ export class ProfileComponent implements OnInit {
       this.pswdServ.changePassword(passData)
         .subscribe((data: any) => {
           // console.log(data, 'data');
+          if(data){
+            this.toastr.success(data.message || 'Password changed successfully', 'Success!');
+            this.disMissMdodal();
+          }
           this.passLoading = false;
         }, (err: any) => {
           console.log(err, 'err')
@@ -90,22 +94,13 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  openModal(content: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  openModal(content: any, isChange?:any) {
+    this.modalService.open(isChange?ChngPassComponent:content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
+    .then((result: any) => {
+      console.log(`Closed with: ${result}`);
+    }, (reason: any) => {
+      console.log(`Dismissed ${(reason)}`);
     });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   disMissMdodal() {
