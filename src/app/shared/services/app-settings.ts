@@ -28,6 +28,10 @@ export class AppSettings {
 
   public static GET_TAG = `api/Tag/GetById`;
 
+  public static DEACT_TAG = `api/Tag/Deactivate`;
+
+  public static ACT_TAG = `api/Tag/Activate`;
+
   public static LIST_WRKSPC = `api/Workspace/GetAll`;
 
   public static ADD_WRKSPC = `api/Workspace/Add`;
@@ -55,6 +59,10 @@ export class AppSettings {
   public static UPD_CATG = `api/Category/Update`;
 
   public static GET_CATG = `api/Category/GetById`;
+
+  public static DEACT_CATG = `api/Category/Deactivate`;
+
+  public static ACT_CATG = `api/Category/Activate`;
 
   public static LIST_ANNOT = `api/Annotation/GetAll`;
 

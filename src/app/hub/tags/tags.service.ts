@@ -10,6 +10,15 @@ export class TagsService {
   constructor(
     private http: HttpClient
   ) { }
+  // -------- Tag --------
+  tagAct(id: any) {
+    return this.http.patch(`${AppSettings.ACT_TAG}?id=${id}`, {});
+  }
+
+  // deactivate category
+  tagDeact(id: any) {
+    return this.http.patch(`${AppSettings.DEACT_TAG}?id=${id}`, {});
+  }
 
   // update tag
   updTag(data: any) {
@@ -39,7 +48,17 @@ export class TagsService {
     return this.http.post(`${AppSettings.ADD_TAG}`, data)
   }
 
-  // ********
+  // ---------- Category ----------
+  // deactivate category
+  catgAct(id: any) {
+    return this.http.patch(`${AppSettings.ACT_CATG}?id=${id}`, {});
+  }
+
+  // deactivate category
+  catgDeact(id: any) {
+    return this.http.patch(`${AppSettings.DEACT_CATG}?id=${id}`, {});
+  }
+
   // list of categories
   catgList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;

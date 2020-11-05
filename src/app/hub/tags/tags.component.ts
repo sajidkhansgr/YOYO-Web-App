@@ -116,7 +116,57 @@ export class TagsComponent implements OnInit {
   //   this.paginationNum = Math.ceil(this.numAllTags / parseInt(this.pageSize));
   // }
 
-  // update tag => changes needed after update api is done
+  // activate tag
+  actTag(tag: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to activate this tag?`,
+        title: `Activate tag`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // console.log(tag);
+        this.tagServ.tagAct(tag.id).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Tag activated successfully', 'Success!');
+            this.getTags();
+          } else {
+            this.toastr.error('Unable to activate tag', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
+  // deactivate tag
+  deactTag(tag: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to deactivate this tag?`,
+        title: `Deactivate tag`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // console.log(tag);
+        this.tagServ.tagDeact(tag.id).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Tag deactivated successfully', 'Success!');
+            this.getTags();
+          } else {
+            this.toastr.error('Unable to deactivate tag', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
+  // update tag
   updTag() {
     if (this.updTagForm.valid) {
       this.updDisabled = true;
@@ -189,11 +239,10 @@ export class TagsComponent implements OnInit {
       isAscending: this.isAsc,
       sortColumn: this.sortColumn
     }
-    console.log(query);
+    // console.log(query);
     this.tagServ.tagList(query)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.lstTagViewModel) && data.result.lstTagViewModel.length > 0) {
-          console.log(data);
           this.tags = data.result.lstTagViewModel;
         }
         this.tagLoading = false;
@@ -263,6 +312,55 @@ export class TagsComponent implements OnInit {
   }
 
   // -------- Category -------- //
+  // activate category
+  actCatg(catg: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to activate this category?`,
+        title: `Activate category`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // console.log(catg);
+        this.tagServ.catgAct(catg.id).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Category activated successfully', 'Success!');
+            this.getCatgs();
+          } else {
+            this.toastr.error('Unable to activate category', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
+  // deactivate category
+  deactCatg(catg: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to deactivate this category?`,
+        title: `Deactivate category`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // console.log(catg);
+        this.tagServ.catgDeact(catg.id).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Category deactivated successfully', 'Success!');
+            this.getCatgs();
+          } else {
+            this.toastr.error('Unable to deactivate category', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
 
   // list of categories
   getCatgs() {
@@ -270,6 +368,7 @@ export class TagsComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.catgs = data.result.results;
+          // console.log(this.catgs);
         }
         this.loading = false;
       }, (err: any) => {
@@ -364,24 +463,9 @@ export class TagsComponent implements OnInit {
     }
   }
 
-  // delete category
-  delCatg(catg: any) {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to delete this category? You can't undo this action.?`,
-        title: `Delete category`
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-
-      }
-    })
-  }
-
   // open modal
   openModal(content: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'Update tag' }).result
+    this.modalService.open(content, { size: 'lg' }).result
       .then((result: any) => {
       }, (reason) => {
       });
@@ -420,8 +504,6 @@ export class TagsComponent implements OnInit {
       // let catg = this.catgs!.filter(catg => catg.id == row.categoryId);
       // this.rowInfo.catgName = catg.length > 0 ? catg[0].name : 'No Categories';
       console.log(this.rowInfo);
-      // console.log(row);
-      // console.log(this.rowInfo);
       this.showRowInfo = true;
     }
   }
