@@ -37,7 +37,7 @@
           <div class="card-header">
             Password
             <div class="float-right">
-              <i class="fas fa-edit curs-ptr" matTooltip="Edit Password" (click)="openModal(editPassword)"></i>
+              <i class="fas fa-edit curs-ptr" matTooltip="Edit Password" (click)="openModal('','chng-pass')"></i>
             </div>
           </div>
           <div class="card-body">
@@ -106,7 +106,7 @@
 </ng-template>
 
 <!-- edit password modal -->
-<ng-template #editPassword let-modal>
+<!-- <ng-template #editPassword let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Edit Password</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -146,9 +146,9 @@
    </div>
    <div class="modal-footer">
      <button class="btn btn-primary" [disabled]="chngPassForm!.invalid || passLoading">
-       <app-loader [type]="'btn'" *ngIf="passLoading"></app-loader> <!-- loader -->
+       <app-loader [type]="'btn'" *ngIf="passLoading"></app-loader>
        Update Password
      </button>
    </div>
   </form>
-</ng-template>
+</ng-template> -->

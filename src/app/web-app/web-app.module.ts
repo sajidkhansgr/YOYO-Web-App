@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { WebAppComponent } from './web-app.component';
+import { ChngPassModule } from '../shared/components/chng-pass/chng-pass.module';
 
 const routes: Routes = [
   {
@@ -11,7 +12,6 @@ const routes: Routes = [
         { path : 'experience', loadChildren: () => import('./exp/exp.module').then(m => m.ExpModule) },
         { path : 'share', loadChildren: () => import('./share/share.module').then(m => m.ShareModule) },
         { path : 'my-files', loadChildren: () => import('./files/files.module').then(m => m.FilesModule) },
-        { path : 'change-password', loadChildren: () => import('./chng-pass/chng-pass.module').then(m => m.ChngPassModule) },
         { path : 'personal-settings', loadChildren: () => import('./prsnl-sett/prsnl-sett.module').then(m => m.PrsnlSettModule) }
       ]
   }
@@ -21,7 +21,8 @@ const routes: Routes = [
   declarations: [WebAppComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ChngPassModule
   ]
 })
 export class WebAppModule { }

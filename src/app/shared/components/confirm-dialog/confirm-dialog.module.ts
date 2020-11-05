@@ -12,7 +12,7 @@ import { ConfirmDialogComponent } from './confirm-dialog.component';
     ],
     entryComponents: [
         ConfirmDialogComponent
-    ],
+    ]
 })
 export class ConfirmDialogModule {
 }

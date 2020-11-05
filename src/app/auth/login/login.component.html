@@ -27,6 +27,11 @@
           </mat-error>
         </mat-form-field>
         <div class="text-center">
+          <a class="float-right" [routerLink]="'/auth/forgot-password'">
+              Forgot Password?
+          </a>
+        </div>
+        <div class="text-center">
           <button aria-label="LOG IN" [disabled]="loginForm!.invalid || disabled" class="mt-2 btn btn-primary">
             <app-loader [type]="'btn'" *ngIf="disabled"></app-loader> <!-- loader -->
             LOGIN

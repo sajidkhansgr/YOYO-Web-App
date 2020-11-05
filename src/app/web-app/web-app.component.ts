@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenDataService } from '../shared/services/token-data.service';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
+import { ChngPassComponent } from '../shared/components/chng-pass/chng-pass.component';
 
 @Component({
   selector: 'app-web-app',
@@ -13,7 +16,8 @@ export class WebAppComponent implements OnInit {
   nav!: any; // for header
   userInfo: any | null;
   constructor(
-    private tokenDataServ: TokenDataService
+    private tokenDataServ: TokenDataService,
+    private modalService: NgbModal,
   ) { }
 
   ngOnInit(): void {
@@ -68,6 +72,24 @@ export class WebAppComponent implements OnInit {
     if (!parent!.contains(this.nav)) {
       parent!.appendChild(this.nav);
     }
+  }
+
+  openModal() {
+    this.modalService.open(ChngPassComponent, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
+    .then((result: any) => {
+      console.log(`Closed with: ${result}`);
+    }, (reason: any) => {
+      console.log(`Dismissed ${(reason)}`);
+    });
+  }
+  
+  disMissMdodal() {
+    if (this.modalService)
+      this.modalService.dismissAll();
+  }
+
+  ngOnDestroy(): void {
+    this.disMissMdodal();
   }
 
 }

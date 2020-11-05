@@ -14,6 +14,7 @@ export class AppComponent {
   isToken: boolean = false; isVisb: boolean = false;
   routerSubs: Subscription;
   usrInfo: any | null;
+  excUrls = ['login','forgot-password','forgot-password'];
 
   constructor(
     private tokenDataServ: TokenDataService,
@@ -40,7 +41,8 @@ export class AppComponent {
   }
 
   isAuthPage(): boolean {
-    return this.router.url.indexOf('auth/login') !== -1 || this.router.url.indexOf('login') !== -1 ? true : false;
+    return (this.excUrls.filter(sUrl => this.router.url.indexOf(sUrl)!== -1 || this.router.url.indexOf('auth/'+sUrl)!== -1).length>0)?true:false;
+    // return this.router.url.indexOf('auth/login') !== -1 || this.router.url.indexOf('login') !== -1 ? true : false;
   }
 
   isWebApp(): boolean {

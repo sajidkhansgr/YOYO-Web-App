@@ -9,6 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { LoaderModule } from '../../shared/components/loader/loader.module';
+import { ChngPassModule } from '../../shared/components/chng-pass/chng-pass.module';
 import { ProfileComponent } from './profile.component';
 import { PasswordService } from '../../shared/services/password.service';
 
@@ -23,7 +24,7 @@ const routes = [
     RouterModule.forChild(routes),
     FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatCheckboxModule, MatTooltipModule,
-    LoaderModule
+    LoaderModule, ChngPassModule
   ],
   exports: [ProfileComponent],
   providers: [PasswordService]

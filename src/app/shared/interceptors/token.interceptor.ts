@@ -17,7 +17,9 @@ export class TokenInterceptor implements HttpInterceptor {
         'Pragma': 'no-cache, no-store, must-revalidate',
         'If-Modified-Since': '0'
       };
-      if (request.url.includes('Login')) {
+      let excUrls = ['Login','ForgotPassword','ResetPassword'];
+
+      if(excUrls.filter(sUrl => request.url.includes(sUrl)).length>0){
         //no need of auth
       }else{
         headerParams = {
