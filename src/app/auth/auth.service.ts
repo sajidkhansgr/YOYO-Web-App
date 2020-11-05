@@ -15,18 +15,8 @@ export class AuthService {
         );
     }
 
-    forgotPass(data: any, params?: any) {
-      let queryParams = new HttpParams();
-      for(let key in params) {
-        if(params[key])
-          queryParams = queryParams.set(key, params[key]);
-      }
-      let url = `${AppSettings.FORG_PASS}`;
-      return this.http.post(
-        `${url}`, data,{
-            params: queryParams
-          }
-      );
+    forgotPass(data: any) {
+      return this.http.post( `${AppSettings.FORG_PASS}`, data );
     }
 
     resetPass(params: any) {

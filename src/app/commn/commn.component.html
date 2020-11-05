@@ -286,7 +286,8 @@
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value, 'selWrkSpcs')" [displayWith]="displayFn">
             <mat-option *ngFor="let wrkSpc of wrkSpcs" [value]="wrkSpc">
-                {{wrkSpc.name}}
+                 {{wrkSpc.name}} <br />
+                 <small *ngIf="wrkSpc.hub && wrkSpc.hub.name">{{wrkSpc.hub.name}}</small>
             </mat-option>
         </mat-autocomplete>
       </mat-form-field>

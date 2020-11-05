@@ -10,7 +10,9 @@ const routes: Routes = [
         { path : 'collections', loadChildren: () => import('./collection/collection.module').then(m => m.CollectionModule) },
         { path : 'experience', loadChildren: () => import('./exp/exp.module').then(m => m.ExpModule) },
         { path : 'share', loadChildren: () => import('./share/share.module').then(m => m.ShareModule) },
-        { path : 'my-files', loadChildren: () => import('./files/files.module').then(m => m.FilesModule) }
+        { path : 'my-files', loadChildren: () => import('./files/files.module').then(m => m.FilesModule) },
+        { path : 'change-password', loadChildren: () => import('./chng-pass/chng-pass.module').then(m => m.ChngPassModule) },
+        { path : 'personal-settings', loadChildren: () => import('./prsnl-sett/prsnl-sett.module').then(m => m.PrsnlSettModule) }
       ]
   }
 ];

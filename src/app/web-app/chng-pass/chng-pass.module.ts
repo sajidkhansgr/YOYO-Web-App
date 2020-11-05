@@ -1,31 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTooltipModule } from '@angular/material/tooltip';
-
-import { LoaderModule } from '../../shared/components/loader/loader.module';
-import { ProfileComponent } from './profile.component';
+import { ChngPassComponent } from './chng-pass.component';
 import { PasswordService } from '../../shared/services/password.service';
+import { LoaderModule } from '../../shared/components/loader/loader.module';
 
-const routes = [
-  { path: '', component: ProfileComponent }
+const routes: Routes = [
+  { path: '', component: ChngPassComponent }
 ];
 
 @NgModule({
-  declarations: [ProfileComponent],
+  declarations: [ChngPassComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     FormsModule, ReactiveFormsModule,
-    MatFormFieldModule, MatInputModule, MatSelectModule, MatCheckboxModule, MatTooltipModule,
+    MatFormFieldModule, MatInputModule, MatSelectModule,
     LoaderModule
   ],
-  exports: [ProfileComponent],
   providers: [PasswordService]
 })
-export class ProfileModule { }
+export class ChngPassModule { }
