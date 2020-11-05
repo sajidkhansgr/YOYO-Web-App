@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TIME, GRP_TYPE } from '../shared/constants';
 import { Anncmnt } from '../shared/models/anncmnt';
 import { Group } from '../shared/models/group';
-import { WrkSpc } from '../shared/models/workspace';
+import { Workspace } from '../shared/models/workspace';
 import { CommnService } from './commn.service'
 import { GroupService } from '../user/group/group.service';
 import { ContentWorkspaceService } from '../hub/content-workspace/content-workspace.service';
@@ -27,10 +27,10 @@ export class CommnComponent implements OnInit {
   ancmntData!: Anncmnt | undefined;
   anncmnts!: Anncmnt[];
   pageNum!: number; lmtPage!: Array<number>; pageSize!: number;
-  searchTxt!: string; time = TIME;grpType = GRP_TYPE;
-  selectable = true;removable: boolean=true;
-  grps: Group[]=[];selGrps: Group[] = [];
-  wrkSpcs: WrkSpc[]=[];selWrkSpcs: WrkSpc[] = [];
+  searchTxt!: string; time = TIME; grpType = GRP_TYPE;
+  selectable = true; removable: boolean = true;
+  grps: Group[] = []; selGrps: Group[] = [];
+  wrkSpcs: Workspace[] = []; selWrkSpcs: Workspace[] = [];
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
@@ -61,9 +61,9 @@ export class CommnComponent implements OnInit {
     });
   }
 
-  setFormData(isData?: any){
-    if(isData && isData.id){
-    }else{
+  setFormData(isData?: any) {
+    if (isData && isData.id) {
+    } else {
       this.ancmntForm.patchValue({
         subject: '', notifyByEmail: false, requestToUpdate: false,
         sendLater: false, sendToGroup: '', date: '', time: ''
@@ -166,15 +166,15 @@ export class CommnComponent implements OnInit {
     }
   }
 
-  changeGrp($event: any){
-    if($event.value==1){
+  changeGrp($event: any) {
+    if ($event.value == 1) {
       // usrGrps usrWrkSpcs
-      this.removeControl(['usrGrps','usrWrkSpcs']);
-    }else if($event.value==2){
+      this.removeControl(['usrGrps', 'usrWrkSpcs']);
+    } else if ($event.value == 2) {
       this.removeControl(['usrGrps']);
       this.addControls(['usrWrkSpcs']);
       this.getWrkSpcs();
-    }else{
+    } else {
       this.removeControl(['usrWrkSpcs']);
       this.addControls(['usrGrps']);
       this.getGroups();
@@ -182,45 +182,45 @@ export class CommnComponent implements OnInit {
     this.ancmntForm.updateValueAndValidity();
   }
 
-  removeControl(names: Array<string>){
-    for(let i=0;i<names.length;i++){
-      if(this.ancmntForm.controls[names[i]])
+  removeControl(names: Array<string>) {
+    for (let i = 0; i < names.length; i++) {
+      if (this.ancmntForm.controls[names[i]])
         this.ancmntForm.removeControl(names[i]);
     }
   }
 
-  addControls(names: Array<string>){
-    for(let i=0;i<names.length;i++){
-      if(!this.ancmntForm.controls[names[i]])
-        this.ancmntForm.addControl(names[i],new FormControl(''))
+  addControls(names: Array<string>) {
+    for (let i = 0; i < names.length; i++) {
+      if (!this.ancmntForm.controls[names[i]])
+        this.ancmntForm.addControl(names[i], new FormControl(''))
     }
   }
 
   getGroups() {
-    if(this.grps.length<=0){
+    if (this.grps.length <= 0) {
       this.grpServ.groupList({ pageNo: 0 })
-      .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          this.grps = data.result.results;
-        }else{
-        }
-      }, (err: any) => {
-        console.log(err);
-      });
+        .subscribe((data: any) => {
+          if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+            this.grps = data.result.results;
+          } else {
+          }
+        }, (err: any) => {
+          console.log(err);
+        });
     }
   }
 
   getWrkSpcs() {
-    if(this.wrkSpcs.length<=0){
+    if (this.wrkSpcs.length <= 0) {
       this.wrkSpcServ.wrkspcList({ pageNo: 0 })
-      .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          this.wrkSpcs = data.result.results;
-        }else{
-        }
-      }, (err: any) => {
-        console.log(err);
-      });
+        .subscribe((data: any) => {
+          if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+            this.wrkSpcs = data.result.results;
+          } else {
+          }
+        }, (err: any) => {
+          console.log(err);
+        });
     }
   }
 
@@ -232,7 +232,7 @@ export class CommnComponent implements OnInit {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this.toastr.clear();
-      this.toastr.info("This"+type==='selGrps'?'group':'workspace'+" is already selected", "Selected");
+      this.toastr.info("This" + type === 'selGrps' ? 'group' : 'workspace' + " is already selected", "Selected");
     } else {
       this[type].push(data);
     }

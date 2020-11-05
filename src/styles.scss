@@ -100,6 +100,12 @@ body {
 // }
 
 // material
+.input-bottom-padding-0 {
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
+
 mat-checkbox {
   label {
     margin-bottom: 0 !important;

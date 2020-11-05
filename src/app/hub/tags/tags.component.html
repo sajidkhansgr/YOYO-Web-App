@@ -17,14 +17,15 @@
           <hr>
           <div class="text-hi-dark-grey">
             Categories
-            <div class="float-right btn p-0" (click)="toggleCatgInp()"><i class="fa fa-plus-circle text-primary"></i>
+            <div class="float-right btn p-0" (click)="showCatgIn = !showCatgIn"><i
+                class="fa fa-plus-circle text-primary"></i>
             </div>
             <form name="catgForm" (ngSubmit)="addCatg()" [formGroup]="catgForm" novalidate *ngIf="showCatgIn">
               <mat-form-field appearance="outline" class="custom-mat-input sp-mat-input w-100 my-2 flex bg-white"
                 [floatLabel]="'never'">
                 <input matInput placeholder="Add Category" class="ml-0" formControlName="name" required>
                 <div matSuffix>
-                  <button type="submit" class="btn btn-secondary input-btn mr-1" (click)="toggleCatgInp()">
+                  <button type="submit" class="btn btn-secondary input-btn mr-1">
                     <i class="fas fa-times"></i>
                   </button>
                   <button type="submit" class="btn btn-primary input-btn"

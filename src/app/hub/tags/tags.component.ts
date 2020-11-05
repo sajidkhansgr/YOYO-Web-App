@@ -391,6 +391,7 @@ export class TagsComponent implements OnInit {
           if (data) {
             this.toastr.success(data.message || 'Category added successfully', 'Success!');
             this.getCatgs();
+            this.showCatgIn = false;
           } else {
             this.toastr.error('Unable to add Category', 'Error!');
           }
@@ -486,11 +487,7 @@ export class TagsComponent implements OnInit {
     }
   }
 
-  toggleCatgInp() {
-    this.showCatgIn = !this.showCatgIn;
-  }
-
-  // toggle tags ---- needs change (bug at backend)
+  // toggle tags ---- needs change (not receiving catgories in getAll)
   toggleInfo(row: Tag) {
     if (this.showRowInfo && this.rowInfo.id == row.id) {
       this.showRowInfo = false;

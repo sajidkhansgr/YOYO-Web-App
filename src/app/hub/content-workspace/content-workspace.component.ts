@@ -10,7 +10,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { DEF_ICON } from '../../shared/constants';
 import { FileDndHelper } from '../../shared/file-helper';
 import { ContentWorkspaceService } from './content-workspace.service'
-import { WrkSpc } from '../../shared/models/workspace';
+import { Workspace } from '../../shared/models/workspace';
 import { Folder } from '../../shared/models/folder';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { PRPS } from '../../shared/constants';
@@ -28,7 +28,7 @@ export class ContentWorkspaceComponent implements OnInit {
   defIcon: any = DEF_ICON; custIcon: any; files!: any[];
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
-  wrkspcs!: WrkSpc[]; selWrkspc!: WrkSpc | undefined;
+  wrkspcs!: Workspace[]; selWrkspc!: Workspace | undefined;
   wrkspcLoading!: boolean; folderLoading!: boolean;
   addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; addFolderForm!: FormGroup;
   disabled!: boolean;
@@ -244,7 +244,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // selected workspace
-  selectWrkspc(wrkspc: WrkSpc) {
+  selectWrkspc(wrkspc: Workspace) {
     this.selWrkspc = wrkspc;
     // console.log(wrkspc);
     this.getFolderList();
