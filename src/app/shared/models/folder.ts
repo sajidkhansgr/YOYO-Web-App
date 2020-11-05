@@ -4,9 +4,12 @@ export interface Folder {
   workspaceId: number;
   // createdDate: string;
   // updatedDate: string;
-  // createdByName: string;
-  // updatedByName: string;
+  // createdBy: string;
+  // updatedBy: string;
   description: string;
   hideLabelInWorkspace: boolean;
   folderIconPath: string;
+  folderIcon: string;
+  folderId: number;
+  isActive: boolean;
 }

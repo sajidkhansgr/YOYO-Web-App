@@ -17,7 +17,7 @@
     </div>
   </div>
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showDoc && !showWork, 'col-md-7': showDoc || showWork}">
+    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showDoc && !showWork, 'col-md-6': showDoc || showWork}">
       <div class="card overflow-hidden">
         <div class="card-header border-0">
           <mat-tab-group>
@@ -30,8 +30,8 @@
                         <button class="btn btn-light dropdown-toggle mr-2" (click)="toggleDropdown($event)">
                           <i class="fas fa-cog"></i>
                         </button>
-                        <div class="cog dropdown-menu dropdown-menu-right" #cogDropDown>
-                          <div class="scrollable">
+                        <div class="cog dropdown-menu dropdown-menu-right pt-0 overflow-hidden" #cogDropDown>
+                          <div class="scrollable py-2">
                             <span class="ml-2 heading">Visible Columns</span>
                             <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols"
                               class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]"
@@ -64,7 +64,7 @@
                               </span>
                             </ul>
                           </div>
-                          <hr class="mb-2">
+                          <hr class="mb-2 mt-0">
                           <div class="float-right mr-2">
                             <button class="btn btn-secondary btn-sm mr-2"
                               (click)="closeDropdown($event)">Cancel</button>
@@ -263,7 +263,7 @@
         </div>
       </div>
     </div>
-    <div class="workspace-container col-md-5" *ngIf="showDoc || showWork">
+    <div class="workspace-container col-md-6" *ngIf="showDoc || showWork">
       <div class="document" *ngIf="showDoc">
         <div class="card">
           <div class="card-header row m-0">
@@ -669,37 +669,40 @@
           <ng-container *ngIf="selWrkspc; else noWrkspc">
             <app-loader [type]="'page'" *ngIf="folderLoading"></app-loader>
             <div class="card-body" *ngIf="!folderLoading">
-              <h5>{{selWrkspc.name}}</h5>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-white mb-0 p-0">
+                  <li class="breadcrumb-item">{{selWrkspc.name}}</li>
+                  <li class="breadcrumb-item" *ngFor="let folNav of folderNav">{{folNav.name}}</li>
+                </ol>
+              </nav>
               <hr>
               <div class="main row py-4" *ngIf="folderArr.length > 0">
-                <div class="col-4" *ngFor="let folder of folderArr">
-                  <img src="assets/images/companyInfo.png" class="w-100">
+                <div class="col-3 curs-ptr" *ngFor="let folder of folderArr">
+                  <div (click)="changeFolder(folder)">
+                    <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}"
+                      class="w-100">
+                    <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
+                      *ngIf="!folder.hideLabelInWorkspace">
+                      {{folder.name}}
+                    </div>
+                  </div>
                   <div class="dropdown">
                     <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
                       data-toggle="dropdown">
                       <i class="fas fa-cog"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                      <a class="dropdown-item curs-ptr" (click)="editFolder(editFolderModal, folder)"><i
-                          class="fas fa-edit mr-1"></i>Edit
-                        Item</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
-                        Item</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
-                        Link</a>
-                      <a class="dropdown-item curs-ptr" (click)="delFolder(folder.id)"><i
-                          class="fas fa-trash-alt mr-1"></i>Delete
-                        Item</a>
-                      <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
-                        New
-                        Channel
-                        from
-                        Folder</a>
+                      <a class="dropdown-item curs-ptr" (click)="editFolder(editFolderModal, folder)">
+                        <i class="fas fa-edit mr-1"></i>Edit Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)">
+                        <i class="fas fa-clone mr-1"></i>Duplicate Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)">
+                        <i class="fas fa-link mr-1"></i>App Link</a>
+                      <a class="dropdown-item curs-ptr text-primary" (click)="delFolder(folder.id)">
+                        <i class="fas fa-trash-alt mr-1"></i>Delete Item</a>
+                      <a class="dropdown-item" href="javascript:void(0)">
+                        <i class="fas fa-folder-plus mr-1"></i>Create New Channel from Folder</a>
                     </div>
-                  </div>
-                  <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
-                    *ngIf="!folder.hideLabelInWorkspace">
-                    {{folder.name}}
                   </div>
                 </div>
                 <!-- <div class="col-3">
@@ -1006,7 +1009,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="addFolderForm" (ngSubmit)="editFolderFunc()" [formGroup]="addFolderForm" novalidate>
+  <form name="addFolderForm" (ngSubmit)="updFolder()" [formGroup]="addFolderForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
         [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
@@ -1126,7 +1129,10 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-primary" [disabled]="addFolderForm!.invalid || disabled">
+        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+        Save
+      </button>
     </div>
   </form>
 </ng-template>

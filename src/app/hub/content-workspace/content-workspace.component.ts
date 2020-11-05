@@ -28,11 +28,11 @@ export class ContentWorkspaceComponent implements OnInit {
   defIcon: any = DEF_ICON; custIcon: any; files!: any[];
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
-  wrkspcs!: Workspace[]; selWrkspc!: Workspace | undefined;
+  wrkspcs!: Workspace[]; selWrkspc: Workspace | undefined;
   wrkspcLoading!: boolean; folderLoading!: boolean;
   addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; addFolderForm!: FormGroup;
   disabled!: boolean;
-  folderArr!: Folder[]; selFolder!: Folder | undefined;
+  folderArr!: Folder[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
   props: any;
@@ -73,7 +73,7 @@ export class ContentWorkspaceComponent implements OnInit {
       hideLabelInWorkspace: ['true']
     });
     this.disabled = false;
-    this.folderArr = []; this.selFolder = undefined;
+    this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
     this.visbCols = [{ n: "Role", key: "role", dir: 1, }];
     this.hidCols = [{ n: "Property", key: "prop", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, },
@@ -89,6 +89,14 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- folder ---- //
+  // change folder (show sub folders)
+  changeFolder(folder: any) {
+    this.dispFolder = folder;
+    this.folderNav.push(folder);
+    // console.log(folder);
+    this.getFolderList();
+  }
+
   // delete folder
   delFolder(id: any) {
     this.dialog.open(ConfirmDialogComponent, {
@@ -99,33 +107,46 @@ export class ContentWorkspaceComponent implements OnInit {
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.cwServ.delFolder({ id: id })
-          .subscribe((data: any) => {
-            if (data) {
-              this.toastr.success(data.message || 'Folder deleted successfully', 'Success!');
-              this.getFolderList();
-            } else {
-              this.toastr.error('Unable to delete Folder', 'Error!');
-            }
-          });
+        // this.cwServ.delFolder({ id: id })
+        //   .subscribe((data: any) => {
+        //     if (data) {
+        //       this.toastr.success(data.message || 'Folder deleted successfully', 'Success!');
+        //       this.getFolderList();
+        //     } else {
+        //       this.toastr.error('Unable to delete Folder', 'Error!');
+        //     }
+        //   });
       }
     })
   }
 
-  // edit folder > not working
-  editFolderFunc() {
+  // edit folder
+  updFolder() {
     if (this.addFolderForm.valid) {
+      this.disabled = true;
       let folderData: any = {
         ...this.addFolderForm.value,
         id: this.selFolder!.id,
         folderIcon: this.custIcon,
         workspaceId: this.selFolder!.workspaceId,
-        folderId: 0
+        folderId: 0,
+        isActive: this.selFolder!.isActive
       };
       // console.log(this.selFolder);
-      console.log(folderData);
+      // console.log(folderData);
       this.cwServ.updFolder(folderData).subscribe((data: any) => {
-        console.log(data);
+        // console.log(data);
+        if (data) {
+          this.toastr.success(data.message || 'Folder added successfully', 'Success!');
+          this.getFolderList();
+        } else {
+          this.toastr.error('Unable to add Folder', 'Error!');
+        }
+        this.disabled = false;
+        this.dismissModal();
+      }, (err: any) => {
+        this.disabled = false;
+        this.dismissModal();
       });
     }
   }
@@ -142,15 +163,16 @@ export class ContentWorkspaceComponent implements OnInit {
     if (this.addFolderForm.valid) {
       this.disabled = true;
       let folderData: any = {
-        id: 0, // bug at backend, not needed when bug fixed
         ...this.addFolderForm.value,
         folderIcon: this.custIcon,
         workspaceId: this.selWrkspc!.id,
-        folderId: 0
+        folderId: 0,
+        isActive: true
       };
+      // console.log(folderData);
       this.cwServ.addFolder(folderData)
         .subscribe((data: any) => {
-          console.log(data);
+          // console.log(data);
           if (data) {
             this.toastr.success(data.message || 'Folder added successfully', 'Success!');
             this.getFolderList();
@@ -170,7 +192,12 @@ export class ContentWorkspaceComponent implements OnInit {
   // get list of folders
   getFolderList() {
     this.folderLoading = true;
-    this.cwServ.folderListWrkspc({ workspaceId: this.selWrkspc!.id }).subscribe((data: any) => {
+    let query = {
+      workspaceId: this.selWrkspc!.id,
+      folderId: this.dispFolder ? this.dispFolder!.id : null
+    };
+    console.log(query);
+    this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         this.folderArr = data.result.results;
         // console.log(this.folderArr);
@@ -178,8 +205,10 @@ export class ContentWorkspaceComponent implements OnInit {
         this.folderArr = [];
         this.toastr.error('No folders found', 'Error!');
       }
+      this.dispFolder = undefined;
       this.folderLoading = false;
     }, (err: any) => {
+      this.dispFolder = undefined;
       this.folderLoading = false;
     });
   }
@@ -296,6 +325,7 @@ export class ContentWorkspaceComponent implements OnInit {
   selectWrkspc(wrkspc: Workspace) {
     this.selWrkspc = wrkspc;
     // console.log(wrkspc);
+    this.folderNav = [];
     this.getFolderList();
   }
 

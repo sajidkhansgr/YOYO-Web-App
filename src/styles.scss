@@ -796,18 +796,18 @@ header {
   }
 
   .main {
-    .col-4 {
+    .col-3 {
       position: relative;
 
       .dropdown {
         position: absolute;
         top: 2.7rem;
-        left: 3.1rem;
+        left: 2.7rem;
         opacity: 0;
       }
     }
 
-    .col-4:hover {
+    .col-3:hover {
       .dropdown {
         opacity: 1;
       }
