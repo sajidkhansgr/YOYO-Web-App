@@ -60,7 +60,7 @@ export class ResetPasswordComponent implements OnInit {
       // console.log(this.token);
       // if(this.token)
       //   passData.token = encodeURIComponent(this.token);
-      console.log(passData);
+      // console.log(passData);
       this.authSer.resetPass(passData)
         .subscribe((data: any) => {
           // console.log(data, 'data');
@@ -72,7 +72,7 @@ export class ResetPasswordComponent implements OnInit {
           }
           this.loading = false;
         }, (err: any) => {
-          console.log(err, 'err');
+          // console.log(err, 'err');
           this.loading = false;
         })
     }
