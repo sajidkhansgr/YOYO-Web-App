@@ -30,7 +30,7 @@ export class ContentWorkspaceComponent implements OnInit {
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: Workspace[]; selWrkspc: Workspace | undefined;
   wrkspcLoading!: boolean; folderLoading!: boolean;
-  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; addFolderForm!: FormGroup;
+  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; addFolderForm!: FormGroup; addSmartFolderForm!: FormGroup;
   disabled!: boolean;
   folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
@@ -69,8 +69,14 @@ export class ContentWorkspaceComponent implements OnInit {
     this.addFolderForm = this.fb.group({
       name: ['', [Validators.required]],
       description: [''],
-      // folderIcon: [''],
       hideLabelInWorkspace: ['true']
+    });
+    this.addSmartFolderForm = this.fb.group({
+      name: ['', [Validators.required]],
+      description: [''],
+      hideLabelInWorkspace: ['true'],
+      limitNoOfFiles: ['']
+      // more feilds need to be added
     });
     this.disabled = false;
     this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
@@ -90,35 +96,68 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // listing all folders
   listFolders() {
+    this.folderLoading = true;
     this.folderArr = [];
     this.getFolderList();
-    this.getSmtFolderList();
+    this.getSmartFolderList();
     // setTimeout(() => {
     //   console.log(this.folderArr)
     // }, 1000)
   }
 
   // ---- smart folder ---- //
-  // get list of folders
-  getSmtFolderList() {
+  // add folder
+  addSmartFolder() {
+    if (this.addSmartFolderForm.valid) {
+      this.disabled = true;
+      let folderData: any = {
+        ...this.addSmartFolderForm.value,
+        smartFolderIcon: this.custIcon,
+        workspaceId: this.selWrkspc!.id,
+        folderId: 0,
+        isActive: true,
+        propertyIds: 1
+      };
+      // console.log(folderData);
+      this.cwServ.addSmartFolder(folderData)
+        .subscribe((data: any) => {
+          // console.log(data);
+          if (data) {
+            this.toastr.success(data.message || 'Smart Folder added successfully', 'Success!');
+            this.listFolders();
+          } else {
+            this.toastr.error('Unable to add smart folder', 'Error!');
+          }
+          this.disabled = false;
+          this.dismissModal();
+        }, (err: any) => {
+          console.log(err);
+          this.disabled = false;
+          this.dismissModal();
+        });
+    }
+  }
+
+  // get list of smart folders
+  getSmartFolderList() {
     // this.folderLoading = true;
     let query = {
       workspaceId: this.selWrkspc!.id,
       folderId: this.dispFolder ? this.dispFolder!.id : null
     };
     // console.log(query);
-    this.cwServ.smtFolderListWrkspc(query).subscribe((data: any) => {
+    this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         for (let i = 0; i < data.result.results.length; i++) {
-          this.folderArr.push({ data: data.result.results[i], key: 'smtFldr' });
+          this.folderArr.push({ ...data.result.results[i], key: 'smtFldr' });
         }
         console.log(this.folderArr);
       } else {
         // this.folderArr = [];
         // this.toastr.error('No smart folders found', 'Error!');
       }
-      this.dispFolder = undefined;
-      this.folderLoading = false;
+      this.dispFolder = undefined;  // need changes
+      this.folderLoading = false;  // need changes
     }, (err: any) => {
       this.dispFolder = undefined;
       this.folderLoading = false;
@@ -229,7 +268,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // add folder
-  addFolderFunc() {
+  addFolder() {
     if (this.addFolderForm.valid) {
       this.disabled = true;
       let folderData: any = {
@@ -261,7 +300,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // get list of folders
   getFolderList() {
-    this.folderLoading = true;
+    // this.folderLoading = true;
     let query = {
       workspaceId: this.selWrkspc!.id,
       folderId: this.dispFolder ? this.dispFolder!.id : null
@@ -270,7 +309,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         for (let i = 0; i < data.result.results.length; i++) {
-          this.folderArr.push({ data: data.result.results[i], key: 'fldr' });
+          this.folderArr.push({ ...data.result.results[i], key: 'fldr' });
         }
         // console.log(this.folderArr);
       } else {
