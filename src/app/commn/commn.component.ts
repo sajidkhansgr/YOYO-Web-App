@@ -77,14 +77,12 @@ export class CommnComponent implements OnInit {
     this.commnServ.anncmntList({ pageNo: this.pageNum, pageSize: this.pageSize, searchText: this.searchTxt })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          console.log(data);
           this.anncmnts = data.result.results;
         } else {
           this.anncmnts = [];
         }
         this.loading = false;
       }, (err: any) => {
-        console.log(err);
         this.loading = false;
       });
   }
@@ -97,7 +95,6 @@ export class CommnComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.ancmntForm, "this.ancmntForm")
     if (this.ancmntForm.valid) {
       this.disabled = true;
       let anncmntData: any = {

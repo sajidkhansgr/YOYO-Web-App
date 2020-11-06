@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authSer.login(this.loginForm.value)
         .subscribe((data: any) => {
-          // console.log(data, 'data');
           if (data && data.result && data.result.token && data.result.id) {
             this.tokenDataServ.setTokenAndUser(data.result);
             this.toastr.success('Login successfully', 'Success');

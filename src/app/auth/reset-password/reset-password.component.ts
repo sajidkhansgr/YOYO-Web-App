@@ -57,13 +57,8 @@ export class ResetPasswordComponent implements OnInit {
         password: this.resetPassForm.value.pswd,
         confirmPassword: this.resetPassForm.value.confirmPswd
       };
-      // console.log(this.token);
-      // if(this.token)
-      //   passData.token = encodeURIComponent(this.token);
-      // console.log(passData);
       this.authSer.resetPass(passData)
         .subscribe((data: any) => {
-          // console.log(data, 'data');
           if(data){
             this.toastr.success(data.message||"Password reset successfully", 'Success');
             this.router.navigate(['/auth/login']);
