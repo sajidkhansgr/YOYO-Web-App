@@ -18,7 +18,7 @@
             Please enter a valid email address
           </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline" class="w-100 input-bottom-padding-0">
+        <mat-form-field appearance="outline" class="w-100">
           <mat-label>Password</mat-label>
           <input matInput [type]="hide?'password':'text'" formControlName="password" required>
           <i matSuffix (click)="hide = !hide" [ngClass]="{'fa-eye': hide, 'fa-eye-slash': !hide}" class="fas"></i>
