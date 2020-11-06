@@ -86,5 +86,5 @@ export class AppSettings {
 
   public static FORG_PASS = `api/User/ForgotPassword`;
 
-  public static RESET_PASS = `api/User/PasswordReset`; //get and post method both
+  public static RESET_PASS = `api/User/ResetPassword`; //get and post method both
 }

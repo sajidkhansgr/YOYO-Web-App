@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
             let nav= HttpHelper.redirectToUrl(this.redirectUrl);
             this.router.navigate([nav]);
           } else {
-            this.toastr.error(HttpHelper.errMessage(data) || 'Please check email or password!', 'Error!');
+            this.toastr.error(data.message || 'Please check email or password!', 'Error!');
             this.disabled = false;
           }
         }, (err: any) => {
