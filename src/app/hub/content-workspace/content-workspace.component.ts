@@ -32,7 +32,7 @@ export class ContentWorkspaceComponent implements OnInit {
   wrkspcLoading!: boolean; folderLoading!: boolean;
   addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; addFolderForm!: FormGroup;
   disabled!: boolean;
-  folderArr!: Folder[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[];
+  folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
   props: any;
@@ -88,6 +88,43 @@ export class ContentWorkspaceComponent implements OnInit {
     this.view = true;
   }
 
+  // listing all folders
+  listFolders() {
+    this.folderArr = [];
+    this.getFolderList();
+    this.getSmtFolderList();
+    // setTimeout(() => {
+    //   console.log(this.folderArr)
+    // }, 1000)
+  }
+
+  // ---- smart folder ---- //
+  // get list of folders
+  getSmtFolderList() {
+    // this.folderLoading = true;
+    let query = {
+      workspaceId: this.selWrkspc!.id,
+      folderId: this.dispFolder ? this.dispFolder!.id : null
+    };
+    // console.log(query);
+    this.cwServ.smtFolderListWrkspc(query).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        for (let i = 0; i < data.result.results.length; i++) {
+          this.folderArr.push({ data: data.result.results[i], key: 'smtFldr' });
+        }
+        console.log(this.folderArr);
+      } else {
+        // this.folderArr = [];
+        // this.toastr.error('No smart folders found', 'Error!');
+      }
+      this.dispFolder = undefined;
+      this.folderLoading = false;
+    }, (err: any) => {
+      this.dispFolder = undefined;
+      this.folderLoading = false;
+    });
+  }
+
   // ---- folder ---- //
   // activate folder
   actFolder(folder: any) {
@@ -102,7 +139,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.cwServ.folderAct(folder.id).subscribe((data: any) => {
           if (data) {
             this.toastr.success('Folder activated successfully', 'Success!');
-            this.getFolderList();
+            this.listFolders()
           } else {
             this.toastr.error('Unable to activate folder', 'Error!');
           }
@@ -113,7 +150,7 @@ export class ContentWorkspaceComponent implements OnInit {
     })
   }
 
-  // deactivate workspace
+  // deactivate folder
   deactFolder(folder: any) {
     this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -127,7 +164,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.cwServ.folderDeact(folder.id).subscribe((data: any) => {
           if (data) {
             this.toastr.success('Folder deactivated successfully', 'Success!');
-            this.getFolderList();
+            this.listFolders()
           } else {
             this.toastr.error('Unable to deactivate folder', 'Error!');
           }
@@ -141,7 +178,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // back nav folder
   backFolder() {
     this.folderNav.pop();
-    this.getFolderList();
+    this.listFolders()
   }
 
   // change folder (show sub folders)
@@ -149,7 +186,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.dispFolder = folder;
     this.folderNav.push(folder);
     // console.log(folder);
-    this.getFolderList();
+    this.listFolders()
   }
 
   // edit folder
@@ -170,7 +207,7 @@ export class ContentWorkspaceComponent implements OnInit {
         // console.log(data);
         if (data) {
           this.toastr.success(data.message || 'Folder added successfully', 'Success!');
-          this.getFolderList();
+          this.listFolders()
         } else {
           this.toastr.error('Unable to add Folder', 'Error!');
         }
@@ -208,7 +245,7 @@ export class ContentWorkspaceComponent implements OnInit {
           // console.log(data);
           if (data) {
             this.toastr.success(data.message || 'Folder added successfully', 'Success!');
-            this.getFolderList();
+            this.listFolders()
           } else {
             this.toastr.error('Unable to add Folder', 'Error!');
           }
@@ -232,17 +269,19 @@ export class ContentWorkspaceComponent implements OnInit {
     // console.log(query);
     this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-        this.folderArr = data.result.results;
+        for (let i = 0; i < data.result.results.length; i++) {
+          this.folderArr.push({ data: data.result.results[i], key: 'fldr' });
+        }
         // console.log(this.folderArr);
       } else {
-        this.folderArr = [];
-        this.toastr.error('No folders found', 'Error!');
+        // this.folderArr = [];
+        // this.toastr.error('No folders found', 'Error!');
       }
-      this.dispFolder = undefined;
-      this.folderLoading = false;
+      // this.dispFolder = undefined;
+      // this.folderLoading = false;
     }, (err: any) => {
-      this.dispFolder = undefined;
-      this.folderLoading = false;
+      // this.dispFolder = undefined;
+      // this.folderLoading = false;
     });
   }
 
@@ -359,7 +398,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.selWrkspc = wrkspc;
     // console.log(wrkspc);
     this.folderNav = [];
-    this.getFolderList();
+    this.listFolders()
   }
 
   // list of workspaces

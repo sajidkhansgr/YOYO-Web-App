@@ -680,12 +680,13 @@
               <hr>
               <div class="main row py-4" *ngIf="folderArr.length > 0">
                 <div class="col-3 curs-ptr" *ngFor="let folder of folderArr">
-                  <div (click)="changeFolder(folder)">
-                    <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}"
+                  <div (click)="changeFolder(folder.data)">
+                    <img
+                      src="{{folder.data.folderIconPath ? folder.data.folderIconPath : 'assets/images/folderIcon.png'}}"
                       class="w-100">
                     <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
-                      *ngIf="!folder.hideLabelInWorkspace">
-                      {{folder.name}}
+                      *ngIf="!folder.data.hideLabelInWorkspace">
+                      {{folder.data.name}}
                     </div>
                   </div>
                   <div class="dropdown">
@@ -694,16 +695,16 @@
                       <i class="fas fa-cog"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                      <a class="dropdown-item curs-ptr" (click)="editFolder(editFolderModal, folder)">
+                      <a class="dropdown-item curs-ptr" (click)="editFolder(editFolderModal, folder.data)">
                         <i class="fas fa-edit mr-1"></i>Edit Item</a>
                       <a class="dropdown-item" href="javascript:void(0)">
                         <i class="fas fa-clone mr-1"></i>Duplicate Folder</a>
                       <a class="dropdown-item" href="javascript:void(0)">
                         <i class="fas fa-link mr-1"></i>App Link</a>
-                      <a class="dropdown-item curs-ptr" (click)="actFolder(folder)" *ngIf="!folder.isActive">
+                      <a class="dropdown-item curs-ptr" (click)="actFolder(folder.data)" *ngIf="!folder.data.isActive">
                         <i class="fas fa-trash-alt mr-1"></i>Activate Folder</a>
-                      <a class="dropdown-item curs-ptr text-primary" (click)="deactFolder(folder)"
-                        *ngIf="folder.isActive">
+                      <a class="dropdown-item curs-ptr text-primary" (click)="deactFolder(folder.data)"
+                        *ngIf="folder.data.isActive">
                         <i class="fas fa-trash-alt mr-1"></i>Deactivate Folder</a>
                       <a class="dropdown-item" href="javascript:void(0)">
                         <i class="fas fa-folder-plus mr-1"></i>Create New Channel from Folder</a>

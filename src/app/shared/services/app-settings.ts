@@ -75,7 +75,7 @@ export class AppSettings {
 
   // ---- SMART FOLDER ---- //
 
-  public static SMT_FLDR_WRKSPC = `api/SmartFolder/GetAllByWorkspace`;
+  public static LIST_SMT_FLDR_WRKSPC = `api/SmartFolder/GetAllByWorkspace`;
 
   public static ADD_SMT_FLDR = `api/SmartFolder/Add`;
 

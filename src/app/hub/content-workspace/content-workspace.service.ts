@@ -10,7 +10,27 @@ export class ContentWorkspaceService {
   constructor(
     private http: HttpClient
   ) { }
-  // ---- folder api's ---- //
+
+  // ---- smart folder ---- //
+  // get smart folder list
+  smtFolderListWrkspc(params: any): Observable<any[]> {
+    let queryParams = new HttpParams();
+    for (let key in params) {
+      if (params[key]) {
+        queryParams = queryParams.set(key, params[key]);
+      }
+    }
+    return this.http.get(`${AppSettings.LIST_SMT_FLDR_WRKSPC}`, {
+      params: queryParams
+    }
+    ).pipe(
+      map((res: any) =>
+        res
+      )
+    );
+  }
+
+  // ---- folder ---- //
   // activate workspace
   folderAct(id: any) {
     return this.http.patch(`${AppSettings.ACT_FLDR}?id=${id}`, {});
@@ -65,7 +85,7 @@ export class ContentWorkspaceService {
     );
   }
 
-  // ---- workspace api's ---- //
+  // ---- workspace ---- //
   // activate workspace
   wrkspcAct(id: any) {
     return this.http.patch(`${AppSettings.ACT_WRKSPC}?id=${id}`, {});

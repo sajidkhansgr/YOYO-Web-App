@@ -12,4 +12,13 @@ export interface Folder {
   folderIcon: string;
   folderId: number;
   isActive: boolean;
+  sortAscending?: boolean;
+  limitNoOfFiles?: number;
+  fileTypeIds?: string;
+  propertyIds?: string;
+  tagIds?: string;
+  localeIds?: string;
+  authorIds?: string;
+  smartFolderTags?: Array<any>;
+  smartFolderFilters?: Array<any>;
 }
