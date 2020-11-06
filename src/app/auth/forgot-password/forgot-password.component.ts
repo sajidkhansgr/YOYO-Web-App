@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 import { AuthService } from '../auth.service';
@@ -18,7 +19,8 @@ export class ForgotPasswordComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authSer: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -34,7 +36,12 @@ export class ForgotPasswordComponent implements OnInit {
       this.authSer.forgotPass(this.forgPassForm.value)
         .subscribe((data: any) => {
           this.disabled = false;
-
+          if(data){
+            this.toastr.success(data.message||"Email sent successfully if registered", 'Success');
+            this.router.navigate(['/auth/login'])
+          }else{
+            this.toastr.error("Unable to send email, please try after sometime", 'Error');
+          }
         }, (err: any) => {
           this.disabled = false;
         });

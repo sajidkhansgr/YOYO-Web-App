@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authSer.login(this.loginForm.value)
         .subscribe((data: any) => {
-          // console.log(data, 'data');
           if (data && data.result && data.result.token && data.result.id) {
             this.tokenDataServ.setTokenAndUser(data.result);
             this.toastr.success('Login successfully', 'Success');
@@ -53,11 +52,11 @@ export class LoginComponent implements OnInit {
             let nav= HttpHelper.redirectToUrl(this.redirectUrl);
             this.router.navigate([nav]);
           } else {
-            this.toastr.error(HttpHelper.errMessage(data) || 'Please check email or password!', 'Error!');
+            this.toastr.error(data.message || 'Please check email or password!', 'Error!');
             this.disabled = false;
           }
         }, (err: any) => {
-          console.log(err, 'err')
+          // console.log(err, 'err');
           this.disabled = false;
         })
     }

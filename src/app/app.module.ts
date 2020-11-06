@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, UrlSerializer } from '@angular/router';
 
 import { AppComponent } from './app.component';
 
@@ -13,6 +13,7 @@ import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 import { OfflineInterceptor } from './shared/interceptors/offline.interceptor';
 import { LoaderInterceptor } from './shared/interceptors/loader.interceptor';
 import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
+import { CustomUrlSerializer } from './custom-url-serializer';
 
 import { AuthGuard } from './shared/guard/auth.guard';
 import { TokenDataService } from './shared/services/token-data.service';
@@ -30,7 +31,6 @@ const appRoutes: Routes = [
     { path : 'reports', loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule),canActivate:[AuthGuard] },
     { path : 'account', loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule),canActivate:[AuthGuard] },
     { path : 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),canActivate:[AuthGuard] },
-
     { path : 'web-app', loadChildren: () => import('./web-app/web-app.module').then(m => m.WebAppModule),canActivate:[AuthGuard] },
 
     { path : 'test', loadChildren: () => import('./test/test.module').then(m => m.TestModule),canActivate:[AuthGuard] },
@@ -51,6 +51,7 @@ const appRoutes: Routes = [
     HeaderModule, SidebarModule
   ],
   providers: [
+     { provide: UrlSerializer, useClass: CustomUrlSerializer },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: OfflineInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },

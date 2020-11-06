@@ -24,7 +24,7 @@ export class HttpHelper{
     if(url){
       window.location = url;
     }else{
-      return '/hub/1/list';
+      return '/dashboard';
     }
   }
 

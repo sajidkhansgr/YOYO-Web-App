@@ -19,16 +19,8 @@ export class AuthService {
       return this.http.post( `${AppSettings.FORG_PASS}`, data );
     }
 
-    resetPass(params: any) {
-      let queryParams = new HttpParams();
-      for(let key in params) {
-        if(params[key])
-          queryParams = queryParams.set(key, params[key]);
-      }
-      return this.http.get(
-        `${AppSettings.RESET_PASS}`,{
-            params: queryParams
-          }
-      );
+    resetPass(data: any) {
+      return this.http.post(
+        `${AppSettings.RESET_PASS}`, data );
     }
 }
