@@ -89,35 +89,67 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- folder ---- //
+  // activate folder
+  actFolder(folder: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to activate this folder?`,
+        title: `Activate folder`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.cwServ.folderAct(folder.id).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Folder activated successfully', 'Success!');
+            this.getFolderList();
+          } else {
+            this.toastr.error('Unable to activate folder', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
+  // deactivate workspace
+  deactFolder(folder: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to deactivate this folder?`,
+        title: `Deactivate folder`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // console.log(tag);
+        this.cwServ.folderDeact(folder.id).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Folder deactivated successfully', 'Success!');
+            this.getFolderList();
+          } else {
+            this.toastr.error('Unable to deactivate folder', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
+  // back nav folder
+  backFolder() {
+    this.folderNav.pop();
+    this.getFolderList();
+  }
+
   // change folder (show sub folders)
   changeFolder(folder: any) {
     this.dispFolder = folder;
     this.folderNav.push(folder);
     // console.log(folder);
     this.getFolderList();
-  }
-
-  // delete folder
-  delFolder(id: any) {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to delete this folder? You can't undo this action.`,
-        title: `Delete folder`
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        // this.cwServ.delFolder({ id: id })
-        //   .subscribe((data: any) => {
-        //     if (data) {
-        //       this.toastr.success(data.message || 'Folder deleted successfully', 'Success!');
-        //       this.getFolderList();
-        //     } else {
-        //       this.toastr.error('Unable to delete Folder', 'Error!');
-        //     }
-        //   });
-      }
-    })
   }
 
   // edit folder
@@ -155,6 +187,7 @@ export class ContentWorkspaceComponent implements OnInit {
   editFolder(modal: any, folder: Folder) {
     this.selFolder = folder;
     this.addFolderForm.patchValue({ ...this.selFolder });
+    console.log(folder);
     this.openModal(modal);
   }
 
@@ -196,7 +229,7 @@ export class ContentWorkspaceComponent implements OnInit {
       workspaceId: this.selWrkspc!.id,
       folderId: this.dispFolder ? this.dispFolder!.id : null
     };
-    console.log(query);
+    // console.log(query);
     this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         this.folderArr = data.result.results;

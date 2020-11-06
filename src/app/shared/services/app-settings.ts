@@ -56,6 +56,10 @@ export class AppSettings {
 
   public static GET_FLDR = `api/Folder/GetById`;
 
+  public static DEACT_FLDR = `api/Folder/Deactivate`;
+
+  public static ACT_FLDR = `api/Folder/Activate`;
+
   public static LIST_CATG = `api/Category/GetAll`;
 
   public static ADD_CATG = `api/Category/Add`;

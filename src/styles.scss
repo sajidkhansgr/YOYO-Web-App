@@ -94,10 +94,23 @@ body {
   }
 }
 
+// breadcrumb
+.breadcrumb {
+  .breadcrumb-item {
+    font-size: 14px;
+  }
+}
+
 // angular bootstrap modal
-// button[aria-label="Close"]:focus {
-//   outline: none;
-// }
+button[aria-label="Close"]:focus {
+  outline: none;
+}
+
+// before pseudo element
+.no-before::before {
+  display: none !important;
+}
+
 
 // material
 .input-bottom-padding-0 {
