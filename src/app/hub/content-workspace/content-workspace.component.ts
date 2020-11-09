@@ -94,6 +94,21 @@ export class ContentWorkspaceComponent implements OnInit {
     this.view = true;
   }
 
+  // ---- folder and smart folder ---- //
+  // back nav folder
+  backFolder() {
+    this.folderNav.pop();
+    this.listFolders()
+  }
+
+  // change folder (show sub folders)
+  changeFolder(folder: any) {
+    this.dispFolder = folder;
+    this.folderNav.push(folder);
+    // console.log(folder);
+    this.listFolders()
+  }
+
   // listing all folders
   listFolders() {
     this.folderLoading = true;
@@ -105,8 +120,107 @@ export class ContentWorkspaceComponent implements OnInit {
     // }, 1000)
   }
 
+  // activate
+  activateFldr(folder: any) {
+    if (folder.key == 'fldr') {
+      this.actFolder(folder);
+    } else {
+      this.actSmartFolder(folder);
+    }
+  }
+
+  // deactivate
+  deActivateFldr(folder: any) {
+    if (folder.key == 'fldr') {
+      this.deactFolder(folder);
+    } else {
+      this.deactSmartFolder(folder);
+    }
+  }
+
   // ---- smart folder ---- //
-  // add folder
+  // activate smart folder
+  actSmartFolder(folder: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to activate this smart folder?`,
+        title: `Activate smart folder`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.cwServ.smartFolderAct(folder.id).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Smart folder activated successfully', 'Success!');
+            this.listFolders()
+          } else {
+            this.toastr.error('Unable to activate smart folder', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
+  // deactivate smart folder
+  deactSmartFolder(folder: any) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to deactivate this smart folder?`,
+        title: `Dectivate smart folder`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.cwServ.smartFolderDeact(folder.id).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Smart folder deactivated successfully', 'Success!');
+            this.listFolders()
+          } else {
+            this.toastr.error('Unable to deactivate smart folder', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
+  // edit smart folder
+  editSmartFolder() {
+    if (this.addSmartFolderForm.valid) {
+      this.disabled = true;
+      let folderData: any = {
+        ...this.addSmartFolderForm.value,
+        id: this.selFolder!.id,
+        smartFolderIcon: this.custIcon,
+        workspaceId: this.selWrkspc!.id,
+        folderId: this.selFolder!.folderId,
+        isActive: this.selFolder!.isActive,
+        propertyIds: 1
+      };
+      // console.log(folderData);
+      this.cwServ.updSmartFolder(folderData)
+        .subscribe((data: any) => {
+          // console.log(data);
+          if (data) {
+            this.toastr.success(data.message || 'Smart Folder updated successfully', 'Success!');
+            this.listFolders();
+          } else {
+            this.toastr.error('Unable to update smart folder', 'Error!');
+          }
+          this.disabled = false;
+          this.dismissModal();
+        }, (err: any) => {
+          // console.log(err);
+          this.disabled = false;
+          this.dismissModal();
+        });
+    }
+  }
+
+  // add smart folder
   addSmartFolder() {
     if (this.addSmartFolderForm.valid) {
       this.disabled = true;
@@ -151,7 +265,7 @@ export class ContentWorkspaceComponent implements OnInit {
         for (let i = 0; i < data.result.results.length; i++) {
           this.folderArr.push({ ...data.result.results[i], key: 'smtFldr' });
         }
-        console.log(this.folderArr);
+        // console.log(this.folderArr);
       } else {
         // this.folderArr = [];
         // this.toastr.error('No smart folders found', 'Error!');
@@ -214,20 +328,6 @@ export class ContentWorkspaceComponent implements OnInit {
     })
   }
 
-  // back nav folder
-  backFolder() {
-    this.folderNav.pop();
-    this.listFolders()
-  }
-
-  // change folder (show sub folders)
-  changeFolder(folder: any) {
-    this.dispFolder = folder;
-    this.folderNav.push(folder);
-    // console.log(folder);
-    this.listFolders()
-  }
-
   // edit folder
   updFolder() {
     if (this.addFolderForm.valid) {
@@ -260,10 +360,14 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // edit folder modal
-  editFolder(modal: any, folder: Folder) {
+  editFolder(modal: any, folder: any) {
     this.selFolder = folder;
-    this.addFolderForm.patchValue({ ...this.selFolder });
-    console.log(folder);
+    if (folder.key == 'fldr') {
+      this.addFolderForm.patchValue({ ...this.selFolder });
+    } else {
+      this.addSmartFolderForm.patchValue({ ...this.selFolder });
+    }
+    // console.log(folder);
     this.openModal(modal);
   }
 

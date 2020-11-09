@@ -28,6 +28,21 @@ export class ContentWorkspaceService {
   }
 
   // ---- smart folder ---- //
+  // activate workspace
+  smartFolderAct(id: any) {
+    return this.http.patch(`${AppSettings.ACT_SMT_FLDR}?id=${id}`, {});
+  }
+
+  // deactivate workspace
+  smartFolderDeact(id: any) {
+    return this.http.patch(`${AppSettings.DEACT_SMT_FLDR}?id=${id}`, {});
+  }
+
+  // update folder
+  updSmartFolder(data: any) {
+    return this.http.put(`${AppSettings.UPD_SMT_FLDR}`, this.freezeFolderObj(data));
+  }
+
   // add folder
   addSmartFolder(data: any) {
     return this.http.post(`${AppSettings.ADD_SMT_FLDR}`, this.freezeFolderObj(data));
