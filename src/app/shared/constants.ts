@@ -12,4 +12,6 @@ const TIME: Array<any> = ["00:00","01:00","02:00","03:00","04:00","05:00","06:00
 
 const GRP_TYPE: Array<any> = [{v:1,n: "All Users"},{v:2,n: "Selected Workspaces"},{v:3,n: "Selected User Groups"}];
 
-export {LMT_PAGE, DEF_IMG, PRPS, DEF_ICON, TIME, GRP_TYPE};
+const ROLES: Array<any> = [{v:2,n: "Admin"},{v:3,n: "User"}];
+
+export {LMT_PAGE, DEF_IMG, PRPS, DEF_ICON, TIME, GRP_TYPE,ROLES};

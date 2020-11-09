@@ -413,74 +413,99 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <div class="row justify-content-between m-0">
-      <mat-form-field appearance="outline">
-        <mat-label>First Name</mat-label>
-        <input matInput placeholder="Your First Name">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Last Name</mat-label>
-        <input matInput placeholder="Your Last Name">
-      </mat-form-field>
-    </div>
-    <mat-form-field appearance="outline">
-      <mat-label>E-mail</mat-label>
-      <input matInput placeholder="Your E-mail">
-    </mat-form-field>
-    <div class="row justify-content-between m-0">
-      <mat-form-field appearance="outline">
-        <mat-label>Language</mat-label>
-        <mat-select>
-          <mat-option value="English">English</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Time Zone</mat-label>
-        <mat-select>
-          <mat-option value="company-timezone">Company Timezone</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="border w-100 mb-4"></div>
-    <div class="row justify-content-between m-0">
-      <mat-form-field appearance="outline">
-        <mat-label>Role</mat-label>
-        <mat-select>
-          <mat-option value="user">User</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>User's Groups</mat-label>
-        <input matInput placeholder="Your Groups">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-label>Product Licenses</mat-label>
-      <mat-checkbox class="ml-3 d-block">Content</mat-checkbox>
-    </div>
-    <div>
-      <mat-label>Status</mat-label>
-      <mat-checkbox class="ml-3 d-block">Activated</mat-checkbox>
-    </div>
-    <div>
-      <mat-label>Password</mat-label>
-      <mat-radio-group class="d-block ml-3" aria-label="Select an option">
-        <mat-radio-button [checked]="true" value="user">Let user choose password upon account confirmation
-        </mat-radio-button>
-        <mat-radio-button value="me">Specify password</mat-radio-button>
-        <mat-form-field class="d-block w-50 mx-auto" appearance="outline">
-          <mat-label>Password</mat-label>
-          <input type="password" matInput placeholder="Password">
+  <form name="usrForm" (ngSubmit)="onSubmit()" [formGroup]="usrForm" novalidate>
+    <div class="modal-body">
+      <div class="row justify-content-between m-0">
+        <mat-form-field appearance="outline">
+          <mat-label>First Name</mat-label>
+          <input matInput type="text" placeholder="First Name" formControlName="firstName" required>
+          <mat-error *ngIf="usrForm.get('firstName')!.hasError('required')">
+            First Name is required
+          </mat-error>
         </mat-form-field>
-      </mat-radio-group>
-      <div class="ml-3">
-        <mat-checkbox class="ml-3 d-block">Send me email with login instructions</mat-checkbox>
-        <mat-checkbox class="ml-3 d-block">Enforce user to reset password on first login</mat-checkbox>
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <input matInput type="text" placeholder="Last Name" formControlName="lastName" required>
+          <mat-error *ngIf="usrForm.get('lastName')!.hasError('required')">
+            Last Name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="text" placeholder="Email" formControlName="email" required>
+        <mat-error *ngIf="usrForm.get('email')!.hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="!usrForm.get('email')!.hasError('required') && usrForm.get('email')!.hasError('invalidEmail')">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+      <div class="row justify-content-between m-0">
+        <mat-form-field appearance="outline">
+          <mat-label>Language</mat-label>
+          <mat-select formControlName="languageId" required>
+            <mat-option [value]="1">English</mat-option>
+          </mat-select>
+          <mat-error *ngIf="usrForm.get('languageId')!.hasError('required')">
+            Language is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Time Zone</mat-label>
+          <mat-select>
+            <mat-option value="company-timezone">Company Timezone</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="border w-100 mb-4"></div>
+      <div class="row justify-content-between m-0">
+        <mat-form-field appearance="outline">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="roleId" required>
+            <mat-option *ngFor="let r of roles" [value]="r.v">{{r.n}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="usrForm.get('roleId')!.hasError('required')">
+            Role is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>User's Groups</mat-label>
+          <input matInput placeholder="Your Groups">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-label>Product Licenses</mat-label>
+        <mat-checkbox class="ml-3 d-block">Content</mat-checkbox>
+      </div>
+      <div>
+        <mat-label>Status</mat-label>
+        <mat-checkbox class="ml-3 d-block">Activated</mat-checkbox>
+      </div>
+      <div>
+        <mat-label>Password</mat-label>
+        <mat-radio-group class="d-block ml-3" aria-label="Select an option" formControlName="letEmployeeCreatePassword" (change)="togglePassword($event)">
+          <mat-radio-button [value]="true"> Let user choose password upon account confirmation</mat-radio-button>
+          <mat-radio-button [value]="false">Specify password</mat-radio-button>
+        </mat-radio-group>
+        <mat-form-field class="d-block w-50 mx-auto" appearance="outline" *ngIf="usrForm.controls.password">
+          <mat-label>Password</mat-label>
+          <input type="password" formControlName="password" matInput placeholder="Password">
+          <mat-error *ngIf="usrForm.get('password')!.hasError('required')">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+        <div class="ml-3">
+          <mat-checkbox class="ml-3 d-block" formControlName="sendLoginInstructionEmail">Send me email with login instructions</mat-checkbox>
+          <mat-checkbox class="ml-3 d-block" formControlName="enforceEmployeePasswordReset">Enforce user to reset password on first login</mat-checkbox>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" [disabled]="usrForm!.invalid || usrLoading">
+        <app-loader [type]="'btn'" *ngIf="usrLoading"></app-loader>
+        Save
+      </button>
+    </div>
+  </form>
 </ng-template>

@@ -116,4 +116,12 @@ export class AppSettings {
   public static UPD_ANNCMNT = `api/Announcement/Update`;
 
   public static GET_ANNCMNT = `api/Announcement/GetById`;
+  //Employee
+  public static LIST_EMPL = `api/Employee/GetAll`;
+
+  public static ADD_EMPL = `api/Employee/Add`;
+
+  public static UPD_EMPL = `api/Employee/Update`;
+
+  public static GET_EMPL = `api/Employee/GetById`;
 }

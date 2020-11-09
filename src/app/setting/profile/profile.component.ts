@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { CommonValidations } from '../../shared/validations/common-validations';
 import { PasswordService } from '../../shared/services/password.service';
 import { ChngPassComponent } from '../../shared/components/chng-pass/chng-pass.component';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -45,7 +46,7 @@ export class ProfileComponent implements OnInit {
     this.profileForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', [Validators.required]],
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required, CommonValidations.emailValidator]],
       language: ['', [Validators.required]],
       timeZone: ['', [Validators.required]]
     });
@@ -78,7 +79,6 @@ export class ProfileComponent implements OnInit {
           }
           this.passLoading = false;
         }, (err: any) => {
-          console.log(err, 'err')
           this.passLoading = false;
         })
     }

@@ -1,6 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+
+
+import { ROLES } from '../../shared/constants';
+import { CommonValidations } from '../../shared/validations/common-validations';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-user-list',
@@ -19,10 +26,41 @@ export class UserListComponent implements OnInit {
     { name: "tes1t", email: "1email@email.com", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U1ser" },
     { name: "tes2t", email: "2email@email.com", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U2ser" }
   ];
-  constructor(private modalService: NgbModal) { }
+  roles = ROLES;
+  usrForm!: FormGroup;usrLoading: boolean=false;
+  constructor(
+    private modalService: NgbModal,
+    private fb: FormBuilder,
+    private usrServ: UserService,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit(): void {
     this.cols.push(...this.visbCols);
+    this.initForm();
+  }
+
+  initForm(){
+    this.usrForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', [Validators.required]],
+      email: ['', [Validators.required, CommonValidations.emailValidator]],
+      roleId: ['', [Validators.required]],
+      languageId: ['', [Validators.required]],
+      letEmployeeCreatePassword: [true],
+      sendLoginInstructionEmail: [false],
+      enforceEmployeePasswordReset: [false]
+    });
+  }
+
+  togglePassword($event: any){
+    if($event.value){
+      this.usrForm.removeControl('password');
+    }else{
+      this.usrForm.addControl('password', new FormControl(''));
+      this.usrForm.controls['password'].setValidators([Validators.required]);
+    }
+    this.usrForm.updateValueAndValidity();
   }
 
   toggleNgDropdown = (myDrop: any) => {
@@ -80,6 +118,23 @@ export class UserListComponent implements OnInit {
     } else {
       this.visbCols.splice(i, 1);
       this.hidCols.push(col);
+    }
+  }
+
+  onSubmit(){
+    if(this.usrForm.valid){
+      this.usrLoading = true;
+      this.usrServ.addEmpl(this.usrForm.value)
+        .subscribe((data: any) => {
+          // console.log(data, 'data');
+          if(data){
+            this.toastr.success(data.message || 'User added successfully', 'Success!');
+            this.disMissMdodal();
+          }
+          this.usrLoading = false;
+        }, (err: any) => {
+          this.usrLoading = false;
+        })
     }
   }
 

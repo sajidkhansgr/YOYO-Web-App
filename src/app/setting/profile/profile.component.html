@@ -82,6 +82,9 @@
         <mat-error *ngIf="profileForm.get('email')!.hasError('required')">>
           Email required
         </mat-error>
+        <mat-error *ngIf="!profileForm.get('email')!.hasError('required') && profileForm.get('email')!.hasError('invalidEmail')">
+          Please enter a valid email address
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Language</mat-label>
