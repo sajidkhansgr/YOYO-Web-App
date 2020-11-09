@@ -1,12 +1,11 @@
 <div class="users-section">
   <div class="buttons-row row mt-3 justify-content-between mx-2">
     <div class="dropdown">
-      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addCOntentDD" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addCOntentDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Add
       </button>
       <div class="dropdown-menu" aria-labelledby="addCOntentDD">
-        <a class="dropdown-item curs-ptr" (click)="openModal(createNewUser)"><i class="fas fa-user-plus mr-1"></i>Create
+        <a class="dropdown-item curs-ptr" (click)="openModal(usrModal,'add')"><i class="fas fa-user-plus mr-1"></i>Create
           New User</a>
         <a class="dropdown-item" [routerLink]="'/user/import'"><i class="fas fa-file-import mr-1"></i>Import CSV
           File</a>
@@ -15,7 +14,7 @@
   </div>
 
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav" [ngClass]="{'col-md-12' : !showDoc, 'col-md-8': showDoc}">
+    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo, 'col-md-8': showRowInfo}">
       <div class="card overflow-hidden">
         <div class="card-header border-0">
           <mat-tab-group>
@@ -47,25 +46,20 @@
                           <div class="cog dropdown-menu dropdown-menu-right" #cogDropDown>
                             <div class="scrollable">
                               <span class="ml-2 heading">Visible Columns</span>
-                              <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols"
-                                class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]"
-                                (cdkDropListDropped)="drop($event)">
+                              <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols" class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]" (cdkDropListDropped)="drop($event)">
                                 <button class="dropdown-item pl-2" *ngFor="let col of visbCols;let i=index" cdkDrag>
                                   <span class="ellipsis mr-2">
                                     <i class="fa fa-ellipsis-v"></i>
                                     <i class="fa fa-ellipsis-v"></i>
                                   </span>
-                                  <i class="text-primary fas fa-eye mr-2"
-                                    (click)="showHideCols(col,'hide',i)"></i>{{col.n}}
+                                  <i class="text-primary fas fa-eye mr-2" (click)="showHideCols(col,'hide',i)"></i>{{col.n}}
                                 </button>
                                 <span *ngIf="visbCols.length==0" class="ml-4 text-secondary">
                                   No visbible columns
                                 </span>
                               </ul>
                               <span class="ml-2 heading">Hidden Columns</span>
-                              <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList" [cdkDropListData]="hidCols"
-                                class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]"
-                                (cdkDropListDropped)="drop($event)">
+                              <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList" [cdkDropListData]="hidCols" class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
                                 <button class="dropdown-item pl-2" *ngFor="let col of hidCols;let i=index" cdkDrag>
                                   <span class="ellipsis mr-2 mb-1">
                                     <i class="fa fa-ellipsis-v"></i>
@@ -80,8 +74,7 @@
                             </div>
                             <hr class="mb-2">
                             <div class="float-right mr-2">
-                              <button class="btn btn-secondary btn-sm mr-2"
-                                (click)=closeDropdown($event)>Cancel</button>
+                              <button class="btn btn-secondary btn-sm mr-2" (click)=closeDropdown($event)>Cancel</button>
                               <button class="btn btn-primary btn-sm" (click)=saveHdrChngs($event);>Save</button>
                             </div>
                           </div>
@@ -91,48 +84,47 @@
                   </div>
                 </h5>
                 <div class="card-text px-3">
-                  <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showDoc}">
+                  <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
                     <thead>
                       <tr>
                         <th class="curs-ptr" *ngFor="let col of cols">
-                          {{col.n}}<i class="fas ml-1"
-                            [ngClass]="{'fa-sort-down align-top': col.dir==1, 'fa-sort-up align-bottom': col.dir==0}"></i>
+                          {{col.n}}
+                          <i class="fas ml-1" [ngClass]="{'fa-sort-down align-top': col.dir==1, 'fa-sort-up align-bottom': col.dir==0}"></i>
                         </th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr *ngFor="let d of data" (click)="toggleDoc()">
+                    <tbody *ngIf="!lstLoading && usrs.length > 0">
+                      <tr *ngFor="let usr of usrs" (click)="toggleInfo(usr)">
                         <td *ngFor="let col of cols">
-                          <span *ngIf="col.key=='name' else otherRow">
-                            {{d.name}}<small>{{d.email}}</small>
+                          <span [ngSwitch]="col.key">
+                            <span *ngSwitchCase="'name'">
+                              {{usr.firstName}}<small><br />{{usr.email}}</small>
+                            </span>
+                            <span *ngSwitchCase="'role'">
+                              {{usr.roleId && usrRoles[usr.roleId]?usrRoles[usr.roleId]:'N/A'}}
+                            </span>
+                            <span *ngSwitchDefault>{{col.key}}{{usr[col.key]}}</span>
                           </span>
-                          <ng-template #otherRow>{{d[col.key]}}</ng-template>
                         </td>
-                        <!-- <td>
-                          User Full Name<br />
-                          <small>email@email.com</small>
-                        </td>
-                        <td class="text-hi-dark-grey">19 Aug 2020</td>
-                        <td>19 Aug 2020</td>
-                        <td class="text-hi-dark-grey">User</td>
-                        <td>19 Aug 2020</td> -->
                       </tr>
                     </tbody>
                   </table>
+                  <div class="text-center text-secondary" *ngIf="!lstLoading && usrs.length == 0">
+                    No User found
+                  </div>
+                  <app-loader [type]="'page'" *ngIf="lstLoading"></app-loader>
                 </div>
                 <div class="card-footer row justify-content-between mx-0">
                   <div class="pages">
                     <mat-form-field appearance="outline" class="mr-2">
-                      <mat-select>
-                        <mat-option *ngFor="let lP of lmtPage" value="lP">{{lP}}</mat-option>
+                      <mat-select [(ngModel)]="pageSize" (selectionChange)="chngPageSize()">
+                        <mat-option *ngFor="let lP of lmtPage" [value]="lP">{{lP}}</mat-option>
                       </mat-select>
                     </mat-form-field>
-                    <span>Showing 1-10 of 100 </span>
                   </div>
                   <ul class="pagination">
                     <li class="page-item disabled">
-                      <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true"><i
-                          class="fas fa-chevron-left"></i></a>
+                      <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
                     </li>
                     <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">1</a></li>
                     <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">2</a></li>
@@ -150,11 +142,11 @@
         </div>
       </div>
     </div>
-    <div class="workspace w-100 col-md-4" [ngClass]="{'hide': !showDoc, 'show': showDoc}">
+    <div class="workspace w-100 col-md-4" *ngIf="showRowInfo">
       <div class="doc">
         <div class="card">
           <div class="card-header row m-0">
-            <h5 class="mb-0 pl-0 align-self-center">Laura Thompson</h5>
+            <h5 class="mb-0 pl-0 align-self-center">{{rowInfo.firstName}}</h5>
             <div class="ml-auto">
               <div class="btn btn-light" (click)="closeDoc()">
                 <i class="fa fa-times"></i>
@@ -162,11 +154,11 @@
             </div>
           </div>
           <div class="card-header bg-hi-light-grey p-1 row m-0">
-            <button class="btn btn-light">
+            <button class="btn btn-light" (click)="delUsr()">
               <i class="fa fa-trash"></i>
             </button>
             <!-- Button trigger for edit user modal -->
-            <button type="button" class="btn btn-light" (click)="openModal(editUser)">
+            <button type="button" class="btn btn-light" (click)="openModal(usrModal, 'edit')">
               <i class="fa fa-edit"></i>
             </button>
             <button class="btn btn-light">
@@ -179,26 +171,24 @@
               <div class="name">
                 <label class="text-hi-dark-grey mb-0 mt-2">Name</label>
                 <div class="value">
-                  Laura Thompson
+                  {{rowInfo.firstName||'N/A'}}
                 </div>
               </div>
               <div class="email">
                 <label class="text-hi-dark-grey mb-0 mt-2">Email</label>
                 <div class="value">
-                  laura.thomsp@email.co
+                  {{rowInfo.email||'N/A'}}
                 </div>
               </div>
               <div class="role">
                 <label class="text-hi-dark-grey mb-0 mt-2">Role</label>
                 <div class="value">
-                  Owner
+                  {{rowInfo.roleId && usrRoles[rowInfo.roleId]?usrRoles[rowInfo.roleId]:'N/A'}}
                 </div>
               </div>
               <div class="password">
                 <label class="text-hi-dark-grey mb-0 mt-2">Password</label>
-                <div class="value">
-                  *********
-                </div>
+                <div class="value"> ********* </div>
               </div>
             </div>
             <div class="doc-details location border-bottom mb-3 pb-3">
@@ -347,68 +337,10 @@
   </div>
 </ng-template>
 
-<!-- edit user modal  -->
-<ng-template #editUser let-modal>
+<!-- User modal  -->
+<ng-template #usrModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="row justify-content-between m-0">
-      <mat-form-field appearance="outline">
-        <mat-label>First Name</mat-label>
-        <input matInput placeholder="Your First Name">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Last Name</mat-label>
-        <input matInput placeholder="Your Last Name">
-      </mat-form-field>
-    </div>
-    <mat-form-field appearance="outline">
-      <mat-label>E-mail</mat-label>
-      <input matInput placeholder="Your E-mail">
-    </mat-form-field>
-    <div class="row justify-content-between m-0">
-      <mat-form-field appearance="outline">
-        <mat-label>Language</mat-label>
-        <input matInput placeholder="Your Language">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Time Zone</mat-label>
-        <input matInput placeholder="Your Time Zone">
-      </mat-form-field>
-    </div>
-    <div class="border w-100 mb-4"></div>
-    <div class="row justify-content-between m-0">
-      <mat-form-field appearance="outline">
-        <mat-label>Role</mat-label>
-        <input matInput placeholder="Your Role">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>User's Groups</mat-label>
-        <input matInput placeholder="Your Groups">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-label>Product Licenses</mat-label><br />
-      <mat-checkbox class="ml-3">Content</mat-checkbox>
-    </div>
-    <div>
-      <mat-label>Status</mat-label><br />
-      <mat-checkbox class="ml-3">Activated</mat-checkbox>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
-</ng-template>
-
-<!-- create new user modal  -->
-<ng-template #createNewUser let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Create New User</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{isEdit?'Edit':'Create New'}} User</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -482,7 +414,7 @@
         <mat-label>Status</mat-label>
         <mat-checkbox class="ml-3 d-block">Activated</mat-checkbox>
       </div>
-      <div>
+      <div *ngIf="!isEdit">
         <mat-label>Password</mat-label>
         <mat-radio-group class="d-block ml-3" aria-label="Select an option" formControlName="letEmployeeCreatePassword" (change)="togglePassword($event)">
           <mat-radio-button [value]="true"> Let user choose password upon account confirmation</mat-radio-button>
@@ -504,7 +436,7 @@
     <div class="modal-footer">
       <button class="btn btn-primary" [disabled]="usrForm!.invalid || usrLoading">
         <app-loader [type]="'btn'" *ngIf="usrLoading"></app-loader>
-        Save
+        {{isEdit?'Update':'Save'}}
       </button>
     </div>
   </form>

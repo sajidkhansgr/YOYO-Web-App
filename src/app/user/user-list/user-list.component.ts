@@ -2,11 +2,14 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
 
-import { ROLES } from '../../shared/constants';
+import { ROLES, USR_ROLES } from '../../shared/constants';
+import { User } from '../../shared/models/user';
 import { CommonValidations } from '../../shared/validations/common-validations';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { UserService } from '../user.service';
 
 @Component({
@@ -15,29 +18,29 @@ import { UserService } from '../user.service';
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit {
-  showDoc: boolean = false;
   @Input() lmtPage: any;
   visbCols: any[] = [{ n: "Role", key: "role", dir: 1, }];
   hidCols: any[] = [{ n: "Property", key: "prop", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, },
   { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }];
   cols: any[] = [{ n: "Name", dir: 1, key: "name" }];
-  data: any[] = [
-    { name: "test", email: "email@email.com", date: "19 Aug 2020", date2: "19 Aug 2020", role: "User" },
-    { name: "tes1t", email: "1email@email.com", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U1ser" },
-    { name: "tes2t", email: "2email@email.com", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U2ser" }
-  ];
-  roles = ROLES;
+  roles = ROLES;usrRoles = USR_ROLES;
   usrForm!: FormGroup;usrLoading: boolean=false;
+  pageNo!: number;lstLoading: boolean=false;pageSize!: number;usrs!: any[];
+  showRowInfo: boolean = false;rowInfo: any;isEdit: boolean = false;
+
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
     private usrServ: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
     this.cols.push(...this.visbCols);
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
     this.initForm();
+    this.userList();
   }
 
   initForm(){
@@ -47,10 +50,32 @@ export class UserListComponent implements OnInit {
       email: ['', [Validators.required, CommonValidations.emailValidator]],
       roleId: ['', [Validators.required]],
       languageId: ['', [Validators.required]],
-      letEmployeeCreatePassword: [true],
-      sendLoginInstructionEmail: [false],
-      enforceEmployeePasswordReset: [false]
+      // letEmployeeCreatePassword: [true],
+      // sendLoginInstructionEmail: [false],
+      // enforceEmployeePasswordReset: [false]
     });
+  }
+
+  userList(){
+    // console.log(query);
+    this.lstLoading = true;
+    this.usrServ.emplList({ pageNo: this.pageNo, pageSize: this.pageSize})
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          this.usrs = data.result.results;
+        }else{
+          this.usrs = [];
+        }
+        this.lstLoading = false;
+      }, (err: any) => {
+        console.log(err);
+        this.usrs = [];
+        this.lstLoading = false;
+      });
+  }
+
+  chngPageSize(){
+    this.userList();
   }
 
   togglePassword($event: any){
@@ -93,11 +118,20 @@ export class UserListComponent implements OnInit {
     event.target.parentNode.parentNode!.classList.remove('show');
   }
 
-  toggleDoc = () => {
-    this.showDoc = !this.showDoc;
+  // toggle user info
+  toggleInfo(row: User) {
+    if (this.showRowInfo && this.rowInfo.id == row.id) {
+      this.showRowInfo = false;
+      this.rowInfo = {};
+    } else {
+      this.rowInfo = row;
+      console.log(this.rowInfo);
+      this.showRowInfo = true;
+    }
   }
+
   closeDoc = () => {
-    this.showDoc = false;
+    this.showRowInfo = false;
   }
 
   drop = (event: CdkDragDrop<string[]>) => {
@@ -124,27 +158,112 @@ export class UserListComponent implements OnInit {
   onSubmit(){
     if(this.usrForm.valid){
       this.usrLoading = true;
-      this.usrServ.addEmpl(this.usrForm.value)
-        .subscribe((data: any) => {
-          // console.log(data, 'data');
-          if(data){
-            this.toastr.success(data.message || 'User added successfully', 'Success!');
-            this.disMissMdodal();
-          }
-          this.usrLoading = false;
-        }, (err: any) => {
-          this.usrLoading = false;
-        })
+      let usrData = {
+        ...this.usrForm.value
+      }
+      if(this.isEdit){
+        this.editUsr(usrData);
+      }else{
+        this.addUsr(usrData);
+      }
     }
   }
 
-  openModal(content: any) {
+  // ADD User
+  addUsr(usrData: any) {
+    this.usrServ.addEmpl(usrData)
+      .subscribe((data: any) => {
+        // console.log(data, 'data');
+        if(data){
+          this.toastr.success(data.message || 'User added successfully', 'Success!');
+          this.disMissMdodal();
+        }
+        this.usrLoading = false;
+      }, (err: any) => {
+        this.usrLoading = false;
+      })
+  }
+
+  // EDIT User
+  editUsr(usrData: any) {
+    usrData.id = this.rowInfo.id;
+    this.usrServ.updateEmpl(usrData)
+      .subscribe((data: any) => {
+        // console.log(data, 'data');
+        if(data){
+          this.toastr.success(data.message || 'User updated successfully', 'Success!');
+          this.disMissMdodal();
+        }
+        this.usrLoading = false;
+      }, (err: any) => {
+        this.usrLoading = false;
+      })
+  }
+
+  addControls(names: Array<string>) {
+    for (let i = 0; i < names.length; i++) {
+      if (!this.usrForm.controls[names[i]])
+        this.usrForm.addControl(names[i], new FormControl(''))
+    }
+  }
+
+  removeControls(names: Array<string>) {
+    for (let i = 0; i < names.length; i++) {
+      if (this.usrForm.controls[names[i]])
+        this.usrForm.removeControl(names[i]);
+    }
+  }
+
+  openModal(content: any, type?:string) {
+    if(type=='add' || type=='edit'){
+      this.usrForm.reset();
+      if(type=='add'){
+        this.isEdit = false;
+        this.addControls(['letEmployeeCreatePassword','sendLoginInstructionEmail','enforceEmployeePasswordReset']);
+        this.usrForm.patchValue({
+          letEmployeeCreatePassword: true,sendLoginInstructionEmail: false,enforceEmployeePasswordReset: false
+        })
+      }else{
+        this.usrForm.patchValue({
+          ...this.rowInfo
+        })
+        this.removeControls(['usrWrkSpcs']);
+        this.isEdit = true;
+      }
+      this.usrForm.updateValueAndValidity();
+    }else{
+      //other form
+      this.isEdit = false;
+    }
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
 
       }, (reason) => {
 
       });
+  }
+
+  delUsr() {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to delete this user?`,
+        title: `Deactivate user`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // console.log(catg);
+        // this.usrServ.delUser(catg.id).subscribe((data: any) => {
+        //   if (data) {
+        //     this.toastr.success('User deleted successfully', 'Success!');
+        //   } else {
+        //     this.toastr.error('Unable to delete user', 'Error!');
+        //   }
+        // }, (err: any) => {
+        //
+        // });
+      }
+    })
   }
 
   private getDismissReason(reason: any): string {

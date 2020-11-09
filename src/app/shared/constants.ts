@@ -14,4 +14,8 @@ const GRP_TYPE: Array<any> = [{v:1,n: "All Users"},{v:2,n: "Selected Workspaces"
 
 const ROLES: Array<any> = [{v:2,n: "Admin"},{v:3,n: "User"}];
 
-export {LMT_PAGE, DEF_IMG, PRPS, DEF_ICON, TIME, GRP_TYPE,ROLES};
+enum USR_ROLES {
+  "Super admin" = 1, "Admin", "User"
+}
+
+export {LMT_PAGE, DEF_IMG, PRPS, DEF_ICON, TIME, GRP_TYPE,ROLES, USR_ROLES};
