@@ -32,7 +32,7 @@ export class UserService {
       return this.http.post(`${AppSettings.ADD_EMPL}`,data)
     }
     updateEmpl(data: any) {
-      return this.http.patch(`${AppSettings.UPD_EMPL}`,data)
+      return this.http.put(`${AppSettings.UPD_EMPL}`,data)
     }
     viewEmpl(id: string) {
       return this.http.get(`${AppSettings.GET_EMPL}`, {

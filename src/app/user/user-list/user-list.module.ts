@@ -12,6 +12,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { ClickOutsideModule } from 'ng-click-outside';
 
 import { LoaderModule } from '../../shared/components/loader/loader.module';
+import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/confirm-dialog.module';
 import { UserListComponent } from './user-list.component';
 import { UserService } from '../user.service';
 
@@ -24,7 +25,7 @@ import { UserService } from '../user.service';
     MatSelectModule, MatCheckboxModule, MatRadioModule,
     DragDropModule,
     ClickOutsideModule,
-    LoaderModule
+    LoaderModule, ConfirmDialogModule
   ],
   providers: [UserService],
   exports: [

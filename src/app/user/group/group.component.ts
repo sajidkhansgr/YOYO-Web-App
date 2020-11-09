@@ -23,7 +23,8 @@ export class GroupComponent implements OnInit {
   exps: any = [
     { id: 1, name: "Exp 1" }, { id: 2, name: "Exp 2" }, { id: 3, name: "Exp 3" }
   ];
-  grps: Group[] = []; divArr: Hub[] = [];
+  grps!: Group[]; divArr: Hub[] = [];
+  pageNo!: number;lstLoading: boolean=false;pageSize!: number;
   groupForm!: FormGroup; grpDetail!: Group | null;
   disabled: boolean = false; loading: boolean = true; docLoading: boolean = true;
   selectable = true; removable = true;
@@ -43,7 +44,8 @@ export class GroupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getGroups();
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
+    this.grpsList();
     this.getHubs();
     this.groupForm = this.fb.group({
       name: ['', Validators.required],
@@ -51,14 +53,20 @@ export class GroupComponent implements OnInit {
     });
   }
 
-  getGroups() {
-    this.groupService.groupList({ pageNo: 1 })
+  grpsList() {
+    this.lstLoading = true;
+    this.groupService.groupList({ pageNo: this.pageNo, pageSize: this.pageSize})
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.grps = data.result.results;
+        }else{
+          this.grps = [];
         }
+        this.lstLoading = false;
       }, (err: any) => {
-        console.log(err);
+          console.log(err);
+          this.grps = [];
+          this.lstLoading = false;
       });
   }
 
@@ -75,7 +83,11 @@ export class GroupComponent implements OnInit {
       });
   }
 
-  getGroup() {
+  chngPageSize(){
+    this.grpsList();
+  }
+
+  getGrp() {
     this.groupService.viewGroup(this.grpDetail!.id.toString()).subscribe((data: any) => {
       if (data && data.result && data.result.id) {
         this.grpDetail = data.result;
@@ -83,7 +95,6 @@ export class GroupComponent implements OnInit {
       this.docLoading = false;
     }, (err: any) => {
       this.docLoading = false;
-      console.log(err);
     });
   }
 
@@ -94,11 +105,10 @@ export class GroupComponent implements OnInit {
         ...this.groupForm.value
       }
       if (this.isEdit) {
-        this.editGrp(grpData)
+        this.editGrp(grpData);
       } else {
         this.addGrp(grpData);
       }
-
     }
   }
 
@@ -107,7 +117,7 @@ export class GroupComponent implements OnInit {
       if (data) {
         this.toastr.success(data.message || 'Group added successfully', 'Success!');
         this.disMissMdodal();
-        this.getGroups();
+        this.grpsList();
       } else {
         this.toastr.error(data.result.data || 'Unable to add Group', 'Error!');
       }
@@ -123,7 +133,7 @@ export class GroupComponent implements OnInit {
       if (data) {
         this.toastr.success(data.message || 'Group updated successfully', 'Success!');
         this.disMissMdodal();
-        this.getGroups();
+        this.grpsList();
         this.closeDoc();
       } else {
         this.toastr.error(data.result.data || 'Unable to update Group', 'Error!');
@@ -152,7 +162,7 @@ export class GroupComponent implements OnInit {
     this.showDoc = !this.showDoc;
     if (this.showDoc) {
       this.grpDetail = grp;
-      // this.getGroup(); //if more detail need then use this function
+      // this.getGrp(); //if more detail need then use this function
       this.docLoading = false;
     } else {
       this.closeDoc();
