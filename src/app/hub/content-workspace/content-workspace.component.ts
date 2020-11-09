@@ -30,7 +30,7 @@ export class ContentWorkspaceComponent implements OnInit {
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: Workspace[]; selWrkspc: Workspace | undefined;
   wrkspcLoading!: boolean; folderLoading!: boolean;
-  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; addSmartFolderForm!: FormGroup;
+  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; smartFolderForm!: FormGroup;
   disabled!: boolean;
   folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
@@ -65,19 +65,20 @@ export class ContentWorkspaceComponent implements OnInit {
     });
     this.updWrkspcForm = this.fb.group({
       name: ['', [Validators.required]]
-      // more feilds need to be added when done in api
+      // more fields need to be added when done in api
     });
     this.folderForm = this.fb.group({
       name: ['', [Validators.required]],
       description: [''],
       hideLabelInWorkspace: ['true']
+      // more fields need to be added
     });
-    this.addSmartFolderForm = this.fb.group({
+    this.smartFolderForm = this.fb.group({
       name: ['', [Validators.required]],
       description: [''],
       hideLabelInWorkspace: ['true'],
       limitNoOfFiles: ['']
-      // more feilds need to be added
+      // more fields need to be added
     });
     this.disabled = false;
     this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
@@ -122,25 +123,55 @@ export class ContentWorkspaceComponent implements OnInit {
     // }, 1000)
   }
 
-  // activate
+  // activate folder/smart folder
   activateFldr(folder: any) {
     if (folder.key == 'fldr') {
       this.actFolder(folder);
-    } else {
+    } else if (folder.key == 'smtFldr') {
       this.actSmartFolder(folder);
     }
   }
 
-  // deactivate
+  // deactivate folder/smart folder
   deActivateFldr(folder: any) {
     if (folder.key == 'fldr') {
       this.deactFolder(folder);
-    } else {
+    } else if (folder.key == 'smtFldr') {
       this.deactSmartFolder(folder);
     }
   }
 
+  // edit folder/smart folder modal
+  editFolder(modal: any, folder: any) {
+    this.selFolder = folder;
+    this.addURLIcon = 'cust-icon';
+    this.iconUrl = folder.folderIconPath;
+    if (folder.key == 'fldr') {
+      this.folderForm.patchValue({ ...this.selFolder });
+    } else if (folder.key == 'smtFldr') {
+      this.smartFolderForm.patchValue({ ...this.selFolder });
+    }
+    // console.log(folder);
+    this.openModal(modal);
+  }
+
+  // folder/smart folder open modal (add/update)
+  openFolderModal(modal: any, type: string, folder?: any) {
+    if (type == 'add') {
+      this.edit = false;
+      this.openModal(modal);
+    } else if (type == 'edit') {
+      this.edit = true;
+      this.editFolder(modal, folder);
+    }
+  }
+
   // ---- smart folder ---- //
+  // smart folder submit functions (add/update)
+  smartFolderSubmit() {
+    this.edit == false ? this.addSmartFolder() : this.updSmartFolder();
+  }
+
   // activate smart folder
   actSmartFolder(folder: any) {
     this.dialog.open(ConfirmDialogComponent, {
@@ -190,11 +221,11 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // edit smart folder
-  editSmartFolder() {
-    if (this.addSmartFolderForm.valid) {
+  updSmartFolder() {
+    if (this.smartFolderForm.valid) {
       this.disabled = true;
       let folderData: any = {
-        ...this.addSmartFolderForm.value,
+        ...this.smartFolderForm.value,
         id: this.selFolder!.id,
         smartFolderIcon: this.custIcon,
         workspaceId: this.selWrkspc!.id,
@@ -224,10 +255,10 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // add smart folder
   addSmartFolder() {
-    if (this.addSmartFolderForm.valid) {
+    if (this.smartFolderForm.valid) {
       this.disabled = true;
       let folderData: any = {
-        ...this.addSmartFolderForm.value,
+        ...this.smartFolderForm.value,
         smartFolderIcon: this.custIcon,
         workspaceId: this.selWrkspc!.id,
         folderId: 0,
@@ -281,17 +312,6 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- folder ---- //
-  // folder open modal (add/update)
-  openFolderModal(modal: any, type: string, folder?: any) {
-    if (type == 'add') {
-      this.edit = false;
-      this.openModal(modal);
-    } else if (type == 'edit') {
-      this.edit = true;
-      this.editFolder(modal, folder);
-    }
-  }
-
   // folder submit functions (add/update)
   folderSubmit() {
     this.edit == false ? this.addFolder() : this.updFolder();
@@ -375,20 +395,6 @@ export class ContentWorkspaceComponent implements OnInit {
         this.dismissModal();
       });
     }
-  }
-
-  // edit folder modal
-  editFolder(modal: any, folder: any) {
-    this.selFolder = folder;
-    if (folder.key == 'fldr') {
-      this.addURLIcon = 'cust-icon';
-      this.iconUrl = folder.folderIconPath;
-      this.folderForm.patchValue({ ...this.selFolder });
-    } else {
-      this.addSmartFolderForm.patchValue({ ...this.selFolder });
-    }
-    // console.log(folder);
-    this.openModal(modal);
   }
 
   // add folder

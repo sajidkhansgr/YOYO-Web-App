@@ -561,13 +561,6 @@
       <div class="worksp" *ngIf="showWork">
         <div class="card">
           <div class="card-header row m-0">
-            <!-- <mat-form-field class="custom-material-select align-self-center" [floatLabel]="'never'">
-              <mat-label>Select a Workspace</mat-label>
-              <mat-select>
-                <mat-option hidden>Select a Workspace</mat-option>
-                <mat-option [value]="wrkspc.id" *ngFor="let wrkspc of wrkspcs">{{wrkspc.name}}</mat-option>
-              </mat-select>
-            </mat-form-field> -->
             <div class="dropdown">
               <button class="btn btn-light dropdown-toggle" type="button" id="wrkspcDD" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false" (click)="loadWrkspcs()">
@@ -609,7 +602,8 @@
               <div class="dropdown-menu" aria-labelledby="btnAddDD">
                 <a class="dropdown-item curs-ptr" (click)="openFolderModal(folderModal, 'add')">Add
                   Folder</a>
-                <a class="dropdown-item curs-ptr" (click)="openModal(addSmartFolderModal)">Add Smart Folder</a>
+                <a class="dropdown-item curs-ptr" (click)="openFolderModal(smartFolderModal, 'add')">Add Smart
+                  Folder</a>
               </div>
             </div>
             <div class="dropdown rounded">
@@ -679,7 +673,7 @@
               </nav>
               <hr>
               <div class="main row py-4" *ngIf="folderArr.length > 0">
-                <div class="col-3 curs-ptr" *ngFor="let folder of folderArr">
+                <div class="col-3 curs-ptr my-2" *ngFor="let folder of folderArr">
                   <div (click)="changeFolder(folder)">
                     <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}"
                       class="w-100">
@@ -695,102 +689,23 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="comInfoDD">
                       <a class="dropdown-item curs-ptr"
-                        (click)="folder.key=='fldr' ? openFolderModal(folderModal, 'edit', folder): editFolder(editSmartFolderModal, folder)">
+                        (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'edit', folder)">
                         <i class="fas fa-edit mr-1"></i>Edit Item</a>
                       <a class="dropdown-item" href="javascript:void(0)">
                         <i class="fas fa-clone mr-1"></i>Duplicate Folder</a>
                       <a class="dropdown-item" href="javascript:void(0)">
                         <i class="fas fa-link mr-1"></i>App Link</a>
                       <a class="dropdown-item curs-ptr" (click)="activateFldr(folder)" *ngIf="!folder.isActive">
-                        <i class="fas fa-trash-alt mr-1"></i>Activate Folder</a>
+                        <i class="fas fa-plus mr-1"></i>Activate {{folder.key != 'fldr' ? 'Smart' : ''}} Folder</a>
                       <a class="dropdown-item curs-ptr text-primary" (click)="deActivateFldr(folder)"
                         *ngIf="folder.isActive">
-                        <i class="fas fa-trash-alt mr-1"></i>Deactivate Folder</a>
+                        <i class="fas fa-trash-alt mr-1"></i>Deactivate {{folder.key != 'fldr' ? 'Smart' : ''}}
+                        Folder</a>
                       <a class="dropdown-item" href="javascript:void(0)">
                         <i class="fas fa-folder-plus mr-1"></i>Create New Channel from Folder</a>
                     </div>
                   </div>
                 </div>
-                <!-- <div class="col-3">
-                    <img src="assets/images/companyInfo.png" class="w-100">
-                    <div class="dropdown">
-                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                        data-toggle="dropdown">
-                        <i class="fas fa-cog"></i>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
-                          Item</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
-                          Item</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
-                          Link</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
-                          Item</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
-                          New
-                          Channel
-                          from
-                          Folder</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-3">
-                    <img src="assets/images/brands.png" class="w-100">
-                    <div class="dropdown">
-                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                        data-toggle="dropdown">
-                        <i class="fas fa-cog"></i>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
-                          Item</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
-                          Item</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
-                          Link</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
-                          Item</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
-                          New
-                          Channel
-                          from
-                          Folder</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-3">
-                    <img src="assets/images/services.png" class="w-100">
-                    <div class="dropdown">
-                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                        data-toggle="dropdown">
-                        <i class="fas fa-cog"></i>
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comInfoDD">
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-edit mr-1"></i>Edit
-                          Item</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-clone mr-1"></i>Duplicate
-                          Item</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-link mr-1"></i>App
-                          Link</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-trash-alt mr-1"></i>Delete
-                          Item</a>
-                        <a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-folder-plus mr-1"></i>Create
-                          New
-                          Channel
-                          from
-                          Folder</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-3">
-                    <img src="assets/images/showpad.jpg" class="w-100">
-                    <div class="dropdown">
-                      <button class="btn btn-light btn-sm">
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </div>
-                  </div> -->
               </div>
               <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;"
                 *ngIf="folderArr.length == 0">
@@ -945,69 +860,7 @@
   </div>
 </ng-template>
 
-<!-- add folder modal  -->
-<!-- <ng-template #addFolderModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Add Folder</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <form name="addFolderForm" (ngSubmit)="addFolder()" [formGroup]="addFolderForm" novalidate>
-    <div class="modal-body" ngbAutofocus>
-      <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
-        <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
-        <div class="text-center my-5">
-          <h2><i class="fa fa-upload"></i></h2>
-          <h5>Drag & Drop an icon image here</h5>
-          OR
-          <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
-        </div>
-      </div>
-      <div class="files-list">
-        <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
-          <div class="info mx-auto">
-            <h6 class="name mb-0 text-wrap">
-              {{ file?.name }}
-            </h6>
-            <p class="size mb-0">
-              {{ getSize(file?.size) }}
-            </p>
-            <app-file-progess [progress]="file?.progress"></app-file-progess>
-          </div>
-          <div>
-            <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
-          </div>
-        </div>
-      </div>
-      <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon" class="border mt-2 mb-4"
-        style="height: 130px; width: auto;">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Folder Label</mat-label>
-        <input matInput placeholder="Folder Label" formControlName="name">
-        <mat-error *ngIf="addFolderForm.get('name')!.hasError('required')">
-          Name is required
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Description</mat-label>
-        <textarea matInput placeholder="Description" formControlName="description"></textarea>
-      </mat-form-field>
-      <div class="options">
-        Options
-        <mat-checkbox class="d-block" formControlName="hideLabelInWorkspace">Hide label in Experience</mat-checkbox>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" [disabled]="addFolderForm!.invalid || disabled">
-        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
-        Save
-      </button>
-    </div>
-  </form>
-</ng-template> -->
-
-<!-- edit folder modal  -->
+<!-- add/edit folder modal  -->
 <ng-template #folderModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">{{edit ? 'Edit' : 'Add'}} Folder</h4>
@@ -1145,15 +998,15 @@
   </form>
 </ng-template>
 
-<!-- add smart folder modal  -->
-<ng-template #addSmartFolderModal let-modal>
+<!-- add/edit smart folder modal  -->
+<ng-template #smartFolderModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Add Smart Folder</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{edit ? 'Edit' : 'Add'}} Smart Folder</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="addSmartFolderModalForm" (ngSubmit)="addSmartFolder()" [formGroup]="addSmartFolderForm" novalidate>
+  <form name="smartFolderModalForm" (ngSubmit)="smartFolderSubmit()" [formGroup]="smartFolderForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
         <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
@@ -1341,208 +1194,10 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-  </form>
-</ng-template>
-
-<!-- add smart folder modal  -->
-<ng-template #editSmartFolderModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Edit Smart Folder</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <form name="addSmartFolderModalForm" (ngSubmit)="editSmartFolder()" [formGroup]="addSmartFolderForm" novalidate>
-    <div class="modal-body" ngbAutofocus>
-      <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
-        <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
-        <div class="text-center my-5">
-          <h2><i class="fa fa-upload"></i></h2>
-          <h5>Drag & Drop an icon image here</h5>
-          OR
-          <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
-        </div>
-      </div>
-      <div class="files-list">
-        <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
-          <div class="info mx-auto">
-            <h6 class="name mb-0 text-wrap">
-              {{ file?.name }}
-            </h6>
-            <p class="size mb-0">
-              {{ getSize(file?.size) }}
-            </p>
-            <app-file-progess [progress]="file?.progress"></app-file-progess>
-          </div>
-          <div>
-            <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
-          </div>
-        </div>
-      </div>
-      <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon" class="border mt-2 mb-4"
-        style="height: 130px; width: auto;">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Smart Folder Label</mat-label>
-        <input matInput placeholder="Smart Folder Label" formControlName="name">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Description</mat-label>
-        <textarea matInput placeholder="Description" formControlName="description"></textarea>
-      </mat-form-field>
-      <div class="options">
-        Options
-        <mat-checkbox class="d-block" formControlName="hideLabelInWorkspace">Hide label in Experience</mat-checkbox>
-      </div>
-      <hr>
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
-        [attr.aria-expanded]="!gnrlCollapsed" aria-controls="collapseExample">
-        Smart Folder Settings
-        <div class="float-right">
-          <ng-container *ngIf="!gnrlCollapsed; else elseIcon">
-            <i class="fa fa-angle-up"></i>
-          </ng-container>
-          <ng-template #elseIcon>
-            <i class="fa fa-angle-down"></i>
-          </ng-template>
-        </div>
-      </div>
-      <div [ngbCollapse]="gnrlCollapsed">
-        <div class="card">
-          <div class="card-header row mx-auto w-100">
-            <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="fileTypeDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                File Type
-              </button>
-              <div class="dropdown-menu" aria-labelledby="fileTypeDD">
-                <mat-checkbox class="dropdown-item">Audio</mat-checkbox>
-                <mat-checkbox class="dropdown-item">Document</mat-checkbox>
-                <mat-checkbox class="dropdown-item">HTML Content</mat-checkbox>
-                <mat-checkbox class="dropdown-item">Photo</mat-checkbox>
-                <mat-checkbox class="dropdown-item">URL</mat-checkbox>
-                <mat-checkbox class="dropdown-item">Video</mat-checkbox>
-              </div>
-            </div>
-            <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Property
-              </button>
-              <div class="dropdown-menu" aria-labelledby="propertyDD">
-                <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
-                <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
-                <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
-              </div>
-            </div>
-            <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="tagsDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Tags
-              </button>
-              <div class="dropdown-menu" aria-labelledby="tagsDD" style="width:18rem;">
-                <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                  <mat-label>Match ALL of theese tags</mat-label>
-                  <input matInput placeholder="Match ALL of theese tags">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                  <mat-label>Match ANY of theese tags</mat-label>
-                  <input matInput placeholder="Match ANY of theese tags">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                  <mat-label>Match NONE of theese tags</mat-label>
-                  <input matInput placeholder="Match NONE of theese tags">
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="localeDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Locale
-              </button>
-              <div class="dropdown-menu" aria-labelledby="localeDD" style="width:18rem;">
-                <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                  <mat-label>Match ALL of these languages</mat-label>
-                  <input matInput placeholder="Match ALL of these languages" class="bg-white">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                  <mat-label>Match ANY of these languages</mat-label>
-                  <input matInput placeholder="Match ANY of these languages">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                  <mat-label>Match NONE of theese languages</mat-label>
-                  <input matInput placeholder="Match NONE of theese languages">
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="dropdown">
-              <button class="btn btn-light dropdown-toggle" type="button" id="authorDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Author
-              </button>
-              <div class="dropdown-menu" aria-labelledby="authorDD" style="width:18rem;">
-                <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3" [floatLabel]="'never'">
-                  <i matPrefix class="fas fa-search"></i>
-                  <input matInput placeholder="Search ...">
-                </mat-form-field>
-                <div class="dropdown-divider"></div>
-                <div class="row justify-content-around m-0">
-                  <button class="btn btn-light text-primary">Select all</button>
-                  <button class="btn btn-light">Clear all</button>
-                </div>
-                <div class="dropdown-divider"></div>
-                <div style="max-height: 200px; overflow-y: auto;">
-                  <mat-checkbox class="dropdown-item">ABC (you)</mat-checkbox>
-                  <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                  <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                  <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                  <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                  <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                  <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-body row mx-auto w-100">
-            <div class="col-4">
-              Select the criteria for this smart folder, or:
-            </div>
-            <div class="col-8">
-              <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Search saved filter</mat-label>
-                <mat-select>
-                  <mat-option value=""></mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-        <div class="row justify-content-between mx-0 mt-3 align-self-center">
-          <mat-form-field appearance="outline">
-            <mat-label>Sort files on</mat-label>
-            <mat-select>
-              <mat-option value="name">Name</mat-option>
-              <mat-option value="file-size">File Size</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-radio-group aria-label="Select an option" class="align-self-center">
-            <mat-radio-button value="asc" class="mr-3">
-              <i class="fa fa-arrow-up"></i>
-            </mat-radio-button>
-            <mat-radio-button value="dsc">
-              <i class="fa fa-arrow-down"></i>
-            </mat-radio-button>
-          </mat-radio-group>
-          <mat-form-field appearance="outline">
-            <mat-label>List number of files to</mat-label>
-            <input type="number" matInput placeholder="List number of files to" formControlName="limitNoOfFiles">
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-primary" [disabled]="smartFolderForm!.invalid || disabled">
+        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+        Save
+      </button>
     </div>
   </form>
 </ng-template>
