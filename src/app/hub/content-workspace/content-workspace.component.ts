@@ -30,13 +30,14 @@ export class ContentWorkspaceComponent implements OnInit {
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: Workspace[]; selWrkspc: Workspace | undefined;
   wrkspcLoading!: boolean; folderLoading!: boolean;
-  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; addFolderForm!: FormGroup; addSmartFolderForm!: FormGroup;
+  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; addSmartFolderForm!: FormGroup;
   disabled!: boolean;
   folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
   props: any;
   view!: boolean;
+  edit!: boolean;
 
   constructor(
     // private route: ActivatedRoute,
@@ -66,7 +67,7 @@ export class ContentWorkspaceComponent implements OnInit {
       name: ['', [Validators.required]]
       // more feilds need to be added when done in api
     });
-    this.addFolderForm = this.fb.group({
+    this.folderForm = this.fb.group({
       name: ['', [Validators.required]],
       description: [''],
       hideLabelInWorkspace: ['true']
@@ -92,6 +93,7 @@ export class ContentWorkspaceComponent implements OnInit {
     ];
     this.props = PRPS;
     this.view = true;
+    this.edit = false;
   }
 
   // ---- folder and smart folder ---- //
@@ -279,6 +281,22 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- folder ---- //
+  // folder open modal (add/update)
+  openFolderModal(modal: any, type: string, folder?: any) {
+    if (type == 'add') {
+      this.edit = false;
+      this.openModal(modal);
+    } else if (type == 'edit') {
+      this.edit = true;
+      this.editFolder(modal, folder);
+    }
+  }
+
+  // folder submit functions (add/update)
+  folderSubmit() {
+    this.edit == false ? this.addFolder() : this.updFolder();
+  }
+
   // activate folder
   actFolder(folder: any) {
     this.dialog.open(ConfirmDialogComponent, {
@@ -330,10 +348,10 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // edit folder
   updFolder() {
-    if (this.addFolderForm.valid) {
+    if (this.folderForm.valid) {
       this.disabled = true;
       let folderData: any = {
-        ...this.addFolderForm.value,
+        ...this.folderForm.value,
         id: this.selFolder!.id,
         folderIcon: this.custIcon,
         workspaceId: this.selFolder!.workspaceId,
@@ -363,7 +381,9 @@ export class ContentWorkspaceComponent implements OnInit {
   editFolder(modal: any, folder: any) {
     this.selFolder = folder;
     if (folder.key == 'fldr') {
-      this.addFolderForm.patchValue({ ...this.selFolder });
+      this.addURLIcon = 'cust-icon';
+      this.iconUrl = folder.folderIconPath;
+      this.folderForm.patchValue({ ...this.selFolder });
     } else {
       this.addSmartFolderForm.patchValue({ ...this.selFolder });
     }
@@ -373,10 +393,10 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // add folder
   addFolder() {
-    if (this.addFolderForm.valid) {
+    if (this.folderForm.valid) {
       this.disabled = true;
       let folderData: any = {
-        ...this.addFolderForm.value,
+        ...this.folderForm.value,
         folderIcon: this.custIcon,
         workspaceId: this.selWrkspc!.id,
         folderId: 0,

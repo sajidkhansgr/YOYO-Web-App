@@ -607,7 +607,7 @@
                 Add
               </button>
               <div class="dropdown-menu" aria-labelledby="btnAddDD">
-                <a class="dropdown-item curs-ptr" (click)="openModal(addFolderModal)">Add
+                <a class="dropdown-item curs-ptr" (click)="openFolderModal(folderModal, 'add')">Add
                   Folder</a>
                 <a class="dropdown-item curs-ptr" (click)="openModal(addSmartFolderModal)">Add Smart Folder</a>
               </div>
@@ -695,7 +695,7 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="comInfoDD">
                       <a class="dropdown-item curs-ptr"
-                        (click)="editFolder(folder.key=='fldr'?editFolderModal:editSmartFolderModal, folder)">
+                        (click)="folder.key=='fldr' ? openFolderModal(folderModal, 'edit', folder): editFolder(editSmartFolderModal, folder)">
                         <i class="fas fa-edit mr-1"></i>Edit Item</a>
                       <a class="dropdown-item" href="javascript:void(0)">
                         <i class="fas fa-clone mr-1"></i>Duplicate Folder</a>
@@ -946,7 +946,7 @@
 </ng-template>
 
 <!-- add folder modal  -->
-<ng-template #addFolderModal let-modal>
+<!-- <ng-template #addFolderModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Add Folder</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -1005,17 +1005,17 @@
       </button>
     </div>
   </form>
-</ng-template>
+</ng-template> -->
 
 <!-- edit folder modal  -->
-<ng-template #editFolderModal let-modal>
+<ng-template #folderModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Edit Folder</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{edit ? 'Edit' : 'Add'}} Folder</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="addFolderForm" (ngSubmit)="updFolder()" [formGroup]="addFolderForm" novalidate>
+  <form name="folderForm" (ngSubmit)="folderSubmit()" [formGroup]="folderForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
         [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
@@ -1071,8 +1071,9 @@
           </mat-checkbox>
         </div>
       </div>
+      <hr *ngIf="edit">
       <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed"
-        [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmartFolder">
+        [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmartFolder" *ngIf="edit">
         Edit Contained Smart Folders (0)
         <div class="float-right">
           <ng-container *ngIf="!editSmrtCollapsed; else elseIcon">
@@ -1083,7 +1084,7 @@
           </ng-template>
         </div>
       </div>
-      <div class="smartFolders" id="editSmartFolder" [ngbCollapse]="editSmrtCollapsed">
+      <div class="smartFolders" id="editSmartFolder" [ngbCollapse]="editSmrtCollapsed" *ngIf="edit">
         <div class="add">
           <mat-checkbox class="ml-3">Add</mat-checkbox>
           <div class="row mx-0 justify-content-between">
@@ -1115,8 +1116,9 @@
           </div>
         </div>
       </div>
+      <hr *ngIf="edit">
       <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="locationCollapsed = !locationCollapsed"
-        [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder">
+        [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder" *ngIf="edit">
         Location
         <div class="float-right">
           <ng-container *ngIf="!locationCollapsed; else elseIcon">
@@ -1127,7 +1129,7 @@
           </ng-template>
         </div>
       </div>
-      <div class="location px-2" id="locationFolder" [ngbCollapse]="locationCollapsed">
+      <div class="location px-2" id="locationFolder" [ngbCollapse]="locationCollapsed" *ngIf="edit">
         <div class="dark-bg-hover rounded p-2">
           <i class="fa fa-angle-right mr-3"></i>
           abc
@@ -1135,7 +1137,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" [disabled]="addFolderForm!.invalid || disabled">
+      <button type="submit" class="btn btn-primary" [disabled]="folderForm!.invalid || disabled">
         <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
         Save
       </button>
