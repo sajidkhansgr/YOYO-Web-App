@@ -68,7 +68,6 @@ export class UserListComponent implements OnInit {
         }
         this.lstLoading = false;
       }, (err: any) => {
-        console.log(err);
         this.usrs = [];
         this.lstLoading = false;
       });
