@@ -104,55 +104,9 @@
               </div>
             </div>
           </h5>
-          <div class="card-text px-3">
-            <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
-              <thead>
-                <tr>
-                  <th class="curs-ptr" [ngClass]="{'font-weight-normal': !col.isSelected}" *ngFor="let col of columns"
-                    (click)="sort(col.key)">
-                    {{col.dispName}}
-                    <i class="fas ml-1"
-                      [ngClass]="{'fa-sort-down align-top': col.isAsc, 'fa-sort-up align-bottom': !col.isAsc}"></i>
-                  </th>
-                </tr>
-              </thead>
-              <tbody *ngIf="!tagLoading && tags.length > 0">
-                <tr (click)="toggleInfo(tag)" *ngFor="let tag of tags">
-                  <td>
-                    {{tag.name}}
-                  </td>
-                  <td class="text-hi-dark-grey">No Status</td>
-                  <td>{{tag.updatedDate.split('T')[0]}}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="text-center text-secondary" *ngIf="tags.length == 0">
-              No tags found
-            </div>
-            <app-loader [type]="'page'" *ngIf="tagLoading"></app-loader> <!-- loader -->
-          </div>
-          <div class="card-footer row justify-content-between mx-0">
-            <div class="pages">
-              <mat-form-field appearance="outline" class="mr-2">
-                <mat-select [(ngModel)]="pageSize" (selectionChange)="pageSizeChange()">
-                  <mat-option [value]="lP" *ngFor="let lP of lmtPage">{{lP}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <!-- <span>Showing 1-10 of {{numAllTags}}</span> -->
-            </div>
-            <ul class="pagination">
-              <li class="page-item disabled">
-                <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true"><i
-                    class="fas fa-chevron-left"></i></a>
-              </li>
-              <!-- <li class="page-item" *ngFor="let item of [].constructor(paginationNum); let i = index">
-                <a class="page-link bg-hi-grey" href="javascript:void(0)">{{i+1}}</a>
-              </li> -->
-              <li class="page-item">
-                <a class="page-link bg-hi-grey" href="javascript:void(0)"><i class="fas fa-chevron-right"></i></a>
-              </li>
-            </ul>
-          </div>
+          <app-table [showRowInfo]="showRowInfo" [columns]="columns" [dataLoading]="tagLoading" [data]="tags"
+            [pageSize]="pageSize" [totalCount]="totalCount" (sort)="sort($event)" (toggleInfo)="toggleInfo($event)"
+            (pageSizeChange)="pageSizeChange($event)" (paginationNum)="paginationNum($event)"></app-table>
         </div>
       </div>
     </div>

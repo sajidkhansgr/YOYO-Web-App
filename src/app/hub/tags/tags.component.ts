@@ -46,8 +46,8 @@ export class TagsComponent implements OnInit {
   updDisabled!: boolean; catgAddDisabled!: boolean; tagAddDisabled!: boolean;
   catgData!: Catg | undefined;
   catgs!: Catg[]; tags!: Tag[]; allTags!: Tag[];
-  pageNum!: string; lmtPage!: Array<number>; pageSize!: number;
-  // numAllTags!: number; paginationNum!: number;
+  pageNum!: number; pageSize!: number;
+  totalCount!: number;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames!: string[];
   searchTxt!: string;
@@ -92,8 +92,8 @@ export class TagsComponent implements OnInit {
     this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
     this.catgData = undefined;
     this.catgs = []; this.tags = []; this.allTags = [];
-    this.pageNum = '1'; this.lmtPage = LMT_PAGE; this.pageSize = this.lmtPage[0];
-    // numAllTags = 0; paginationNum = 0;
+    this.pageNum = 1; this.pageSize = LMT_PAGE[0];
+    this.totalCount = 0;
     this.tagNames = [];
     this.searchTxt = '';
     this.sortColumn = ''; this.isAsc = undefined;
@@ -105,14 +105,16 @@ export class TagsComponent implements OnInit {
   // }
 
   // when changing page size
-  pageSizeChange() {
+  pageSizeChange(pageSize: number) {
+    this.pageSize = pageSize;
     this.getTags();
   }
 
   // numbers to be displayed for Pagination
-  // paginationNums() {
-  //   this.paginationNum = Math.ceil(this.numAllTags / parseInt(this.pageSize));
-  // }
+  paginationNum(num: number) {
+    this.pageNum = num;
+    this.getTags();
+  }
 
   // activate tag
   actTag(tag: any) {
@@ -242,6 +244,7 @@ export class TagsComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.lstTagViewModel) && data.result.lstTagViewModel.length > 0) {
           this.tags = data.result.lstTagViewModel;
+          this.totalCount = data.result.totalCount;
         }
         this.tagLoading = false;
       }, (err: any) => {
