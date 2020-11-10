@@ -11,6 +11,7 @@ import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/confirm-dialog.module';
 import { TagsComponent } from './tags.component';
 import { TagsService } from './tags.service';
+import { TableModule } from '../../shared/components/table/table.module'
 
 @NgModule({
   declarations: [TagsComponent],
@@ -22,7 +23,7 @@ import { TagsService } from './tags.service';
     MatSelectModule,
     ConfirmDialogModule,
     MatCheckboxModule,
-    LoaderModule,
+    LoaderModule, TableModule,
     MatChipsModule
   ],
   exports: [
