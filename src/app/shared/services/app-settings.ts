@@ -109,13 +109,16 @@ export class AppSettings {
 
   // ---- ANNOUNCEMENT ---- //
 
-  public static LIST_ANNCMNT = `api/Announcement/GetAll`;
+  public static LIST_ANCMNT = `api/Announcement/GetAll`;
 
-  public static ADD_ANNCMNT = `api/Announcement/Add`;
+  public static ADD_ANCMNT = `api/Announcement/Add`;
 
-  public static UPD_ANNCMNT = `api/Announcement/Update`;
+  public static UPD_ANCMNT = `api/Announcement/Update`;
 
-  public static GET_ANNCMNT = `api/Announcement/GetById`;
+  public static GET_ANCMNT = `api/Announcement/GetById`;
+
+  public static ARCH_ANCMNT = (id: string) => `api/Announcement/${id}/Archive`;
+
   //Employee
   public static LIST_EMPL = `api/Employee/GetAll`;
 

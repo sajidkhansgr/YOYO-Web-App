@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { NgbModal, NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
 
 import { TIME, GRP_TYPE } from '../shared/constants';
-import { Anncmnt } from '../shared/models/anncmnt';
+import { Announcement } from '../shared/models/announcement';
 import { Group } from '../shared/models/group';
 import { Workspace } from '../shared/models/workspace';
+import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
 import { CommnService } from './commn.service'
 import { GroupService } from '../user/group/group.service';
 import { ContentWorkspaceService } from '../hub/content-workspace/content-workspace.service';
@@ -24,8 +26,8 @@ export class CommnComponent implements OnInit {
   showNewAnn: boolean = false;
   ancmntForm!: FormGroup; isEdit!: boolean;
   disabled: boolean = false; loading: boolean = true;
-  ancmntData!: Anncmnt | undefined;
-  anncmnts!: Anncmnt[];
+  ancmntData!: Announcement | undefined;
+  anncmnts!: Announcement[];
   pageNum!: number; lmtPage!: Array<number>; pageSize!: number;
   searchTxt!: string; time = TIME; grpType = GRP_TYPE;
   selectable = true; removable: boolean = true;
@@ -37,7 +39,8 @@ export class CommnComponent implements OnInit {
     private commnServ: CommnService,
     private grpServ: GroupService,
     private wrkSpcServ: ContentWorkspaceService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -101,16 +104,16 @@ export class CommnComponent implements OnInit {
         ...this.ancmntForm.value
       }
       if (this.isEdit) {
-        // this.editAnncmnt(anncmntData);
+        // this.editAncmnt(anncmntData);
       } else {
-        console.log("addAnncmnt")
-        this.addAnncmnt(anncmntData);
+        console.log("addAncmnt")
+        this.addAncmnt(anncmntData);
       }
     }
   }
 
-  addAnncmnt(anncmntData: any) {
-    this.commnServ.addAnncmnt(anncmntData)
+  addAncmnt(anncmntData: any) {
+    this.commnServ.addAncmnt(anncmntData)
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Annoucement added successfully', 'Success!');
@@ -242,12 +245,36 @@ export class CommnComponent implements OnInit {
     }
   }
 
+  archAncmnt(ancmnt?: Announcement){
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to archive this annoucement?`,
+        title: `Archive Announcement`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // console.log(tag);
+        this.commnServ.archAncmnt(ancmnt!.id.toString()).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(data.message||'Announcement archived successfully', 'Success!');
+          } else {
+            this.toastr.error('Unable to arhive announcement', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
   disMissMdodal() {
     if (this.modalService)
       this.modalService.dismissAll();
   }
 
   ngOnDestroy(): void {
+    this.dialog.closeAll();
     this.disMissMdodal();
   }
 }

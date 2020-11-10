@@ -18,7 +18,7 @@ export class CommnService {
         queryParams = queryParams.set(key, params[key]);
       }
     }
-    return this.http.get(`${AppSettings.LIST_ANNCMNT}`, {
+    return this.http.get(`${AppSettings.LIST_ANCMNT}`, {
       params: queryParams
     }
     ).pipe(
@@ -28,17 +28,21 @@ export class CommnService {
     );
   }
 
-  addAnncmnt(data: any) {
-    return this.http.post(`${AppSettings.ADD_ANNCMNT}`, data)
+  addAncmnt(data: any) {
+    return this.http.post(`${AppSettings.ADD_ANCMNT}`, data)
   }
 
-  updAnncmnt(data: any) {
-    return this.http.patch(`${AppSettings.UPD_ANNCMNT}`, data)
+  updAncmnt(data: any) {
+    return this.http.patch(`${AppSettings.UPD_ANCMNT}`, data)
   }
 
-  viewAnncmnt(id: string) {
-    return this.http.get(`${AppSettings.GET_ANNCMNT}`, {
+  viewAncmnt(id: string) {
+    return this.http.get(`${AppSettings.GET_ANCMNT}`, {
       params: { id }
     });
+  }
+
+  archAncmnt(id: string) {
+    return this.http.put(`${AppSettings.ARCH_ANCMNT(id)}`, {})
   }
 }

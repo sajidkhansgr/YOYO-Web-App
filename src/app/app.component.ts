@@ -14,7 +14,7 @@ export class AppComponent {
   isToken: boolean = false; isVisb: boolean = false;
   routerSubs: Subscription;
   usrInfo: any | null;
-  excUrls = ['login','forgot-password','forgot-password'];
+  excUrls = ['login','forgot-password','forgot-password','create-password'];
 
   constructor(
     private tokenDataServ: TokenDataService,

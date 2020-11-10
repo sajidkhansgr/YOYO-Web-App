@@ -23,4 +23,9 @@ export class AuthService {
       return this.http.post(
         `${AppSettings.RESET_PASS}`, data );
     }
+
+    createPass(data: any) {
+      return this.http.post(
+        `${AppSettings.RESET_PASS}`, data );
+    }
 }

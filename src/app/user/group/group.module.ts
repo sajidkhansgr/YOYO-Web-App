@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule} from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
@@ -20,7 +19,7 @@ import { GroupService } from './group.service';
     CommonModule,
     FormsModule, ReactiveFormsModule,
     ClickOutsideModule,
-    MatFormFieldModule, MatInputModule, MatSelectModule, MatSelectModule, MatProgressSpinnerModule,
+    MatFormFieldModule, MatInputModule, MatSelectModule, MatSelectModule,
     MatChipsModule, MatAutocompleteModule,
     ConfirmDialogModule, LoaderModule
   ],

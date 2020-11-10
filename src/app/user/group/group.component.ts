@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { PRPS } from '../../shared/constants';
@@ -17,8 +19,23 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
   styleUrls: ['./group.component.scss']
 })
 export class GroupComponent implements OnInit {
-  showDoc: boolean = false;
   @Input() lmtPage: any;
+  input: any; searInit!: boolean;searchTxt!: string;
+  @ViewChild("sear", { static: false }) set altRefIn(el: ElementRef) {
+    this.input = el;
+    if (this.input && this.input?.nativeElement && !this.searInit) {
+      fromEvent(this.input.nativeElement, 'keyup')
+        .pipe(
+          debounceTime(1000),
+          distinctUntilChanged(),
+          tap(() => {
+            this.grpsList();
+          })
+        )
+        .subscribe();
+      this.searInit = true;
+    }
+  }
   props: any = PRPS;
   exps: any = [
     { id: 1, name: "Exp 1" }, { id: 2, name: "Exp 2" }, { id: 3, name: "Exp 3" }
@@ -28,19 +45,20 @@ export class GroupComponent implements OnInit {
   groupForm!: FormGroup; grpDetail!: Group | null;
   disabled: boolean = false; loading: boolean = true; docLoading: boolean = true;
   selectable = true; removable = true;
-  selDiv: any = []; divNameInp: any; isEdit!: boolean;
+  selDiv: any = []; divNameInp: any;
+  showRowInfo: boolean = false;rowInfo: any;isEdit!: boolean;
   @ViewChild("divName", { static: false }) set divName(el: ElementRef) {
     this.divNameInp = el;
   }
 
   constructor(
     private modalService: NgbModal,
-    private groupService: GroupService,
+    private grpServ: GroupService,
     private hubService: HubService,
     private dataServ: DataService,
     private toastr: ToastrService,
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +73,11 @@ export class GroupComponent implements OnInit {
 
   grpsList() {
     this.lstLoading = true;
-    this.groupService.groupList({ pageNo: this.pageNo, pageSize: this.pageSize})
+    let params:any = {
+      pageNo: this.pageNo, pageSize: this.pageSize,
+      searchText: this.searchTxt
+    }
+    this.grpServ.groupList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.grps = data.result.results;
@@ -88,7 +110,7 @@ export class GroupComponent implements OnInit {
   }
 
   getGrp() {
-    this.groupService.viewGroup(this.grpDetail!.id.toString()).subscribe((data: any) => {
+    this.grpServ.viewGroup(this.grpDetail!.id.toString()).subscribe((data: any) => {
       if (data && data.result && data.result.id) {
         this.grpDetail = data.result;
       }
@@ -113,7 +135,7 @@ export class GroupComponent implements OnInit {
   }
 
   addGrp(grpData: any) {
-    this.groupService.addGroup(grpData).subscribe((data: any) => {
+    this.grpServ.addGroup(grpData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Group added successfully', 'Success!');
         this.disMissMdodal();
@@ -129,7 +151,7 @@ export class GroupComponent implements OnInit {
 
   editGrp(grpData: any) {
     grpData.id = this.grpDetail!.id;
-    this.groupService.updGroup(grpData).subscribe((data: any) => {
+    this.grpServ.updGroup(grpData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Group updated successfully', 'Success!');
         this.disMissMdodal();
@@ -157,22 +179,20 @@ export class GroupComponent implements OnInit {
     })
   }
 
-  toggleDoc = (grp: any) => {
-    this.docLoading = true;
-    this.showDoc = !this.showDoc;
-    if (this.showDoc) {
-      this.grpDetail = grp;
-      // this.getGrp(); //if more detail need then use this function
-      this.docLoading = false;
+  // toggle group info
+  toggleInfo(row: Group) {
+    if (this.showRowInfo && this.rowInfo.id == row.id) {
+      this.showRowInfo = false;
+      this.rowInfo = {};
     } else {
-      this.closeDoc();
+      this.rowInfo = row;
+      console.log(this.rowInfo);
+      this.showRowInfo = true;
     }
   }
 
   closeDoc = () => {
-    this.grpDetail = null;
-    this.docLoading = false;
-    this.showDoc = false;
+    this.showRowInfo = false;
   }
 
   outsideCloseDD = (dropdown: any, event: any) => {

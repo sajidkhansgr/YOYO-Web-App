@@ -18,4 +18,8 @@ enum USR_ROLES {
   "Super admin" = 1, "Admin", "User"
 }
 
-export {LMT_PAGE, DEF_IMG, PRPS, DEF_ICON, TIME, GRP_TYPE,ROLES, USR_ROLES};
+enum EMP_STATUS {
+  "Active" = 1, "Inactive", "Invited"
+}
+
+export {LMT_PAGE, DEF_IMG, PRPS, DEF_ICON, TIME, GRP_TYPE,ROLES, USR_ROLES, EMP_STATUS};

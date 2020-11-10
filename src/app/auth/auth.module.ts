@@ -11,6 +11,7 @@ const routes: Routes = [
       { path : 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule), canActivate:[LoginCheckGuard] },
       { path : 'forgot-password', loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule)},
       { path : 'reset-password', loadChildren: () => import('./reset-password/reset-password.module').then(m => m.ResetPasswordModule)},
+      { path : 'create-password', loadChildren: () => import('./create-password/create-password.module').then(m => m.CreatePasswordModule)}
     ]
   },
 ];
