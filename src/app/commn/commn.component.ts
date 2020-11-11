@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { NgbModal, NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
+import { DatePipe } from '@angular/common';
 
-import { TIME, GRP_TYPE } from '../shared/constants';
+import { TIME, GRP_TYPE, LMT_PAGE, ANCMT_STATUS } from '../shared/constants';
 import { Announcement } from '../shared/models/announcement';
 import { Group } from '../shared/models/group';
 import { Workspace } from '../shared/models/workspace';
@@ -22,17 +23,17 @@ import { ContentWorkspaceService } from '../hub/content-workspace/content-worksp
   }
 })
 export class CommnComponent implements OnInit {
-  showDoc: boolean = false;
-  showNewAnn: boolean = false;
   ancmntForm!: FormGroup; isEdit!: boolean;
-  disabled: boolean = false; loading: boolean = true;
-  ancmntData!: Announcement | undefined;
-  anncmnts!: Announcement[];
-  pageNum!: number; lmtPage!: Array<number>; pageSize!: number;
+  disabled: boolean = false; ancmntData!: Announcement | undefined;
+  lmtPage: Array<number> = LMT_PAGE; pageNo!: number; loading: boolean = false; pageSize: number = LMT_PAGE[0];
+  ancmnts!: Announcement[]; activeIndex: number = 0; ancmntSts = ANCMT_STATUS; docLoading!: boolean;
   searchTxt!: string; time = TIME; grpType = GRP_TYPE;
   selectable = true; removable: boolean = true;
   grps: Group[] = []; selGrps: Group[] = [];
   wrkSpcs: Workspace[] = []; selWrkSpcs: Workspace[] = [];
+  showRowInfo: boolean = false; rowInfo: any;sort:any={};
+  cols: any[] = [];
+
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
@@ -44,11 +45,18 @@ export class CommnComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAncmnts();
     this.initialiseState();
+    this.initForm();
+    this.getAncmnts();
   }
 
-  initialiseState() {
+  initialiseState(){
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
+    this.cols = [{ n: "Subject", asc: false, k: "subject" },{ n: "Author", asc: false, k: "author" },{ n: "Recipients", asc: false, k: "name" },
+    { n: "Date Sent", asc: false, k: "date" },{ n: "Read", asc: false, k: "read" }];
+  }
+
+  initForm() {
     this.ancmntForm = this.fb.group({
       subject: ['', [Validators.required]],
       body: ['', [Validators.required]],
@@ -71,52 +79,128 @@ export class CommnComponent implements OnInit {
         subject: '', notifyByEmail: false, requestToUpdate: false,
         sendLater: false, sendToGroup: '', date: '', time: ''
       })
+      this.enbDisbDateTime({ checked: false });
     }
   }
 
   // list of Annoucements
   getAncmnts() {
     this.loading = true;
-    this.commnServ.anncmntList({ pageNo: this.pageNum, pageSize: this.pageSize, searchText: this.searchTxt })
+    this.closeDoc();
+    let params: any = {
+      pageNo: this.pageNo, pageSize: this.pageSize,
+      searchText: this.searchTxt,...this.sort,
+      status: this.activeIndex === 2 ? 3 : this.activeIndex == 1 ? 2 : 1,
+    }
+    this.commnServ.ancmntList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          this.anncmnts = data.result.results;
+          this.ancmnts = data.result.results;
         } else {
-          this.anncmnts = [];
+          this.ancmnts = [];
         }
         this.loading = false;
       }, (err: any) => {
+        this.ancmnts = [];
         this.loading = false;
       });
   }
 
-  toggleDoc = () => {
-    this.showDoc = !this.showDoc;
+  chngPageSize() {
+    this.getAncmnts();
   }
+
+  sortChange(col: any, index: number) {
+    this.loading = true;
+    let colData = { ...col };
+    for (let k = 0; k < this.cols.length; k++) {
+      this.cols[k].asc = false;
+    }
+    colData.asc = !colData.asc;
+    this.cols[index].asc = colData.asc;
+    this.sort = {
+      SortColumn: col.k,
+      IsAscending: colData.asc,
+    }
+    this.getAncmnts();
+  }
+
+  onTabChange = (event: any) => {
+    this.activeIndex = event.index;
+    this.initialiseState();
+    this.getAncmnts();
+  }
+
+  // toggle info
+  toggleInfo(row: Announcement) {
+    if (this.showRowInfo && this.rowInfo.id == row.id) {
+      this.closeDoc();
+    } else {
+      this.showRowInfo = true;
+      this.docLoading = true;
+      setTimeout(() => {
+        this.rowInfo = row;
+        this.docLoading = false;
+      }, 900)
+      console.log(this.rowInfo);
+    }
+  }
+
   closeDoc = () => {
-    this.showDoc = false;
+    this.showRowInfo = false;
+    this.rowInfo = {};
+  }
+
+  //Not using
+  getAncment(ancmnt: Announcement) {
+    this.docLoading = true;
+    this.commnServ.viewAncmnt(ancmnt!.id.toString()).subscribe((data: any) => {
+      if (data && data.result && data.result.id) {
+        this.rowInfo = data.result;
+      } else {
+        this.rowInfo = ancmnt;
+      }
+      this.docLoading = false;
+    }, (err: any) => {
+      this.rowInfo = ancmnt;
+      this.docLoading = false;
+    });
   }
 
   onSubmit() {
     if (this.ancmntForm.valid) {
       this.disabled = true;
-      let anncmntData: any = {
+      let ancmntData: any = {
         ...this.ancmntForm.value
       }
+      if (ancmntData.sendToGroup === 2) {
+        ancmntData.recipients = [];
+      } else if (ancmntData.sendToGroup === 3) {
+
+      } else {
+        ancmntData.recipients
+      }
+      if (ancmntData.sendLater) {
+        let datePipe = new DatePipe("en-US");
+        ancmntData.scheduledOn = datePipe.transform(new Date(ancmntData.date), 'yyyy-MM-dd') + 'T' + ancmntData.time + ':00.000Z';
+        delete ancmntData.date; delete ancmntData.time;
+      }
+      console.log(ancmntData, "ancmntData")
       if (this.isEdit) {
-        // this.editAncmnt(anncmntData);
+        // this.editAncmnt(ancmntData);
       } else {
         console.log("addAncmnt")
-        this.addAncmnt(anncmntData);
+        this.addAncmnt(ancmntData);
       }
     }
   }
 
-  addAncmnt(anncmntData: any) {
-    this.commnServ.addAncmnt(anncmntData)
+  addAncmnt(ancmntData: any) {
+    this.commnServ.addAncmnt(ancmntData)
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Annoucement added successfully', 'Success!');
+          this.getAncmnts();
           this.disMissMdodal();
           //get all annoucem
         } else {
@@ -245,7 +329,8 @@ export class CommnComponent implements OnInit {
     }
   }
 
-  archAncmnt(ancmnt?: Announcement){
+  archAncmnt($event: any, ancmnt?: Announcement) {
+    $event.stopPropagation();
     this.dialog.open(ConfirmDialogComponent, {
       data: {
         msg: `Are you sure you want to archive this annoucement?`,
@@ -257,7 +342,8 @@ export class CommnComponent implements OnInit {
         // console.log(tag);
         this.commnServ.archAncmnt(ancmnt!.id.toString()).subscribe((data: any) => {
           if (data) {
-            this.toastr.success(data.message||'Announcement archived successfully', 'Success!');
+            this.getAncmnts();
+            this.toastr.success(data.message || 'Announcement archived successfully', 'Success!');
           } else {
             this.toastr.error('Unable to arhive announcement', 'Error!');
           }

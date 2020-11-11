@@ -14,7 +14,7 @@ export class GroupService {
   groupList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
     for (let key in params) {
-      if (params[key] || key == 'pageNo') {
+      if (params[key] || key == 'pageNo' || key == 'IsAscending') {
         queryParams = queryParams.set(key, params[key]);
       }
     }

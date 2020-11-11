@@ -1,6 +1,4 @@
-<app-loader [type]="'page'" *ngIf="loading"></app-loader> <!-- loader -->
-
-<div class="groups-section overflow-hidden" *ngIf="!loading">
+<div class="groups-section overflow-hidden">
   <div class="buttons-row row mt-3 justify-content-between mx-2">
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" (click)="openModal(grpModal)">
@@ -16,7 +14,7 @@
               <div class="search col-md-6">
                 <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
                   <i matPrefix class="fas fa-search"></i>
-                  <input matInput placeholder="Search ..." autocomplete="disabled"  #sear [(ngModel)]="searchTxt">
+                  <input matInput placeholder="Search ..." autocomplete="disabled" #sear [(ngModel)]="searchTxt">
                   <div matSuffix class="curs-ptr">
                     <i class="fas fa-sliders-h"></i>
                   </div>
@@ -93,62 +91,56 @@
               </div>
             </div>
           </h5>
-          <div class="card-text px-3">
-            <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
-              <thead>
-                <tr>
-                  <th scope="col" class="curs-ptr">
-                    Name<i class="fas fa-sort-down ml-1 align-top"></i>
-                  </th>
-                  <th scope="col" class="curs-ptr">
-                    Date Created<i class="fas fa-sort-down ml-1 align-top"></i>
-                  </th>
-                  <th scope="col" class="curs-ptr">
-                    Members<i class="fas fa-sort-down ml-1 align-top"></i>
-                  </th>
-                  <th scope="col" class="curs-ptr">
-                    Anonymized<i class="fas fa-sort-down ml-1 align-top"></i>
-                  </th>
-                </tr>
-              </thead>
-              <tbody *ngIf="!lstLoading && grps.length > 0">
-                <tr *ngFor="let grp of grps" (click)="toggleInfo(grp)">
-                  <td>
-                    <span class="d-block">{{grp.name}}</span>
-                    <small>St Email</small>
-                  </td>
-                  <td class="text-hi-dark-grey">St dae</td>
-                  <td>St dae</td>
-                  <td class="text-hi-dark-grey">Static ROle</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="text-center text-secondary" *ngIf="!lstLoading && grps.length == 0">
-              No Group found
+          <app-loader [type]="'page'" *ngIf="loading"></app-loader> <!-- loader -->
+          <div *ngIf="!loading">
+            <div class="card-text px-3">
+              <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
+                <thead>
+                  <tr>
+                    <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
+                      {{col.n}}
+                      <i class="ml-1 fas" [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="!loading && grps.length > 0">
+                  <tr *ngFor="let grp of grps" (click)="toggleInfo(grp)">
+                    <td>
+                      <span class="d-block">{{grp.name}}</span>
+                    </td>
+                    <td class="text-hi-dark-grey">{{(grp.createdDate|date:'dd MMM, yyyy')||'N/A'}}</td>
+                    <td>St dae</td>
+                    <td class="text-hi-dark-grey">Static ROle</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center text-secondary" *ngIf="!loading && grps.length == 0">
+                No Group found
+              </div>
             </div>
-          </div>
-          <div class="card-footer row justify-content-between mx-0">
-            <div class="pages">
-              <mat-form-field appearance="outline" class="mr-2">
-                <mat-select [(ngModel)]="pageSize" (selectionChange)="chngPageSize()">>
-                  <mat-option *ngFor="let lP of lmtPage" value="lP">{{lP}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <span>Showing 1-10 of 100 </span>
+            <div class="card-footer row justify-content-between mx-0">
+              <div class="pages">
+                <mat-form-field appearance="outline" class="mr-2">
+                  <mat-select [(ngModel)]="pageSize" (selectionChange)="chngPageSize()">
+                    <mat-option *ngFor="let lP of lmtPage" [value]="lP">{{lP}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <span>Showing 1-10 of 100 </span>
+              </div>
+              <ul class="pagination">
+                <li class="page-item disabled">
+                  <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true">
+                    <i class="fas fa-chevron-left"></i>
+                  </a>
+                </li>
+                <li class="page-item active"><a class="page-link bg-hi-grey" href="javascript:void(0)">1</a></li>
+                <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">2</a></li>
+                <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">3</a></li>
+                <li class="page-item">
+                  <a class="page-link bg-hi-grey" href="javascript:void(0)"><i class="fas fa-chevron-right"></i></a>
+                </li>
+              </ul>
             </div>
-            <ul class="pagination">
-              <li class="page-item disabled">
-                <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true">
-                  <i class="fas fa-chevron-left"></i>
-                </a>
-              </li>
-              <li class="page-item active"><a class="page-link bg-hi-grey" href="javascript:void(0)">1</a></li>
-              <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">2</a></li>
-              <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">3</a></li>
-              <li class="page-item">
-                <a class="page-link bg-hi-grey" href="javascript:void(0)"><i class="fas fa-chevron-right"></i></a>
-              </li>
-            </ul>
           </div>
         </div>
       </div>

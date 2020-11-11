@@ -4,12 +4,14 @@
   </h3>
   <div class="mt-2">
     <div class="main-tab-nav">
-      <mat-tab-group (selectedTabChange)="onTabChange($event)">
+      <mat-tab-group [selectedIndex]="activeIndex" (selectedTabChange)="onTabChange($event)">
         <mat-tab label="Users">
-          <app-user-list [lmtPage]="lmtPage"></app-user-list>
+          <div *ngIf="activeIndex==0">
+            <app-user-list [lmtPage]="lmtPage"></app-user-list>
+          </div>
         </mat-tab>
         <mat-tab label="Groups">
-          <div *ngIf="arr.indexOf(1)!==-1">
+          <div *ngIf="activeIndex==1">
             <app-group [lmtPage]="lmtPage"></app-group>
           </div>
         </mat-tab>

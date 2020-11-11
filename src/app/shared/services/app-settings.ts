@@ -115,7 +115,7 @@ export class AppSettings {
 
   public static UPD_ANCMNT = `api/Announcement/Update`;
 
-  public static GET_ANCMNT = `api/Announcement/GetById`;
+  public static GET_ANCMNT = (id: string) => `api/Announcement/GetById/${id}`;
 
   public static ARCH_ANCMNT = (id: string) => `api/Announcement/${id}/Archive`;
 
