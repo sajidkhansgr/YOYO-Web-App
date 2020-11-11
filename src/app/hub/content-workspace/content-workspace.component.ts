@@ -627,13 +627,13 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // toggle dropdown
-  toggleDropdown = (event: any) => {
-    if (event.target!.classList.contains('fas')) {
-      event.target.parentNode.nextSibling!.classList.toggle('show');
-    } else {
-      event.target.nextSibling!.classList.toggle('show');
-    }
-  }
+  // toggleDropdown = (event: any) => {
+  //   if (event.target!.classList.contains('fas')) {
+  //     event.target.parentNode.nextSibling!.classList.toggle('show');
+  //   } else {
+  //     event.target.nextSibling!.classList.toggle('show');
+  //   }
+  // }
 
   closeDropdown = (event: any) => {
     event.target.parentNode.parentNode!.classList.remove('show');
