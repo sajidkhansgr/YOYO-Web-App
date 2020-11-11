@@ -104,6 +104,15 @@
               </div>
             </div>
           </h5>
+          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs justify-content-end border-bottom-0 mr-3"
+            (activeIdChange)="changeDispTags()">
+            <li [ngbNavItem]="1">
+              <a ngbNavLink>Active</a>
+            </li>
+            <li [ngbNavItem]="2">
+              <a ngbNavLink>Disabled</a>
+            </li>
+          </ul>
           <app-table [showRowInfo]="showRowInfo" [columns]="columns" [dataLoading]="tagLoading" [data]="tags"
             [pageSize]="pageSize" [totalCount]="totalCount" (sort)="sort($event)" (toggleInfo)="toggleInfo($event)"
             (pageSizeChange)="pageSizeChange($event)" (paginationNum)="paginationNum($event)"></app-table>
@@ -242,9 +251,10 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Organized in Categories</mat-label>
-        <mat-select formControlName="categories" multiple>
+        <mat-select multiple [(value)]="rowInfo.categoryIDs">
           <!-- multiple -->
-          <mat-option *ngFor="let catg of catgs" [value]="catg.id">{{catg.name}}</mat-option>
+          <mat-option hidden></mat-option>
+          <mat-option *ngFor="let catg of catgs" value="{{catg.id}}">{{catg.name}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>

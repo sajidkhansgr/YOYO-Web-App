@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/confirm-dialog.module';
@@ -24,7 +25,8 @@ import { TableModule } from '../../shared/components/table/table.module'
     ConfirmDialogModule,
     MatCheckboxModule,
     LoaderModule, TableModule,
-    MatChipsModule
+    MatChipsModule,
+    NgbNavModule
   ],
   exports: [
     TagsComponent

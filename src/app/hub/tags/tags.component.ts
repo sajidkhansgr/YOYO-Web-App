@@ -46,13 +46,14 @@ export class TagsComponent implements OnInit {
   updDisabled!: boolean; catgAddDisabled!: boolean; tagAddDisabled!: boolean;
   catgData!: Catg | undefined;
   catgs!: Catg[]; tags!: Tag[]; allTags!: Tag[];
-  pageNum!: number; pageSize!: number;
+  pageNum!: number; pageSize!: number; isActive!: boolean;
   totalCount!: number;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames!: string[];
   searchTxt!: string;
   sortColumn!: string; isAsc!: boolean | undefined;
   columns!: any[];
+  active!: number;
 
   constructor(
     private dialog: MatDialog,
@@ -86,23 +87,29 @@ export class TagsComponent implements OnInit {
       name: ['', [Validators.required]]
     });
     this.updTagForm = this.fb.group({
-      name: ['', [Validators.required]],
-      categories: [[]]
+      name: ['', [Validators.required]]
     });
     this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
     this.catgData = undefined;
     this.catgs = []; this.tags = []; this.allTags = [];
-    this.pageNum = 1; this.pageSize = LMT_PAGE[0];
+    this.pageNum = 1; this.pageSize = LMT_PAGE[0]; this.isActive = true;
     this.totalCount = 0;
     this.tagNames = [];
     this.searchTxt = '';
     this.sortColumn = ''; this.isAsc = undefined;
     this.columns = [{ dispName: "Name", isAsc: true, isSelected: false, key: "name" }, { dispName: "Status", isAsc: true, isSelected: false, key: "status" }, { dispName: "Date Modified", isAsc: true, isSelected: false, key: "updatedDate" }];
+    this.active = 1;
   }
 
   // resetCh() {
   //   this.tagForm.reset()
   // }
+
+  // change displayed tags (isActive)
+  changeDispTags() {
+    this.active == 1 ? this.isActive = true : this.isActive = false;
+    this.getTags();
+  }
 
   // when changing page size
   pageSizeChange(pageSize: number) {
@@ -175,6 +182,7 @@ export class TagsComponent implements OnInit {
       let tagData: any = {
         id: this.rowInfo.id,
         ...this.updTagForm.value,
+        categories: this.rowInfo.categoryIDs.map(Number),
         hubId: parseInt(this.hubid)
       };
       // console.log(tagData);
@@ -239,7 +247,8 @@ export class TagsComponent implements OnInit {
       pageSize: this.pageSize,
       searchText: this.searchTxt,
       isAscending: this.isAsc,
-      sortColumn: this.sortColumn
+      sortColumn: this.sortColumn,
+      isActive: this.isActive
     }
     // console.log(query);
     this.tagServ.tagList(query)
@@ -498,7 +507,12 @@ export class TagsComponent implements OnInit {
       this.rowInfo = {};
     } else {
       this.rowInfo = row;
-      console.log(this.rowInfo);
+      this.rowInfo.categoryIDs = [];
+      for (let i = 0; i < row.categories.length; i++) {
+        this.rowInfo.categoryIDs.push((row.categories[i].id).toString());
+      }
+      // console.log(this.rowInfo.categoryIDs);
+      // console.log(this.rowInfo.categories);
       this.showRowInfo = true;
     }
   }
