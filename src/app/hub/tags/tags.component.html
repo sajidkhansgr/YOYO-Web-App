@@ -123,12 +123,10 @@
           </div>
         </div>
         <div class="card-header bg-hi-light-grey d-flex">
-          <div class="btn btn-sm btn-light mr-2" (click)="deactTag(rowInfo)">
-            <!-- *ngIf="rowInfo.isActive" -->
+          <div class="btn btn-sm btn-light mr-2" (click)="deactTag(rowInfo)" *ngIf="rowInfo.isActive">
             <i class="fas fa-trash-alt"></i>
           </div>
-          <div class="btn btn-sm btn-light mr-2" (click)="actTag(rowInfo)">
-            <!-- *ngIf="!rowInfo.isActive" -->
+          <div class="btn btn-sm btn-light mr-2" (click)="actTag(rowInfo)" *ngIf="!rowInfo.isActive">
             <i class="fas fa-plus"></i>
           </div>
           <div class="btn btn-sm btn-light" (click)="updTagModal(editTag)">
@@ -147,7 +145,14 @@
             <div class="orgCategories">
               <label class="text-hi-dark-grey mb-0 mt-2">Organized in Categories</label>
               <div class="value">
-                {{rowInfo.catgName}}
+                <ng-container *ngIf="rowInfo.categories.length>0; else noCatg">
+                  <ul class="mb-0">
+                    <li *ngFor="let cn of rowInfo.categories">{{cn.name}}</li>
+                  </ul>
+                </ng-container>
+                <ng-template #noCatg>
+                  No Categories
+                </ng-template>
               </div>
             </div>
             <div class="orgCategories">
