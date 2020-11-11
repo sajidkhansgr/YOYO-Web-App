@@ -40,12 +40,13 @@ export class GroupComponent implements OnInit {
   exps: any = [
     { id: 1, name: "Exp 1" }, { id: 2, name: "Exp 2" }, { id: 3, name: "Exp 3" }
   ];
+  cols: any[] = [{ n: "Name", asc: false,k:"name"},{ n: "Date Created", asc: false,k:"createdDate"},{ n: "Members", asc: false},{ n: "Anonymized", asc: false}];
   grps!: Group[]; divArr: Hub[] = [];
-  pageNo!: number;lstLoading: boolean=false;pageSize!: number;
+  pageNo!: number;loading: boolean=false;pageSize!: number;
   groupForm!: FormGroup; grpDetail!: Group | null;
-  disabled: boolean = false; loading: boolean = true; docLoading: boolean = true;
+  disabled: boolean = false; docLoading: boolean = true;
   selectable = true; removable = true;
-  selDiv: any = []; divNameInp: any;
+  selDiv: any = []; divNameInp: any;sort:any={};
   showRowInfo: boolean = false;rowInfo: any;isEdit!: boolean;
   @ViewChild("divName", { static: false }) set divName(el: ElementRef) {
     this.divNameInp = el;
@@ -72,10 +73,12 @@ export class GroupComponent implements OnInit {
   }
 
   grpsList() {
-    this.lstLoading = true;
+    this.loading = true;
+    this.closeDoc();
     let params:any = {
       pageNo: this.pageNo, pageSize: this.pageSize,
-      searchText: this.searchTxt
+      searchText: this.searchTxt,
+      ...this.sort
     }
     this.grpServ.groupList(params)
       .subscribe((data: any) => {
@@ -84,11 +87,11 @@ export class GroupComponent implements OnInit {
         }else{
           this.grps = [];
         }
-        this.lstLoading = false;
+        this.loading = false;
       }, (err: any) => {
           console.log(err);
           this.grps = [];
-          this.lstLoading = false;
+          this.loading = false;
       });
   }
 
@@ -98,14 +101,27 @@ export class GroupComponent implements OnInit {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.divArr = data.result.results;
         }
-        this.loading = false;
       }, (err: any) => {
-        this.loading = false;
         console.log(err);
       });
   }
 
   chngPageSize(){
+    this.grpsList();
+  }
+
+  sortChange(col: any, index: number){
+    this.loading = true;
+    let colData = {...col};
+    for(let k=0;k<this.cols.length;k++){
+      this.cols[k].asc = false;
+    }
+    colData.asc = !colData.asc;
+    this.cols[index].asc = colData.asc;
+    this.sort = {
+      SortColumn: col.k,
+      IsAscending: colData.asc,
+    }
     this.grpsList();
   }
 
@@ -156,7 +172,6 @@ export class GroupComponent implements OnInit {
         this.toastr.success(data.message || 'Group updated successfully', 'Success!');
         this.disMissMdodal();
         this.grpsList();
-        this.closeDoc();
       } else {
         this.toastr.error(data.result.data || 'Unable to update Group', 'Error!');
       }
@@ -182,8 +197,7 @@ export class GroupComponent implements OnInit {
   // toggle group info
   toggleInfo(row: Group) {
     if (this.showRowInfo && this.rowInfo.id == row.id) {
-      this.showRowInfo = false;
-      this.rowInfo = {};
+      this.closeDoc();
     } else {
       this.rowInfo = row;
       console.log(this.rowInfo);
@@ -193,6 +207,7 @@ export class GroupComponent implements OnInit {
 
   closeDoc = () => {
     this.showRowInfo = false;
+    this.rowInfo = {};
   }
 
   outsideCloseDD = (dropdown: any, event: any) => {

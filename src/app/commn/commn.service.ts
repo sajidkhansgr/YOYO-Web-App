@@ -11,7 +11,7 @@ export class CommnService {
     private http: HttpClient
   ) { }
 
-  anncmntList(params: any): Observable<any[]> {
+  ancmntList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
     for (let key in params) {
       if (params[key] || key == 'isDisabled') {
@@ -37,9 +37,7 @@ export class CommnService {
   }
 
   viewAncmnt(id: string) {
-    return this.http.get(`${AppSettings.GET_ANCMNT}`, {
-      params: { id }
-    });
+    return this.http.get(`${AppSettings.GET_ANCMNT(id)}`)
   }
 
   archAncmnt(id: string) {

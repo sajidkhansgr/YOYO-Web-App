@@ -13,88 +13,30 @@
                 New Announcement
               </button>
             </div>
-
             <div class="row mt-4 mx-0">
-              <div class="sub-tab-nav" [ngClass]="{'col-md-12' : !showDoc, 'col-md-8': showDoc}">
+              <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo, 'col-md-8': showRowInfo}">
                 <div class="card overflow-hidden">
                   <div class="card-header border-0">
-                    <mat-tab-group>
+                    <mat-tab-group [selectedIndex]="activeIndex" (selectedTabChange)="onTabChange($event)">
                       <mat-tab label="Sent">
-                        <div class="card-body bg-white rounded-bottom px-0 pb-0">
-                          <div class="card-text px-3">
-                            <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showDoc}">
-                              <thead>
-                                <tr>
-                                  <th scope="col" class="curs-ptr">SUBJECT<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                                  <th scope="col" class="curs-ptr">AUTHOR<i class="fas fa-sort-down ml-1 align-top"></i>
-                                  </th>
-                                  <th scope="col" class="curs-ptr">RECIPIENTS<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                                  <th scope="col" class="curs-ptr">DATE SENT<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                                  <th scope="col" class="curs-ptr">READ<i class="fas fa-sort-down ml-1 align-top"></i>
-                                  </th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr (click)="toggleDoc()">
-                                  <td>
-                                    Updated Spare Partds<br />
-                                  </td>
-                                  <td class="text-hi-dark-grey">Andrea ABC</td>
-                                  <td>All Users</td>
-                                  <td class="text-hi-dark-grey">01/01/2020</td>
-                                  <td>10%</td>
-                                  <td (click)="archAncmnt()">
-                                    <button class="btn btn-primary btn-sm hover-btn">Archive</button>
-                                  </td>
-                                </tr>
-                                <tr (click)="toggleDoc()">
-                                  <td>
-                                    Updated Spare Partds<br />
-                                  </td>
-                                  <td class="text-hi-dark-grey">Andrea ABC</td>
-                                  <td>All Users</td>
-                                  <td class="text-hi-dark-grey">01/01/2020</td>
-                                  <td>10%</td>
-                                  <td>
-                                    <button class="btn btn-primary btn-sm hover-btn">Archive</button>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="card-footer row justify-content-between mx-0">
-                            <div class="pages">
-                              <mat-form-field appearance="outline" class="mr-2">
-                                <mat-select>
-                                  <mat-option value="10">10</mat-option>
-                                  <mat-option value="10">20</mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                              <span>Showing 1-10 of 100 </span>
-                            </div>
-                            <ul class="pagination">
-                              <li class="page-item disabled">
-                                <a class="page-link bg-hi-grey" href="#" tabindex="-1" aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
-                              </li>
-                              <li class="page-item"><a class="page-link bg-hi-grey" href="#">1</a></li>
-                              <li class="page-item"><a class="page-link bg-hi-grey" href="#">2</a></li>
-                              <li class="page-item"><a class="page-link bg-hi-grey" href="#">3</a></li>
-                              <li class="page-item">
-                                <a class="page-link bg-hi-grey" href="#"><i class="fas fa-chevron-right"></i></a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
+                        <app-loader [type]="'page'" *ngIf="loading"></app-loader> <!-- loader -->
+                        <ng-container *ngTemplateOutlet="ancmntTable"></ng-container>
                       </mat-tab>
-                      <mat-tab label="Scheduled">Same Table</mat-tab>
-                      <mat-tab label="Archived">Same Table</mat-tab>
+                      <mat-tab label="Scheduled">
+                        <app-loader [type]="'page'" *ngIf="loading"></app-loader> <!-- loader -->
+                        <ng-container *ngTemplateOutlet="ancmntTable"></ng-container>
+                      </mat-tab>
+                      <mat-tab label="Archived">
+                        <app-loader [type]="'page'" *ngIf="loading"></app-loader> <!-- loader -->
+                        <ng-container *ngTemplateOutlet="ancmntTable"></ng-container>
+                      </mat-tab>
                     </mat-tab-group>
                   </div>
                 </div>
               </div>
-              <div class="workspace w-100 col-md-4" [ngClass]="{'hide': !showDoc, 'show': showDoc}">
-                <div class="doc">
+              <div class="workspace w-100 col-md-4" *ngIf="showRowInfo">
+                <app-loader [type]="'page'" *ngIf="docLoading"></app-loader>
+                <div class="doc"  *ngIf="!docLoading">
                   <div class="card">
                     <div class="card-header row m-0">
                       <h5 class="mb-0 pl-0 align-self-center">Announcement details</h5>
@@ -108,60 +50,42 @@
                       <div class="doc-details details border-bottom mb-3 pb-3">
                         <div class="subject">
                           <label class="text-hi-dark-grey mb-0 mt-2">Subject</label>
-                          <div class="value">
-                            Updated abc def ghi jkl
-                          </div>
+                          <div class="value">{{rowInfo.subject||'N/A'}}</div>
                         </div>
                         <div class="created">
                           <label class="text-hi-dark-grey mb-0 mt-2">Created</label>
-                          <div class="value">
-                            01/01/2020 12:45
-                          </div>
+                          <div class="value">{{rowInfo.created||'N/A'}}</div>
                         </div>
                         <div class="author">
                           <label class="text-hi-dark-grey mb-0 mt-2">Author</label>
-                          <div class="value">
-                            Andrea Def Ghi
-                          </div>
+                          <div class="value">{{rowInfo.author}}</div>
                         </div>
                         <div class="recipients">
                           <label class="text-hi-dark-grey mb-0 mt-2">Recipients</label>
                           <div class="value">
-                            All Users
+                            {{rowInfo.sendToGroup===1?'All Users':''}}
                           </div>
                         </div>
                         <div class="requestUpdate">
                           <label class="text-hi-dark-grey mb-0 mt-2">Request Update</label>
-                          <div class="value">
-                            Yes
-                          </div>
+                          <div class="value">{{rowInfo.requestToUpdate?'Yes':'No'}}</div>
                         </div>
                         <div class="sendEmailReminders">
                           <label class="text-hi-dark-grey mb-0 mt-2">Send email reminders</label>
-                          <div class="value">
-                            Yes
-                          </div>
+                          <div class="value">{{rowInfo.notifyByEmail?'Yes':'No'}}</div>
                         </div>
                         <div class="status">
                           <label class="text-hi-dark-grey mb-0 mt-2">Status</label>
-                          <div class="value">
-                            Sent 01/01/2020 12:45
-                          </div>
+                          <div class="value">{{rowInfo.created||'N/A'}}</div>
                         </div>
                         <div class="readRate">
                           <label class="text-hi-dark-grey mb-0 mt-2">Read Rate</label>
-                          <div class="value">
-                            10% (35 of 364)
-                          </div>
+                          <div class="value">{{rowInfo.read||'N/A'}}</div>
                         </div>
                       </div>
                       <div class="announcement details border-bottom mb-3 pb-3">
                         <div class="announcement">
-                          <div class="value">
-                            The Hi-Force Spare Parts price lists have been updated in Showpad. Please take note of the
-                            changes
-                            that have been made to the price lists;
-                          </div>
+                          <div class="value">{{rowInfo.body||'N/A'}}</div>
                         </div>
                       </div>
                       <div class="additions details border-bottom mb-3 pb-3">
@@ -232,6 +156,68 @@
   </div>
 </div>
 
+<ng-template #ancmntTable>
+  <div *ngIf="!loading">
+    <div class="card-body bg-white rounded-bottom px-0 pb-0">
+      <div class="card-text px-3">
+        <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
+          <thead>
+            <tr>
+              <th scope="col" class="curs-ptr">SUBJECT<i class="fas fa-sort-down ml-1 align-top"></i></th>
+              <th scope="col" class="curs-ptr">AUTHOR<i class="fas fa-sort-down ml-1 align-top"></i>
+              </th>
+              <th scope="col" class="curs-ptr">RECIPIENTS<i class="fas fa-sort-down ml-1 align-top"></i></th>
+              <th scope="col" class="curs-ptr">DATE SENT<i class="fas fa-sort-down ml-1 align-top"></i></th>
+              <th scope="col" class="curs-ptr">READ<i class="fas fa-sort-down ml-1 align-top"></i>
+              </th>
+              <th *ngIf="activeIndex==0"></th>
+            </tr>
+          </thead>
+          <tbody *ngIf="!loading && ancmnts.length > 0">
+            <tr *ngFor="let ancmnt of ancmnts" (click)="toggleInfo(ancmnt)">
+              <td>
+                {{ancmnt.subject}}<br />
+              </td>
+              <td class="text-hi-dark-grey">Author</td>
+              <td>{{ancmnt.sendToGroup===1?'All Users':''}}</td>
+              <td class="text-hi-dark-grey">Date</td>
+              <td>Read</td>
+              <td *ngIf="activeIndex==0" (click)="archAncmnt($event, ancmnt)">
+                <button class="btn btn-primary btn-sm hover-btn">Archive</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-center text-secondary" *ngIf="!loading && ancmnts.length == 0">
+          No Announcement found
+        </div>
+      </div>
+      <div class="card-footer row justify-content-between mx-0">
+        <div class="pages">
+          <mat-form-field appearance="outline" class="mr-2">
+            <mat-select [(ngModel)]="pageSize" (selectionChange)="chngPageSize()">
+              <mat-option *ngFor="let lP of lmtPage" [value]="lP">{{lP}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <span>Showing 1-10 of 100 </span>
+        </div>
+        <ul class="pagination">
+          <li class="page-item disabled">
+            <a class="page-link bg-hi-grey" href="#" tabindex="-1" aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
+          </li>
+          <li class="page-item"><a class="page-link bg-hi-grey" href="#">1</a></li>
+          <li class="page-item"><a class="page-link bg-hi-grey" href="#">2</a></li>
+          <li class="page-item"><a class="page-link bg-hi-grey" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link bg-hi-grey" href="#"><i class="fas fa-chevron-right"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
 <!-- new announcment Modal -->
 <ng-template #anncModal let-modal class="custom-modal">
   <div class="modal-header">
@@ -270,48 +256,32 @@
       <br />
       <mat-form-field appearance="outline" class="w-100" *ngIf="ancmntForm.controls.usrWrkSpcs && ancmntForm.value.sendToGroup==2">
         <mat-chip-list #chipList aria-label="Select Wrodkspaces">
-            <mat-chip
-            *ngFor="let d of selWrkSpcs"
-            [selectable]="selectable"
-            [removable]="removable"
-            (removed)="remove(d, 'selWrkSpcs')">
+          <mat-chip *ngFor="let d of selWrkSpcs" [selectable]="selectable" [removable]="removable" (removed)="remove(d, 'selWrkSpcs')">
             {{d.name}}
-              <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
-            </mat-chip>
-            <input
-              matInput formControlName="usrWrkSpcs"
-              placeholder="Select user workspaces(s)"
-              [matAutocomplete]="auto"
-              ><!-- (matChipInputTokenEnd)="add($event)" -->
+            <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+          </mat-chip>
+          <input matInput formControlName="usrWrkSpcs" placeholder="Select user workspaces(s)" [matAutocomplete]="auto"><!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value, 'selWrkSpcs')" [displayWith]="displayFn">
-            <mat-option *ngFor="let wrkSpc of wrkSpcs" [value]="wrkSpc">
-                 {{wrkSpc.name}} <br />
-                 <small *ngIf="wrkSpc.hub && wrkSpc.hub.name">{{wrkSpc.hub.name}}</small>
-            </mat-option>
+          <mat-option *ngFor="let wrkSpc of wrkSpcs" [value]="wrkSpc">
+            {{wrkSpc.name}} <br />
+            <small *ngIf="wrkSpc.hub && wrkSpc.hub.name">{{wrkSpc.hub.name}}</small>
+          </mat-option>
         </mat-autocomplete>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="w-100" *ngIf="ancmntForm.controls.usrGrps && ancmntForm.value.sendToGroup==3">
         <mat-chip-list #chipList1 aria-label="Select user Group(s)">
-            <mat-chip
-            *ngFor="let d of selGrps"
-            [selectable]="selectable"
-            [removable]="removable"
-            (removed)="remove(d,'selGrps')">
+          <mat-chip *ngFor="let d of selGrps" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selGrps')">
             {{d.name}}
-              <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
-            </mat-chip>
-            <input
-              matInput formControlName="usrGrps"
-              placeholder="Select user group(s)"
-              [matAutocomplete]="auto"
-              ><!-- (matChipInputTokenEnd)="add($event)" -->
+            <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+          </mat-chip>
+          <input matInput formControlName="usrGrps" placeholder="Select user group(s)" [matAutocomplete]="auto"><!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selGrps')" [displayWith]="displayFn">
-            <mat-option *ngFor="let grp of grps" [value]="grp">
-                {{grp.name}}
-            </mat-option>
+          <mat-option *ngFor="let grp of grps" [value]="grp">
+            {{grp.name}}
+          </mat-option>
         </mat-autocomplete>
       </mat-form-field>
       <mat-checkbox formControlName="requestToUpdate">Request user to update content</mat-checkbox><br />

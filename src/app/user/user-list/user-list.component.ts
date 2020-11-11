@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -8,10 +8,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
 
-import { ROLES, USR_ROLES } from '../../shared/constants';
+import { ROLES, LNGS } from '../../shared/constants';
 import { User } from '../../shared/models/user';
 import { Group } from '../../shared/models/group';
 import { CommonValidations } from '../../shared/validations/common-validations';
+import { EnumHelper } from '../../shared/enum-helper';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { UserService } from '../user.service';
 import { GroupService } from '../group/group.service';
@@ -23,32 +24,35 @@ import { GroupService } from '../group/group.service';
 })
 export class UserListComponent implements OnInit {
   @Input() lmtPage: any;
-  input: any; searInit!: boolean;searchTxt!: string;
-  @ViewChild("sear", { static: false }) set altRefIn(el: ElementRef) {
-    this.input = el;
-    if (this.input && this.input?.nativeElement && !this.searInit) {
-      fromEvent(this.input.nativeElement, 'keyup')
-        .pipe(
-          debounceTime(1000),
-          distinctUntilChanged(),
-          tap(() => {
-            this.userList();
-          })
-        )
-        .subscribe();
-      this.searInit = true;
-    }
-  }
-  visbCols: any[] = [{ n: "Role", key: "role", dir: 1, }];
-  hidCols: any[] = [{ n: "Property", key: "prop", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, },
-  { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }];
-  cols: any[] = [{ n: "Name", dir: 1, key: "name" }];
-  roles = ROLES;usrRoles = USR_ROLES;
-  usrForm!: FormGroup;usrLoading: boolean=false;
-  pageNo!: number;lstLoading: boolean=false;pageSize!: number;usrs!: any[];
-  showRowInfo: boolean = false;rowInfo: any;isEdit: boolean = false;
+  input: any; searchTxt!: string; //searInit!: boolean;
+  // @ViewChild("sear", { static: false }) set altRefIn(el: ElementRef) {
+  //   this.input = el;
+  //   if (this.input && this.input?.nativeElement && !this.searInit) {
+  //     fromEvent(this.input.nativeElement, 'keyup')
+  //       .pipe(
+  //         debounceTime(1000),
+  //         distinctUntilChanged(),
+  //         tap(() => {
+  //           this.userList();
+  //         })
+  //       )
+  //       .subscribe();
+  //     this.searInit = true;
+  //   }
+  // }
+  searchTxtChng: Subject<string> = new Subject<string>();
+  private subscription!: Subscription;
+
+  visbCols: any[] = [{ n: "Role", k: "roleId", asc: false, }];
+  hidCols: any[] = [{ n: "Property", k: "prop", asc: false, }, { n: "License Type", k: "lic", asc: false, }, { n: "License Type", k: "lic", asc: false, },
+  { n: "License Type", k: "lic", asc: false, }, { n: "License Type", k: "lic", asc: false, }];
+  cols: any[] = [{ n: "Name", asc: false, k: "name" }];
+  roles = ROLES; rolesArr!: any; lngs = LNGS; lngArr!: any;
+  usrForm!: FormGroup; usrLoading: boolean = false; activeIndex: number = 0; docLoading!: boolean;
+  pageNo!: number; loading: boolean = false; pageSize!: number; usrs!: any[]; sort: any = {};
+  showRowInfo: boolean = false; rowInfo: any; isEdit: boolean = false;
   grps!: Group[];
-  selectable = true; removable = true;selGrps: any = [];
+  selectable = true; removable = true; selGrps: any = [];
 
   constructor(
     private modalService: NgbModal,
@@ -60,13 +64,24 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.rolesArr = EnumHelper.enumToArray(this.roles);
+    this.lngArr = EnumHelper.enumToArray(this.lngs);
     this.cols.push(...this.visbCols);
     this.pageSize = this.lmtPage[0]; this.pageNo = 1;
     this.initForm();
     this.userList();
+    this.subscription = this.searchTxtChng
+      .pipe(
+        debounceTime(1000),
+        distinctUntilChanged(),
+        tap(() => {
+          this.userList();
+        })
+      )
+      .subscribe();
   }
 
-  initForm(){
+  initForm() {
     this.usrForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', [Validators.required]],
@@ -74,44 +89,70 @@ export class UserListComponent implements OnInit {
       roleId: ['', [Validators.required]],
       languageId: ['', [Validators.required]],
       group: [''],
-      employeeStatus: [true],
-      // letEmployeeCreatePassword: [true],
+      isActive: [true],
+      // specifyPassword: [true],
       // sendLoginInstructionEmail: [false],
       // enforceEmployeePasswordReset: [false]
     });
     this.grpsList();
   }
 
-  userList(){
-    this.lstLoading = true;
-    let params:any = {
+  userList() {
+    this.loading = true;
+    this.closeDoc();
+    let params: any = {
       pageNo: this.pageNo, pageSize: this.pageSize,
-      searchText: this.searchTxt
+      searchText: this.searchTxt,
+      ...this.sort
     }
+    if (this.activeIndex == 1)
+      params.isActive = true;
+    else if (this.activeIndex == 2)
+      params.isActive = false;
     this.usrServ.emplList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.usrs = data.result.results;
-        }else{
+        } else {
           this.usrs = [];
         }
-        this.lstLoading = false;
+        this.loading = false;
       }, (err: any) => {
         this.usrs = [];
-        this.lstLoading = false;
+        this.loading = false;
       });
   }
 
-  chngPageSize(){
+  chngPageSize() {
     this.userList();
   }
 
-  togglePassword($event: any){
-    if($event.value){
-      this.usrForm.removeControl('password');
-    }else{
+  sortChange(col: any, index: number) {
+    this.loading = true;
+    let colData = { ...col };
+    for (let k = 0; k < this.cols.length; k++) {
+      this.cols[k].asc = false;
+    }
+    colData.asc = !colData.asc;
+    this.cols[index].asc = colData.asc;
+    this.sort = {
+      SortColumn: col.k === 'name' ? 'firstName' : col.k,
+      IsAscending: colData.asc,
+    }
+    this.userList();
+  }
+
+  onTabChange = (event: any) => {
+    this.activeIndex = event.index;
+    this.userList();
+  }
+
+  togglePassword($event: any) {
+    if ($event.value) {
       this.usrForm.addControl('password', new FormControl(''));
       this.usrForm.controls['password'].setValidators([Validators.required]);
+    } else {
+      this.usrForm.removeControl('password');
     }
     this.usrForm.updateValueAndValidity();
   }
@@ -146,20 +187,37 @@ export class UserListComponent implements OnInit {
     event.target.parentNode.parentNode!.classList.remove('show');
   }
 
-  // toggle user info
-  toggleInfo(row: User) {
-    if (this.showRowInfo && this.rowInfo.id == row.id) {
-      this.showRowInfo = false;
-      this.rowInfo = {};
+  // toggle info
+  toggleInfo(usr: User) {
+    if (this.showRowInfo && this.rowInfo.id == usr.id) {
+      this.closeDoc();
     } else {
-      this.rowInfo = row;
-      console.log(this.rowInfo);
       this.showRowInfo = true;
+      this.getUsr(usr)
     }
   }
 
   closeDoc = () => {
     this.showRowInfo = false;
+    this.rowInfo = {};
+  }
+
+  getUsr(usr: User) {
+    this.docLoading = true;
+    this.usrServ.viewEmpl(usr!.id.toString()).subscribe((data: any) => {
+      if (data && data.result && data.result.id) {
+        this.rowInfo = data.result;
+
+        if (this.rowInfo.language && this.rowInfo.language.id)
+          this.rowInfo.languageId = this.rowInfo.language.id
+      } else {
+        this.rowInfo = usr;
+      }
+      this.docLoading = false;
+    }, (err: any) => {
+      this.rowInfo = usr;
+      this.docLoading = false;
+    });
   }
 
   drop = (event: CdkDragDrop<string[]>) => {
@@ -183,20 +241,20 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  onSubmit(){
-    if(this.usrForm.valid){
+  onSubmit() {
+    if (this.usrForm.valid) {
       this.usrLoading = true;
       let usrData = {
         ...this.usrForm.value
       }
       delete usrData.group;
-      if(this.selGrps && this.selGrps.length>0){
-        usrData.employeeGroups = this.selGrps.map((grp:any) => grp.id);
+      if (this.selGrps && this.selGrps.length > 0) {
+        usrData.employeeGroups = this.selGrps.map((grp: any) => grp.id);
       }
-      usrData.employeeStatus = this.usrForm.getRawValue().employeeStatus?1:2;
-      if(this.isEdit){
+      usrData.isActive = this.usrForm.getRawValue().isActive;
+      if (this.isEdit) {
         this.editUsr(usrData);
-      }else{
+      } else {
         this.addUsr(usrData);
       }
     }
@@ -207,7 +265,7 @@ export class UserListComponent implements OnInit {
     this.usrServ.addEmpl(usrData)
       .subscribe((data: any) => {
         // console.log(data, 'data');
-        if(data){
+        if (data) {
           this.toastr.success(data.message || 'User added successfully', 'Success!');
           this.disMissMdodal();
           this.userList();
@@ -224,10 +282,10 @@ export class UserListComponent implements OnInit {
     this.usrServ.updateEmpl(usrData)
       .subscribe((data: any) => {
         // console.log(data, 'data');
-        if(data){
+        if (data) {
           this.toastr.success(data.message || 'User updated successfully', 'Success!');
           this.disMissMdodal();
-          this.isEdit = false; this.showRowInfo = false; this.rowInfo = {};
+          this.isEdit = false;
           this.userList();
         }
         this.usrLoading = false;
@@ -251,17 +309,17 @@ export class UserListComponent implements OnInit {
   }
 
   grpsList() {
-    this.grpServ.groupList({ pageNo: 0})
-    .subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-        this.grps = data.result.results;
-      }else{
+    this.grpServ.groupList({ pageNo: 0 })
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          this.grps = data.result.results;
+        } else {
+          this.grps = [];
+        }
+      }, (err: any) => {
+        console.log(err);
         this.grps = [];
-      }
-    }, (err: any) => {
-      console.log(err);
-      this.grps = [];
-    });
+      });
   }
 
   displayFn = (grp: any) => {
@@ -287,32 +345,32 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  openModal(content: any, type?:string) {
-    if(type=='add' || type=='edit'){
+  openModal(content: any, type?: string) {
+    if (type == 'add' || type == 'edit') {
       this.usrForm.reset();
       this.selGrps = [];
-      if(type=='add'){
+      if (type == 'add') {
         this.isEdit = false;
-        this.usrForm.controls['employeeStatus'].disable();
-        this.addControls(['letEmployeeCreatePassword','sendLoginInstructionEmail','enforceEmployeePasswordReset']);
+        this.usrForm.controls['isActive'].disable();
+        this.addControls(['specifyPassword', 'sendLoginInstructionEmail', 'enforceEmployeePasswordReset']);
         this.usrForm.patchValue({
-          letEmployeeCreatePassword: true,sendLoginInstructionEmail: false,enforceEmployeePasswordReset: false,
-          employeeStatus: true
+          specifyPassword: false, sendLoginInstructionEmail: false, enforceEmployeePasswordReset: false,
+          isActive: true
         })
-      }else{
+      } else {
+        console.log("d", this.rowInfo.isActive)
         this.usrForm.patchValue({
-          ...this.rowInfo,
-          employeeStatus: this.rowInfo.employeeStatus==1?true:false
+          ...this.rowInfo
         })
-        this.usrForm.controls['employeeStatus'].enable();
-        if(this.rowInfo && this.rowInfo.employeeGroups && this.rowInfo.employeeGroups.length>0){
-          this.selGrps = this.rowInfo.employeeGroups.map((grp:any) => ({id:grp.groupId,name:grp.groupName}));
+        this.usrForm.controls['isActive'].enable();
+        if (this.rowInfo && this.rowInfo.employeeGroups && this.rowInfo.employeeGroups.length > 0) {
+          this.selGrps = this.rowInfo.employeeGroups.map((grp: any) => ({ id: grp.groupId, name: grp.groupName }));
         }
-        this.removeControls(['letEmployeeCreatePassword','sendLoginInstructionEmail','enforceEmployeePasswordReset']);
+        this.removeControls(['specifyPassword', 'sendLoginInstructionEmail', 'enforceEmployeePasswordReset']);
         this.isEdit = true;
       }
       this.usrForm.updateValueAndValidity();
-    }else{
+    } else {
       //other form
       this.isEdit = false;
     }
@@ -366,6 +424,7 @@ export class UserListComponent implements OnInit {
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this.disMissMdodal();
+    this.subscription.unsubscribe();
   }
 
 }

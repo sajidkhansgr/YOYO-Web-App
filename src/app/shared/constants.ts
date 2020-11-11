@@ -11,15 +11,23 @@ const TIME: Array<any> = ["00:00","01:00","02:00","03:00","04:00","05:00","06:00
 "13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"];
 
 const GRP_TYPE: Array<any> = [{v:1,n: "All Users"},{v:2,n: "Selected Workspaces"},{v:3,n: "Selected User Groups"}];
-
-const ROLES: Array<any> = [{v:2,n: "Admin"},{v:3,n: "User"}];
-
-enum USR_ROLES {
-  "Super admin" = 1, "Admin", "User"
+//"Super admin" = 1,
+enum ROLES {
+  "Admin"=2, "User"
 }
+// const ROLES: Array<any> = [{v:2,n: USR_ROLES[2]},{v:3,n: USR_ROLES[3]}];
+
+enum LNGS {
+  "English" = 1, "German", "French", "Spanish", "Dutch", "Italian", "Japanese", "Chinese(China)",
+}
+// const LNGS: Array<any> = [{v:1,n: USR_LNGS[1]},{v:2,n: USR_ROLES[2]}];
 
 enum EMP_STATUS {
   "Active" = 1, "Inactive", "Invited"
 }
 
-export {LMT_PAGE, DEF_IMG, PRPS, DEF_ICON, TIME, GRP_TYPE,ROLES, USR_ROLES, EMP_STATUS};
+enum ANCMT_STATUS {
+  "Sent" = 1, "Scheduled", "Archived"
+}
+
+export {LMT_PAGE, DEF_IMG, PRPS, DEF_ICON, TIME, GRP_TYPE, ROLES, EMP_STATUS, ANCMT_STATUS, LNGS};
