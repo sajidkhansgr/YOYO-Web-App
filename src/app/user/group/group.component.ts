@@ -29,6 +29,7 @@ export class GroupComponent implements OnInit {
           debounceTime(1000),
           distinctUntilChanged(),
           tap(() => {
+            this.pageNo = 1;
             this.grpsList();
           })
         )
@@ -40,7 +41,7 @@ export class GroupComponent implements OnInit {
   exps: any = [
     { id: 1, name: "Exp 1" }, { id: 2, name: "Exp 2" }, { id: 3, name: "Exp 3" }
   ];
-  cols: any[] = [{ n: "Name", asc: false,k:"name"},{ n: "Date Created", asc: false,k:"createdDate"},{ n: "Members", asc: false},{ n: "Anonymized", asc: false}];
+  cols: any[] = [];
   grps!: Group[]; divArr: Hub[] = [];
   pageNo!: number;loading: boolean=false;pageSize!: number;
   groupForm!: FormGroup; grpDetail!: Group | null;
@@ -63,13 +64,18 @@ export class GroupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
+    this.intializeState();
     this.grpsList();
     this.getHubs();
     this.groupForm = this.fb.group({
       name: ['', Validators.required],
       division: ['']
     });
+  }
+
+  intializeState(){
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
+    this.cols = [{ n: "Name", asc: false,k:"name"},{ n: "Date Created", asc: false,k:"createdDate"},{ n: "Members", asc: false},{ n: "Anonymized", asc: false}];
   }
 
   grpsList() {

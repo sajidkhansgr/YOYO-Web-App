@@ -67,7 +67,7 @@ export class UserListComponent implements OnInit {
     this.rolesArr = EnumHelper.enumToArray(this.roles);
     this.lngArr = EnumHelper.enumToArray(this.lngs);
     this.cols.push(...this.visbCols);
-    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
+    this.initialiseState();
     this.initForm();
     this.userList();
     this.subscription = this.searchTxtChng
@@ -75,10 +75,15 @@ export class UserListComponent implements OnInit {
         debounceTime(1000),
         distinctUntilChanged(),
         tap(() => {
+          this.pageNo = 1;
           this.userList();
         })
       )
       .subscribe();
+  }
+
+  initialiseState(){
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
   }
 
   initForm() {
@@ -144,6 +149,7 @@ export class UserListComponent implements OnInit {
 
   onTabChange = (event: any) => {
     this.activeIndex = event.index;
+    this.initialiseState();
     this.userList();
   }
 

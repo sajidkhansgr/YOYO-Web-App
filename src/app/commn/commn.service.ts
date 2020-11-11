@@ -14,7 +14,7 @@ export class CommnService {
   ancmntList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
     for (let key in params) {
-      if (params[key] || key == 'isDisabled') {
+      if (params[key] || key == 'IsAscending') {
         queryParams = queryParams.set(key, params[key]);
       }
     }

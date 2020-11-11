@@ -163,12 +163,9 @@
         <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
           <thead>
             <tr>
-              <th scope="col" class="curs-ptr">SUBJECT<i class="fas fa-sort-down ml-1 align-top"></i></th>
-              <th scope="col" class="curs-ptr">AUTHOR<i class="fas fa-sort-down ml-1 align-top"></i>
-              </th>
-              <th scope="col" class="curs-ptr">RECIPIENTS<i class="fas fa-sort-down ml-1 align-top"></i></th>
-              <th scope="col" class="curs-ptr">DATE SENT<i class="fas fa-sort-down ml-1 align-top"></i></th>
-              <th scope="col" class="curs-ptr">READ<i class="fas fa-sort-down ml-1 align-top"></i>
+              <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
+                {{col.n}}
+                <i class="ml-1 fas" [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
               </th>
               <th *ngIf="activeIndex==0"></th>
             </tr>

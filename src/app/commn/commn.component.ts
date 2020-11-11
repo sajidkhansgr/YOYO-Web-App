@@ -31,7 +31,8 @@ export class CommnComponent implements OnInit {
   selectable = true; removable: boolean = true;
   grps: Group[] = []; selGrps: Group[] = [];
   wrkSpcs: Workspace[] = []; selWrkSpcs: Workspace[] = [];
-  showRowInfo: boolean = false; rowInfo: any;
+  showRowInfo: boolean = false; rowInfo: any;sort:any={};
+  cols: any[] = [];
 
   constructor(
     private modalService: NgbModal,
@@ -44,11 +45,18 @@ export class CommnComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAncmnts();
     this.initialiseState();
+    this.initForm();
+    this.getAncmnts();
   }
 
-  initialiseState() {
+  initialiseState(){
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
+    this.cols = [{ n: "Subject", asc: false, k: "subject" },{ n: "Author", asc: false, k: "author" },{ n: "Recipients", asc: false, k: "name" },
+    { n: "Date Sent", asc: false, k: "date" },{ n: "Read", asc: false, k: "read" }];
+  }
+
+  initForm() {
     this.ancmntForm = this.fb.group({
       subject: ['', [Validators.required]],
       body: ['', [Validators.required]],
@@ -81,8 +89,8 @@ export class CommnComponent implements OnInit {
     this.closeDoc();
     let params: any = {
       pageNo: this.pageNo, pageSize: this.pageSize,
-      searchText: this.searchTxt,
-      status: this.activeIndex === 2 ? 3 : this.activeIndex == 1 ? 2 : 1
+      searchText: this.searchTxt,...this.sort,
+      status: this.activeIndex === 2 ? 3 : this.activeIndex == 1 ? 2 : 1,
     }
     this.commnServ.ancmntList(params)
       .subscribe((data: any) => {
@@ -93,12 +101,33 @@ export class CommnComponent implements OnInit {
         }
         this.loading = false;
       }, (err: any) => {
+        this.ancmnts = [];
         this.loading = false;
       });
   }
 
+  chngPageSize() {
+    this.getAncmnts();
+  }
+
+  sortChange(col: any, index: number) {
+    this.loading = true;
+    let colData = { ...col };
+    for (let k = 0; k < this.cols.length; k++) {
+      this.cols[k].asc = false;
+    }
+    colData.asc = !colData.asc;
+    this.cols[index].asc = colData.asc;
+    this.sort = {
+      SortColumn: col.k,
+      IsAscending: colData.asc,
+    }
+    this.getAncmnts();
+  }
+
   onTabChange = (event: any) => {
     this.activeIndex = event.index;
+    this.initialiseState();
     this.getAncmnts();
   }
 
