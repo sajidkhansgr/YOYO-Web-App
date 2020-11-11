@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,9 +10,11 @@ import { ToastrService } from 'ngx-toastr';
 
 import { ROLES, USR_ROLES } from '../../shared/constants';
 import { User } from '../../shared/models/user';
+import { Group } from '../../shared/models/group';
 import { CommonValidations } from '../../shared/validations/common-validations';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { UserService } from '../user.service';
+import { GroupService } from '../group/group.service';
 
 @Component({
   selector: 'app-user-list',
@@ -19,6 +23,22 @@ import { UserService } from '../user.service';
 })
 export class UserListComponent implements OnInit {
   @Input() lmtPage: any;
+  input: any; searInit!: boolean;searchTxt!: string;
+  @ViewChild("sear", { static: false }) set altRefIn(el: ElementRef) {
+    this.input = el;
+    if (this.input && this.input?.nativeElement && !this.searInit) {
+      fromEvent(this.input.nativeElement, 'keyup')
+        .pipe(
+          debounceTime(1000),
+          distinctUntilChanged(),
+          tap(() => {
+            this.userList();
+          })
+        )
+        .subscribe();
+      this.searInit = true;
+    }
+  }
   visbCols: any[] = [{ n: "Role", key: "role", dir: 1, }];
   hidCols: any[] = [{ n: "Property", key: "prop", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, },
   { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }];
@@ -27,13 +47,16 @@ export class UserListComponent implements OnInit {
   usrForm!: FormGroup;usrLoading: boolean=false;
   pageNo!: number;lstLoading: boolean=false;pageSize!: number;usrs!: any[];
   showRowInfo: boolean = false;rowInfo: any;isEdit: boolean = false;
+  grps!: Group[];
+  selectable = true; removable = true;selGrps: any = [];
 
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
     private usrServ: UserService,
     private toastr: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private grpServ: GroupService
   ) { }
 
   ngOnInit(): void {
@@ -50,16 +73,22 @@ export class UserListComponent implements OnInit {
       email: ['', [Validators.required, CommonValidations.emailValidator]],
       roleId: ['', [Validators.required]],
       languageId: ['', [Validators.required]],
+      group: [''],
+      employeeStatus: [true],
       // letEmployeeCreatePassword: [true],
       // sendLoginInstructionEmail: [false],
       // enforceEmployeePasswordReset: [false]
     });
+    this.grpsList();
   }
 
   userList(){
-    // console.log(query);
     this.lstLoading = true;
-    this.usrServ.emplList({ pageNo: this.pageNo, pageSize: this.pageSize})
+    let params:any = {
+      pageNo: this.pageNo, pageSize: this.pageSize,
+      searchText: this.searchTxt
+    }
+    this.usrServ.emplList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.usrs = data.result.results;
@@ -160,6 +189,11 @@ export class UserListComponent implements OnInit {
       let usrData = {
         ...this.usrForm.value
       }
+      delete usrData.group;
+      if(this.selGrps && this.selGrps.length>0){
+        usrData.employeeGroups = this.selGrps.map((grp:any) => grp.id);
+      }
+      usrData.employeeStatus = this.usrForm.getRawValue().employeeStatus?1:2;
       if(this.isEdit){
         this.editUsr(usrData);
       }else{
@@ -176,6 +210,7 @@ export class UserListComponent implements OnInit {
         if(data){
           this.toastr.success(data.message || 'User added successfully', 'Success!');
           this.disMissMdodal();
+          this.userList();
         }
         this.usrLoading = false;
       }, (err: any) => {
@@ -192,6 +227,8 @@ export class UserListComponent implements OnInit {
         if(data){
           this.toastr.success(data.message || 'User updated successfully', 'Success!');
           this.disMissMdodal();
+          this.isEdit = false; this.showRowInfo = false; this.rowInfo = {};
+          this.userList();
         }
         this.usrLoading = false;
       }, (err: any) => {
@@ -213,20 +250,65 @@ export class UserListComponent implements OnInit {
     }
   }
 
+  grpsList() {
+    this.grpServ.groupList({ pageNo: 0})
+    .subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        this.grps = data.result.results;
+      }else{
+        this.grps = [];
+      }
+    }, (err: any) => {
+      console.log(err);
+      this.grps = [];
+    });
+  }
+
+  displayFn = (grp: any) => {
+    return (grp && grp.id) ? grp.name : '';
+  }
+
+  selGrpIds(grp: any) {
+    const index = this.selGrps.findIndex((ele: any) => ele.id == grp.id);
+    if (index >= 0) {
+      this.toastr.clear();
+      this.toastr.info("This group is already selected", "Selected");
+    } else {
+      this.selGrps.push(grp);
+      // this.msgForm.controls['RecipientName'].setValue({});
+      // this.divNameInp.nativeElement.value = '';
+    }
+  }
+
+  remove(div: any): void {
+    const index = this.selGrps.findIndex((ele: any) => ele.id == div.id);
+    if (index >= 0) {
+      this.selGrps.splice(index, 1);
+    }
+  }
+
   openModal(content: any, type?:string) {
     if(type=='add' || type=='edit'){
       this.usrForm.reset();
+      this.selGrps = [];
       if(type=='add'){
         this.isEdit = false;
+        this.usrForm.controls['employeeStatus'].disable();
         this.addControls(['letEmployeeCreatePassword','sendLoginInstructionEmail','enforceEmployeePasswordReset']);
         this.usrForm.patchValue({
-          letEmployeeCreatePassword: true,sendLoginInstructionEmail: false,enforceEmployeePasswordReset: false
+          letEmployeeCreatePassword: true,sendLoginInstructionEmail: false,enforceEmployeePasswordReset: false,
+          employeeStatus: true
         })
       }else{
         this.usrForm.patchValue({
-          ...this.rowInfo
+          ...this.rowInfo,
+          employeeStatus: this.rowInfo.employeeStatus==1?true:false
         })
-        this.removeControls(['usrWrkSpcs']);
+        this.usrForm.controls['employeeStatus'].enable();
+        if(this.rowInfo && this.rowInfo.employeeGroups && this.rowInfo.employeeGroups.length>0){
+          this.selGrps = this.rowInfo.employeeGroups.map((grp:any) => ({id:grp.groupId,name:grp.groupName}));
+        }
+        this.removeControls(['letEmployeeCreatePassword','sendLoginInstructionEmail','enforceEmployeePasswordReset']);
         this.isEdit = true;
       }
       this.usrForm.updateValueAndValidity();
@@ -242,6 +324,7 @@ export class UserListComponent implements OnInit {
       });
   }
 
+  /* This will not use as no delete
   delUsr() {
     this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -263,7 +346,7 @@ export class UserListComponent implements OnInit {
         // });
       }
     })
-  }
+  } */
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {

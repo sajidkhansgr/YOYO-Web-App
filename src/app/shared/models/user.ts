@@ -7,6 +7,7 @@ export interface User {
   roleId: number;
   languageId: number;
   employeeStatus: number;
+  employeeGroups: number;
   lastLoginTimestamp: number;
   deviceModel: string;
   osUsed: string;

@@ -14,7 +14,7 @@ export class GroupService {
   groupList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
     for (let key in params) {
-      if (params[key] || key == 'isDisabled') {
+      if (params[key] || key == 'pageNo') {
         queryParams = queryParams.set(key, params[key]);
       }
     }
@@ -33,7 +33,7 @@ export class GroupService {
   }
 
   updGroup(data: any) {
-    return this.http.patch(`${AppSettings.UPD_GRP}`, data)
+    return this.http.put(`${AppSettings.UPD_GRP}`, data)
   }
 
   viewGroup(id: string) {

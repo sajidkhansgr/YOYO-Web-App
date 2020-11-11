@@ -25,7 +25,7 @@
                     <div class="search col-lg-8 col-sm-7">
                       <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
                         <i matPrefix class="fas fa-search"></i>
-                        <input matInput placeholder="Search ...">
+                        <input matInput placeholder="Search ..." #sear [(ngModel)]="searchTxt">
                         <div matSuffix class="curs-ptr">
                           <i class="fas fa-sliders-h"></i>
                         </div>
@@ -157,9 +157,9 @@
             </div>
           </div>
           <div class="card-header bg-hi-light-grey p-1 row m-0">
-            <button class="btn btn-light" (click)="delUsr()">
+            <!-- <button class="btn btn-light" (click)="delUsr()">
               <i class="fa fa-trash"></i>
-            </button>
+            </button> -->
             <!-- Button trigger for edit user modal -->
             <button type="button" class="btn btn-light" (click)="openModal(usrModal, 'edit')">
               <i class="fa fa-edit"></i>
@@ -214,11 +214,11 @@
               <div class="activated">
                 <label class="text-hi-dark-grey mb-0 mt-2">Activated</label>
                 <div class="value">
-                  Yes
+                  {{rowInfo.employeeStatus==1?"Yes":"NO"}}
                 </div>
               </div>
             </div>
-            <div class="doc-details prod-licenses border-bottom mb-3 pb-3">
+            <!-- <div class="doc-details prod-licenses border-bottom mb-3 pb-3">
               <div class="heading text-hi-dark-grey font-weight-bold">Product Licenses</div>
               <div class="content_">
                 <label class="text-hi-dark-grey mb-0 mt-2">Content</label>
@@ -226,15 +226,14 @@
                   Direct
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="doc-details in-groups border-bottom mb-3 pb-3">
               <div class="heading text-hi-dark-grey font-weight-bold">In Groups</div>
               <div class="value mt-2">
-                <ul class="list-unstyled mb-0">
-                  <li>All Users</li>
-                  <li>HES & Hi-Force</li>
-                  <li>ABC</li>
+                <ul class="list-unstyled mb-0" *ngIf="rowInfo.employeeGroups && rowInfo.employeeGroups.length>0 else noGrp">
+                  <li *ngFor="let empGrp of rowInfo.employeeGroups">{{empGrp.groupName}}</li>
                 </ul>
+                <ng-template #noGrp>No Group</ng-template>
               </div>
             </div>
             <div class="doc-details assigned-experiences border-bottom mb-3 pb-3">
@@ -265,13 +264,13 @@
               <div class="created">
                 <label class="text-hi-dark-grey mb-0 mt-2">Created</label>
                 <div class="value">
-                  20 Jun 2016 2:03 PM
+                  {{rowInfo.lastLoginTimestamp}} <!-- create time -->
                 </div>
               </div>
               <div class="last-login">
                 <label class="text-hi-dark-grey mb-0 mt-2">Last Login</label>
                 <div class="value">
-                  20 Jun 2016 2:03 PM
+                  {{rowInfo.lastLoginTimestamp}}
                 </div>
               </div>
             </div>
@@ -279,27 +278,19 @@
               <div class="heading text-hi-dark-grey font-weight-bold">Device</div>
               <div class="receive-notifications">
                 <label class="text-hi-dark-grey mb-0 mt-2">Able to receive notifications</label>
-                <div class="value">
-                  Yes
-                </div>
+                <div class="value">Yes</div>
               </div>
               <div class="device-model">
                 <label class="text-hi-dark-grey mb-0 mt-2">Device Model</label>
-                <div class="value">
-                  Nokia the king
-                </div>
+                <div class="value">{{rowInfo.deviceModel||'N/A'}}</div>
               </div>
               <div class="os">
                 <label class="text-hi-dark-grey mb-0 mt-2">Operating System</label>
-                <div class="value">
-                  Android 10
-                </div>
+                <div class="value">{{rowInfo.osUsed||'N/A'}}</div>
               </div>
               <div class="app-ver">
                 <label class="text-hi-dark-grey mb-0 mt-2">App Version</label>
-                <div class="value">
-                  1.0.0
-                </div>
+                <div class="value">1.0.0</div>
               </div>
             </div>
           </div>
@@ -404,18 +395,35 @@
             Role is required
           </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>User's Groups</mat-label>
-          <input matInput placeholder="Your Groups">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-chip-list #chipList aria-label="User's Groups *">
+              <mat-chip
+              *ngFor="let d of selGrps"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="remove(d)">
+              {{d.name}}
+                <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+              </mat-chip>
+              <input #usrGrp
+                matInput formControlName="group"
+                placeholder="Add User Group *"
+                [matAutocomplete]="auto"><!-- (matChipInputTokenEnd)="add($event)" -->
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selGrpIds($event.option.value)" [displayWith]="displayFn">
+              <mat-option *ngFor="let grp of grps" [value]="grp">
+                  {{grp.name}}
+              </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
-      <div>
+      <!-- <div>
         <mat-label>Product Licenses</mat-label>
         <mat-checkbox class="ml-3 d-block">Content</mat-checkbox>
-      </div>
+      </div> -->
       <div>
         <mat-label>Status</mat-label>
-        <mat-checkbox class="ml-3 d-block">Activated</mat-checkbox>
+        <mat-checkbox class="ml-3 d-block" formControlName="employeeStatus">Activated</mat-checkbox>
       </div>
       <div *ngIf="!isEdit">
         <mat-label>Password</mat-label>

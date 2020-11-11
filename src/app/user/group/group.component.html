@@ -8,7 +8,7 @@
     </button>
   </div>
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showDoc, 'col-md-8': showDoc}">
+    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo, 'col-md-8': showRowInfo}">
       <div class="card overflow-hidden">
         <div class="card-body bg-white px-0 pb-0">
           <h5 class="card-title px-3">
@@ -16,7 +16,7 @@
               <div class="search col-md-6">
                 <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
                   <i matPrefix class="fas fa-search"></i>
-                  <input matInput placeholder="Search ..." autocomplete="disabled">
+                  <input matInput placeholder="Search ..." autocomplete="disabled"  #sear [(ngModel)]="searchTxt">
                   <div matSuffix class="curs-ptr">
                     <i class="fas fa-sliders-h"></i>
                   </div>
@@ -94,7 +94,7 @@
             </div>
           </h5>
           <div class="card-text px-3">
-            <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showDoc}">
+            <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
               <thead>
                 <tr>
                   <th scope="col" class="curs-ptr">
@@ -112,7 +112,7 @@
                 </tr>
               </thead>
               <tbody *ngIf="!lstLoading && grps.length > 0">
-                <tr *ngFor="let grp of grps" (click)="toggleDoc(grp)">
+                <tr *ngFor="let grp of grps" (click)="toggleInfo(grp)">
                   <td>
                     <span class="d-block">{{grp.name}}</span>
                     <small>St Email</small>
@@ -153,12 +153,12 @@
         </div>
       </div>
     </div>
-    <div class="workspace w-100 col-md-4" [ngClass]="{'hide': !showDoc, 'show': showDoc}">
-      <app-loader [type]="'page'" *ngIf="docLoading"></app-loader> <!-- loader -->
-      <div class="doc" *ngIf="grpDetail && !docLoading">
+    <div class="workspace w-100 col-md-4" *ngIf="showRowInfo">
+      <!-- <app-loader [type]="'page'" *ngIf="docLoading"></app-loader> -->
+      <div class="doc" *ngIf="rowInfo">
         <div class="card">
           <div class="card-header row m-0">
-            <h5 class="mb-0 pl-0 align-self-center">{{grpDetail.name}}</h5>
+            <h5 class="mb-0 pl-0 align-self-center">{{rowInfo.name}}</h5>
             <div class="ml-auto">
               <div class="btn btn-light" (click)="closeDoc()">
                 <i class="fas fa-times"></i>
@@ -179,7 +179,7 @@
               <div class="name">
                 <label class="text-hi-dark-grey mb-0 mt-2">Name</label>
                 <div class="value">
-                  {{grpDetail.name}}
+                  {{rowInfo.name}}
                 </div>
               </div>
               <div class="description">
