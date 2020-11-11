@@ -26,11 +26,12 @@
                 <h5 class="card-title px-3">
                   <div class="heading">
                     <div class="float-right row mx-0">
-                      <div class="dropdown" (clickOutside)="outsideCloseDD(cogDropDown, $event)">
-                        <button class="btn btn-light dropdown-toggle mr-2" (click)="toggleDropdown($event)">
+                      <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle mr-2" id="fileDD" data-toggle="dropdown">
                           <i class="fas fa-cog"></i>
                         </button>
-                        <div class="cog dropdown-menu dropdown-menu-right pt-0 overflow-hidden" #cogDropDown>
+                        <div class="cog dropdown-menu dropdown-menu-right pt-0 overflow-hidden" aria-labelledby="fileDD"
+                          (click)="$event.stopPropagation();">
                           <div class="scrollable py-2">
                             <span class="ml-2 heading">Visible Columns</span>
                             <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols"
@@ -77,11 +78,12 @@
                       </div>
                     </div>
                     <div class="row mx-0 mb-3">
-                      <div class="dropdown mr-2 mb-1" (clickOutside)="outsideCloseDD(fileDropDown, $event)">
-                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
+                      <div class="dropdown mr-2 mb-1">
+                        <button class="btn btn-light dropdown-toggle" id="fileDD" data-toggle="dropdown">
                           File Type
                         </button>
-                        <div class="dropdown-menu" #fileDropDown style="width:12rem;">
+                        <div class="dropdown-menu" style="width:12rem;" aria-labelledby="fileDD"
+                          (click)="$event.stopPropagation();">
                           <mat-checkbox class="dropdown-item">Audio</mat-checkbox>
                           <mat-checkbox class="dropdown-item">Document</mat-checkbox>
                           <mat-checkbox class="dropdown-item">HTML Content</mat-checkbox>
@@ -90,20 +92,22 @@
                           <mat-checkbox class="dropdown-item">Video</mat-checkbox>
                         </div>
                       </div>
-                      <div class="dropdown mr-2 mb-1" (clickOutside)="outsideCloseDD(propertyDropDown, $event)">
-                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
+                      <div class="dropdown mr-2 mb-1">
+                        <button class="btn btn-light dropdown-toggle" id="propDD" data-toggle="dropdown">
                           Property
                         </button>
-                        <div class="dropdown-menu" #propertyDropDown style="width:18.5rem;">
+                        <div class="dropdown-menu" #propertyDropDown style="width:18.5rem;" aria-labelledby="propDD"
+                          (click)="$event.stopPropagation();">
                           <mat-checkbox class="dropdown-item" *ngFor="let p of props" [attr.id]="p.id">{{p.name}}
                           </mat-checkbox>
                         </div>
                       </div>
-                      <div class="dropdown mr-2 mb-1" (clickOutside)="outsideCloseDD(tagsDropDown, $event)">
-                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
+                      <div class="dropdown mr-2 mb-1">
+                        <button class="btn btn-light dropdown-toggle" id="tagsDD" data-toggle="dropdown">
                           Tags
                         </button>
-                        <div class="dropdown-menu" #tagsDropDown style="width:18rem;">
+                        <div class="dropdown-menu" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD"
+                          (click)="$event.stopPropagation();">
                           <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
                             <mat-label>Match ALL of theese tags</mat-label>
                             <input matInput placeholder="Match ALL of theese tags">
@@ -118,11 +122,12 @@
                           </mat-form-field>
                         </div>
                       </div>
-                      <div class="dropdown mr-2 mb-1" (clickOutside)="outsideCloseDD(localeDropDown, $event)">
-                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
+                      <div class="dropdown mr-2 mb-1">
+                        <button class="btn btn-light dropdown-toggle" id="localeDD" data-toggle="dropdown">
                           Locale
                         </button>
-                        <div class="dropdown-menu" #localeDropDown style="width:18rem;">
+                        <div class="dropdown-menu" #localeDropDown style="width:18rem;" aria-labelledby="localeDD"
+                          (click)="$event.stopPropagation();">
                           <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
                             <mat-label>Match ALL of these languages</mat-label>
                             <input matInput placeholder="Match ALL of these languages" class="bg-white">
@@ -137,11 +142,12 @@
                           </mat-form-field>
                         </div>
                       </div>
-                      <div class="dropdown mb-1" (clickOutside)="outsideCloseDD(authorDropDown, $event)">
-                        <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
+                      <div class="dropdown mb-1">
+                        <button class="btn btn-light dropdown-toggle" id="authorDD" data-toggle="dropdown">
                           Author
                         </button>
-                        <div class="dropdown-menu" #authorDropDown style="width:18rem;">
+                        <div class="dropdown-menu" #authorDropDown style="width:18rem;" aria-labelledby="authorDD"
+                          (click)="$event.stopPropagation();">
                           <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
                             [floatLabel]="'never'">
                             <i matPrefix class="fas fa-search"></i>

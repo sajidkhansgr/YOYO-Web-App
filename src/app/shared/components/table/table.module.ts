@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { TableComponent } from './table.component';
 import { LoaderModule } from '../loader/loader.module';
@@ -17,7 +17,7 @@ import { LoaderModule } from '../loader/loader.module';
     MatSelectModule,
     MatFormFieldModule,
     FormsModule,
-    NgbModule
+    NgbPaginationModule
   ],
   exports: [
     TableComponent

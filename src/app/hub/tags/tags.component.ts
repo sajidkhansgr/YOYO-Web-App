@@ -97,7 +97,7 @@ export class TagsComponent implements OnInit {
     this.tagNames = [];
     this.searchTxt = '';
     this.sortColumn = ''; this.isAsc = undefined;
-    this.columns = [{ dispName: "Name", isAsc: true, isSelected: false, key: "name" }, { dispName: "Status", isAsc: true, isSelected: false, key: "status" }, { dispName: "Date Modified", isAsc: true, isSelected: false, key: "date-mod" }];
+    this.columns = [{ dispName: "Name", isAsc: true, isSelected: false, key: "name" }, { dispName: "Status", isAsc: true, isSelected: false, key: "status" }, { dispName: "Date Modified", isAsc: true, isSelected: false, key: "updatedDate" }];
   }
 
   // resetCh() {
@@ -130,6 +130,7 @@ export class TagsComponent implements OnInit {
         this.tagServ.tagAct(tag.id).subscribe((data: any) => {
           if (data) {
             this.toastr.success('Tag activated successfully', 'Success!');
+            this.showRowInfo = false
             this.getTags();
           } else {
             this.toastr.error('Unable to activate tag', 'Error!');
@@ -155,6 +156,7 @@ export class TagsComponent implements OnInit {
         this.tagServ.tagDeact(tag.id).subscribe((data: any) => {
           if (data) {
             this.toastr.success('Tag deactivated successfully', 'Success!');
+            this.showRowInfo = false
             this.getTags();
           } else {
             this.toastr.error('Unable to deactivate tag', 'Error!');
@@ -289,7 +291,8 @@ export class TagsComponent implements OnInit {
       for (let i = 0; i < this.tagNames.length; i++) {
         tagDataArr.push({
           name: this.tagNames[i],
-          categories: [0]
+          categories: [],
+          isActive: true
         });
       }
 
@@ -488,19 +491,13 @@ export class TagsComponent implements OnInit {
     }
   }
 
-  // toggle tags ---- needs change (not receiving catgories in getAll)
+  // toggle tags
   toggleInfo(row: Tag) {
     if (this.showRowInfo && this.rowInfo.id == row.id) {
       this.showRowInfo = false;
       this.rowInfo = {};
     } else {
       this.rowInfo = row;
-      // for (let i = 0; i < row.categories.length; i++) {
-      //   let catg = this.catgs!.filter(catg => catg.id == row.categories[i]);
-      //   this.rowInfo.catgName = catg.length > 0 ? catg[0].name : 'No Categories';
-      // }
-      // let catg = this.catgs!.filter(catg => catg.id == row.categoryId);
-      // this.rowInfo.catgName = catg.length > 0 ? catg[0].name : 'No Categories';
       console.log(this.rowInfo);
       this.showRowInfo = true;
     }

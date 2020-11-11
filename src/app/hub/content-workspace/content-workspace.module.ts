@@ -9,8 +9,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
-import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
-import { ClickOutsideModule } from 'ng-click-outside';
+import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { FileProgessModule } from '../../shared/components/file-progess/file-progess.module';
@@ -31,8 +30,7 @@ import { ContentWorkspaceService } from './content-workspace.service'
     FileProgessModule,
     LoaderModule,
     FormsModule, ReactiveFormsModule,
-    NgbCollapseModule,
-    ClickOutsideModule,
+    NgbCollapseModule, NgbDropdownModule,
     DragDropModule
   ],
   exports: [
