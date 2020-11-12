@@ -681,8 +681,9 @@
               <div class="main row py-4" *ngIf="folderArr.length > 0">
                 <div class="col-3 curs-ptr my-2" *ngFor="let folder of folderArr">
                   <div (click)="changeFolder(folder)">
-                    <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}"
-                      class="w-100">
+                    <div class="image">
+                      <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}">
+                    </div>
                     <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
                       *ngIf="!folder.hideLabelInWorkspace">
                       {{folder.name}}

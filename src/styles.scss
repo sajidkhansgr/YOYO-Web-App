@@ -817,10 +817,25 @@ header {
     .col-3 {
       position: relative;
 
+      .image {
+        min-height: 100px;
+        position: relative;
+
+        img {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          max-height: 100px;
+          max-width: 100px;
+        }
+      }
+
       .dropdown {
         position: absolute;
-        top: 2.7rem;
-        left: 2.7rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -100%);
         opacity: 0;
       }
     }

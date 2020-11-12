@@ -108,7 +108,7 @@ export class ContentWorkspaceComponent implements OnInit {
   changeFolder(folder: any) {
     this.dispFolder = folder;
     this.folderNav.push(folder);
-    // console.log(folder);
+    // console.log(this.dispFolder);
     this.listFolders()
   }
 
@@ -261,7 +261,7 @@ export class ContentWorkspaceComponent implements OnInit {
         ...this.smartFolderForm.value,
         smartFolderIcon: this.custIcon,
         workspaceId: this.selWrkspc!.id,
-        folderId: 0,
+        folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].id : 0,
         isActive: true,
         propertyIds: 1
       };
@@ -303,8 +303,8 @@ export class ContentWorkspaceComponent implements OnInit {
         // this.folderArr = [];
         // this.toastr.error('No smart folders found', 'Error!');
       }
-      this.dispFolder = undefined;  // need changes
-      this.folderLoading = false;  // need changes
+      this.dispFolder = undefined;
+      this.folderLoading = false;
     }, (err: any) => {
       this.dispFolder = undefined;
       this.folderLoading = false;
@@ -405,9 +405,11 @@ export class ContentWorkspaceComponent implements OnInit {
         ...this.folderForm.value,
         folderIcon: this.custIcon,
         workspaceId: this.selWrkspc!.id,
-        folderId: 0,
+        folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].id : 0,
         isActive: true
       };
+      // console.log(this.folderNav[this.folderNav.length - 1]);
+      // console.log(this.folderNav[this.folderNav.length - 1].id);
       // console.log(folderData);
       this.cwServ.addFolder(folderData)
         .subscribe((data: any) => {
