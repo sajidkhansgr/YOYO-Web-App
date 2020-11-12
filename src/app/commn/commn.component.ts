@@ -26,14 +26,13 @@ export class CommnComponent implements OnInit {
   ancmntForm!: FormGroup; isEdit!: boolean;
   disabled: boolean = false; ancmntData!: Announcement | undefined;
   lmtPage: Array<number> = LMT_PAGE; pageNo!: number; loading: boolean = false; pageSize: number = LMT_PAGE[0];
-  ancmnts!: Announcement[]; activeIndex: number = 0; ancmntSts = ANCMT_STATUS; docLoading!: boolean;
+  ancmnts!: any[]; activeIndex: number = 0; ancmntSts = ANCMT_STATUS; docLoading!: boolean;
   searchTxt!: string; time = TIME; grpType = GRP_TYPE;
   selectable = true; removable: boolean = true;
   grps: Group[] = []; selGrps: Group[] = [];
   wrkSpcs: Workspace[] = []; selWrkSpcs: Workspace[] = [];
   showRowInfo: boolean = false; rowInfo: any;sort:any={};
-  cols: any[] = [];
-
+  cols:any[] = [];
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
@@ -52,8 +51,18 @@ export class CommnComponent implements OnInit {
 
   initialiseState(){
     this.pageSize = this.lmtPage[0]; this.pageNo = 1;
-    this.cols = [{ n: "Subject", asc: false, k: "subject" },{ n: "Author", asc: false, k: "author" },{ n: "Recipients", asc: false, k: "name" },
-    { n: "Date Sent", asc: false, k: "date" },{ n: "Read", asc: false, k: "read" }];
+    this.cols = [];this.sort={};
+    let commonCols = [{ n: "Subject", asc: false, k: "subject" },{ n: "Author", asc: false, k: "createdByFullName" },{ n: "Recipients", asc: false, k: "sendToGroup" }];
+    let cols1 = [{ n: "Date Sent", asc: false, k: "deliveredOn" },{ n: "Read", asc: false, k: "viewPercentage" }];
+    if(this.activeIndex===0){
+      this.cols.push(...commonCols, ...cols1);
+    }
+    else if(this.activeIndex===1){
+      this.cols.push(...commonCols, { n: "Scheduled", asc: false, k: "scheduledOn" });
+    }
+    else if(this.activeIndex===2){
+      this.cols.push(...commonCols, ...cols1, { n: "Archived", asc: false, k: "archived" });
+    }
   }
 
   initForm() {

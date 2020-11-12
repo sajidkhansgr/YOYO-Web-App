@@ -41,7 +41,6 @@ export class SettingComponent implements OnInit {
 
   checkAndGet() {
     this.activeIndex = this.route.snapshot.firstChild!.data['type'];
-    console.log(this.activeIndex)
   }
 
   onTabChange(event: any) {
@@ -51,7 +50,7 @@ export class SettingComponent implements OnInit {
       case 1: this.router.navigate([url + 'divisions/list']); break;
     }
   }
-  
+
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     if(!!this.routerSubs)

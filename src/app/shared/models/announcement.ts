@@ -8,4 +8,10 @@ export interface Announcement {
   sendToGroup: number;
   recipients: Array<number>;
   scheduledOn: string;
+  archivedOn?: string;
+  deliveryStatus?: number;
+  createdByFullName?:string;
+  deliveredOn?:string;
+  updatedDate?:string;
+  createdDate?:string;
 }
