@@ -111,6 +111,16 @@ button[aria-label="Close"]:focus {
   display: none !important;
 }
 
+.nav-tabs.justify-content-end {
+  .nav-link {
+    color: darken($color: $hi-dark-grey, $amount: 40) !important;
+  }
+
+  .nav-link.active {
+    color: $primary !important;
+  }
+}
+
 
 // material
 
