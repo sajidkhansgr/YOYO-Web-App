@@ -16,7 +16,8 @@ import { Hub } from '../shared/models/hub';
 export class HubComponent implements OnInit {
   id!: string; routerSubs!: Subscription;
   arr!: Array<number>; activeIndex!: number;
-  hubInfo!: Hub | null;disabled!: boolean;
+  hubInfo!: Hub | null; disabled!: boolean;
+  loading!: boolean;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -33,13 +34,14 @@ export class HubComponent implements OnInit {
 
   initialiseState() {
     this.arr = [];
-    this.disabled = true;this.hubInfo = null;
-    setTimeout(()=>{
+    this.disabled = true; this.hubInfo = null;
+    this.getHub();
+    setTimeout(() => {
       this.arr.push(0);
       this.activeIndex = 0;
-      this.getHub();
       this.disabled = false;
-    },900)
+    }, 900)
+    this.loading = true;
   }
 
   getHub() {
@@ -47,6 +49,7 @@ export class HubComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && data.result.id) {
           this.hubInfo = data.result;
+          this.loading = false;
         } else {
           this.toastr.error("invalid Hub")
           this.router.navigate(['/dashboard']);
@@ -67,7 +70,7 @@ export class HubComponent implements OnInit {
 
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    if(!!this.routerSubs)
+    if (!!this.routerSubs)
       this.routerSubs.unsubscribe();
   }
 

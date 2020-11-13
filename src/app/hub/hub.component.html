@@ -1,4 +1,6 @@
-<div class="main main-hub p-3" *ngIf="hubInfo">
+<app-loader [type]="'page'" *ngIf="loading"></app-loader> <!-- loader -->
+
+<div class="main main-hub p-3" *ngIf="hubInfo && !loading">
   <h3 class="mb-4 clearfix heading">
     {{hubInfo.name}}
   </h3>

@@ -121,6 +121,14 @@ button[aria-label="Close"]:focus {
   }
 }
 
+.table {
+  tbody {
+    .deact {
+      color: darken($color: $hi-dark-grey, $amount: 40) !important;
+    }
+  }
+}
+
 
 // material
 

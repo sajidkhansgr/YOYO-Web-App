@@ -35,7 +35,7 @@ export class TableComponent implements OnInit {
     this.toggleInfo.emit(tag);
   }
 
-  pageSizeChangeFunc() {
+  chngPageSize() {
     this.pageSizeChange.emit(this.pageSize);
   }
 
