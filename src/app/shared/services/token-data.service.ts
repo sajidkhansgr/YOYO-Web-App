@@ -12,9 +12,13 @@ export class TokenDataService {
   }
 
   removeAll() {
+    this.remTkn();
+    this.router.navigate(['/auth/login']);
+  }
+
+  remTkn() {
     localStorage.clear(); //remove local
     this.cookieServ.deleteAll('/'); //remove cookie
-    this.router.navigate(['/auth/login']);
   }
 
   setTokenAndUser(res: any) {

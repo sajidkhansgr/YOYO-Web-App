@@ -75,7 +75,7 @@
               <div class="name">
                 <label class="text-hi-dark-grey mb-0 mt-2">Name</label>
                 <div class="value">
-                  {{rowInfo.firstName||'N/A'}}
+                  {{getName(rowInfo)}}
                 </div>
               </div>
               <div class="email">
@@ -87,7 +87,7 @@
               <div class="role">
                 <label class="text-hi-dark-grey mb-0 mt-2">Role</label>
                 <div class="value">
-                  {{rowInfo.roleId && roles[rowInfo.roleId]?roles[rowInfo.roleId]:'N/A'}}
+                  {{rowInfo.role && rowInfo.role.name ?rowInfo.role.name:'N/A'}}
                 </div>
               </div>
               <div class="password">
@@ -284,10 +284,10 @@
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
                 <span *ngSwitchCase="'name'">
-                  {{usr.firstName||'N/A'}}<small><br />{{usr.email}}</small>
+                  {{getName(usr)}}<small><br />{{usr.email}}</small>
                 </span>
                 <span *ngSwitchCase="'roleId'">
-                  {{usr.roleId && roles[usr.roleId]?roles[usr.roleId]:'N/A'}}
+                  {{usr.role && usr.role.name ?usr.role.name:'N/A'}}
                 </span>
                 <span *ngSwitchDefault>{{usr[col.k]}}</span>
               </span>

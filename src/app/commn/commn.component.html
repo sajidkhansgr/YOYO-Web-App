@@ -54,11 +54,11 @@
                         </div>
                         <div class="created">
                           <label class="text-hi-dark-grey mb-0 mt-2">Created</label>
-                          <div class="value">{{rowInfo.created||'N/A'}}</div>
+                          <div class="value">{{(rowInfo.createdDate|date:'dd MMM, yyyy')||'N/A'}}</div>
                         </div>
                         <div class="author">
                           <label class="text-hi-dark-grey mb-0 mt-2">Author</label>
-                          <div class="value">{{rowInfo.author}}</div>
+                          <div class="value">{{rowInfo.createdByFullName||'N/A'}}</div>
                         </div>
                         <div class="recipients">
                           <label class="text-hi-dark-grey mb-0 mt-2">Recipients</label>
@@ -74,13 +74,31 @@
                           <label class="text-hi-dark-grey mb-0 mt-2">Send email reminders</label>
                           <div class="value">{{rowInfo.notifyByEmail?'Yes':'No'}}</div>
                         </div>
-                        <div class="status">
-                          <label class="text-hi-dark-grey mb-0 mt-2">Status</label>
-                          <div class="value">{{rowInfo.created||'N/A'}}</div>
+                        <div *ngIf="activeIndex==0||activeIndex==2 else schAncmnt">
+                          <div class="status">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Status</label>
+                            <div class="value">Sent</div>
+                          </div>
+                          <div class="status">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Date Sent</label>
+                            <div class="value">{{(rowInfo.deliveredOn|date:'dd MMM, yyyy h:mm a')||'N/A'}}</div>
+                          </div>
                         </div>
+                        <ng-template #schAncmnt>
+                          <div class="status">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Status</label>
+                            <div class="value">Scheduled</div>
+                          </div>
+                          <div class="status">
+                            <label class="text-hi-dark-grey mb-0 mt-2">Scheduled</label>
+                            <div class="value">{{(rowInfo.scheduledOn|date:'dd MMM, yyyy h:mm a')||'N/A'}}</div>
+                          </div>
+                        </ng-template>
                         <div class="readRate">
                           <label class="text-hi-dark-grey mb-0 mt-2">Read Rate</label>
-                          <div class="value">{{rowInfo.read||'N/A'}}</div>
+                          <div class="value">
+                            {{rowInfo.viewPercentage?rowInfo.viewPercentage:0}}%
+                          </div>
                         </div>
                       </div>
                       <div class="announcement details border-bottom mb-3 pb-3">
@@ -167,20 +185,31 @@
                 {{col.n}}
                 <i class="ml-1 fas" [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
               </th>
-              <th *ngIf="activeIndex==0"></th>
+              <th *ngIf="activeIndex==0 || activeIndex==1"></th>
             </tr>
           </thead>
           <tbody *ngIf="!loading && ancmnts.length > 0">
             <tr *ngFor="let ancmnt of ancmnts" (click)="toggleInfo(ancmnt)">
-              <td>
-                {{ancmnt.subject}}<br />
+              <td *ngFor="let col of cols">
+                <span [ngSwitch]="col.k">
+                  <span *ngSwitchCase="'sendToGroup'">
+                    {{ancmnt.sendToGroup===1?'All Users':''}}
+                  </span>
+                  <span *ngSwitchCase="'deliveredOn'">
+                    {{(ancmnt[col.k]|date:'dd MMM, yyyy')||'N/A'}}
+                  </span>
+                  <span *ngSwitchCase="'scheduledOn'">
+                    {{(ancmnt[col.k]|date:'dd MMM, yyyy')||'N/A'}}
+                  </span>
+                  <span *ngSwitchCase="'viewPercentage'">
+                    {{ancmnt.viewPercentage?ancmnt.viewPercentage:0}}%
+                  </span>
+                  <span *ngSwitchDefault>{{ancmnt[col.k]||'N/A'}}</span>
+                </span>
               </td>
-              <td class="text-hi-dark-grey">Author</td>
-              <td>{{ancmnt.sendToGroup===1?'All Users':''}}</td>
-              <td class="text-hi-dark-grey">Date</td>
-              <td>Read</td>
-              <td *ngIf="activeIndex==0" (click)="archAncmnt($event, ancmnt)">
-                <button class="btn btn-primary btn-sm hover-btn">Archive</button>
+              <td *ngIf="activeIndex==0 || activeIndex==1">
+                <button *ngIf="activeIndex==0" class="btn btn-primary btn-sm hover-btn" (click)="archAncmnt($event, ancmnt)">Archive</button>
+                <button *ngIf="activeIndex==1" class="btn btn-primary btn-sm hover-btn">Edit</button>
               </td>
             </tr>
           </tbody>

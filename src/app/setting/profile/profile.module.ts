@@ -11,7 +11,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { ChngPassModule } from '../../shared/components/chng-pass/chng-pass.module';
 import { ProfileComponent } from './profile.component';
+import { UserService } from '../../user/user.service';
 import { PasswordService } from '../../shared/services/password.service';
+import { TokenDataService } from '../../shared/services/token-data.service';
 
 const routes = [
   { path: '', component: ProfileComponent }
@@ -27,6 +29,6 @@ const routes = [
     LoaderModule, ChngPassModule
   ],
   exports: [ProfileComponent],
-  providers: [PasswordService]
+  providers: [PasswordService, UserService, TokenDataService]
 })
 export class ProfileModule { }

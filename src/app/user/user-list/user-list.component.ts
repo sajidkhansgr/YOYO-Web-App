@@ -7,7 +7,6 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
-
 import { ROLES, LNGS } from '../../shared/constants';
 import { User } from '../../shared/models/user';
 import { Group } from '../../shared/models/group';
@@ -83,7 +82,7 @@ export class UserListComponent implements OnInit {
   }
 
   initialiseState(){
-    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;this.sort = {};
   }
 
   initForm() {
@@ -130,6 +129,10 @@ export class UserListComponent implements OnInit {
 
   chngPageSize() {
     this.userList();
+  }
+
+  getName(usr: User){
+    return usr.firstName?usr.lastName?usr.firstName+' '+usr.lastName:usr.firstName:'N/A';
   }
 
   sortChange(col: any, index: number) {
@@ -198,8 +201,15 @@ export class UserListComponent implements OnInit {
     if (this.showRowInfo && this.rowInfo.id == usr.id) {
       this.closeDoc();
     } else {
+      //directly setting w/o hit api
       this.showRowInfo = true;
-      this.getUsr(usr)
+      this.docLoading = true;
+      setTimeout(() => {
+        this.rowInfo = usr;
+        this.rowInfo.languageId = this.rowInfo.language && this.rowInfo.language.id ? this.rowInfo.language.id : '';
+        this.docLoading = false;
+      }, 900)
+      // this.getUsr(usr)
     }
   }
 
@@ -213,9 +223,10 @@ export class UserListComponent implements OnInit {
     this.usrServ.viewEmpl(usr!.id.toString()).subscribe((data: any) => {
       if (data && data.result && data.result.id) {
         this.rowInfo = data.result;
-
-        if (this.rowInfo.language && this.rowInfo.language.id)
-          this.rowInfo.languageId = this.rowInfo.language.id
+        // if (this.rowInfo.language && this.rowInfo.language.id)
+        //   this.rowInfo.languageId = this.rowInfo.language.id;
+        // if (this.rowInfo.role && this.rowInfo.role.id)
+        //   this.rowInfo.roleId = this.rowInfo.role.id;
       } else {
         this.rowInfo = usr;
       }
@@ -364,9 +375,9 @@ export class UserListComponent implements OnInit {
           isActive: true
         })
       } else {
-        console.log("d", this.rowInfo.isActive)
         this.usrForm.patchValue({
-          ...this.rowInfo
+          ...this.rowInfo,
+          roleId: this.rowInfo.role && this.rowInfo.role.id ? this.rowInfo.role.id : ''
         })
         this.usrForm.controls['isActive'].enable();
         if (this.rowInfo && this.rowInfo.employeeGroups && this.rowInfo.employeeGroups.length > 0) {

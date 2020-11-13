@@ -205,9 +205,13 @@ export class GroupComponent implements OnInit {
     if (this.showRowInfo && this.rowInfo.id == row.id) {
       this.closeDoc();
     } else {
-      this.rowInfo = row;
-      console.log(this.rowInfo);
+      //directly setting w/o hit api
       this.showRowInfo = true;
+      this.docLoading = true;
+      setTimeout(() => {
+        this.rowInfo = row;
+        this.docLoading = false;
+      }, 900)
     }
   }
 
