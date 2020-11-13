@@ -21,11 +21,12 @@
                 </mat-form-field>
               </div>
               <div class="col-md-6 align-self-center row justify-content-end">
-                <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(propDropDown, $event)">
-                  <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
+                <div class="dropdown mr-2">
+                  <button class="btn btn-light dropdown-toggle" id="propDD" data-toggle="dropdown">
                     Property
                   </button>
-                  <div class="dropdown-menu dropdown-menu-right" #propDropDown>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="propDD"
+                    (click)="$event.stopPropagation();">
                     <button class="dropdown-item" *ngFor="let pr of props">
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="{{pr.id}}">
@@ -36,12 +37,14 @@
                     </button>
                   </div>
                 </div>
-                <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(divisionDropDown, $event)">
-                  <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
+                <div class="dropdown mr-2">
+                  <button class="btn btn-light dropdown-toggle" id="divisionDD" data-toggle="dropdown">
                     Division
                   </button>
-                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" #divisionDropDown aria-labelledby="divisionTrigger">
-                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3" [floatLabel]="'never'">
+                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" aria-labelledby="divisionDD"
+                    (click)="$event.stopPropagation();">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
+                      [floatLabel]="'never'">
                       <i matPrefix class="fas fa-search"></i>
                       <input matInput placeholder="Search ...">
                     </mat-form-field>
@@ -59,19 +62,17 @@
                     </button>
                   </div>
                 </div>
-                <div class="dropdown mr-2" (clickOutside)="outsideCloseDD(expDropDown, $event)">
-                  <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
-                    Experience
+                <div class="dropdown mr-2">
+                  <button class="btn btn-light dropdown-toggle" id="wrkspcDD" data-toggle="dropdown">
+                    Workspace
                   </button>
-                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" #expDropDown aria-labelledby="divisionTrigger">
-                    <div class="input-group mb-2 p-2">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text bg-white">
-                          <i class="fa fa-search"></i>
-                        </span>
-                      </div>
-                      <input type="text" class="form-control" placeholder="Search Experiences">
-                    </div>
+                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" aria-labelledby="wrkspcDD"
+                    (click)="$event.stopPropagation();">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
+                      [floatLabel]="'never'">
+                      <i matPrefix class="fas fa-search"></i>
+                      <input matInput placeholder="Search ...">
+                    </mat-form-field>
                     <div class="dropdown-divider"></div>
                     <div class="row justify-content-around m-0">
                       <button class="btn btn-light text-primary">Select all</button>
@@ -99,7 +100,8 @@
                   <tr>
                     <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
                       {{col.n}}
-                      <i class="ml-1 fas" [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
+                      <i class="ml-1 fas"
+                        [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
                     </th>
                   </tr>
                 </thead>
@@ -280,24 +282,18 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-chip-list #chipList aria-label="Recipient  Names *">
-            <mat-chip
-            *ngFor="let d of selDiv"
-            [selectable]="selectable"
-            [removable]="removable"
-            (removed)="remove(d)">
+          <mat-chip *ngFor="let d of selDiv" [selectable]="selectable" [removable]="removable" (removed)="remove(d)">
             {{d.name}}
-              <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
-            </mat-chip>
-            <input #divName
-              matInput formControlName="division"
-              placeholder="Add Division *"
-              [matAutocomplete]="auto"
-              ><!-- (matChipInputTokenEnd)="add($event)" -->
+            <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+          </mat-chip>
+          <input #divName matInput formControlName="division" placeholder="Add Division *" [matAutocomplete]="auto">
+          <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selDivIds($event.option.value)" [displayWith]="displayFn">
-            <mat-option *ngFor="let div of divArr" [value]="div">
-                {{div.name}}
-            </mat-option>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selDivIds($event.option.value)"
+          [displayWith]="displayFn">
+          <mat-option *ngFor="let div of divArr" [value]="div">
+            {{div.name}}
+          </mat-option>
         </mat-autocomplete>
       </mat-form-field>
       <!-- <mat-form-field appearance="outline" class="w-100">

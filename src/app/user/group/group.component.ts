@@ -20,7 +20,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 })
 export class GroupComponent implements OnInit {
   @Input() lmtPage: any;
-  input: any; searInit!: boolean;searchTxt!: string;
+  input: any; searInit!: boolean; searchTxt!: string;
   @ViewChild("sear", { static: false }) set altRefIn(el: ElementRef) {
     this.input = el;
     if (this.input && this.input?.nativeElement && !this.searInit) {
@@ -43,12 +43,12 @@ export class GroupComponent implements OnInit {
   ];
   cols: any[] = [];
   grps!: Group[]; divArr: Hub[] = [];
-  pageNo!: number;loading: boolean=false;pageSize!: number;
+  pageNo!: number; loading: boolean = false; pageSize!: number;
   groupForm!: FormGroup; grpDetail!: Group | null;
   disabled: boolean = false; docLoading: boolean = true;
   selectable = true; removable = true;
-  selDiv: any = []; divNameInp: any;sort:any={};
-  showRowInfo: boolean = false;rowInfo: any;isEdit!: boolean;
+  selDiv: any = []; divNameInp: any; sort: any = {};
+  showRowInfo: boolean = false; rowInfo: any; isEdit!: boolean;
   @ViewChild("divName", { static: false }) set divName(el: ElementRef) {
     this.divNameInp = el;
   }
@@ -73,15 +73,15 @@ export class GroupComponent implements OnInit {
     });
   }
 
-  intializeState(){
+  intializeState() {
     this.pageSize = this.lmtPage[0]; this.pageNo = 1;
-    this.cols = [{ n: "Name", asc: false,k:"name"},{ n: "Date Created", asc: false,k:"createdDate"},{ n: "Members", asc: false},{ n: "Anonymized", asc: false}];
+    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Created", asc: false, k: "createdDate" }, { n: "Members", asc: false }, { n: "Anonymized", asc: false }];
   }
 
   grpsList() {
     this.loading = true;
     this.closeDoc();
-    let params:any = {
+    let params: any = {
       pageNo: this.pageNo, pageSize: this.pageSize,
       searchText: this.searchTxt,
       ...this.sort
@@ -90,14 +90,14 @@ export class GroupComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.grps = data.result.results;
-        }else{
+        } else {
           this.grps = [];
         }
         this.loading = false;
       }, (err: any) => {
-          console.log(err);
-          this.grps = [];
-          this.loading = false;
+        console.log(err);
+        this.grps = [];
+        this.loading = false;
       });
   }
 
@@ -112,14 +112,14 @@ export class GroupComponent implements OnInit {
       });
   }
 
-  chngPageSize(){
+  chngPageSize() {
     this.grpsList();
   }
 
-  sortChange(col: any, index: number){
+  sortChange(col: any, index: number) {
     this.loading = true;
-    let colData = {...col};
-    for(let k=0;k<this.cols.length;k++){
+    let colData = { ...col };
+    for (let k = 0; k < this.cols.length; k++) {
       this.cols[k].asc = false;
     }
     colData.asc = !colData.asc;
@@ -226,13 +226,13 @@ export class GroupComponent implements OnInit {
     }
   }
 
-  toggleDropdown = (event: any) => {
-    if (event.target!.classList.contains('fas')) {
-      event.target.parentNode.nextSibling!.classList.toggle('show');
-    } else {
-      event.target.nextSibling!.classList.toggle('show');
-    }
-  }
+  // toggleDropdown = (event: any) => {
+  //   if (event.target!.classList.contains('fas')) {
+  //     event.target.parentNode.nextSibling!.classList.toggle('show');
+  //   } else {
+  //     event.target.nextSibling!.classList.toggle('show');
+  //   }
+  // }
 
   displayFn = (div: any) => {
     return (div && div.id) ? div.name : '';

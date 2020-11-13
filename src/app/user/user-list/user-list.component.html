@@ -225,11 +225,12 @@
           </button>
         </div>
         <div class="float-right">
-          <div class="dropdown" (clickOutside)="outsideCloseDD(cogDropDown, $event)">
-            <button class="btn btn-light dropdown-toggle" (click)="toggleDropdown($event)">
+          <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" id="cogDD" data-toggle="dropdown">
               <i class="fas fa-cog"></i>
             </button>
-            <div class="cog dropdown-menu dropdown-menu-right" #cogDropDown>
+            <div class="cog dropdown-menu dropdown-menu-right" aria-labelledby="cogDD"
+              (click)="$event.stopPropagation();">
               <div class="scrollable">
                 <span class="ml-2 heading">Visible Columns</span>
                 <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols"

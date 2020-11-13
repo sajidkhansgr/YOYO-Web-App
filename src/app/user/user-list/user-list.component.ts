@@ -81,8 +81,8 @@ export class UserListComponent implements OnInit {
       .subscribe();
   }
 
-  initialiseState(){
-    this.pageSize = this.lmtPage[0]; this.pageNo = 1;this.sort = {};
+  initialiseState() {
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1; this.sort = {};
   }
 
   initForm() {
@@ -131,8 +131,8 @@ export class UserListComponent implements OnInit {
     this.userList();
   }
 
-  getName(usr: User){
-    return usr.firstName?usr.lastName?usr.firstName+' '+usr.lastName:usr.firstName:'N/A';
+  getName(usr: User) {
+    return usr.firstName ? usr.lastName ? usr.firstName + ' ' + usr.lastName : usr.firstName : 'N/A';
   }
 
   sortChange(col: any, index: number) {
@@ -184,13 +184,13 @@ export class UserListComponent implements OnInit {
     this.closeDropdown(event);
   }
 
-  toggleDropdown = (event: any) => {
-    if (event.target!.classList.contains('fas')) {
-      event.target.parentNode.nextSibling!.classList.toggle('show');
-    } else {
-      event.target.nextSibling!.classList.toggle('show');
-    }
-  }
+  // toggleDropdown = (event: any) => {
+  //   if (event.target!.classList.contains('fas')) {
+  //     event.target.parentNode.nextSibling!.classList.toggle('show');
+  //   } else {
+  //     event.target.nextSibling!.classList.toggle('show');
+  //   }
+  // }
 
   closeDropdown = (event: any) => {
     event.target.parentNode.parentNode!.classList.remove('show');
