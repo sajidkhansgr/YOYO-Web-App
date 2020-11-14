@@ -52,6 +52,7 @@ export class UserListComponent implements OnInit {
   showRowInfo: boolean = false; rowInfo: any; isEdit: boolean = false;
   grps!: Group[];
   selectable = true; removable = true; selGrps: any = [];
+  totalCount!: number;
 
   constructor(
     private modalService: NgbModal,
@@ -83,6 +84,19 @@ export class UserListComponent implements OnInit {
 
   initialiseState() {
     this.pageSize = this.lmtPage[0]; this.pageNo = 1; this.sort = {};
+    this.totalCount = 0;
+  }
+
+  // when changing page size
+  pageSizeChange(pageSize: number) {
+    this.pageSize = pageSize;
+    this.userList();
+  }
+
+  // numbers to be displayed for Pagination
+  paginationNum(num: number) {
+    this.pageNo = num;
+    this.userList();
   }
 
   initForm() {
@@ -113,10 +127,13 @@ export class UserListComponent implements OnInit {
       params.isActive = true;
     else if (this.activeIndex == 2)
       params.isActive = false;
+    // console.log(params);
     this.usrServ.emplList(params)
       .subscribe((data: any) => {
+        // console.log(data);
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.usrs = data.result.results;
+          this.totalCount = data.result.totalCount;
         } else {
           this.usrs = [];
         }

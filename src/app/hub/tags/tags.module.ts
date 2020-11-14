@@ -12,7 +12,7 @@ import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/confirm-dialog.module';
 import { TagsComponent } from './tags.component';
 import { TagsService } from './tags.service';
-import { TableModule } from '../../shared/components/table/table.module'
+import { PaginationModule } from '../../shared/components/pagination/pagination.module';
 
 @NgModule({
   declarations: [TagsComponent],
@@ -24,9 +24,10 @@ import { TableModule } from '../../shared/components/table/table.module'
     MatSelectModule,
     ConfirmDialogModule,
     MatCheckboxModule,
-    LoaderModule, TableModule,
+    LoaderModule,
     MatChipsModule,
-    NgbNavModule
+    NgbNavModule,
+    PaginationModule
   ],
   exports: [
     TagsComponent

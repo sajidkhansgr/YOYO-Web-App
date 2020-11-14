@@ -113,9 +113,39 @@
               <a ngbNavLink>Disabled</a>
             </li>
           </ul>
-          <app-table [showRowInfo]="showRowInfo" [columns]="columns" [dataLoading]="tagLoading" [data]="tags"
+          <div class="card-text px-3">
+            <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
+              <thead>
+                <tr>
+                  <th class="curs-ptr" [ngClass]="{'font-weight-normal': !col.isSelected}" *ngFor="let col of columns"
+                    (click)="sort(col.key)">
+                    {{col.dispName}}
+                    <i class="fas ml-1"
+                      [ngClass]="{'fa-sort-down align-top': col.isAsc, 'fa-sort-up align-bottom': !col.isAsc}"></i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody *ngIf="!tagLoading && tags.length > 0">
+                <tr (click)="toggleInfo(tag)" *ngFor="let tag of tags">
+                  <td>
+                    {{tag.name}}
+                  </td>
+                  <td class="text-hi-dark-grey">No Status</td>
+                  <td>{{tag.updatedDate.split('T')[0]}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-center text-secondary" style="min-height: 230px; padding-top:95px;"
+              *ngIf="tags.length == 0">
+              No data found
+            </div>
+            <app-loader [type]="'page'" *ngIf="tagLoading"></app-loader>
+          </div>
+          <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
+            (pageSizeChange)="pageSizeChange($event)" (paginationNum)="paginationNum($event)"></app-pagination>
+          <!-- <app-table [showRowInfo]="showRowInfo" [columns]="columns" [dataLoading]="tagLoading" [data]="tags"
             [pageSize]="pageSize" [totalCount]="totalCount" (sort)="sort($event)" (toggleInfo)="toggleInfo($event)"
-            (pageSizeChange)="pageSizeChange($event)" (paginationNum)="paginationNum($event)"></app-table>
+            (pageSizeChange)="pageSizeChange($event)" (paginationNum)="paginationNum($event)"></app-table> -->
         </div>
       </div>
     </div>

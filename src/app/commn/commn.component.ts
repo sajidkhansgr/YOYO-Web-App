@@ -31,8 +31,10 @@ export class CommnComponent implements OnInit {
   selectable = true; removable: boolean = true;
   grps: Group[] = []; selGrps: Group[] = [];
   wrkSpcs: Workspace[] = []; selWrkSpcs: Workspace[] = [];
-  showRowInfo: boolean = false; rowInfo: any;sort:any={};
-  cols:any[] = [];
+  showRowInfo: boolean = false; rowInfo: any; sort: any = {};
+  cols: any[] = [];
+  totalCount!: number;
+
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
@@ -49,20 +51,33 @@ export class CommnComponent implements OnInit {
     this.getAncmnts();
   }
 
-  initialiseState(){
+  initialiseState() {
     this.pageSize = this.lmtPage[0]; this.pageNo = 1;
-    this.cols = [];this.sort={};
-    let commonCols = [{ n: "Subject", asc: false, k: "subject" },{ n: "Author", asc: false, k: "createdByFullName" },{ n: "Recipients", asc: false, k: "sendToGroup" }];
-    let cols1 = [{ n: "Date Sent", asc: false, k: "deliveredOn" },{ n: "Read", asc: false, k: "viewPercentage" }];
-    if(this.activeIndex===0){
+    this.cols = []; this.sort = {};
+    let commonCols = [{ n: "Subject", asc: false, k: "subject" }, { n: "Author", asc: false, k: "createdByFullName" }, { n: "Recipients", asc: false, k: "sendToGroup" }];
+    let cols1 = [{ n: "Date Sent", asc: false, k: "deliveredOn" }, { n: "Read", asc: false, k: "viewPercentage" }];
+    if (this.activeIndex === 0) {
       this.cols.push(...commonCols, ...cols1);
     }
-    else if(this.activeIndex===1){
+    else if (this.activeIndex === 1) {
       this.cols.push(...commonCols, { n: "Scheduled", asc: false, k: "scheduledOn" });
     }
-    else if(this.activeIndex===2){
+    else if (this.activeIndex === 2) {
       this.cols.push(...commonCols, ...cols1, { n: "Archived", asc: false, k: "archived" });
     }
+    this.totalCount = 0;
+  }
+
+  // when changing page size
+  pageSizeChange(pageSize: number) {
+    this.pageSize = pageSize;
+    this.getAncmnts();
+  }
+
+  // numbers to be displayed for Pagination
+  paginationNum(num: number) {
+    this.pageNo = num;
+    this.getAncmnts();
   }
 
   initForm() {
@@ -98,13 +113,15 @@ export class CommnComponent implements OnInit {
     this.closeDoc();
     let params: any = {
       pageNo: this.pageNo, pageSize: this.pageSize,
-      searchText: this.searchTxt,...this.sort,
+      searchText: this.searchTxt, ...this.sort,
       status: this.activeIndex === 2 ? 3 : this.activeIndex == 1 ? 2 : 1,
     }
     this.commnServ.ancmntList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.ancmnts = data.result.results;
+          this.totalCount = data.result.totalCount;
+          console.log(this.totalCount);
         } else {
           this.ancmnts = [];
         }

@@ -52,6 +52,7 @@ export class GroupComponent implements OnInit {
   @ViewChild("divName", { static: false }) set divName(el: ElementRef) {
     this.divNameInp = el;
   }
+  totalCount!: number;
 
   constructor(
     private modalService: NgbModal,
@@ -76,6 +77,19 @@ export class GroupComponent implements OnInit {
   intializeState() {
     this.pageSize = this.lmtPage[0]; this.pageNo = 1;
     this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Created", asc: false, k: "createdDate" }, { n: "Members", asc: false }, { n: "Anonymized", asc: false }];
+    this.totalCount = 0;
+  }
+
+  // when changing page size
+  pageSizeChange(pageSize: number) {
+    this.pageSize = pageSize;
+    this.grpsList();
+  }
+
+  // numbers to be displayed for Pagination
+  paginationNum(num: number) {
+    this.pageNo = num;
+    this.grpsList();
   }
 
   grpsList() {
@@ -90,6 +104,7 @@ export class GroupComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.grps = data.result.results;
+          this.totalCount = data.result.totalCount;
         } else {
           this.grps = [];
         }

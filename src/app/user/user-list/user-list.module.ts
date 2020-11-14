@@ -17,6 +17,7 @@ import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/conf
 import { UserListComponent } from './user-list.component';
 import { UserService } from '../user.service';
 import { GroupService } from '../group/group.service';
+import { PaginationModule } from '../../shared/components/pagination/pagination.module';
 
 @NgModule({
   declarations: [UserListComponent],
@@ -26,7 +27,7 @@ import { GroupService } from '../group/group.service';
     MatTabsModule, MatFormFieldModule, MatInputModule, MatSelectModule,
     MatCheckboxModule, MatRadioModule, MatChipsModule, MatAutocompleteModule,
     DragDropModule,
-    LoaderModule, ConfirmDialogModule
+    LoaderModule, ConfirmDialogModule, PaginationModule
   ],
   providers: [UserService, GroupService],
   exports: [

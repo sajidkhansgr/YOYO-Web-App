@@ -46,7 +46,7 @@ export class TagsComponent implements OnInit {
   updDisabled!: boolean; catgAddDisabled!: boolean; tagAddDisabled!: boolean;
   catgData!: Catg | undefined;
   catgs!: Catg[]; tags!: Tag[]; allTags!: Tag[];
-  pageNum!: number; pageSize!: number; isActive!: boolean;
+  pageNo!: number; pageSize!: number; isActive!: boolean;
   totalCount!: number;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames!: string[];
@@ -92,7 +92,7 @@ export class TagsComponent implements OnInit {
     this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
     this.catgData = undefined;
     this.catgs = []; this.tags = []; this.allTags = [];
-    this.pageNum = 1; this.pageSize = LMT_PAGE[0]; this.isActive = true;
+    this.pageNo = 1; this.pageSize = LMT_PAGE[0]; this.isActive = true;
     this.totalCount = 0;
     this.tagNames = [];
     this.searchTxt = '';
@@ -119,7 +119,7 @@ export class TagsComponent implements OnInit {
 
   // numbers to be displayed for Pagination
   paginationNum(num: number) {
-    this.pageNum = num;
+    this.pageNo = num;
     this.getTags();
   }
 
@@ -243,7 +243,7 @@ export class TagsComponent implements OnInit {
     this.tagLoading = true;
     let query = {
       hubId: this.hubid,
-      pageNo: this.pageNum,
+      pageNo: this.pageNo,
       pageSize: this.pageSize,
       searchText: this.searchTxt,
       isAscending: this.isAsc,

@@ -11,6 +11,7 @@ import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/conf
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { GroupComponent } from './group.component';
 import { GroupService } from './group.service';
+import { PaginationModule } from '../../shared/components/pagination/pagination.module';
 
 @NgModule({
   declarations: [GroupComponent],
@@ -19,7 +20,8 @@ import { GroupService } from './group.service';
     FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatSelectModule,
     MatChipsModule, MatAutocompleteModule,
-    ConfirmDialogModule, LoaderModule
+    ConfirmDialogModule, LoaderModule,
+    PaginationModule
   ],
   exports: [
     GroupComponent

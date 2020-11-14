@@ -1,1 +1,12 @@
-<p>pagination works!</p>
+<div class="card-footer row justify-content-between mx-0">
+  <div class="pages">
+    <mat-form-field appearance="outline" class="mr-2">
+      <mat-select [(ngModel)]="pageSize" (selectionChange)="chngPageSize()">
+        <mat-option [value]="lP" *ngFor="let lP of lmtPage">{{lP}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <ngb-pagination [collectionSize]="totalCount" [(page)]="page" [maxSize]="3" [pageSize]="pageSize" [rotate]="true"
+    [boundaryLinks]="true" (pageChange)="pageChangeFunc()">
+  </ngb-pagination>
+</div>

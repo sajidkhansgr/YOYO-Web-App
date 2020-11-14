@@ -36,7 +36,7 @@
               </div>
               <div class="workspace w-100 col-md-4" *ngIf="showRowInfo">
                 <app-loader [type]="'page'" *ngIf="docLoading"></app-loader>
-                <div class="doc"  *ngIf="!docLoading">
+                <div class="doc" *ngIf="!docLoading">
                   <div class="card">
                     <div class="card-header row m-0">
                       <h5 class="mb-0 pl-0 align-self-center">Announcement details</h5>
@@ -183,7 +183,8 @@
             <tr>
               <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
                 {{col.n}}
-                <i class="ml-1 fas" [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
+                <i class="ml-1 fas"
+                  [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
               </th>
               <th *ngIf="activeIndex==0 || activeIndex==1"></th>
             </tr>
@@ -208,7 +209,8 @@
                 </span>
               </td>
               <td *ngIf="activeIndex==0 || activeIndex==1">
-                <button *ngIf="activeIndex==0" class="btn btn-primary btn-sm hover-btn" (click)="archAncmnt($event, ancmnt)">Archive</button>
+                <button *ngIf="activeIndex==0" class="btn btn-primary btn-sm hover-btn"
+                  (click)="archAncmnt($event, ancmnt)">Archive</button>
                 <button *ngIf="activeIndex==1" class="btn btn-primary btn-sm hover-btn">Edit</button>
               </td>
             </tr>
@@ -218,7 +220,9 @@
           No Announcement found
         </div>
       </div>
-      <div class="card-footer row justify-content-between mx-0">
+      <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
+        (pageSizeChange)="pageSizeChange($event)" (paginationNum)="paginationNum($event)"></app-pagination>
+      <!-- <div class="card-footer row justify-content-between mx-0">
         <div class="pages">
           <mat-form-field appearance="outline" class="mr-2">
             <mat-select [(ngModel)]="pageSize" (selectionChange)="chngPageSize()">
@@ -238,7 +242,7 @@
             <a class="page-link bg-hi-grey" href="#"><i class="fas fa-chevron-right"></i></a>
           </li>
         </ul>
-      </div>
+      </div> -->
     </div>
   </div>
 </ng-template>
@@ -280,15 +284,19 @@
         </mat-error>
       </mat-form-field>
       <br />
-      <mat-form-field appearance="outline" class="w-100" *ngIf="ancmntForm.controls.usrWrkSpcs && ancmntForm.value.sendToGroup==2">
+      <mat-form-field appearance="outline" class="w-100"
+        *ngIf="ancmntForm.controls.usrWrkSpcs && ancmntForm.value.sendToGroup==2">
         <mat-chip-list #chipList aria-label="Select Wrodkspaces">
-          <mat-chip *ngFor="let d of selWrkSpcs" [selectable]="selectable" [removable]="removable" (removed)="remove(d, 'selWrkSpcs')">
+          <mat-chip *ngFor="let d of selWrkSpcs" [selectable]="selectable" [removable]="removable"
+            (removed)="remove(d, 'selWrkSpcs')">
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input matInput formControlName="usrWrkSpcs" placeholder="Select user workspaces(s)" [matAutocomplete]="auto"><!-- (matChipInputTokenEnd)="add($event)" -->
+          <input matInput formControlName="usrWrkSpcs" placeholder="Select user workspaces(s)" [matAutocomplete]="auto">
+          <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value, 'selWrkSpcs')" [displayWith]="displayFn">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value, 'selWrkSpcs')"
+          [displayWith]="displayFn">
           <mat-option *ngFor="let wrkSpc of wrkSpcs" [value]="wrkSpc">
             {{wrkSpc.name}} <br />
             <small *ngIf="wrkSpc.hub && wrkSpc.hub.name">{{wrkSpc.hub.name}}</small>
@@ -296,15 +304,19 @@
         </mat-autocomplete>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="w-100" *ngIf="ancmntForm.controls.usrGrps && ancmntForm.value.sendToGroup==3">
+      <mat-form-field appearance="outline" class="w-100"
+        *ngIf="ancmntForm.controls.usrGrps && ancmntForm.value.sendToGroup==3">
         <mat-chip-list #chipList1 aria-label="Select user Group(s)">
-          <mat-chip *ngFor="let d of selGrps" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selGrps')">
+          <mat-chip *ngFor="let d of selGrps" [selectable]="selectable" [removable]="removable"
+            (removed)="remove(d,'selGrps')">
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input matInput formControlName="usrGrps" placeholder="Select user group(s)" [matAutocomplete]="auto"><!-- (matChipInputTokenEnd)="add($event)" -->
+          <input matInput formControlName="usrGrps" placeholder="Select user group(s)" [matAutocomplete]="auto">
+          <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selGrps')" [displayWith]="displayFn">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selGrps')"
+          [displayWith]="displayFn">
           <mat-option *ngFor="let grp of grps" [value]="grp">
             {{grp.name}}
           </mat-option>
