@@ -20,6 +20,13 @@ export const navigation: Navigation[] = [
     url: '/dashboard'
   },
   {
+    id: 'chat',
+    title: 'Chat',
+    type: 'item',
+    icon: 'fa-th-large',
+    url: '/chat'
+  },
+  {
     id: 'hub',
     title: 'Hub',
     type: 'collapsable',
