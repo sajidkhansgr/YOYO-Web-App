@@ -188,7 +188,7 @@ export class TagsComponent implements OnInit {
         categories: this.rowInfo.categoryIDs.map(Number),
         hubId: parseInt(this.hubid)
       };
-      // console.log(tagData);
+      console.log(tagData);
       // console.log(this.rowInfo);
       this.tagServ.updTag(tagData)
         .subscribe((data: any) => {
@@ -265,10 +265,10 @@ export class TagsComponent implements OnInit {
       categoryId: this.categoryId,
       unCategorized: this.unCategorized
     }
-    // console.log(query);
+    // console.log(query.isActive);
     this.tagServ.tagList(query)
       .subscribe((data: any) => {
-        // console.log(data);
+        // console.log(data.result.results);
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.tags = data.result.results;
           this.totalCount = data.result.totalCount;
@@ -319,10 +319,11 @@ export class TagsComponent implements OnInit {
       for (let i = 0; i < this.tagNames.length; i++) {
         tagDataArr.push({
           name: this.tagNames[i],
-          categories: [],
+          categories: this.categoryId ? [this.categoryId] : [],
           isActive: true
         });
       }
+      // console.log(tagDataArr);
 
       this.tagServ.addTag({ lstTagDTO: tagDataArr, hubId: parseInt(this.hubid) })
         .subscribe((data: any) => {
