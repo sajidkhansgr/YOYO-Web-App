@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { debug } from 'console';
-import { NotificationDto } from '../shared/models/notification';
-
+import { Notification } from '../shared/models/notification';
 import { SignalRService } from '../shared/services/signal-r.service';
 
 @Component({
@@ -10,22 +8,23 @@ import { SignalRService } from '../shared/services/signal-r.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  public msgs: Array<Notification> = [];
 
-  constructor(private _sService: SignalRService) { }
+  constructor(private sgnlServ: SignalRService) { }
 
   ngOnInit(): void {
-    this._sService.retrieveMappedObject().subscribe((receivedObjs: Array<NotificationDto>) => {
-        this.msgInboxArray = receivedObjs;
-    });
+    // this.initList();
+  }
 
-    this._sService.notificationList().subscribe((data: any) => {
-      this.msgInboxArray = data.result.results as Array<NotificationDto>;
+  initList(){
+    this.sgnlServ.retrieveMappedObj().subscribe((receivedObjs: Array<Notification>) => {
+        this.msgs = receivedObjs;
+    });
+    this.sgnlServ.notifList().subscribe((data: any) => {
+      this.msgs = data.result.results as Array<Notification>;
     }, (err: any) => {
       console.log("Error");
     });
   }
-
-  public msgDto: NotificationDto = new NotificationDto();
-  public msgInboxArray: Array<NotificationDto> = [];
 
 }

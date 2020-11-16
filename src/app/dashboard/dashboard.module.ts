@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard.component';
 import { FormsModule } from '@angular/forms';
+
+import { DashboardComponent } from './dashboard.component';
+import { SignalRService } from '../shared/services/signal-r.service';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent }
@@ -12,8 +14,9 @@ const routes: Routes = [
   declarations: [DashboardComponent],
   imports: [
     CommonModule,
-    FormsModule,
-    RouterModule.forChild(routes)
-  ]
+    RouterModule.forChild(routes),
+    FormsModule
+  ],
+  providers: [SignalRService]
 })
 export class DashboardModule { }

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  API_ENDPOINT: "https://localhost:44314/",
+  API_ENDPOINT: "http://hiforceapi.imobisoft.eu/",
+  SGNL_R: "http://hiforceapi.imobisoft.eu/notification",
   CLNT_ID: "8c0cd670273d451cbc9b351b11d22318"
 };
 

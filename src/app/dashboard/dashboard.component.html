@@ -1,8 +1,9 @@
 <div class="ud-body">
   <div class="msg-box">
     <ul>
-      <li *ngFor="let mObj of msgInboxArray" [ngClass]="mObj.subject === msgDto.subject ? 'in-msg' : 'ex-msg'">{{mObj.subject}} :<br /><span class="msg-italic-style">{{mObj.description}}</span></li>
+      <li *ngFor="let msg of msgs" [ngClass]="msg.subject?'ex-msg':'in-msg'">{{msg.subject}} :<br />
+        <span class="msg-italic-style">{{msg.description}}</span>
+      </li>
     </ul>
   </div>
-  
 </div>
