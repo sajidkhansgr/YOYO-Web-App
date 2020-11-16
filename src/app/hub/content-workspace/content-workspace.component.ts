@@ -38,6 +38,7 @@ export class ContentWorkspaceComponent implements OnInit {
   props: any;
   view!: boolean;
   edit!: boolean;
+  activeFldrs!: number; isActiveFldrs!: boolean;
 
   constructor(
     // private route: ActivatedRoute,
@@ -95,9 +96,16 @@ export class ContentWorkspaceComponent implements OnInit {
     this.props = PRPS;
     this.view = true;
     this.edit = false;
+    this.activeFldrs = 1; this.isActiveFldrs = true;
   }
 
   // ---- folder and smart folder ---- //
+  // change displayed folders and smart foldera (isActive)
+  changeDispFldrs() {
+    this.activeFldrs == 1 ? this.isActiveFldrs = true : this.isActiveFldrs = false;
+    this.listFolders();
+  }
+
   // back nav folder
   backFolder() {
     this.folderNav.pop();
@@ -290,7 +298,8 @@ export class ContentWorkspaceComponent implements OnInit {
     // this.folderLoading = true;
     let query = {
       workspaceId: this.selWrkspc!.id,
-      folderId: this.dispFolder ? this.dispFolder!.id : null
+      folderId: this.dispFolder ? this.dispFolder!.id : null,
+      isActive: this.isActiveFldrs
     };
     // console.log(query);
     this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
@@ -435,7 +444,8 @@ export class ContentWorkspaceComponent implements OnInit {
     // this.folderLoading = true;
     let query = {
       workspaceId: this.selWrkspc!.id,
-      folderId: this.dispFolder ? this.dispFolder!.id : null
+      folderId: this.dispFolder ? this.dispFolder!.id : null,
+      isActive: this.isActiveFldrs
     };
     // console.log(query);
     this.cwServ.folderListWrkspc(query).subscribe((data: any) => {

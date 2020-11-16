@@ -114,10 +114,19 @@ button[aria-label="Close"]:focus {
 .nav-tabs.justify-content-end {
   .nav-link {
     color: darken($color: $hi-dark-grey, $amount: 40) !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.9rem !important;
   }
 
   .nav-link.active {
     color: $primary !important;
+    background-color: transparent !important;
+  }
+}
+
+.nav-tabs.border-color-grey {
+  .nav-link.active {
+    border-color: #dee2e6 #dee2e6 $hi-grey !important;
   }
 }
 
@@ -823,8 +832,6 @@ header {
 
   .main {
     .col-3 {
-      position: relative;
-
       .image {
         min-height: 100px;
         position: relative;
@@ -837,15 +844,16 @@ header {
           max-height: 100px;
           max-width: 100px;
         }
+
+        .dropdown {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          opacity: 0;
+        }
       }
 
-      .dropdown {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -100%);
-        opacity: 0;
-      }
     }
 
     .col-3:hover {

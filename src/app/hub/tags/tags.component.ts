@@ -38,7 +38,7 @@ export class TagsComponent implements OnInit {
     }
   }
   selTag!: string;
-  loading!: boolean; tagLoading!: boolean;
+  catgLoading!: boolean; tagLoading!: boolean;
   rowInfo: any;
   showRowInfo!: boolean;
   showCatgIn!: boolean;
@@ -46,14 +46,14 @@ export class TagsComponent implements OnInit {
   updDisabled!: boolean; catgAddDisabled!: boolean; tagAddDisabled!: boolean;
   catgData!: Catg | undefined;
   catgs!: Catg[]; tags!: Tag[]; allTags!: Tag[];
-  pageNo!: number; pageSize!: number; isActive!: boolean;
+  pageNo!: number; pageSize!: number; isActiveTag!: boolean; isActiveCatg!: boolean;
   totalCount!: number;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames!: string[];
   searchTxt!: string;
   sortColumn!: string; isAsc!: boolean | undefined;
   columns!: any[];
-  active!: number;
+  activeTags!: number; activeCatgs!: number;
 
   constructor(
     private dialog: MatDialog,
@@ -72,7 +72,7 @@ export class TagsComponent implements OnInit {
   initialiseState() {
     this.input = undefined; this.searInit = false;
     this.selTag = 'all';
-    this.loading = true; this.tagLoading = true;
+    this.catgLoading = true; this.tagLoading = true;
     this.rowInfo = undefined;
     this.showRowInfo = false;
     this.showCatgIn = false;
@@ -92,13 +92,13 @@ export class TagsComponent implements OnInit {
     this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
     this.catgData = undefined;
     this.catgs = []; this.tags = []; this.allTags = [];
-    this.pageNo = 1; this.pageSize = LMT_PAGE[0]; this.isActive = true;
+    this.pageNo = 1; this.pageSize = LMT_PAGE[0]; this.isActiveTag = true; this.isActiveCatg = true;
     this.totalCount = 0;
     this.tagNames = [];
     this.searchTxt = '';
     this.sortColumn = ''; this.isAsc = undefined;
     this.columns = [{ dispName: "Name", isAsc: true, isSelected: false, key: "name" }, { dispName: "Status", isAsc: true, isSelected: false, key: "status" }, { dispName: "Date Modified", isAsc: true, isSelected: false, key: "updatedDate" }];
-    this.active = 1;
+    this.activeTags = 1; this.activeCatgs = 1;
   }
 
   // resetCh() {
@@ -107,7 +107,7 @@ export class TagsComponent implements OnInit {
 
   // change displayed tags (isActive)
   changeDispTags() {
-    this.active == 1 ? this.isActive = true : this.isActive = false;
+    this.activeTags == 1 ? this.isActiveTag = true : this.isActiveTag = false;
     this.getTags();
   }
 
@@ -248,7 +248,7 @@ export class TagsComponent implements OnInit {
       searchText: this.searchTxt,
       isAscending: this.isAsc,
       sortColumn: this.sortColumn,
-      isActive: this.isActive
+      isActive: this.isActiveTag
     }
     // console.log(query);
     this.tagServ.tagList(query)
@@ -325,6 +325,12 @@ export class TagsComponent implements OnInit {
   }
 
   // -------- Category -------- //
+  // change displayed categories (isActive)
+  changeDispCatgs() {
+    this.activeCatgs == 1 ? this.isActiveCatg = true : this.isActiveCatg = false;
+    this.getCatgs();
+  }
+
   // activate category
   actCatg(catg: any) {
     this.dialog.open(ConfirmDialogComponent, {
@@ -377,16 +383,17 @@ export class TagsComponent implements OnInit {
 
   // list of categories
   getCatgs() {
-    this.tagServ.catgList({ hubId: this.hubid })
+    this.catgLoading = true;
+    this.tagServ.catgList({ hubId: this.hubid, isActive: this.isActiveCatg })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.catgs = data.result.results;
           // console.log(this.catgs);
         }
-        this.loading = false;
+        this.catgLoading = false;
       }, (err: any) => {
         console.log(err);
-        this.loading = false;
+        this.catgLoading = false;
       });
   }
 
