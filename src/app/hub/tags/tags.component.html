@@ -8,10 +8,10 @@
           <div class="card-body">
             <div class="text-hi-dark-grey">Tags</div>
             <ul class="list-unstyled pl-2 mt-1">
-              <li class="dark-bg-hover px-2 py-1 rounded mt-2" [ngClass]="{'act-tag': selTag==='all'}"
-                (click)="changeTag('all')">All tags</li>
-              <li class="dark-bg-hover px-2 py-1 rounded mt-2" [ngClass]="{'act-tag': selTag==='uncatg'}"
-                (click)="changeTag('uncatg')">
+              <li class="dark-bg-hover px-2 py-1 rounded mt-2" [ngClass]="{'act-tag': selTag == 'all'}"
+                (click)="changeTags('all')">All tags</li>
+              <li class="dark-bg-hover px-2 py-1 rounded mt-2" [ngClass]="{'act-tag': selTag == 'uncatg'}"
+                (click)="changeTags('uncatg')">
                 Uncategorized Tags
               </li>
             </ul>
@@ -56,7 +56,8 @@
 
               <ng-template #loadCatgs>
                 <ng-container *ngIf="catgs.length>0; else noCatg">
-                  <li class="dark-bg-hover px-2 py-1 rounded mt-2" *ngFor="let catg of catgs">
+                  <li class="dark-bg-hover px-2 py-1 rounded mt-2" *ngFor="let catg of catgs"
+                    (click)="changeTags(catg.id)" [ngClass]="{'act-tag': selTag == catg.id}">
                     {{catg.name}}
                     <div class="float-right row mx-0">
                       <div class="dropdown">

@@ -37,7 +37,7 @@ export class TagsComponent implements OnInit {
       this.searInit = true;
     }
   }
-  selTag!: string;
+  selTag!: any;
   catgLoading!: boolean; tagLoading!: boolean;
   rowInfo: any;
   showRowInfo!: boolean;
@@ -54,6 +54,7 @@ export class TagsComponent implements OnInit {
   sortColumn!: string; isAsc!: boolean | undefined;
   columns!: any[];
   activeTags!: number; activeCatgs!: number;
+  categoryId!: number | undefined; unCategorized!: boolean | undefined;
 
   constructor(
     private dialog: MatDialog,
@@ -99,12 +100,14 @@ export class TagsComponent implements OnInit {
     this.sortColumn = ''; this.isAsc = undefined;
     this.columns = [{ dispName: "Name", isAsc: true, isSelected: false, key: "name" }, { dispName: "Status", isAsc: true, isSelected: false, key: "status" }, { dispName: "Date Modified", isAsc: true, isSelected: false, key: "updatedDate" }];
     this.activeTags = 1; this.activeCatgs = 1;
+    this.categoryId = undefined; this.unCategorized = undefined;
   }
 
   // resetCh() {
   //   this.tagForm.reset()
   // }
 
+  // -------- tags -------- //
   // change displayed tags (isActive)
   changeDispTags() {
     this.activeTags == 1 ? this.isActiveTag = true : this.isActiveTag = false;
@@ -233,8 +236,18 @@ export class TagsComponent implements OnInit {
   }
 
   // change tags listing - table
-  changeTag(type: string) {
+  changeTags(type: any) {
     this.selTag = type;
+    if (type == 'all') {
+      this.categoryId = undefined;
+      this.unCategorized = undefined;
+    } else if (type == 'uncatg') {
+      this.categoryId = undefined;
+      this.unCategorized = true;
+    } else {
+      this.categoryId = type;
+      this.unCategorized = true;
+    }
     this.getTags();
   }
 
@@ -242,19 +255,25 @@ export class TagsComponent implements OnInit {
   getTags() {
     this.tagLoading = true;
     let query = {
-      hubId: this.hubid,
+      hubId: parseInt(this.hubid),
       pageNo: this.pageNo,
       pageSize: this.pageSize,
       searchText: this.searchTxt,
       isAscending: this.isAsc,
       sortColumn: this.sortColumn,
-      isActive: this.isActiveTag
+      isActive: this.isActiveTag,
+      categoryId: this.categoryId,
+      unCategorized: this.unCategorized
     }
     // console.log(query);
     this.tagServ.tagList(query)
       .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.lstTagViewModel) && data.result.lstTagViewModel.length > 0) {
-          this.tags = data.result.lstTagViewModel;
+        // console.log(data);
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          this.tags = data.result.results;
+          this.totalCount = data.result.totalCount;
+        } else if (data && data.result && Array.isArray(data.result.results) && data.result.results.length == 0) {
+          this.tags = [];
           this.totalCount = data.result.totalCount;
         }
         this.tagLoading = false;
