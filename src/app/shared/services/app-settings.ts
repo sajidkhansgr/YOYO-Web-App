@@ -101,6 +101,10 @@ export class AppSettings {
 
   public static ACT_CATG = `api/Category/Activate`;
 
+
+  public static NOTIFICATIONS = `api/Notification/EmployeeNotifications`;
+
+
   // ---- ANNOTATION ---- //
 
   public static LIST_ANNOT = `api/Annotation/GetAll`;
