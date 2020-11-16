@@ -109,7 +109,7 @@ export class TagsComponent implements OnInit {
 
   // -------- tags -------- //
   // change displayed tags (isActive)
-  changeDispTags() {
+  chngDispTags() {
     this.activeTags == 1 ? this.isActiveTag = true : this.isActiveTag = false;
     this.getTags();
   }
@@ -236,7 +236,7 @@ export class TagsComponent implements OnInit {
   }
 
   // change tags listing - table
-  changeTags(type: any) {
+  chngTags(type: any) {
     this.selTag = type;
     if (type == 'all') {
       this.categoryId = undefined;
@@ -272,13 +272,14 @@ export class TagsComponent implements OnInit {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.tags = data.result.results;
           this.totalCount = data.result.totalCount;
-        } else if (data && data.result && Array.isArray(data.result.results) && data.result.results.length == 0) {
+        } else {
           this.tags = [];
-          this.totalCount = data.result.totalCount;
+          this.totalCount = 0;
         }
         this.tagLoading = false;
       }, (err: any) => {
         console.log(err);
+        this.tags = [];
         this.tagLoading = false;
       });
   }
@@ -408,11 +409,12 @@ export class TagsComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.catgs = data.result.results;
-          // console.log(this.catgs);
+        }else{
+          this.catgs = [];
         }
         this.catgLoading = false;
       }, (err: any) => {
-        console.log(err);
+        this.catgs = [];
         this.catgLoading = false;
       });
   }

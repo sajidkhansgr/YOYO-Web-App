@@ -30,7 +30,7 @@ export class TagsService {
   tagList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
     for (let key in params) {
-      if (params[key] || key == 'isDisabled') {
+      if (params[key] || key == 'isActive') {
         queryParams = queryParams.set(key, params[key]);
       }
     }
@@ -64,7 +64,7 @@ export class TagsService {
   catgList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
     for (let key in params) {
-      if (params[key] || key == 'isDisabled') {
+      if (params[key] || key == 'isActive') {
         queryParams = queryParams.set(key, params[key]);
       }
     }

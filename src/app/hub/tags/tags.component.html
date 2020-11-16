@@ -9,9 +9,9 @@
             <div class="text-hi-dark-grey">Tags</div>
             <ul class="list-unstyled pl-2 mt-1">
               <li class="dark-bg-hover px-2 py-1 rounded mt-2" [ngClass]="{'act-tag': selTag == 'all'}"
-                (click)="changeTags('all')">All tags</li>
+                (click)="chngTags('all')">All tags</li>
               <li class="dark-bg-hover px-2 py-1 rounded mt-2" [ngClass]="{'act-tag': selTag == 'uncatg'}"
-                (click)="changeTags('uncatg')">
+                (click)="chngTags('uncatg')">
                 Uncategorized Tags
               </li>
             </ul>
@@ -57,7 +57,7 @@
               <ng-template #loadCatgs>
                 <ng-container *ngIf="catgs.length>0; else noCatg">
                   <li class="dark-bg-hover px-2 py-1 rounded mt-2" *ngFor="let catg of catgs"
-                    (click)="changeTags(catg.id)" [ngClass]="{'act-tag': selTag == catg.id}">
+                    (click)="chngTags(catg.id)" [ngClass]="{'act-tag': selTag == catg.id}">
                     {{catg.name}}
                     <div class="float-right row mx-0">
                       <div class="dropdown">
@@ -125,7 +125,7 @@
               </div>
             </h5>
             <ul ngbNav #TagsNav="ngbNav" [(activeId)]="activeTags"
-              class="nav-tabs justify-content-end border-bottom-0 mr-3" (activeIdChange)="changeDispTags()">
+              class="nav-tabs justify-content-end border-bottom-0 mr-3" (activeIdChange)="chngDispTags()">
               <li [ngbNavItem]="1">
                 <a ngbNavLink>Active</a>
               </li>
