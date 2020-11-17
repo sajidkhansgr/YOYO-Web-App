@@ -41,4 +41,10 @@ export class GroupService {
       params: { id }
     });
   }
+
+  actDeactGrp(id: any, isAct: boolean) {
+    console.log("adadadas")
+    let url= isAct?AppSettings.ACT_GRP:AppSettings.DEACT_GRP;
+    return this.http.patch(`${url}?id=${id}`, {});
+  }
 }
