@@ -33,7 +33,7 @@ export class CommnService {
   }
 
   updAncmnt(data: any) {
-    return this.http.patch(`${AppSettings.UPD_ANCMNT}`, data)
+    return this.http.put(`${AppSettings.UPD_ANCMNT}`, data)
   }
 
   viewAncmnt(id: string) {
