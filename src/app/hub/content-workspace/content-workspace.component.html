@@ -655,8 +655,8 @@
                 <i class="fas fa-cog"></i>
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDD">
-                <a class="dropdown-item curs-ptr" (click)="updWrkspcModal(editWorkspace)">Edit</a>
-                <a class="dropdown-item">Duplicate</a>
+                <a class="dropdown-item curs-ptr" (click)="updWrkspcModal(editWorkspace, 'edit')">Edit</a>
+                <a class="dropdown-item" (click)="updWrkspcModal(editWorkspace, 'dupl')">Duplicate</a>
                 <a class="dropdown-item">Lock</a>
                 <a class="dropdown-item">Hide from Workspace App Link</a>
                 <a class="dropdown-item">Tag Categories</a>
@@ -689,39 +689,37 @@
               <app-loader [type]="'page'" *ngIf="folderLoading"></app-loader>
               <div class="main row py-4" *ngIf="folderArr.length > 0 && !folderLoading">
                 <div class="col-3 curs-ptr my-2" *ngFor="let folder of folderArr">
-                  <div>
-                    <div class="image">
-                      <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}"
-                        (click)="changeFolder(folder)">
-                      <div class="dropdown" style="z-index:1;">
-                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                          data-toggle="dropdown">
-                          <i class="fas fa-cog"></i>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                          <a class="dropdown-item curs-ptr"
-                            (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'edit', folder)">
-                            <i class="fas fa-edit mr-1"></i>Edit Item</a>
-                          <a class="dropdown-item curs-ptr"
-                            (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'dupl', folder)">
-                            <i class="fas fa-clone mr-1"></i>Duplicate Folder</a>
-                          <a class="dropdown-item" href="javascript:void(0)">
-                            <i class="fas fa-link mr-1"></i>App Link</a>
-                          <a class="dropdown-item curs-ptr" (click)="activateFldr(folder)" *ngIf="!folder.isActive">
-                            <i class="fas fa-plus mr-1"></i>Activate {{folder.key != 'fldr' ? 'Smart' : ''}} Folder</a>
-                          <a class="dropdown-item curs-ptr text-primary" (click)="deActivateFldr(folder)"
-                            *ngIf="folder.isActive">
-                            <i class="fas fa-trash-alt mr-1"></i>Deactivate {{folder.key != 'fldr' ? 'Smart' : ''}}
-                            Folder</a>
-                          <a class="dropdown-item" href="javascript:void(0)">
-                            <i class="fas fa-folder-plus mr-1"></i>Create New Channel from Folder</a>
-                        </div>
+                  <div class="image">
+                    <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}"
+                      (click)="changeFolder(folder)">
+                    <div class="dropdown" style="z-index:1;">
+                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                        data-toggle="dropdown">
+                        <i class="fas fa-cog"></i>
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="comInfoDD">
+                        <a class="dropdown-item curs-ptr"
+                          (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'edit', folder)">
+                          <i class="fas fa-edit mr-1"></i>Edit Item</a>
+                        <a class="dropdown-item curs-ptr"
+                          (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'dupl', folder)">
+                          <i class="fas fa-clone mr-1"></i>Duplicate Folder</a>
+                        <a class="dropdown-item" href="javascript:void(0)">
+                          <i class="fas fa-link mr-1"></i>App Link</a>
+                        <a class="dropdown-item curs-ptr" (click)="activateFldr(folder)" *ngIf="!folder.isActive">
+                          <i class="fas fa-plus mr-1"></i>Activate {{folder.key != 'fldr' ? 'Smart' : ''}} Folder</a>
+                        <a class="dropdown-item curs-ptr text-primary" (click)="deActivateFldr(folder)"
+                          *ngIf="folder.isActive">
+                          <i class="fas fa-trash-alt mr-1"></i>Deactivate {{folder.key != 'fldr' ? 'Smart' : ''}}
+                          Folder</a>
+                        <a class="dropdown-item" href="javascript:void(0)">
+                          <i class="fas fa-folder-plus mr-1"></i>Create New Channel from Folder</a>
                       </div>
                     </div>
-                    <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
-                      *ngIf="!folder.hideLabelInWorkspace" (click)="changeFolder(folder)">
-                      {{folder.name}}
-                    </div>
+                  </div>
+                  <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
+                    *ngIf="!folder.hideLabelInWorkspace" (click)="changeFolder(folder)">
+                    {{folder.name}}
                   </div>
                 </div>
               </div>
@@ -1232,7 +1230,7 @@
 <!-- edit workspace modal  -->
 <ng-template #editWorkspace let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Edit Workspace</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{edit ? 'Edit' : 'Duplicate'}} Workspace</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -1258,7 +1256,7 @@
             Name is required
           </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100" *ngIf="edit">
           <mat-label>Description</mat-label>
           <textarea matInput type="text" placeholder="Description"></textarea>
         </mat-form-field>
@@ -1276,16 +1274,24 @@
         </div>
       </div>
       <div class="settings" *ngIf="dispSettings">
-        <mat-label>Content</mat-label>
-        <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle"
-            matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
-        <mat-label>
-          Default view
-          <mat-radio-group aria-label="Select an option" class="d-block ml-3">
-            <mat-radio-button value="1" class="mr-2">Grid View</mat-radio-button>
-            <mat-radio-button value="2">List View</mat-radio-button>
-          </mat-radio-group>
-        </mat-label>
+        <div class="mb-2" *ngIf="!edit">
+          <mat-label>Options</mat-label>
+          <mat-checkbox class="d-block ml-3">Add me to this Workspace</mat-checkbox>
+        </div>
+        <div class="mb-2">
+          <mat-label>Content</mat-label>
+          <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle"
+              matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
+        </div>
+        <div>
+          <mat-label>
+            Default view
+            <mat-radio-group aria-label="Select an option" class="d-block ml-3">
+              <mat-radio-button value="1" class="mr-2">Grid View</mat-radio-button>
+              <mat-radio-button value="2">List View</mat-radio-button>
+            </mat-radio-group>
+          </mat-label>
+        </div>
       </div>
       <hr>
       <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="showSmart()">

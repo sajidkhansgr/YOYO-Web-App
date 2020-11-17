@@ -528,7 +528,9 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // update workspace
   updWrkspc() {
-    if (this.updWrkspcForm.valid) {
+    if (this.updWrkspcForm.valid && !this.edit) {
+      this.addWorkSpc();
+    } else if (this.updWrkspcForm.valid && this.edit) {
       this.disabled = true;
       let wrkspcData: any = {
         id: this.selWrkspc!.id,
@@ -554,19 +556,33 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // open update workspace modal
-  updWrkspcModal(content: any) {
+  updWrkspcModal(content: any, type: string) {
+    if (type == 'edit') {
+      this.edit = true;
+    } else if (type == 'dupl') {
+      this.edit = false;
+    }
+
     this.updWrkspcForm.patchValue({ ...this.selWrkspc });
     this.openModal(content);
   }
 
   // add workspace
   addWorkSpc() {
-    if (this.addWrkspcForm.valid) {
+    if (this.addWrkspcForm.valid || this.updWrkspcForm.valid && !this.edit) {
       this.disabled = true;
-      let wrkspcData: any = {
-        ...this.addWrkspcForm.value,
-        hubId: parseInt(this.hubid)
-      };
+      let wrkspcData: any;
+      if (this.addWrkspcForm.valid) {
+        wrkspcData = {
+          ...this.addWrkspcForm.value,
+          hubId: this.selWrkspc!.hubId
+        };
+      } else if (this.updWrkspcForm.valid) {
+        wrkspcData = {
+          ...this.updWrkspcForm.value,
+          hubId: this.selWrkspc!.hubId
+        };
+      }
       this.cwServ.addWrkspc(wrkspcData)
         .subscribe((data: any) => {
           if (data) {
