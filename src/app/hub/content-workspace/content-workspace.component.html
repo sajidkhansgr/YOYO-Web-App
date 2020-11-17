@@ -702,7 +702,8 @@
                           <a class="dropdown-item curs-ptr"
                             (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'edit', folder)">
                             <i class="fas fa-edit mr-1"></i>Edit Item</a>
-                          <a class="dropdown-item" href="javascript:void(0)">
+                          <a class="dropdown-item curs-ptr"
+                            (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'dupl', folder)">
                             <i class="fas fa-clone mr-1"></i>Duplicate Folder</a>
                           <a class="dropdown-item" href="javascript:void(0)">
                             <i class="fas fa-link mr-1"></i>App Link</a>
@@ -880,7 +881,8 @@
 <!-- add/edit folder modal  -->
 <ng-template #folderModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{edit ? 'Edit' : 'Add'}} Folder</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{edit ? 'Edit' : edit == undefined ? 'Duplicate' : 'Add'}} Folder
+    </h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -901,7 +903,7 @@
       </div>
       <div class="general" id="generalFolder" [ngbCollapse]="gnrlCollapsed">
         <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
-          <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
+          <input type="file" id="uploadFileInput" #ip (change)="fileBrowseHandler($event ,true)" accept="image/*">
           <div class="text-center my-5">
             <h2><i class="fa fa-upload"></i></h2>
             <h5>Drag & Drop an icon image here</h5>
@@ -909,7 +911,7 @@
             <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
           </div>
         </div>
-        <div class="files-list">
+        <!-- <div class="files-list">
           <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
             <div class="info mx-auto">
               <h6 class="name mb-0 text-wrap">
@@ -924,9 +926,13 @@
               <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
             </div>
           </div>
+        </div> -->
+        <div class="image border mt-2 mb-4">
+          <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon">
+          <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(ip)"><i
+              class="fas fa-trash-alt"></i>
+          </div>
         </div>
-        <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon" class="border mt-2 mb-4"
-          style="height: 130px; width: auto;">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Folder Label</mat-label>
           <input matInput placeholder="Folder Label" formControlName="name">
@@ -1026,7 +1032,7 @@
   <form name="smartFolderModalForm" (ngSubmit)="smartFolderSubmit()" [formGroup]="smartFolderForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
-        <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
+        <input type="file" id="uploadFileInput" #inp (change)="fileBrowseHandler($event ,true)" accept="image/*">
         <div class="text-center my-5">
           <h2><i class="fa fa-upload"></i></h2>
           <h5>Drag & Drop an icon image here</h5>
@@ -1034,7 +1040,7 @@
           <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
         </div>
       </div>
-      <div class="files-list">
+      <!-- <div class="files-list">
         <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
           <div class="info mx-auto">
             <h6 class="name mb-0 text-wrap">
@@ -1049,9 +1055,13 @@
             <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
           </div>
         </div>
+      </div> -->
+      <div class="image border mt-2 mb-4">
+        <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon">
+        <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(inp)"><i
+            class="fas fa-trash-alt"></i>
+        </div>
       </div>
-      <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon" class="border mt-2 mb-4"
-        style="height: 130px; width: auto;">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Smart Folder Label</mat-label>
         <input matInput placeholder="Smart Folder Label" formControlName="name">

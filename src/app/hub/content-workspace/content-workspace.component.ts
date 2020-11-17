@@ -37,7 +37,7 @@ export class ContentWorkspaceComponent implements OnInit {
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
   props: any;
   view!: boolean;
-  edit!: boolean;
+  edit!: boolean | undefined;
   activeFldrs!: number; isActiveFldrs!: boolean;
 
   constructor(
@@ -100,6 +100,13 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- folder and smart folder ---- //
+  // remove image in Modals
+  remImg(abc: any) {
+    this.iconUrl = '';
+    this.custIcon = undefined;
+    abc.value = '';
+  }
+
   // change displayed folders and smart foldera (isActive)
   changeDispFldrs() {
     this.activeFldrs == 1 ? this.isActiveFldrs = true : this.isActiveFldrs = false;
@@ -171,13 +178,16 @@ export class ContentWorkspaceComponent implements OnInit {
     } else if (type == 'edit') {
       this.edit = true;
       this.editFolder(modal, folder);
+    } else if (type == 'dupl') {
+      this.edit = undefined;
+      this.editFolder(modal, folder);
     }
   }
 
   // ---- smart folder ---- //
   // smart folder submit functions (add/update)
   smartFolderSubmit() {
-    this.edit == false ? this.addSmartFolder() : this.updSmartFolder();
+    this.edit ? this.updSmartFolder() : this.addSmartFolder();
   }
 
   // activate smart folder
@@ -323,7 +333,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // ---- folder ---- //
   // folder submit functions (add/update)
   folderSubmit() {
-    this.edit == false ? this.addFolder() : this.updFolder();
+    this.edit ? this.updFolder() : this.addFolder();
   }
 
   // activate folder
@@ -378,7 +388,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // edit folder
   updFolder() {
     if (this.folderForm.valid) {
-      this.disabled = true;
+      // this.disabled = true;
       let folderData: any = {
         ...this.folderForm.value,
         id: this.selFolder!.id,
@@ -388,7 +398,7 @@ export class ContentWorkspaceComponent implements OnInit {
         isActive: this.selFolder!.isActive
       };
       // console.log(this.selFolder);
-      // console.log(folderData);
+      // console.log(folderData.folderIcon);
       this.cwServ.updFolder(folderData).subscribe((data: any) => {
         // console.log(data);
         if (data) {
