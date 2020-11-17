@@ -26,7 +26,7 @@ export class PaginationComponent implements OnChanges {
     this.pageSizeChange.emit(this.pageSize);
   }
 
-  pageChangeFunc() {
+  chngPageNo() {
     this.paginationNum.emit(this.page);
   }
 
