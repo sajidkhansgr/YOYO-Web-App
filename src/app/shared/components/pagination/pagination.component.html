@@ -5,6 +5,7 @@
         <mat-option [value]="lP" *ngFor="let lP of lmtPage">{{lP}}</mat-option>
       </mat-select>
     </mat-form-field>
+    <span>{{text}}</span>
   </div>
   <ngb-pagination [collectionSize]="totalCount" [(page)]="page" [maxSize]="3" [pageSize]="pageSize" [rotate]="true"
     [boundaryLinks]="true" (pageChange)="pageChangeFunc()">

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 
 import { LMT_PAGE } from '../../constants'
 
@@ -7,17 +7,19 @@ import { LMT_PAGE } from '../../constants'
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
-export class PaginationComponent implements OnInit {
+export class PaginationComponent implements OnChanges {
   @Input() pageSize!: number;
   @Input() totalCount!: number;
   @Input() page!: number;
   @Output() pageSizeChange = new EventEmitter();
   @Output() paginationNum = new EventEmitter();
   lmtPage: number[] = LMT_PAGE;
+  text: string = '';
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
+    this.text = `Showing ${(this.page * this.pageSize) - (this.pageSize - 1)}-${Math.min((this.page * this.pageSize), this.totalCount)} of ${this.totalCount}`;
   }
 
   chngPageSize() {
