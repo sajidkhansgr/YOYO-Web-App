@@ -187,7 +187,7 @@ export class GroupComponent implements OnInit {
   }
 
   editGrp(grpData: any) {
-    grpData.id = this.grpDetail!.id;
+    grpData.id = this.rowInfo!.id;
     this.grpServ.updGroup(grpData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Group updated successfully', 'Success!');
@@ -202,15 +202,27 @@ export class GroupComponent implements OnInit {
     });
   }
 
-  delGrp() {
+  actDeactGrp() {
+    let actDeac: string = `${this.rowInfo.isActive?'deactivate':'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to delete this group? You can't undo this action.?`,
-        title: `Delete Group`
+        msg: `Are you sure you want to ${this.rowInfo.isActive?'deactivate':'activate'} this group?`,
+        title: `${this.rowInfo.isActive?'Deactivate':'Activate'} Group`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
+        console.log(result);
+        this.grpServ.actDeactGrp(this.rowInfo.id.toString(),this.rowInfo.isActive?false:true).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(`Group ${actDeac}d successfully`, 'Success!');
+            this.grpsList();
+          } else {
+            this.toastr.error(`Unable to ${actDeac}d group`, 'Error!');
+          }
+        }, (err: any) => {
+
+        });
       }
     })
   }
@@ -279,20 +291,26 @@ export class GroupComponent implements OnInit {
     }
   }
 
-  openModal(content: any, type?: string) {
-    if (type === 'edit') {
-      this.isEdit = true;
-      this.groupForm.patchValue({ ...this.grpDetail }); // set form value
-    } else {
-      this.isEdit = false;
-      this.groupForm.reset();
-    }
+  openModal(content: any, type: boolean) {
+    this.groupForm.reset();
+    this.isEdit = type;
+    this.setFormData();
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
 
       }, (reason) => {
 
       });
+  }
+
+  setFormData() {
+    if (this.isEdit && this.rowInfo && this.rowInfo.id) {
+      this.groupForm.patchValue({
+        ...this.rowInfo
+      })
+    } else {
+      this.rowInfo = {};
+    }
   }
 
   disMissMdodal() {

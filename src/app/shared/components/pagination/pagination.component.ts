@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
-import { LMT_PAGE } from '../../constants'
+import { LMT_PAGE } from '../../constants';
 
 @Component({
   selector: 'app-pagination',
@@ -24,7 +23,7 @@ export class PaginationComponent implements OnInit {
     this.pageSizeChange.emit(this.pageSize);
   }
 
-  pageChangeFunc() {
+  chngPageNo() {
     this.paginationNum.emit(this.page);
   }
 

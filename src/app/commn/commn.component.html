@@ -251,7 +251,7 @@
 <!-- new announcment Modal -->
 <ng-template #anncModal let-modal class="custom-modal">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">New Announcement</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{isEdit?'Edit':'New'}} Announcement</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -260,7 +260,7 @@
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Subject</mat-label>
-        <input matInput placeholder="Subject" formControlName="subject" required />
+        <input matInput placeholder="Subject" formControlName="subject" required/>
         <mat-error *ngIf="ancmntForm.get('subject')!.hasError('required')">
           Subject is required
         </mat-error>
@@ -350,7 +350,8 @@
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Close</button>
       <button class="btn btn-primary" [disabled]="ancmntForm!.invalid || disabled">
-        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>Save
+        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+        {{isEdit?'Update':'Save'}}
       </button>
     </div>
   </form>

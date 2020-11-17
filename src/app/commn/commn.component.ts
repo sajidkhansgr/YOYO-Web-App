@@ -99,17 +99,22 @@ export class CommnComponent implements OnInit {
   setFormData() {
     this.selWrkSpcs = [];
     this.selGrps = [];
-    if (this.rowInfo && this.rowInfo.id) {
+    if (this.isEdit && this.rowInfo && this.rowInfo.id) {
       this.enbDisbDateTime({ checked: true });
       this.changeGrp({ value: this.rowInfo.sendToGroup });
-      let datePipe = new DatePipe("en-US");
-      this.rowInfo.date = datePipe.transform(new Date(this.rowInfo.scheduledOn), 'yyyy-MM-dd');
-      this.rowInfo.time = datePipe.transform(new Date(this.rowInfo.scheduledOn), 'HH:mm');
+      if(this.rowInfo.scheduledOn){
+        let datePipe = new DatePipe("en-US");
+        this.rowInfo.date = datePipe.transform(new Date(this.rowInfo.scheduledOn), 'yyyy-MM-dd');
+        this.rowInfo.time = datePipe.transform(new Date(this.rowInfo.scheduledOn), 'HH:mm');
+      }else{
+        this.rowInfo.date = '';this.rowInfo.time = '';
+      }
       this.ancmntForm.patchValue({
         ...this.rowInfo,
         sendLater: true
       })
     } else {
+      this.rowInfo = {};
       this.ancmntForm.patchValue({
         subject: '', notifyByEmail: false, requestToUpdate: false,
         sendLater: false, sendToGroup: '', date: '', time: ''

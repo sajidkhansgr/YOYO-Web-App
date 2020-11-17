@@ -29,6 +29,10 @@ export class AppSettings {
 
   public static GET_GRP = `api/Group/GetById`;
 
+  public static DEACT_GRP = `api/Group/Deactivate`;
+
+  public static ACT_GRP = `api/Group/Activate`;
+
   // ---- TAG ---- //
 
   public static LIST_TAG = `api/Tag/GetAll`;
