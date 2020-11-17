@@ -103,6 +103,10 @@ export class TagsComponent implements OnInit {
     this.categoryId = undefined; this.unCategorized = undefined;
   }
 
+  // initForms() {
+  //   this.tagForm.patchValue({ name: '' });
+  // }
+
   // resetCh() {
   //   this.tagForm.reset()
   // }
@@ -307,7 +311,11 @@ export class TagsComponent implements OnInit {
     if (index >= 0) {
       this.tagNames.splice(index, 1);
       if (this.tagNames.length == 0) {
+        // console.log(this.tagForm);
         this.tagForm.reset();
+        // this.tagForm.markAsDirty();
+        // this.tagForm.markAsTouched();
+        // console.log(this.tagForm);
       }
     }
   }
@@ -331,6 +339,7 @@ export class TagsComponent implements OnInit {
           if (data) {
             this.toastr.success(data.message || 'Tags added successfully', 'Success!');
             this.getTags();
+            // this.initForms();
           } else {
             this.toastr.error('Unable to add Tag', 'Error!');
           }
@@ -409,7 +418,7 @@ export class TagsComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.catgs = data.result.results;
-        }else{
+        } else {
           this.catgs = [];
         }
         this.catgLoading = false;

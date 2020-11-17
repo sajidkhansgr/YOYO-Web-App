@@ -656,10 +656,10 @@
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDD">
                 <a class="dropdown-item curs-ptr" (click)="updWrkspcModal(editWorkspace, 'edit')">Edit</a>
-                <a class="dropdown-item" (click)="updWrkspcModal(editWorkspace, 'dupl')">Duplicate</a>
-                <a class="dropdown-item">Lock</a>
-                <a class="dropdown-item">Hide from Workspace App Link</a>
-                <a class="dropdown-item">Tag Categories</a>
+                <a class="dropdown-item curs-ptr" (click)="updWrkspcModal(editWorkspace, 'dupl')">Duplicate</a>
+                <a class="dropdown-item curs-ptr">Lock</a>
+                <a class="dropdown-item curs-ptr">Hide from Workspace App Link</a>
+                <a class="dropdown-item curs-ptr">Tag Categories</a>
                 <a class="dropdown-item curs-ptr" (click)="actWrkspc(selWrkspc)">Activate Workspace</a>
                 <a class="dropdown-item text-danger curs-ptr" (click)="deactWrkspc(selWrkspc)">Deactivate Workspace</a>
               </div>
