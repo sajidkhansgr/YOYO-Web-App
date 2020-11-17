@@ -17,6 +17,7 @@ import { CustomUrlSerializer } from './custom-url-serializer';
 
 import { AuthGuard } from './shared/guard/auth.guard';
 import { TokenDataService } from './shared/services/token-data.service';
+// import { SignalRService } from './shared/services/signal-r.service';
 import { DataService } from './shared/services/data.service';
 import { HeaderModule } from './home-layout/header/header.module';
 import { SidebarModule } from './home-layout/sidebar/sidebar.module';
@@ -56,7 +57,8 @@ const appRoutes: Routes = [
     { provide: HTTP_INTERCEPTORS, useClass: OfflineInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    AuthGuard,TokenDataService, DataService
+    AuthGuard, TokenDataService, DataService,
+    // SignalRService
   ],
   bootstrap: [AppComponent]
 })

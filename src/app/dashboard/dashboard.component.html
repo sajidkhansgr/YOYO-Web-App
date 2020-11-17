@@ -1,1 +1,9 @@
-<p>dashboard works!</p>
+<div class="ud-body">
+  <div class="msg-box">
+    <ul>
+      <li *ngFor="let msg of msgs" [ngClass]="msg.subject?'ex-msg':'in-msg'">{{msg.subject}} :<br />
+        <span class="msg-italic-style">{{msg.description}}</span>
+      </li>
+    </ul>
+  </div>
+</div>
