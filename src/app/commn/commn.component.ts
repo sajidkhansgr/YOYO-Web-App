@@ -96,8 +96,19 @@ export class CommnComponent implements OnInit {
     });
   }
 
-  setFormData(isData?: any) {
-    if (isData && isData.id) {
+  setFormData() {
+    this.selWrkSpcs = [];
+    this.selGrps = [];
+    if (this.rowInfo && this.rowInfo.id) {
+      this.enbDisbDateTime({ checked: true });
+      this.changeGrp({ value: this.rowInfo.sendToGroup });
+      let datePipe = new DatePipe("en-US");
+      this.rowInfo.date = datePipe.transform(new Date(this.rowInfo.scheduledOn), 'yyyy-MM-dd');
+      this.rowInfo.time = datePipe.transform(new Date(this.rowInfo.scheduledOn), 'HH:mm');
+      this.ancmntForm.patchValue({
+        ...this.rowInfo,
+        sendLater: true
+      })
     } else {
       this.ancmntForm.patchValue({
         subject: '', notifyByEmail: false, requestToUpdate: false,
@@ -121,7 +132,6 @@ export class CommnComponent implements OnInit {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.ancmnts = data.result.results;
           this.totalCount = data.result.totalCount;
-          console.log(this.totalCount);
         } else {
           this.ancmnts = [];
         }
@@ -200,22 +210,24 @@ export class CommnComponent implements OnInit {
         ...this.ancmntForm.value
       }
       if (ancmntData.sendToGroup === 2) {
-        ancmntData.recipients = [];
+          ancmntData.recipients = this.selWrkSpcs.map((wkSpc: any) => wkSpc.id);
       } else if (ancmntData.sendToGroup === 3) {
-
+          ancmntData.recipients = this.selGrps.map((grp: any) => grp.id);
       } else {
-        ancmntData.recipients
+        ancmntData.recipients = [];
       }
+      delete ancmntData.usrGrps;
+      delete ancmntData.usrWrkSpcs;
       if (ancmntData.sendLater) {
         let datePipe = new DatePipe("en-US");
         ancmntData.scheduledOn = datePipe.transform(new Date(ancmntData.date), 'yyyy-MM-dd') + 'T' + ancmntData.time + ':00.000Z';
         delete ancmntData.date; delete ancmntData.time;
       }
-      console.log(ancmntData, "ancmntData")
+      console.log(ancmntData, "ancmntData");
       if (this.isEdit) {
-        // this.editAncmnt(ancmntData);
+        this.editAncmnt(ancmntData);
       } else {
-        console.log("addAncmnt")
+        console.log("addAncmnt");
         this.addAncmnt(ancmntData);
       }
     }
@@ -238,15 +250,30 @@ export class CommnComponent implements OnInit {
       });
   }
 
-  openModal(content: any, type?: string) {
+  editAncmnt(ancmntData: any) {
+    ancmntData.id = this.rowInfo.id;
+    this.commnServ.updAncmnt(ancmntData)
+      .subscribe((data: any) => {
+        if (data) {
+          this.toastr.success(data.message || 'Annoucement updated successfully', 'Success!');
+          this.rowInfo = {};
+          this.getAncmnts();
+          this.disMissMdodal();
+          //get all annoucem
+        } else {
+          this.toastr.error(data.result.data || 'Unable to update Annoucement', 'Error!');
+        }
+        this.disabled = false;
+      }, (err: any) => {
+        this.disabled = false;
+      });
+  }
+
+  openModal(content: any, type: boolean) {
     // console.log('abc');
-    if (type === 'edit') {
-      this.isEdit = true;
-    } else {
-      this.isEdit = false;
-      this.ancmntForm.reset();
-      this.setFormData()
-    }
+    this.ancmntForm.reset();
+    this.isEdit = type;
+    this.setFormData();
     this.modalService.open(content, { centered: true }).result
       .then((result) => {
         // console.log(`Closed with: ${result}`);
@@ -378,6 +405,13 @@ export class CommnComponent implements OnInit {
         });
       }
     })
+  }
+
+  // open upd modal
+  updAncmnt($event: any, ancmnt: Announcement, content: any) {
+    $event.stopPropagation();
+    this.rowInfo = ancmnt;
+    this.openModal(content, true);
   }
 
   disMissMdodal() {

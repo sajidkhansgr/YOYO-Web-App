@@ -9,7 +9,7 @@
           <div class="communication">
             <div class="buttons-row row mt-3 justify-content-between mx-2">
               <!-- new announcment trigger modal -->
-              <button type="button" class="btn btn-primary" (click)="openModal(anncModal)">
+              <button type="button" class="btn btn-primary" (click)="openModal(anncModal, false)">
                 New Announcement
               </button>
             </div>
@@ -211,7 +211,7 @@
               <td *ngIf="activeIndex==0 || activeIndex==1">
                 <button *ngIf="activeIndex==0" class="btn btn-primary btn-sm hover-btn"
                   (click)="archAncmnt($event, ancmnt)">Archive</button>
-                <button *ngIf="activeIndex==1" class="btn btn-primary btn-sm hover-btn">Edit</button>
+                <button *ngIf="activeIndex==1" class="btn btn-primary btn-sm hover-btn" (click)="updAncmnt($event, ancmnt, anncModal)">Edit</button>
               </td>
             </tr>
           </tbody>
@@ -286,7 +286,7 @@
       <br />
       <mat-form-field appearance="outline" class="w-100"
         *ngIf="ancmntForm.controls.usrWrkSpcs && ancmntForm.value.sendToGroup==2">
-        <mat-chip-list #chipList aria-label="Select Wrodkspaces">
+        <mat-chip-list #chipList aria-label="Select Workspaces">
           <mat-chip *ngFor="let d of selWrkSpcs" [selectable]="selectable" [removable]="removable"
             (removed)="remove(d, 'selWrkSpcs')">
             {{d.name}}
