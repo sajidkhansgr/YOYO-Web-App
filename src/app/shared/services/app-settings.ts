@@ -135,4 +135,13 @@ export class AppSettings {
   public static UPD_EMPL = `api/Employee/Update`;
 
   public static GET_EMPL = `api/Employee/GetById`;
+
+  //Content
+  public static LIST_CNTNT= `api/Content/GetAll`;
+
+  public static ADD_CNTNT = `api/Content/Add`;
+
+  public static UPD_CNTNT = `api/Content/Update`;
+
+  public static GET_CNTNT = `api/Content/GetById`;
 }

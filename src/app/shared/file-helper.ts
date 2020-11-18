@@ -1,4 +1,4 @@
-export class FileDndHelper{
+export class FileHelper{
 
   public static formatBytes(bytes: any, decimals?: any) {
     if (bytes === 0) {

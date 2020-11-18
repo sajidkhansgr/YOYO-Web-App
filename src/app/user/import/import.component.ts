@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FileDndHelper } from '../../shared/file-helper';
+import { FileHelper } from '../../shared/file-helper';
 
 @Component({
   selector: 'app-import',
@@ -76,7 +76,7 @@ export class ImportComponent implements OnInit {
   }
 
   getSize(bytes: any) {
-    return FileDndHelper.formatBytes(bytes, 2);
+    return FileHelper.formatBytes(bytes, 2);
   }
 
 }

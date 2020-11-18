@@ -139,8 +139,36 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.ADD_WRKSPC}`, data)
   }
 
-  // update category
+  // update workspace
   updWrkspc(data: any) {
     return this.http.put(`${AppSettings.UPD_WRKSPC}`, data)
   }
+
+  //Content
+  contentList(params: any): Observable<any[]> {
+    let queryParams = new HttpParams();
+    for (let key in params) {
+      if (params[key]) {
+        queryParams = queryParams.set(key, params[key]);
+      }
+    }
+    return this.http.get(`${AppSettings.LIST_CNTNT}`, {
+      params: queryParams
+    }
+    ).pipe(
+      map((res: any) =>
+        res
+      )
+    );
+  }
+
+  addContent(data: any) {
+    return this.http.post(`${AppSettings.ADD_CNTNT}`, data)
+  }
+
+  updContent(data: any) {
+    return this.http.put(`${AppSettings.UPD_CNTNT}`, data)
+  }
+
+
 }

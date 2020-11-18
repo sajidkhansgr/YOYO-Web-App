@@ -8,10 +8,8 @@ const routes: Routes = [
   {
       path        : '', component: WebAppComponent,
       children    : [
-        { path : 'collections', loadChildren: () => import('./collection/collection.module').then(m => m.CollectionModule) },
-        { path : 'experience', loadChildren: () => import('./exp/exp.module').then(m => m.ExpModule) },
+        { path : 'resource', loadChildren: () => import('./resource/resource.module').then(m => m.ResourceModule) },
         { path : 'share', loadChildren: () => import('./share/share.module').then(m => m.ShareModule) },
-        { path : 'my-files', loadChildren: () => import('./files/files.module').then(m => m.FilesModule) },
         { path : 'personal-settings', loadChildren: () => import('./prsnl-sett/prsnl-sett.module').then(m => m.PrsnlSettModule) }
       ]
   }

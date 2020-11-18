@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 import { DEF_ICON } from '../../shared/constants';
-import { FileDndHelper } from '../../shared/file-helper';
+import { FileHelper } from '../../shared/file-helper';
 import { ContentWorkspaceService } from './content-workspace.service'
 import { Workspace } from '../../shared/models/workspace';
 import { Folder } from '../../shared/models/folder';
@@ -57,7 +57,7 @@ export class ContentWorkspaceComponent implements OnInit {
   initialiseState() {
     this.files = []; this.addURLIcon = ''; this.iconUrl = '';
     this.dispGnrl = true; this.dispSettings = true; this.dispSmart = false;
-    this.dispPropsSec = false; this.dispSmFolderSec = true;
+    this.dispPropsSec = true; this.dispSmFolderSec = true;
     this.custIcon = undefined; this.showWork = false; this.showDoc = false;
     this.wrkspcs = []; this.selWrkspc = undefined;
     this.wrkspcLoading = true; this.folderLoading = true;
@@ -762,7 +762,7 @@ export class ContentWorkspaceComponent implements OnInit {
     if (!isIcon)
       this.prepareFilesList($event, isIcon);
     else {
-      this.renderImg($event[0])
+      this.renderImg($event[0]);
     }
   }
 
@@ -775,7 +775,7 @@ export class ContentWorkspaceComponent implements OnInit {
     // preview image
     let input = $event.target;
     if (input.files && input.files && isIcon) {
-      this.renderImg(input.files[0])
+      this.renderImg(input.files[0]);
     }
   }
 
@@ -835,6 +835,6 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   getSize(bytes: any) {
-    return FileDndHelper.formatBytes(bytes, 2);
+    return FileHelper.formatBytes(bytes, 2);
   }
 }

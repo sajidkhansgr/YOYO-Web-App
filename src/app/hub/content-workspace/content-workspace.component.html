@@ -778,12 +778,7 @@
     <div class="w-100 dark-bg-hover p-2 rounded" (click)="showPropsSection()">
       Properties
       <div class="float-right">
-        <ng-container *ngIf="dispPropsSec; else elseIcon">
-          <i class="fa fa-angle-up"></i>
-        </ng-container>
-        <ng-template #elseIcon>
-          <i class="fa fa-angle-down"></i>
-        </ng-template>
+        <i class="fa fa-angle-up" [ngClass]="{'fa-angle-up': !dispPropsSec,'fa-angle-down': dispPropsSec}"></i>
       </div>
     </div>
     <div class="mt-2" *ngIf="dispPropsSec">
