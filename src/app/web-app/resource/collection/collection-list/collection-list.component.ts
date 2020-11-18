@@ -13,12 +13,13 @@ import { CollectionService } from '../collection.service';
 export class CollectionListComponent implements OnInit {
   view!: boolean; disabled!: boolean; loading!: boolean;
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
-  colctArr: any;
+  colctnArr: any; selColctn: any;
   colctnForm!: FormGroup;
+  multiForm!: number;
 
   constructor(
     private modalService: NgbModal,
-    private colctSrv: CollectionService,
+    private colctnSrv: CollectionService,
     private fb: FormBuilder,
     private toastr: ToastrService
   ) { }
@@ -30,41 +31,103 @@ export class CollectionListComponent implements OnInit {
 
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
-    this.colctArr = [];
+    this.colctnArr = []; this.selColctn = undefined;
     this.colctnForm = this.fb.group({
       name: ['', [Validators.required]]
     });
+    this.multiForm = 0;
   }
 
   // ***** collection *****
-  // add collection
-  addColctn() {
+  // collection open modal
+  colctnModal(modal: any, type: string, colctn?: any) {
+    if (type == 'add') {
+      this.multiForm = 1;
+    } else if (type == 'ren') {
+      this.multiForm = 2;
+      this.selColctn = colctn;
+      this.colctnForm.patchValue({ ...colctn });
+    } else if (type == 'dupl') {
+      this.multiForm = 3;
+      this.selColctn = colctn;
+      this.colctnForm.patchValue({ ...colctn });
+    }
+    this.openModal(modal);
+  }
+
+  // collection form submit
+  submitColctn() {
     if (this.colctnForm.valid) {
       this.disabled = true;
       let colctnData: any = {
         ...this.colctnForm.value
       };
-      this.colctSrv.addColct(colctnData).subscribe((data: any) => {
-        if (data) {
-          this.toastr.success(data.message || 'Collection added successfully', 'Success!');
-          this.listColct();
-        }
-        this.dismissModal();
-        this.disabled = false;
-      }, (err: any) => {
-        this.dismissModal();
-        this.disabled = false;
-      });
+      if (this.multiForm == 1) {
+        this.addColctn(colctnData);
+      } else if (this.multiForm == 2) {
+        colctnData.id = this.selColctn.id;
+        this.renColct(colctnData);
+      } else if (this.multiForm == 3) {
+        colctnData.collectionNewName = colctnData.name;
+        colctnData.sourceCollectionId = this.selColctn.id;
+        this.duplColct(colctnData);
+      }
     }
+  }
+
+  // duplicate collection
+  duplColct(colctnData: any) {
+    this.colctnSrv.duplColct(colctnData).subscribe((data: any) => {
+      console.log(data);
+      if (data) {
+        this.toastr.success(data.message || 'Collection renamed successfully', 'Success!');
+        this.listColct();
+      }
+      this.dismissModal();
+      this.disabled = false;
+    }, (err: any) => {
+      this.dismissModal();
+      this.disabled = false;
+    });
+  }
+
+  // rename collection
+  renColct(colctnData: any) {
+    this.colctnSrv.renColct(colctnData).subscribe((data: any) => {
+      if (data) {
+        this.toastr.success(data.message || 'Collection renamed successfully', 'Success!');
+        this.listColct();
+      }
+      this.dismissModal();
+      this.disabled = false;
+    }, (err: any) => {
+      this.dismissModal();
+      this.disabled = false;
+    });
+  }
+
+  // add collection
+  addColctn(colctnData: any) {
+    this.colctnSrv.addColct(colctnData).subscribe((data: any) => {
+      if (data) {
+        this.toastr.success(data.message || 'Collection added successfully', 'Success!');
+        this.listColct();
+      }
+      this.dismissModal();
+      this.disabled = false;
+    }, (err: any) => {
+      this.dismissModal();
+      this.disabled = false;
+    });
   }
 
   // get collection list
   listColct() {
-    this.colctSrv.colctList({}).subscribe((data: any) => {
+    this.colctnSrv.colctList({}).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.colctArr = data.result;
+        this.colctnArr = data.result;
       } else {
-        this.colctArr = [];
+        this.colctnArr = [];
       }
       this.loading = false;
     }, (err: any) => {

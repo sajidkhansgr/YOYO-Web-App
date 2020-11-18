@@ -11,6 +11,7 @@ export class CollectionService {
     private http: HttpClient
   ) { }
 
+  // get collection list
   colctList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
@@ -28,15 +29,18 @@ export class CollectionService {
     );
   }
 
+  // add collection
   addColct(data: any) {
     return this.http.post(`${AppSettings.ADD_COLCT}`, data)
   }
-  // updateEmpl(data: any) {
-  //   return this.http.put(`${AppSettings.UPD_EMPL}`, data)
-  // }
-  // viewEmpl(id: string) {
-  //   return this.http.get(`${AppSettings.GET_EMPL}`, {
-  //     params: { id }
-  //   });
-  // }
+
+  // rename collection
+  renColct(data: any) {
+    return this.http.put(`${AppSettings.REN_COLCT}`, data)
+  }
+
+  // duplicate collection
+  duplColct(data: any) {
+    return this.http.patch(`${AppSettings.DUPL_COLCT}`, data)
+  }
 }
