@@ -1,6 +1,12 @@
-<div>
-  <a [routerLinkActive]="['active']" [routerLink]="'/web-app/resource/collections'">Collections</a>
-  <a [routerLinkActive]="['active']" [routerLink]="'/web-app/resource/experiences'">Experiences</a>
-  <a [routerLinkActive]="['active']" [routerLink]="'/web-app/resource/my-files'">My Files</a>
-</div>
+<!-- <nav mat-tab-nav-bar>
+  <a mat-tab-link [routerLink]="'/web-app/resource/collections'">Collections</a>
+  <a mat-tab-link [routerLink]="'/web-app/resource/experiences'">Experiences</a>
+  <a mat-tab-link [routerLink]="'/web-app/resource/my-files'">My Files</a>
+</nav> -->
+<nav mat-tab-nav-bar>
+  <a mat-tab-link *ngFor="let link of links" (click)="activeLink = link.label" [active]="activeLink == link.label"
+    [routerLink]="link.link">
+    {{link.label}}
+  </a>
+</nav>
 <router-outlet></router-outlet>

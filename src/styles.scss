@@ -373,6 +373,20 @@ mat-checkbox {
   }
 }
 
+.mat-tab-link-container {
+  .mat-tab-list {
+    .mat-tab-links {
+      a {
+        text-decoration: none !important;
+      }
+
+      .active {
+        opacity: 1;
+      }
+    }
+  }
+}
+
 // custom file select
 .custom-file-select {
   // height: 138px;
