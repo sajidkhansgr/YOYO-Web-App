@@ -4,7 +4,7 @@
     Collections
     <div class="float-right">
       <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
-        (click)="switchView()" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
+        (click)="this.view = !this.view;" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
       <button class="btn btn-primary mb-2" (click)="openModal(newCollection)">New Collection</button>
     </div>
   </h3>
@@ -13,8 +13,9 @@
     <span class="text-primary mr-2 curs-ptr">Name<i class="fa fa-sort-down align-top ml-1"></i></span>
     <span class="text-primary curs-ptr">Date Modified<i class="fa fa-sort-down align-top ml-1"></i></span>
   </div>
-  <div class="mt-2 row collections" *ngIf="view">
-    <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let t of testArr">
+  <app-loader [type]="'page'" *ngIf="loading"></app-loader>
+  <div class="mt-2 row collections" *ngIf="view && !loading">
+    <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let colct of colctArr">
       <div class="card curs-ptr">
         <div class="card-body">
           <div class="imagePreview text-center">
@@ -54,11 +55,11 @@
           </div>
         </div>
         <div class="card-footer">
-          <div class="name">Test</div>
+          <div class="name">{{colct.name}}</div>
           <div class="float-left text-secondary d-flex">
-            <div class="date">Oct 10, 2020</div>
+            <div class="date">{{colct.updatedDate.split('T')[0]}}</div>
             <div class="mx-2">l</div>
-            <div class="items">3 Items</div>
+            <div class="items">{{colct.collectionContents.length}} Item(s)</div>
           </div>
           <div class="float-right">
             <mat-checkbox></mat-checkbox>
@@ -67,7 +68,7 @@
       </div>
     </div>
   </div>
-  <div class="mt-2 row collections" *ngIf="!view">
+  <div class="mt-2 row collections" *ngIf="!view && !loading">
     <table class="table table-hover">
       <thead>
         <tr>
@@ -80,7 +81,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let t of testArr">
+        <tr *ngFor="let colct of colctArr">
           <td class="align-middle">
             <mat-checkbox></mat-checkbox>
           </td>
@@ -89,10 +90,10 @@
               <div class="imagePreview border mr-2">
                 <img src="assets/images/discription.png">
               </div>
-              <div class="name align-self-center">Abc def</div>
+              <div class="name align-self-center">{{colct.name}}</div>
             </div>
           </td>
-          <td class="align-middle">16 Oct, 2020 14:40</td>
+          <td class="align-middle">{{colct.updatedDate.split('T')[0]}}</td>
           <td class="align-middle options">
             <div class="d-flex">
               <div class="dropleft">
@@ -153,15 +154,23 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body" ngbAutofocus>
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Name</mat-label>
-      <input matInput type="text" placeholder="New Collection Name">
-    </mat-form-field>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
+  <form name="colctnForm" (ngSubmit)="addColctn()" [formGroup]="colctnForm">
+    <div class="modal-body" ngbAutofocus>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="New Collection Name" required formControlName="name">
+        <mat-error *ngIf="colctnForm.get('name')!.hasError('required')">
+          Name is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" [disabled]="colctnForm!.invalid || disabled">
+        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+        Save
+      </button>
+    </div>
+  </form>
 </ng-template>
 
 <!-- email modal -->

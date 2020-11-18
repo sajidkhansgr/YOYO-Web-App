@@ -127,7 +127,8 @@ export class AppSettings {
 
   public static ARCH_ANCMNT = (id: string) => `api/Announcement/${id}/Archive`;
 
-  //Employee
+  // ---- EMPLOYEE ---- //
+
   public static LIST_EMPL = `api/Employee/GetAll`;
 
   public static ADD_EMPL = `api/Employee/Add`;
@@ -136,12 +137,31 @@ export class AppSettings {
 
   public static GET_EMPL = `api/Employee/GetById`;
 
-  //Content
-  public static LIST_CNTNT= `api/Content/GetAll`;
+  // ---- CONTENT ---- //
+
+  public static LIST_CNTNT = `api/Content/GetAll`;
 
   public static ADD_CNTNT = `api/Content/Add`;
 
   public static UPD_CNTNT = `api/Content/Update`;
 
   public static GET_CNTNT = `api/Content/GetById`;
+
+  // ---- COLLECTION ---- //
+
+  public static LIST_COLCT = `api/Collection/GetAll`;
+
+  public static ADD_COLCT = `api/Collection/Add`;
+
+  public static ADD_CONTENT_COLCT = `api/Collection/AddContent`;
+
+  public static REN_COLCT = `api/Collection/Rename`;
+
+  public static DUPL_COLCT = `api/Collection/Duplicate`;
+
+  public static DEL_COLCT = `api/Collection/Delete`;
+
+  public static GET_COLCT = `api/Collection/GetById`;
+
+  public static REM_COLCT = `api/Collection/RemoveFromCollection`;
 }
