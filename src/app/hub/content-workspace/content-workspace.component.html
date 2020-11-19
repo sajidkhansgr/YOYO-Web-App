@@ -2,7 +2,8 @@
 <div class="content-workspace">
   <div class="buttons-row row mt-3 justify-content-between mx-2">
     <div class="dropdown">
-      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addContentDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addContentDD" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
         Add Content
       </button>
       <div class="dropdown-menu" aria-labelledby="addContentDD">
@@ -53,7 +54,7 @@
     <div class="workspace-container col-md-6" *ngIf="showRowInfo || showWork">
       <div class="document" *ngIf="showRowInfo">
         <app-loader [type]="'page'" *ngIf="docLoading"></app-loader>
-        <div class="card"  *ngIf="!docLoading">
+        <div class="card" *ngIf="!docLoading">
           <div class="card-header row m-0">
             <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">{{rowInfo.name}}
             </h5>
@@ -80,12 +81,14 @@
                 </div>
                 <div class="edit" style="display: none;">
                   <div>
-                    <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                      [floatLabel]="'never'">
                       <input matInput placeholder="Description" [(ngModel)]="desc" name="desc" class="ml-0">
                     </mat-form-field>
                     <div class="form-group text-right">
                       <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                      <button class="btn btn-primary btn-sm" [disabled]="descDisb" (click)="updContent($event, 1,'descDisb')">
+                      <button class="btn btn-primary btn-sm" [disabled]="descDisb"
+                        (click)="updContent($event, 1,'descDisb')">
                         <app-loader [type]="'btn'" *ngIf="descDisb"></app-loader>Submit
                       </button>
                     </div>
@@ -96,50 +99,122 @@
             <div class="workspace-nav mt-5">
               <mat-tab-group>
                 <mat-tab label="Properties">
-                  <div class="properties">
-                    <div class="tags mt-3 work-div dark-bg-hover rounded p-2">
-                      <div class="font-weight-bold mb-1">
-                        Tags
-                        <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
-                          <i class=" fas fa-edit"></i>
-                        </a>
-                      </div>
-                      <div class="view">
-                        <div *ngIf="rowInfo.contentTags && rowInfo.contentTags.length>0 else noCntntTag">
-                          <span *ngFor="let tg of rowInfo.contentTags" class="badge badge-light text-success">{{tg.tagId}}</span>
+                  <div class="properties row mx-0">
+                    <div class="col-5 mt-3">
+                      <div class="tags work-div dark-bg-hover rounded p-2">
+                        <div class="font-weight-bold mb-1">
+                          Tags
+                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                            <i class=" fas fa-edit"></i>
+                          </a>
                         </div>
-                        <ng-template #noCntntTag>
-                          <div class="text-hi-dark-grey">No Tags</div>
-                        </ng-template>
-                      </div>
-                      <div class="edit" style="display: none;">
-                        <div>
-                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white">
-                            <mat-chip-list aria-label="Select tags">
-                              <mat-chip *ngFor="let d of selTags2" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selTags2')">
-                                {{d.name}}
-                                <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
-                              </mat-chip>
-                              <input matInput placeholder="Select tags" [matAutocomplete]="autoT">
-                            </mat-chip-list>
-                            <mat-autocomplete #autoT="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags2')"
-                              [displayWith]="displayFn">
-                              <mat-option *ngFor="let tag of tags" [value]="tag">
-                                {{tag.name}}
-                              </mat-option>
-                            </mat-autocomplete>
-                          </mat-form-field>
-                          <div class="form-group text-right">
-                            <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                            <button class="btn btn-primary btn-sm" [disabled]="tagsDisb" (click)="updContent($event, 4,'tagsDisb')">
-                              <app-loader [type]="'btn'" *ngIf="tagsDisb"></app-loader>Submit
-                            </button>
+                        <div class="view">
+                          <div *ngIf="rowInfo.contentTags && rowInfo.contentTags.length>0 else noCntntTag">
+                            <span *ngFor="let tg of rowInfo.contentTags"
+                              class="badge badge-light text-success">{{tg.tagId}}</span>
+                          </div>
+                          <ng-template #noCntntTag>
+                            <div class="text-hi-dark-grey">No Tags</div>
+                          </ng-template>
+                        </div>
+                        <div class="edit" style="display: none;">
+                          <div>
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white">
+                              <mat-chip-list aria-label="Select tags">
+                                <mat-chip *ngFor="let d of selTags2" [selectable]="selectable" [removable]="removable"
+                                  (removed)="remove(d,'selTags2')">
+                                  {{d.name}}
+                                  <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+                                </mat-chip>
+                                <input matInput placeholder="Select tags" [matAutocomplete]="autoT">
+                              </mat-chip-list>
+                              <mat-autocomplete #autoT="matAutocomplete"
+                                (optionSelected)="selFromAutoComp($event.option.value,'selTags2')"
+                                [displayWith]="displayFn">
+                                <mat-option *ngFor="let tag of tags" [value]="tag">
+                                  {{tag.name}}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+                            <div class="form-group text-right">
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-primary btn-sm" [disabled]="tagsDisb"
+                                (click)="updContent($event, 4,'tagsDisb')">
+                                <app-loader [type]="'btn'" *ngIf="tagsDisb"></app-loader>Submit
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="row mt-3 mx-0">
-                      <div class="author col-6 work-div dark-bg-hover rounded p-2">
+                      <div class="language work-div dark-bg-hover rounded p-2">
+                        <div class="font-weight-bold mb-1">
+                          Language
+                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                            <i class="fas fa-edit"></i>
+                          </a>
+                        </div>
+                        <div class="view">
+                          <div *ngIf="rowInfo.contentLanguages && rowInfo.contentLanguages.length>0 else noCntntLng">
+                            <span *ngFor="let lng of rowInfo.contentLanguages"
+                              class="badge badge-light text-success">{{lng.languageId}}</span>
+                          </div>
+                          <ng-template #noCntntLng>
+                            <div class="text-hi-dark-grey">No Languages</div>
+                          </ng-template>
+                        </div>
+                        <div class="edit" style="display: none;">
+                          <div>
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white">
+                              <mat-chip-list aria-label="Select Languages">
+                                <mat-chip *ngFor="let d of selLngs" [selectable]="selectable" [removable]="removable"
+                                  (removed)="remove(d,'selLngs')">
+                                  {{d.name}}
+                                  <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+                                </mat-chip>
+                                <input matInput placeholder="Select Languages" [matAutocomplete]="autoL">
+                              </mat-chip-list>
+                              <mat-autocomplete #autoL="matAutocomplete"
+                                (optionSelected)="selFromAutoComp($event.option.value,'selLngs')"
+                                [displayWith]="displayFn">
+                                <mat-option *ngFor="let lng of lngs" [value]="lng">
+                                  {{lng.name}}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+                            <div class="form-group text-right">
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-primary btn-sm" [disabled]="lngDisb"
+                                (click)="updContent($event, 3,'lngDisb')">
+                                <app-loader [type]="'btn'" *ngIf="lngDisb"></app-loader>Submit
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="country work-div dark-bg-hover rounded p-2">
+                        <div class="font-weight-bold mb-1">
+                          Country
+                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                            <i class="fas fa-edit"></i>
+                          </a>
+                        </div>
+                        <div class="view">
+                          <div class="text-hi-dark-grey">No Country</div>
+                        </div>
+                        <div class="edit" style="display: none;">
+                          <div>
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                              [floatLabel]="'never'">
+                              <input matInput placeholder="Country" class="ml-0">
+                            </mat-form-field>
+                            <div class="form-group text-right">
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-primary btn-sm">Submit</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="author work-div dark-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Author
                           <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
@@ -153,7 +228,8 @@
                         </div>
                         <div class="edit" style="display: none;">
                           <div>
-                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                              [floatLabel]="'never'">
                               <input matInput placeholder="Author" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
@@ -163,7 +239,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="availibility col-6 work-div dark-bg-hover rounded p-2">
+                      <div class="availibility work-div dark-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Availibility
                           <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
@@ -178,10 +254,12 @@
                         </div>
                         <div class="edit" style="display: none;">
                           <div>
-                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                              [floatLabel]="'never'">
                               <input matInput placeholder="Released" class="ml-0">
                             </mat-form-field>
-                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                              [floatLabel]="'never'">
                               <input matInput placeholder="Expired" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
@@ -192,64 +270,116 @@
                         </div>
                       </div>
                     </div>
-                    <div class="language work-div dark-bg-hover rounded p-2">
-                      <div class="font-weight-bold mb-1">
-                        Language
-                        <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                      </div>
-                      <div class="view">
-                        <div *ngIf="rowInfo.contentLanguages && rowInfo.contentLanguages.length>0 else noCntntLng">
-                          <span *ngFor="let lng of rowInfo.contentLanguages" class="badge badge-light text-success">{{lng.languageId}}</span>
+                    <div class="col-7 mt-3">
+                      <div class="permissions work-div dark-bg-hover rounded p-2">
+                        <div class="font-weight-bold mb-1">
+                          Permissions
+                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                            <i class="fas fa-edit"></i>
+                          </a>
                         </div>
-                        <ng-template #noCntntLng>
-                          <div class="text-hi-dark-grey">No Languages</div></ng-template>
-                      </div>
-                      <div class="edit" style="display: none;">
-                        <div>
-                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white">
-                            <mat-chip-list aria-label="Select Languages">
-                              <mat-chip *ngFor="let d of selLngs" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selLngs')">
-                                {{d.name}}
-                                <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
-                              </mat-chip>
-                              <input matInput placeholder="Select Languages" [matAutocomplete]="autoL">
-                            </mat-chip-list>
-                            <mat-autocomplete #autoL="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selLngs')"
-                              [displayWith]="displayFn">
-                              <mat-option *ngFor="let lng of lngs" [value]="lng">
-                                {{lng.name}}
-                              </mat-option>
-                            </mat-autocomplete>
-                          </mat-form-field>
-                          <div class="form-group text-right">
-                            <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                            <button class="btn btn-primary btn-sm" [disabled]="lngDisb" (click)="updContent($event, 3,'lngDisb')">
-                              <app-loader [type]="'btn'" *ngIf="lngDisb"></app-loader>Submit
-                            </button>
+                        <div class="view">
+                          <div class="text-hi-dark-grey">
+                            <ul class="list-unstyled">
+                              <li><i class="fas fa-check mr-1"></i>Can be shared</li>
+                              <li><i class="fas fa-check mr-1"></i>Can be downloaded</li>
+                              <ul class="list-unstyled ml-3">
+                                <li><i class="fas fa-check mr-1"></i>Internally</li>
+                                <li><i class="fas fa-check mr-1"></i>Externally</li>
+                              </ul>
+                              <li><i class="fas fa-check mr-1"></i>Can be annotated</li>
+                              <li><i class="fas fa-check mr-1"></i>Pages can be separated</li>
+                              <li><i class="fas fa-times mr-1"></i>Page group are enforced</li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="edit" style="display: none;">
+                          <div>
+                            <ul class="list-unstyled">
+                              <li>
+                                <mat-checkbox>Can be shared</mat-checkbox>
+                              </li>
+                              <li>
+                                <mat-checkbox>Can be downloaded</mat-checkbox>
+                              </li>
+                              <ul class="list-unstyled ml-3">
+                                <li>
+                                  <mat-checkbox>Internally</mat-checkbox>
+                                </li>
+                                <li>
+                                  <mat-checkbox>Externally</mat-checkbox>
+                                </li>
+                              </ul>
+                              <li>
+                                <mat-checkbox>Can be annotated</mat-checkbox>
+                              </li>
+                              <li>
+                                <mat-checkbox>Pages can be separated</mat-checkbox>
+                              </li>
+                              <li>
+                                <mat-checkbox>Page group are enforced</mat-checkbox>
+                              </li>
+                              <li class="ml-2">
+                                <div class="row">
+                                  <div class="col-5 pr-0">
+                                    <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                                      [floatLabel]="'never'">
+                                      <!-- <mat-label>Page</mat-label> -->
+                                      <mat-select placeholder="Page">
+                                        <mat-option hidden selected></mat-option>
+                                        <mat-option value="1">
+                                          1
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class="col-5 pr-0">
+                                    <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                                      [floatLabel]="'never'">
+                                      <!-- <mat-label>Page</mat-label> -->
+                                      <mat-select placeholder="Page">
+                                        <mat-option hidden selected></mat-option>
+                                        <mat-option value="1">
+                                          1
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class="col-2 align-self-center">
+                                    <i class="fas fa-times"></i>
+                                  </div>
+                                </div>
+                              </li>
+                              <li class="ml-2">
+                                <a href="javascript:void(0)"><i class="fas fa-plus mr-1"></i>Add another</a>
+                              </li>
+                            </ul>
+                            <div class="form-group text-right">
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-primary btn-sm">Submit</button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="country work-div dark-bg-hover rounded p-2">
-                      <div class="font-weight-bold mb-1">
-                        Country
-                        <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                      </div>
-                      <div class="view">
-                        <div class="text-hi-dark-grey">No Country</div>
-                      </div>
-                      <div class="edit" style="display: none;">
-                        <div>
-                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
-                            <input matInput placeholder="Country" class="ml-0">
-                          </mat-form-field>
-                          <div class="form-group text-right">
-                            <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                            <button class="btn btn-primary btn-sm">Submit</button>
+                      <div class="optimization work-div dark-bg-hover rounded p-2">
+                        <div class="font-weight-bold mb-1">
+                          Optimization
+                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                            <i class="fas fa-edit"></i>
+                          </a>
+                        </div>
+                        <div class="view">
+                          <div class="text-hi-dark-grey">
+                            Use Optimized File : Yes
+                          </div>
+                        </div>
+                        <div class="edit" style="display: none;">
+                          <div>
+                            <mat-checkbox>Use Optimized File</mat-checkbox>
+                            <div class="form-group text-right">
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-primary btn-sm">Submit</button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -308,11 +438,13 @@
                           </div>
                           <div class="edit" style="display: none;">
                             <form>
-                              <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
+                              <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                                [floatLabel]="'never'">
                                 <input matInput placeholder="External ID" class="ml-0">
                               </mat-form-field>
                               <div class="form-group text-right">
-                                <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                                <button type="reset" class="btn btn-secondary btn-sm mr-2"
+                                  (click)="closeEdit($event)">Cancel</button>
                                 <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                               </div>
                             </form>
@@ -353,7 +485,8 @@
                     </div>
                     <!-- add comment -->
                     <div class="add-comment mt-4">
-                      <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
+                      <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
+                        [floatLabel]="'never'">
                         <input matInput placeholder="Write a comment..." class="ml-0">
                         <i matSuffix class="fa fa-angle-double-right curs-ptr"></i>
                       </mat-form-field>
@@ -369,7 +502,8 @@
         <div class="card">
           <div class="card-header row m-0">
             <div class="dropdown">
-              <button class="btn btn-light dropdown-toggle" type="button" id="wrkspcDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="loadWrkspcs()">
+              <button class="btn btn-light dropdown-toggle" type="button" id="wrkspcDD" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" (click)="loadWrkspcs()">
                 {{selWrkspc ? selWrkspc.name : 'Select a Workspace'}}
               </button>
               <div class="dropdown-menu" aria-labelledby="wrkspcDD">
@@ -379,7 +513,8 @@
                 <ng-template #noLoading>
                   <ng-container *ngIf="wrkspcs.length>0; else noWrkspc">
                     <div class="overflow-auto" style="max-height:130px">
-                      <a class="dropdown-item curs-ptr" [ngClass]="{'active': selWrkspc == ws}" *ngFor="let ws of wrkspcs" (click)="selectWrkspc(ws)">{{ws.name}}</a>
+                      <a class="dropdown-item curs-ptr" [ngClass]="{'active': selWrkspc == ws}"
+                        *ngFor="let ws of wrkspcs" (click)="selectWrkspc(ws)">{{ws.name}}</a>
                     </div>
                   </ng-container>
                   <ng-template #noWrkspc>
@@ -400,7 +535,8 @@
           </div>
           <div class="card-header bg-hi-light-grey py-1 px-2 row m-0">
             <div class="dropdown rounded mr-2">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown" [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown"
+                [disabled]="!selWrkspc">
                 Add
               </button>
               <div class="dropdown-menu" aria-labelledby="btnAddDD">
@@ -411,14 +547,16 @@
               </div>
             </div>
             <div class="dropdown rounded">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown" [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown"
+                [disabled]="!selWrkspc">
                 Users <span class="badge badge-light">11</span>
               </button>
               <div class="dropdown-menu large-dropdown-menu pt-0 overflow-hidden" aria-labelledby="btnUsersDD">
                 <div class="bg-hi-dark-grey p-2">Assign Experience Users</div>
                 <div class="p-3">
                   <form>
-                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3" [floatLabel]="'never'">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
+                      [floatLabel]="'never'">
                       <input matInput placeholder="Add User or Group" class="ml-0">
                     </mat-form-field>
                     <div class="form-group text-right">
@@ -429,7 +567,8 @@
                     <div class="bg-hi-light-grey row m-0 py-1">
                       <div class="col-4 align-self-center">Name</div>
                       <div class="col-8">
-                        <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white" [floatLabel]="'never'">
+                        <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white"
+                          [floatLabel]="'never'">
                           <input matInput placeholder="Add User or Group" class="ml-0">
                           <i matPrefix class="fas fa-search"></i>
                         </mat-form-field>
@@ -445,7 +584,8 @@
               </div>
             </div>
             <div class="dropdown rounded ml-auto">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown" [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown"
+                [disabled]="!selWrkspc">
                 <i class="fas fa-cog"></i>
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDD">
@@ -464,12 +604,14 @@
             <div class="card-body">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-white mb-0 p-0">
-                  <li class="breadcrumb-item curs-ptr text-primary" (click)="backFolder()" style="font-size: 16px;" *ngIf="folderNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li>
+                  <li class="breadcrumb-item curs-ptr text-primary" (click)="backFolder()" style="font-size: 16px;"
+                    *ngIf="folderNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li>
                   <li class="breadcrumb-item no-before">{{selWrkspc.name}}</li>
                   <li class="breadcrumb-item" *ngFor="let folNav of folderNav">{{folNav.name}}</li>
                 </ol>
               </nav>
-              <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeFldrs" class="nav-tabs justify-content-end border-bottom-0 mr-3 w-100" (activeIdChange)="changeDispFldrs()">
+              <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeFldrs"
+                class="nav-tabs justify-content-end border-bottom-0 mr-3 w-100" (activeIdChange)="changeDispFldrs()">
                 <li [ngbNavItem]="1">
                   <a ngbNavLink>Active</a>
                 </li>
@@ -482,21 +624,26 @@
               <div class="main row py-4" *ngIf="folderArr.length > 0 && !folderLoading">
                 <div class="col-3 curs-ptr my-2" *ngFor="let folder of folderArr">
                   <div class="image">
-                    <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}" (click)="changeFolder(folder)">
+                    <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}"
+                      (click)="changeFolder(folder)">
                     <div class="dropdown" style="z-index:1;">
-                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD" data-toggle="dropdown">
+                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                        data-toggle="dropdown">
                         <i class="fas fa-cog"></i>
                       </button>
                       <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                        <a class="dropdown-item curs-ptr" (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'edit', folder)">
+                        <a class="dropdown-item curs-ptr"
+                          (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'edit', folder)">
                           <i class="fas fa-edit mr-1"></i>Edit Item</a>
-                        <a class="dropdown-item curs-ptr" (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'dupl', folder)">
+                        <a class="dropdown-item curs-ptr"
+                          (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'dupl', folder)">
                           <i class="fas fa-clone mr-1"></i>Duplicate Folder</a>
                         <a class="dropdown-item" href="javascript:void(0)">
                           <i class="fas fa-link mr-1"></i>App Link</a>
                         <a class="dropdown-item curs-ptr" (click)="activateFldr(folder)" *ngIf="!folder.isActive">
                           <i class="fas fa-plus mr-1"></i>Activate {{folder.key != 'fldr' ? 'Smart' : ''}} Folder</a>
-                        <a class="dropdown-item curs-ptr text-primary" (click)="deActivateFldr(folder)" *ngIf="folder.isActive">
+                        <a class="dropdown-item curs-ptr text-primary" (click)="deActivateFldr(folder)"
+                          *ngIf="folder.isActive">
                           <i class="fas fa-trash-alt mr-1"></i>Deactivate {{folder.key != 'fldr' ? 'Smart' : ''}}
                           Folder</a>
                         <a class="dropdown-item" href="javascript:void(0)">
@@ -504,12 +651,14 @@
                       </div>
                     </div>
                   </div>
-                  <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate" *ngIf="!folder.hideLabelInWorkspace" (click)="changeFolder(folder)">
+                  <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
+                    *ngIf="!folder.hideLabelInWorkspace" (click)="changeFolder(folder)">
                     {{folder.name}}
                   </div>
                 </div>
               </div>
-              <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;" *ngIf="folderArr.length == 0 && !folderLoading">
+              <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;"
+                *ngIf="folderArr.length == 0 && !folderLoading">
                 No folder found
               </div>
             </div>
@@ -533,10 +682,12 @@
           <button class="btn btn-light dropdown-toggle mr-2" id="fileDD" data-toggle="dropdown">
             <i class="fas fa-cog"></i>
           </button>
-          <div class="cog dropdown-menu dropdown-menu-right pt-0 overflow-hidden" aria-labelledby="fileDD" (click)="$event.stopPropagation();">
+          <div class="cog dropdown-menu dropdown-menu-right pt-0 overflow-hidden" aria-labelledby="fileDD"
+            (click)="$event.stopPropagation();">
             <div class="scrollable py-2">
               <span class="ml-2 heading">Visible Columns</span>
-              <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols" class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]" (cdkDropListDropped)="drop($event)">
+              <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols"
+                class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]" (cdkDropListDropped)="drop($event)">
                 <button class="dropdown-item pl-2" *ngFor="let col of visbCols;let i=index" cdkDrag>
                   <span class="ellipsis mr-2">
                     <i class="fa fa-ellipsis-v"></i>
@@ -549,7 +700,8 @@
                 </span>
               </ul>
               <span class="ml-2 heading">Hidden Columns</span>
-              <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList" [cdkDropListData]="hidCols" class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
+              <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList" [cdkDropListData]="hidCols"
+                class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
                 <button class="dropdown-item pl-2" *ngFor="let col of hidCols;let i=index" cdkDrag>
                   <span class="ellipsis mr-2 mb-1">
                     <i class="fa fa-ellipsis-v"></i>
@@ -591,7 +743,8 @@
           <button class="btn btn-light dropdown-toggle" id="propDD" data-toggle="dropdown">
             Property
           </button>
-          <div class="dropdown-menu" #propertyDropDown style="width:18.5rem;" aria-labelledby="propDD" (click)="$event.stopPropagation();">
+          <div class="dropdown-menu" #propertyDropDown style="width:18.5rem;" aria-labelledby="propDD"
+            (click)="$event.stopPropagation();">
             <mat-checkbox class="dropdown-item" *ngFor="let p of props" [attr.id]="p.id">{{p.name}}
             </mat-checkbox>
           </div>
@@ -600,7 +753,8 @@
           <button class="btn btn-light dropdown-toggle" id="tagsDD" data-toggle="dropdown">
             Tags
           </button>
-          <div class="dropdown-menu" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD" (click)="$event.stopPropagation();">
+          <div class="dropdown-menu" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD"
+            (click)="$event.stopPropagation();">
             <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
               <mat-label>Match ALL of theese tags</mat-label>
               <input matInput placeholder="Match ALL of theese tags">
@@ -619,7 +773,8 @@
           <button class="btn btn-light dropdown-toggle" id="localeDD" data-toggle="dropdown">
             Locale
           </button>
-          <div class="dropdown-menu" #localeDropDown style="width:18rem;" aria-labelledby="localeDD" (click)="$event.stopPropagation();">
+          <div class="dropdown-menu" #localeDropDown style="width:18rem;" aria-labelledby="localeDD"
+            (click)="$event.stopPropagation();">
             <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
               <mat-label>Match ALL of these languages</mat-label>
               <input matInput placeholder="Match ALL of these languages" class="bg-white">
@@ -638,7 +793,8 @@
           <button class="btn btn-light dropdown-toggle" id="authorDD" data-toggle="dropdown">
             Author
           </button>
-          <div class="dropdown-menu" #authorDropDown style="width:18rem;" aria-labelledby="authorDD" (click)="$event.stopPropagation();">
+          <div class="dropdown-menu" #authorDropDown style="width:18rem;" aria-labelledby="authorDD"
+            (click)="$event.stopPropagation();">
             <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3" [floatLabel]="'never'">
               <i matPrefix class="fas fa-search"></i>
               <input matInput placeholder="Search ...">
@@ -686,7 +842,8 @@
         <thead>
           <tr>
             <th class="curs-ptr" *ngFor="let col of cols">
-              {{col.n}}<i class="fas ml-1" [ngClass]="{'fa-sort-down align-top': col.dir==1, 'fa-sort-up align-bottom': col.dir==0}"></i>
+              {{col.n}}<i class="fas ml-1"
+                [ngClass]="{'fa-sort-down align-top': col.dir==1, 'fa-sort-up align-bottom': col.dir==0}"></i>
             </th>
             <!-- <th scope="col" class="curs-ptr">Name<i class="fas fa-sort-down ml-1 align-top"></i>
             </th>
@@ -719,8 +876,8 @@
         </tbody>
       </table>
       <div class="row justify-content-between" *ngIf="!view">
-        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-0" *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)"
-            style="max-width:400px;" [ngClass]="{'fa-angle-up':(rowInfo.id === cntnt.id)}">
+        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-0" *ngFor="let cntnt of cntnts"
+          (click)="toggleInfo(cntnt)" style="max-width:400px;" [ngClass]="{'fa-angle-up':(rowInfo.id === cntnt.id)}">
           <img src="assets/images/discription.png" style="max-height:200px;">
           <div class="name bg-hi-grey rounded w-75 mx-auto px-2">{{cntnt.name}}</div>
         </div>
@@ -777,13 +934,15 @@
       <div class="mt-2" *ngIf="dispPropsSec">
         <mat-form-field appearance="outline" class="w-100">
           <mat-chip-list aria-label="Select tags">
-            <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selTags')">
+            <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable"
+              (removed)="remove(d,'selTags')">
               {{d.name}}
               <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
             </mat-chip>
             <input matInput formControlName="tags" placeholder="Select tags" [matAutocomplete]="auto">
           </mat-chip-list>
-          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags')" [displayWith]="displayFn">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags')"
+            [displayWith]="displayFn">
             <mat-option *ngFor="let tag of tags" [value]="tag">
               {{tag.name}}
             </mat-option>
@@ -821,7 +980,8 @@
           Icon Type is required
         </mat-error>
       </mat-form-field>
-      <div class="custom-file-select" appFileDnd *ngIf="urlForm.controls.img && urlForm.value.iconType==2" (fileDropped)="onFileDropped($event,true,'urlForm')">
+      <div class="custom-file-select" appFileDnd *ngIf="urlForm.controls.img && urlForm.value.iconType==2"
+        (fileDropped)="onFileDropped($event,true,'urlForm')">
         <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true,'urlForm')" accept="image/*">
         <input type="hidden" formControlName="img" /> <!-- Validation Field -->
         <div class="text-center my-5">
@@ -834,7 +994,7 @@
       <img [src]="iconUrl?iconUrl:defIcon" class="border mt-2 mb-4" style="height: 130px; width: auto;">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Name</mat-label>
-        <input matInput placeholder="Add a Name" formControlName="name" required/>
+        <input matInput placeholder="Add a Name" formControlName="name" required />
         <div matSuffix>.url</div>
         <mat-error *ngIf="urlForm.get('name')!.hasError('required')">
           Name is required
@@ -853,13 +1013,15 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-chip-list aria-label="Select tags">
-          <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selTags')">
+          <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable"
+            (removed)="remove(d,'selTags')">
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
           <input matInput formControlName="tags" placeholder="Select tags" [matAutocomplete]="auto">
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags')" [displayWith]="displayFn">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags')"
+          [displayWith]="displayFn">
           <mat-option *ngFor="let tag of tags" [value]="tag">
             {{tag.name}}
           </mat-option>
@@ -868,9 +1030,12 @@
       </mat-form-field>
       <div class="options">
         Options<br />
-        <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle" matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br />
-        <mat-checkbox>Can be Shared <i class="fa fa-info-circle" matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
-        <mat-checkbox>View in Showpad <i class="fa fa-info-circle" matTooltip="This permission only works for https links"></i></mat-checkbox><br />
+        <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle"
+            matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br />
+        <mat-checkbox>Can be Shared <i class="fa fa-info-circle"
+            matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
+        <mat-checkbox>View in Showpad <i class="fa fa-info-circle"
+            matTooltip="This permission only works for https links"></i></mat-checkbox><br />
         <mat-checkbox>Hide name in Workspace</mat-checkbox>
       </div>
     </div>
@@ -894,7 +1059,8 @@
   </div>
   <form name="folderForm" (ngSubmit)="folderSubmit()" [formGroup]="folderForm" novalidate>
     <div class="modal-body" ngbAutofocus>
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed" [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
+        [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
         General
         <div class="float-right">
           <ng-container *ngIf="!gnrlCollapsed; else elseIcon">
@@ -933,7 +1099,8 @@
         </div> -->
         <div class="image border mt-2 mb-4">
           <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon">
-          <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(ip)"><i class="fas fa-trash-alt"></i>
+          <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(ip)"><i
+              class="fas fa-trash-alt"></i>
           </div>
         </div>
         <mat-form-field appearance="outline" class="w-100">
@@ -951,7 +1118,8 @@
         </div>
       </div>
       <hr *ngIf="edit">
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed" [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmartFolder" *ngIf="edit">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed"
+        [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmartFolder" *ngIf="edit">
         Edit Contained Smart Folders (0)
         <div class="float-right">
           <ng-container *ngIf="!editSmrtCollapsed; else elseIcon">
@@ -995,7 +1163,8 @@
         </div>
       </div>
       <hr *ngIf="edit">
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="locationCollapsed = !locationCollapsed" [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder" *ngIf="edit">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="locationCollapsed = !locationCollapsed"
+        [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder" *ngIf="edit">
         Location
         <div class="float-right">
           <ng-container *ngIf="!locationCollapsed; else elseIcon">
@@ -1059,7 +1228,8 @@
       </div> -->
       <div class="image border mt-2 mb-4">
         <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon">
-        <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(inp)"><i class="fas fa-trash-alt"></i>
+        <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(inp)"><i
+            class="fas fa-trash-alt"></i>
         </div>
       </div>
       <mat-form-field appearance="outline" class="w-100">
@@ -1075,7 +1245,8 @@
         <mat-checkbox class="d-block" formControlName="hideLabelInWorkspace">Hide label in Experience</mat-checkbox>
       </div>
       <hr>
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed" [attr.aria-expanded]="!gnrlCollapsed" aria-controls="collapseExample">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
+        [attr.aria-expanded]="!gnrlCollapsed" aria-controls="collapseExample">
         Smart Folder Settings
         <div class="float-right">
           <ng-container *ngIf="!gnrlCollapsed; else elseIcon">
@@ -1090,7 +1261,8 @@
         <div class="card">
           <div class="card-header row mx-auto w-100">
             <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="fileTypeDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="fileTypeDD" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 File Type
               </button>
               <div class="dropdown-menu" aria-labelledby="fileTypeDD">
@@ -1103,7 +1275,8 @@
               </div>
             </div>
             <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 Property
               </button>
               <div class="dropdown-menu" aria-labelledby="propertyDD">
@@ -1113,7 +1286,8 @@
               </div>
             </div>
             <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="tagsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="tagsDD" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 Tags
               </button>
               <div class="dropdown-menu" aria-labelledby="tagsDD" style="width:18rem;">
@@ -1132,7 +1306,8 @@
               </div>
             </div>
             <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="localeDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="localeDD" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 Locale
               </button>
               <div class="dropdown-menu" aria-labelledby="localeDD" style="width:18rem;">
@@ -1151,7 +1326,8 @@
               </div>
             </div>
             <div class="dropdown">
-              <button class="btn btn-light dropdown-toggle" type="button" id="authorDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="authorDD" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 Author
               </button>
               <div class="dropdown-menu" aria-labelledby="authorDD" style="width:18rem;">
@@ -1276,7 +1452,8 @@
         </div>
         <div class="mb-2">
           <mat-label>Content</mat-label>
-          <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle" matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
+          <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle"
+              matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
         </div>
         <div>
           <mat-label>

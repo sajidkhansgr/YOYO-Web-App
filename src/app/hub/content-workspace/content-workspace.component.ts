@@ -44,17 +44,17 @@ export class ContentWorkspaceComponent implements OnInit {
   edit!: boolean | undefined;
   activeFldrs!: number; isActiveFldrs!: boolean;
 
-  tags!: Tag[];selTags:Tag[] =[]; selTags2:Tag[] =[];//using in selTags add and selTags2 form
-  cntnts!: any[];totalCount!: number;sort: any = {};searchTxt!: string;
+  tags!: Tag[]; selTags: Tag[] = []; selTags2: Tag[] = [];//using in selTags add and selTags2 form
+  cntnts!: any[]; totalCount!: number; sort: any = {}; searchTxt!: string;
   selectable = true; removable: boolean = true;
   urlDisb!: boolean;
-  cntntDisb!: boolean; cntntLoading!: boolean;activeIndex: number = 0;
-  pageNo!: number; pageSize!: number;  @Input() lmtPage: any;
-  showRowInfo!: boolean;rowInfo!:any;docLoading!: boolean;
-  desc!:string;
+  cntntDisb!: boolean; cntntLoading!: boolean; activeIndex: number = 0;
+  pageNo!: number; pageSize!: number; @Input() lmtPage: any;
+  showRowInfo!: boolean; rowInfo!: any; docLoading!: boolean;
+  desc!: string;
 
-  descDisb!:boolean;tagsDisb!:boolean;availDisb!:boolean;lngDisb!: boolean;
-  lngs!: Language[];selLngs:Language[] =[];
+  descDisb!: boolean; tagsDisb!: boolean; availDisb!: boolean; lngDisb!: boolean;
+  lngs!: Language[]; selLngs: Language[] = [];
 
   constructor(
     // private route: ActivatedRoute,
@@ -112,7 +112,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.view = true;
     this.edit = false;
     this.activeFldrs = 1; this.isActiveFldrs = true;
-    this.showRowInfo = false;this.rowInfo = {};this.docLoading = false;
+    this.showRowInfo = false; this.rowInfo = {}; this.docLoading = false;
     this.pageSize = this.lmtPage[0]; this.pageNo = 1;
     this.cntntDisb = false;
     this.totalCount = 0;
@@ -127,7 +127,7 @@ export class ContentWorkspaceComponent implements OnInit {
       tags: ['']
     });
     this.urlForm = this.fb.group({
-      iconType:['', [Validators.required]],
+      iconType: ['', [Validators.required]],
       img: ['', [Validators.required]],
       tags: [''],
       name: ['', [Validators.required]],
@@ -726,6 +726,7 @@ export class ContentWorkspaceComponent implements OnInit {
       this.closeDoc();
     } else {
       this.showRowInfo = true;
+      this.showWork = false;
       this.rowInfo = {};
       this.desc = '';
       this.selTags2 = [];
@@ -755,13 +756,13 @@ export class ContentWorkspaceComponent implements OnInit {
     });
   }
 
-  setDefCntntData(){
+  setDefCntntData() {
     this.desc = this.rowInfo.description;
 
-    if(Array.isArray(this.rowInfo.contentTags))
-      this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag,id: tag.tagId }));
-    if(Array.isArray(this.rowInfo.contentLanguages))
-      this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng,id: lng.languageId }));
+    if (Array.isArray(this.rowInfo.contentTags))
+      this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId }));
+    if (Array.isArray(this.rowInfo.contentLanguages))
+      this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng, id: lng.languageId }));
     this.docLoading = false;
   }
 
@@ -788,11 +789,11 @@ export class ContentWorkspaceComponent implements OnInit {
     this.dispSmart = !this.dispSmart;
   }
 
-  iconURLHandler = ($event:any) => {
+  iconURLHandler = ($event: any) => {
     this.iconUrl = '';
-    if($event.value===1){
+    if ($event.value === 1) {
       this.urlForm.removeControl('img');
-    }else if($event.value===2){
+    } else if ($event.value === 2) {
       this.urlForm.addControl('img', new FormControl(''));
       this.urlForm.controls['img'].setValidators([Validators.required]);
     }
@@ -808,7 +809,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   openModal(content: any, isTagReq: boolean = false) {
-    if(isTagReq){
+    if (isTagReq) {
       this.urlForm.reset();
       this.cntntForm.reset();
       this.iconUrl = '';
@@ -843,19 +844,19 @@ export class ContentWorkspaceComponent implements OnInit {
     //   params.isActive = false;
 
     this.cwServ.contentList(params)
-    .subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-        console.log(data, "dadsa")
-        this.cntnts = data.result.results;
-        this.totalCount = data.result.totalCount;
-      } else {
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          console.log(data, "dadsa")
+          this.cntnts = data.result.results;
+          this.totalCount = data.result.totalCount;
+        } else {
+          this.cntnts = [];
+        }
+        this.cntntLoading = false;
+      }, (err: any) => {
         this.cntnts = [];
-      }
-      this.cntntLoading = false;
-    }, (err: any) => {
-      this.cntnts = [];
-      this.cntntLoading = false;
-    });
+        this.cntntLoading = false;
+      });
   }
 
   // list of tags
@@ -894,8 +895,8 @@ export class ContentWorkspaceComponent implements OnInit {
           this.lngs = [];
         }
       }, (err: any) => {
-          console.log(err);
-          this.lngs = [];
+        console.log(err);
+        this.lngs = [];
       });
   }
 
@@ -915,128 +916,128 @@ export class ContentWorkspaceComponent implements OnInit {
     return (tag && tag.id) ? tag.name : '';
   }
 
-  selFromAutoComp(data: any, type:'selTags'|'selTags2'|'selLngs') {
+  selFromAutoComp(data: any, type: 'selTags' | 'selTags2' | 'selLngs') {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this.toastr.clear();
-      this.toastr.info(`This ${type=='selLngs'?'language':'tag'} is already selected`, "Selected");
+      this.toastr.info(`This ${type == 'selLngs' ? 'language' : 'tag'} is already selected`, "Selected");
     } else {
-      if(type==='selLngs')
-        this[type].push({...data,lid:data.id});
+      if (type === 'selLngs')
+        this[type].push({ ...data, lid: data.id });
       else
-        this[type].push({...data,tid:data.id});
+        this[type].push({ ...data, tid: data.id });
     }
   }
 
-  remove(data: any, type:'selTags'|'selTags2'|'selLngs'): void {
+  remove(data: any, type: 'selTags' | 'selTags2' | 'selLngs'): void {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this[type].splice(index, 1);
     }
   }
 
-  onCntntSubmit(){
+  onCntntSubmit() {
     if (this.cntntForm.valid) {
       this.cntntDisb = true;
-      let cntntData:any = {
+      let cntntData: any = {
         content: this.files[0],
         hubId: parseInt(this.hubid),
         isUrl: false
       }
-      if(this.selTags && this.selTags.length>0){
+      if (this.selTags && this.selTags.length > 0) {
         cntntData.ContentTagsString = this.selTags.map((tag: any) => ({ tagId: tag.id }));
         cntntData.ContentTagsString = JSON.stringify(cntntData.ContentTagsString)
       }
       this.cwServ.addContent(cntntData)
-      .subscribe((data: any) => {
-        if (data) {
-          this.toastr.success('Content added successfully', 'Success!');
-          this.files = [];
-          this.dismissModal();
-        } else {
-          this.toastr.error('Unable to add content', 'Error!');
-        }
-        this.cntntDisb = false;
-      }, (err: any) => {
-        this.cntntDisb = false;
-      });
+        .subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Content added successfully', 'Success!');
+            this.files = [];
+            this.dismissModal();
+          } else {
+            this.toastr.error('Unable to add content', 'Error!');
+          }
+          this.cntntDisb = false;
+        }, (err: any) => {
+          this.cntntDisb = false;
+        });
     }
   }
 
-  onUrlSubmit(){
+  onUrlSubmit() {
     if (this.urlForm.valid) {
       this.urlDisb = true;
       //need to check icon type for default icon, for now its skip
-      let cntntData:any = {
+      let cntntData: any = {
         ...this.urlForm.value,
         urlIcon: this.custIcon,
         hubId: parseInt(this.hubid),
         isUrl: true
       }
       delete cntntData.img;
-      if(this.selTags && this.selTags.length>0){
+      if (this.selTags && this.selTags.length > 0) {
         cntntData.ContentTagsString = this.selTags.map((tag: any) => ({ tagId: tag.id }));
         cntntData.ContentTagsString = JSON.stringify(cntntData.ContentTagsString)
       }
       this.cwServ.addContent(cntntData)
-      .subscribe((data: any) => {
-        if (data) {
-          this.toastr.success('Content added successfully', 'Success!');
-          this.files = [];
-          this.dismissModal();
-        } else {
-          this.toastr.error('Unable to add content', 'Error!');
-        }
-        this.urlDisb = false;
-      }, (err: any) => {
-        this.urlDisb = false;
-      });
+        .subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('Content added successfully', 'Success!');
+            this.files = [];
+            this.dismissModal();
+          } else {
+            this.toastr.error('Unable to add content', 'Error!');
+          }
+          this.urlDisb = false;
+        }, (err: any) => {
+          this.urlDisb = false;
+        });
     }
   }
 
-  updContent($event:any, type: number, disbType: 'descDisb'|'tagsDisb'|'lngDisb'){
-    let cntntData:any = {};let str:string='';
-    switch(type){
-      case 1: str='Description';
+  updContent($event: any, type: number, disbType: 'descDisb' | 'tagsDisb' | 'lngDisb') {
+    let cntntData: any = {}; let str: string = '';
+    switch (type) {
+      case 1: str = 'Description';
         cntntData = {
-          description: this.desc,updateType: type
-        };break;
-      case 4: str='Tags';
+          description: this.desc, updateType: type
+        }; break;
+      case 4: str = 'Tags';
         cntntData = {
-          contentTags: [],updateType: type
+          contentTags: [], updateType: type
         };
-        if(this.selTags2 && this.selTags2.length>0){
-          cntntData.contentTags = this.selTags2.map((tag: any) => tag.id );
+        if (this.selTags2 && this.selTags2.length > 0) {
+          cntntData.contentTags = this.selTags2.map((tag: any) => tag.id);
         }
         break;
-      case 3: str='Languages';
+      case 3: str = 'Languages';
         cntntData = {
-          contentLanguages: [],updateType: type
+          contentLanguages: [], updateType: type
         };
-        if(this.selLngs && this.selLngs.length>0){
-          cntntData.contentLanguages = this.selLngs.map((lng: any) => lng.id );
+        if (this.selLngs && this.selLngs.length > 0) {
+          cntntData.contentLanguages = this.selLngs.map((lng: any) => lng.id);
         }
         break;
     }
     cntntData.id = this.rowInfo.id;
-    this[disbType]  = true;
+    this[disbType] = true;
     this.cwServ.updContent(cntntData)
-    .subscribe((data: any) => {
-      if (data) {
-        this.toastr.success(`${str} saved successfully`, 'Success!');
-        switch(type){
-          case 1: this.rowInfo.description = this.desc;break;
-          case 4: this.rowInfo.contentTags = this.selTags2;break;
-          case 3: this.rowInfo.contentLanguages = this.selLngs;break;
+      .subscribe((data: any) => {
+        if (data) {
+          this.toastr.success(`${str} saved successfully`, 'Success!');
+          switch (type) {
+            case 1: this.rowInfo.description = this.desc; break;
+            case 4: this.rowInfo.contentTags = this.selTags2; break;
+            case 3: this.rowInfo.contentLanguages = this.selLngs; break;
+          }
+          this.closeEdit($event);
+        } else {
+          this.toastr.error(`Unable to save ${str.toLowerCase()}`, 'Error!');
         }
-        this.closeEdit($event);
-      } else {
-        this.toastr.error(`Unable to save ${str.toLowerCase()}`, 'Error!');
-      }
-      this[disbType] = false;
-    }, (err: any) => {
-      this[disbType] = false;
-    });
+        this[disbType] = false;
+      }, (err: any) => {
+        this[disbType] = false;
+      });
   }
 
   dismissModal() {
@@ -1057,28 +1058,28 @@ export class ContentWorkspaceComponent implements OnInit {
   // /**
   // * on file drop handler
   // */
-  onFileDropped($event: any, isIcon: boolean = false, type:string='') {
+  onFileDropped($event: any, isIcon: boolean = false, type: string = '') {
     if (!isIcon)
       this.prepareFilesList($event, isIcon);
     else {
-      this.renderImg($event[0],type);
+      this.renderImg($event[0], type);
     }
   }
 
   /**
    * handle file from browsing
    */
-  fileBrowseHandler($event: any, isIcon: boolean = false, type:string='') {
+  fileBrowseHandler($event: any, isIcon: boolean = false, type: string = '') {
     if ($event.target && $event.target.files)
       this.prepareFilesList($event.target.files, isIcon);
     // preview image
     let input = $event.target;
     if (input.files && input.files && isIcon) {
-      this.renderImg(input.files[0],type);
+      this.renderImg(input.files[0], type);
     }
   }
 
-  renderImg(file: any,type:string) {
+  renderImg(file: any, type: string) {
     if (file) {
       let reader = new FileReader();
       reader.onload = (event: any) => {
@@ -1086,7 +1087,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.iconUrl = event.target.result;
       };
       this.custIcon = file;
-      if(type==='urlForm')
+      if (type === 'urlForm')
         this.urlForm.controls['img'].setValue(this.custIcon);
       reader.readAsDataURL(file);
     }
