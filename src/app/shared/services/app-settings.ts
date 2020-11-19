@@ -147,6 +147,9 @@ export class AppSettings {
 
   public static GET_CNTNT = `api/Content/GetById`;
 
+  // Language
+  public static LIST_LNG = `api/Language/GetAll`;
+
   // ---- COLLECTION ---- //
 
   public static LIST_COLCT = `api/Collection/GetAll`;
