@@ -12,7 +12,7 @@ export class CollectionService {
   ) { }
 
   // get collection list
-  colctList(params: any): Observable<any[]> {
+  colctnList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
       if (params[key]) {
@@ -30,17 +30,22 @@ export class CollectionService {
   }
 
   // add collection
-  addColct(data: any) {
+  addColctn(data: any) {
     return this.http.post(`${AppSettings.ADD_COLCT}`, data)
   }
 
   // rename collection
-  renColct(data: any) {
+  renColctn(data: any) {
     return this.http.put(`${AppSettings.REN_COLCT}`, data)
   }
 
   // duplicate collection
-  duplColct(data: any) {
+  duplColctn(data: any) {
     return this.http.patch(`${AppSettings.DUPL_COLCT}`, data)
+  }
+
+  // delete collection
+  delColctn(id: any) {
+    return this.http.patch(`${AppSettings.DEL_COLCT}?id=${id}`, {})
   }
 }

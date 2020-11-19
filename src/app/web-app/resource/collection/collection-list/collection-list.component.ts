@@ -39,6 +39,18 @@ export class CollectionListComponent implements OnInit {
   }
 
   // ***** collection *****
+  // delete collection
+  delColctn(id: any) {
+    this.colctnSrv.delColctn(id).subscribe((data: any) => {
+      // console.log(data);
+      if (data) {
+        this.toastr.success(data.message || 'Collection deleted successfully', 'Success!');
+        this.listColct();
+      }
+    }, (err: any) => {
+
+    });
+  }
   // collection open modal
   colctnModal(modal: any, type: string, colctn?: any) {
     if (type == 'add') {
@@ -77,7 +89,7 @@ export class CollectionListComponent implements OnInit {
 
   // duplicate collection
   duplColct(colctnData: any) {
-    this.colctnSrv.duplColct(colctnData).subscribe((data: any) => {
+    this.colctnSrv.duplColctn(colctnData).subscribe((data: any) => {
       console.log(data);
       if (data) {
         this.toastr.success(data.message || 'Collection renamed successfully', 'Success!');
@@ -93,7 +105,7 @@ export class CollectionListComponent implements OnInit {
 
   // rename collection
   renColct(colctnData: any) {
-    this.colctnSrv.renColct(colctnData).subscribe((data: any) => {
+    this.colctnSrv.renColctn(colctnData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Collection renamed successfully', 'Success!');
         this.listColct();
@@ -108,7 +120,7 @@ export class CollectionListComponent implements OnInit {
 
   // add collection
   addColctn(colctnData: any) {
-    this.colctnSrv.addColct(colctnData).subscribe((data: any) => {
+    this.colctnSrv.addColctn(colctnData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Collection added successfully', 'Success!');
         this.listColct();
@@ -123,7 +135,8 @@ export class CollectionListComponent implements OnInit {
 
   // get collection list
   listColct() {
-    this.colctnSrv.colctList({}).subscribe((data: any) => {
+    this.loading = true;
+    this.colctnSrv.colctnList({}).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.colctnArr = data.result;
       } else {

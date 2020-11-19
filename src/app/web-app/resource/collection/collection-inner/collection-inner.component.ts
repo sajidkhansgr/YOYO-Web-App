@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -8,17 +10,18 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./collection-inner.component.scss']
 })
 export class CollectionInnerComponent implements OnInit {
-  view: boolean = true;
+  view: boolean = true; id!: number; routerSubs!: Subscription;
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
 
-  constructor(private modalService: NgbModal) { }
+  constructor(
+    private modalService: NgbModal,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
-  }
-
-  // switch views
-  switchView = () => {
-    this.view = !this.view;
+    this.routerSubs = this.route.params.subscribe(params => {
+      this.id = params['cid']
+    });
   }
 
   // copy link button
