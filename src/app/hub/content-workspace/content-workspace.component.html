@@ -21,7 +21,7 @@
     </div>
   </div>
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showDoc && !showWork, 'col-md-6': showDoc || showWork}">
+    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo && !showWork, 'col-md-6': showRowInfo || showWork}">
       <div class="card overflow-hidden">
         <div class="card-header border-0">
           <mat-tab-group (selectedTabChange)="onTabChange($event)">
@@ -50,14 +50,15 @@
         </div>
       </div>
     </div>
-    <div class="workspace-container col-md-6" *ngIf="showDoc || showWork">
-      <div class="document" *ngIf="showDoc">
-        <div class="card">
+    <div class="workspace-container col-md-6" *ngIf="showRowInfo || showWork">
+      <div class="document" *ngIf="showRowInfo">
+        <app-loader [type]="'page'" *ngIf="docLoading"></app-loader>
+        <div class="card"  *ngIf="!docLoading">
           <div class="card-header row m-0">
-            <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">Group Stock Position - Regional Offices.pdf
+            <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">{{rowInfo.name}}
             </h5>
             <div class="mr-2 col-1 ml-auto">
-              <div class="btn btn-light" (click)="closeWorkspace()">
+              <div class="btn btn-light" (click)="closeDoc()">
                 <i class="fas fa-times"></i>
               </div>
             </div>
@@ -69,28 +70,26 @@
               </div>
               <div class="col-6 align-self-center text-hi-dark work-div dark-bg-hover rounded p-2">
                 <h6 class="font-weight-bold">
-                  DESCRIPTION
+                  Description
                   <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
                     <i class=" fas fa-edit"></i>
                   </a>
                 </h6>
                 <div class="view">
-                  <P class="disc-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto
-                    cupiditate
-                    sequi
-                    accusantium
-                    temporibus necessitatibus, deserunt provid</P>
+                  <p class="disc-text">{{rowInfo.description||'No Description'}}</p>
                 </div>
                 <div class="edit" style="display: none;">
-                  <form>
+                  <div>
                     <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
-                      <input matInput placeholder="Description" class="ml-0">
+                      <input matInput placeholder="Description" [(ngModel)]="desc" name="desc" class="ml-0">
                     </mat-form-field>
                     <div class="form-group text-right">
-                      <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                      <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                      <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                      <button class="btn btn-primary btn-sm" [disabled]="descDisb" (click)="updContent($event, 1,'descDisb')">
+                        <app-loader [type]="'btn'" *ngIf="descDisb"></app-loader>Submit
+                      </button>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -106,18 +105,37 @@
                         </a>
                       </div>
                       <div class="view">
-                        <span class="badge badge-light text-success">Stock</span>
+                        <div *ngIf="rowInfo.contentTags && rowInfo.contentTags.length>0 else noCntntTag">
+                          <span *ngFor="let tg of rowInfo.contentTags" class="badge badge-light text-success">{{tg.tagId}}</span>
+                        </div>
+                        <ng-template #noCntntTag>
+                          <div class="text-hi-dark-grey">No Tags</div>
+                        </ng-template>
                       </div>
                       <div class="edit" style="display: none;">
-                        <form>
-                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
-                            <input matInput placeholder="Tags" class="ml-0">
+                        <div>
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white">
+                            <mat-chip-list aria-label="Select tags">
+                              <mat-chip *ngFor="let d of selTags2" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selTags2')">
+                                {{d.name}}
+                                <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+                              </mat-chip>
+                              <input matInput placeholder="Select tags" [matAutocomplete]="autoT">
+                            </mat-chip-list>
+                            <mat-autocomplete #autoT="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags2')"
+                              [displayWith]="displayFn">
+                              <mat-option *ngFor="let tag of tags" [value]="tag">
+                                {{tag.name}}
+                              </mat-option>
+                            </mat-autocomplete>
                           </mat-form-field>
                           <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                            <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                            <button class="btn btn-primary btn-sm" [disabled]="tagsDisb" (click)="updContent($event, 4,'tagsDisb')">
+                              <app-loader [type]="'btn'" *ngIf="tagsDisb"></app-loader>Submit
+                            </button>
                           </div>
-                        </form>
+                        </div>
                       </div>
                     </div>
                     <div class="row mt-3 mx-0">
@@ -134,15 +152,15 @@
                           </div>
                         </div>
                         <div class="edit" style="display: none;">
-                          <form>
+                          <div>
                             <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                               <input matInput placeholder="Author" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                              <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-primary btn-sm">Submit</button>
                             </div>
-                          </form>
+                          </div>
                         </div>
                       </div>
                       <div class="availibility col-6 work-div dark-bg-hover rounded p-2">
@@ -159,7 +177,7 @@
                           </div>
                         </div>
                         <div class="edit" style="display: none;">
-                          <form>
+                          <div>
                             <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                               <input matInput placeholder="Released" class="ml-0">
                             </mat-form-field>
@@ -167,10 +185,10 @@
                               <input matInput placeholder="Expired" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                              <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-primary btn-sm">Submit</button>
                             </div>
-                          </form>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -182,18 +200,36 @@
                         </a>
                       </div>
                       <div class="view">
-                        <div class="text-hi-dark-grey">No Language</div>
+                        <div *ngIf="rowInfo.contentLanguages && rowInfo.contentLanguages.length>0 else noCntntLng">
+                          <span *ngFor="let lng of rowInfo.contentLanguages" class="badge badge-light text-success">{{lng.languageId}}</span>
+                        </div>
+                        <ng-template #noCntntLng>
+                          <div class="text-hi-dark-grey">No Languages</div></ng-template>
                       </div>
                       <div class="edit" style="display: none;">
-                        <form>
-                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
-                            <input matInput placeholder="Language" class="ml-0">
+                        <div>
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white">
+                            <mat-chip-list aria-label="Select Languages">
+                              <mat-chip *ngFor="let d of selLngs" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selLngs')">
+                                {{d.name}}
+                                <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+                              </mat-chip>
+                              <input matInput placeholder="Select Languages" [matAutocomplete]="autoL">
+                            </mat-chip-list>
+                            <mat-autocomplete #autoL="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selLngs')"
+                              [displayWith]="displayFn">
+                              <mat-option *ngFor="let lng of lngs" [value]="lng">
+                                {{lng.name}}
+                              </mat-option>
+                            </mat-autocomplete>
                           </mat-form-field>
                           <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                            <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                            <button class="btn btn-primary btn-sm" [disabled]="lngDisb" (click)="updContent($event, 3,'lngDisb')">
+                              <app-loader [type]="'btn'" *ngIf="lngDisb"></app-loader>Submit
+                            </button>
                           </div>
-                        </form>
+                        </div>
                       </div>
                     </div>
                     <div class="country work-div dark-bg-hover rounded p-2">
@@ -207,15 +243,15 @@
                         <div class="text-hi-dark-grey">No Country</div>
                       </div>
                       <div class="edit" style="display: none;">
-                        <form>
+                        <div>
                           <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                             <input matInput placeholder="Country" class="ml-0">
                           </mat-form-field>
                           <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                            <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                            <button class="btn btn-primary btn-sm">Submit</button>
                           </div>
-                        </form>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -357,7 +393,7 @@
               </div>
             </div>
             <div class="ml-auto mr-2">
-              <div class="btn btn-light" (click)="closeWorkspace()">
+              <div class="btn btn-light" (click)="closeDoc()">
                 <i class="fas fa-times"></i>
               </div>
             </div>
@@ -646,7 +682,7 @@
 <ng-template #cntntTable>
   <div *ngIf="!cntntLoading">
     <div class="card-text px-3">
-      <table class="table table-hover text-dark w-100" [class.hide-rows]="showDoc || showWork" *ngIf="view">
+      <table class="table table-hover text-dark w-100" [class.hide-rows]="showRowInfo || showWork" *ngIf="view">
         <thead>
           <tr>
             <th class="curs-ptr" *ngFor="let col of cols">
@@ -662,7 +698,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- <tr (click)="documentToggle()">
+          <!-- <tr (click)="toggleInfo()">
             <td>
               Group Stock Position - Regional Offices<br />
               <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
@@ -672,24 +708,25 @@
             <td>19 Aug 2020</td>
             <td class="text-hi-dark-grey">Andrea D'Souza</td>
           </tr> -->
-          <tr *ngFor="let d of data" (click)="documentToggle()">
+          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)">
             <td *ngFor="let col of cols">
               <span *ngIf="col.key=='name' else otherRow">
-                {{d.name}}
+                {{cntnt.name}}
               </span>
-              <ng-template #otherRow>{{d[col.key]}}</ng-template>
+              <ng-template #otherRow>{{cntnt[col.key]}}</ng-template>
             </td>
           </tr>
         </tbody>
       </table>
       <div class="row justify-content-between" *ngIf="!view">
-        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-0" *ngFor="let d of data" (click)="documentToggle()" style="max-width:400px;">
+        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-0" *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)"
+            style="max-width:400px;" [ngClass]="{'fa-angle-up':(rowInfo.id === cntnt.id)}">
           <img src="assets/images/discription.png" style="max-height:200px;">
-          <div class="name bg-hi-grey rounded w-75 mx-auto px-2">{{d.name}}</div>
+          <div class="name bg-hi-grey rounded w-75 mx-auto px-2">{{cntnt.name}}</div>
         </div>
       </div>
     </div>
-    <app-pagination [pageSize]="pageSize" [totalCount]="2" [page]="1"
+    <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
       (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
   </div>
 </ng-template>
@@ -734,19 +771,19 @@
       <div class="w-100 dark-bg-hover p-2 rounded" (click)="showPropsSection()">
         Properties
         <div class="float-right">
-          <i class="fa fa-angle-up" [ngClass]="{'fa-angle-up': !dispPropsSec,'fa-angle-down': dispPropsSec}"></i>
+          <i class="fa" [ngClass]="{'fa-angle-up': !dispPropsSec,'fa-angle-down': dispPropsSec}"></i>
         </div>
       </div>
       <div class="mt-2" *ngIf="dispPropsSec">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-chip-list #chipList1 aria-label="Select tags">
-            <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable" (removed)="remove(d)">
+          <mat-chip-list aria-label="Select tags">
+            <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selTags')">
               {{d.name}}
               <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
             </mat-chip>
             <input matInput formControlName="tags" placeholder="Select tags" [matAutocomplete]="auto">
           </mat-chip-list>
-          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value)" [displayWith]="displayFn">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags')" [displayWith]="displayFn">
             <mat-option *ngFor="let tag of tags" [value]="tag">
               {{tag.name}}
             </mat-option>
@@ -815,14 +852,14 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
-        <mat-chip-list #chipList1 aria-label="Select tags">
-          <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable" (removed)="remove(d)">
+        <mat-chip-list aria-label="Select tags">
+          <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selTags')">
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
           <input matInput formControlName="tags" placeholder="Select tags" [matAutocomplete]="auto">
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value)" [displayWith]="displayFn">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags')" [displayWith]="displayFn">
           <mat-option *ngFor="let tag of tags" [value]="tag">
             {{tag.name}}
           </mat-option>

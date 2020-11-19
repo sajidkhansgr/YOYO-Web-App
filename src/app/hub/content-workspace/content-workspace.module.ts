@@ -22,6 +22,7 @@ import { PaginationModule } from '../../shared/components/pagination/pagination.
 import { ContentWorkspaceComponent } from './content-workspace.component';
 import { ContentWorkspaceService } from './content-workspace.service';
 import { TagsService } from '../tags/tags.service';
+import { LanguageService } from '../../shared/services/language.service';
 
 @NgModule({
   declarations: [ContentWorkspaceComponent],
@@ -40,6 +41,6 @@ import { TagsService } from '../tags/tags.service';
   exports: [
     ContentWorkspaceComponent
   ],
-  providers: [ContentWorkspaceService, TagsService],
+  providers: [ContentWorkspaceService, TagsService, LanguageService],
 })
 export class ContentWorkspaceModule { }

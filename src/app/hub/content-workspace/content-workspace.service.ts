@@ -167,7 +167,13 @@ export class ContentWorkspaceService {
   }
 
   updContent(data: any) {
-    return this.http.put(`${AppSettings.UPD_CNTNT}`, data)
+    return this.http.post(`${AppSettings.UPD_CNTNT}`, data)
+  }
+
+  viewContent(id: string) {
+    return this.http.get(`${AppSettings.GET_CNTNT}`, {
+      params: { id }
+    });
   }
 
 

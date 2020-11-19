@@ -13,10 +13,11 @@ import { Workspace } from '../../shared/models/workspace';
 import { Folder } from '../../shared/models/folder';
 import { Tag } from '../../shared/models/tag';
 import { Content } from '../../shared/models/content';
+import { Language } from '../../shared/models/language';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ContentWorkspaceService } from './content-workspace.service';
 import { TagsService } from '../tags/tags.service';
-
+import { LanguageService } from '../../shared/services/language.service';
 
 @Component({
   selector: 'app-content-workspace',
@@ -24,7 +25,7 @@ import { TagsService } from '../tags/tags.service';
   styleUrls: ['./content-workspace.component.scss']
 })
 export class ContentWorkspaceComponent implements OnInit {
-  showWork!: boolean; showDoc!: boolean;
+  showWork!: boolean;
   @Input() hubid: any; routerSubs!: Subscription;
   addURLIcon!: string; iconUrl!: any;
   defIcon: any = DEF_ICON; custIcon: any; files!: any[];
@@ -43,11 +44,17 @@ export class ContentWorkspaceComponent implements OnInit {
   edit!: boolean | undefined;
   activeFldrs!: number; isActiveFldrs!: boolean;
 
-  tags!: Tag[];selTags:Tag[] =[];cntnts!: Content[];
+  tags!: Tag[];selTags:Tag[] =[]; selTags2:Tag[] =[];//using in selTags add and selTags2 form
+  cntnts!: any[];totalCount!: number;sort: any = {};searchTxt!: string;
   selectable = true; removable: boolean = true;
   urlDisb!: boolean;
   cntntDisb!: boolean; cntntLoading!: boolean;activeIndex: number = 0;
   pageNo!: number; pageSize!: number;  @Input() lmtPage: any;
+  showRowInfo!: boolean;rowInfo!:any;docLoading!: boolean;
+  desc!:string;
+
+  descDisb!:boolean;tagsDisb!:boolean;availDisb!:boolean;lngDisb!: boolean;
+  lngs!: Language[];selLngs:Language[] =[];
 
   constructor(
     // private route: ActivatedRoute,
@@ -56,11 +63,14 @@ export class ContentWorkspaceComponent implements OnInit {
     private fb: FormBuilder,
     private toastr: ToastrService,
     private dialog: MatDialog,
-    private tagServ: TagsService
+    private tagServ: TagsService,
+    private lngServ: LanguageService
   ) { }
 
   ngOnInit(): void {
     this.initialiseState(); // reset and set based on new parameter this time
+    this.getTags();
+    this.getLangs();
     this.cntntList()
   }
 
@@ -68,7 +78,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.files = []; this.addURLIcon = ''; this.iconUrl = '';
     this.dispGnrl = true; this.dispSettings = true; this.dispSmart = false;
     this.dispPropsSec = true; this.dispSmFolderSec = true;
-    this.custIcon = undefined; this.showWork = false; this.showDoc = false;
+    this.custIcon = undefined; this.showWork = false;
     this.wrkspcs = []; this.selWrkspc = undefined;
     this.wrkspcLoading = true; this.folderLoading = true;
     this.addWrkspcForm = this.fb.group({
@@ -98,20 +108,20 @@ export class ContentWorkspaceComponent implements OnInit {
     this.hidCols = [{ n: "Property", key: "prop", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, },
     { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }];
     this.cols = [{ n: "Name", dir: 1, key: "name" }, { n: "Role", key: "role", dir: 1, }];
-    this.data = [
-      { name: "test", date: "19 Aug 2020", date2: "19 Aug 2020", role: "User" },
-      { name: "tes1t", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U1ser" },
-      { name: "tes2t", date: "19 1Aug 2020", date2: "19 Aug1 2020", role: "U2ser" }
-    ];
     this.props = PRPS;
     this.view = true;
     this.edit = false;
     this.activeFldrs = 1; this.isActiveFldrs = true;
-
+    this.showRowInfo = false;this.rowInfo = {};this.docLoading = false;
     this.pageSize = this.lmtPage[0]; this.pageNo = 1;
     this.cntntDisb = false;
+    this.totalCount = 0;
     this.cntntLoading = true; //use in cntnt listing
     this.urlDisb = false;
+    this.descDisb = false; //used in update
+    this.tagsDisb = false; //used in update
+    this.availDisb = false; //used in update
+    this.lngDisb = false; //used in update
     this.cntntForm = this.fb.group({
       img: [''],
       tags: ['']
@@ -706,20 +716,53 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // toggle workspace
   workspaceToggle = () => {
-    this.showDoc = false;
+    this.showRowInfo = false;
     this.showWork = !this.showWork;
   }
 
-  // document toggle
-  documentToggle = () => {
-    this.showWork = false;
-    this.showDoc = !this.showDoc;
+  // content toggle
+  toggleInfo = (row: any) => {
+    if (this.showRowInfo && this.rowInfo.id == row.id) {
+      this.closeDoc();
+    } else {
+      this.showRowInfo = true;
+      this.rowInfo = {};
+      this.desc = '';
+      this.selTags2 = [];
+      this.selLngs = [];
+      this.getCntnt(row);
+    }
   }
 
-  // close button on workspace
-  closeWorkspace = () => {
+  closeDoc = () => {
+    this.showRowInfo = false;
     this.showWork = false;
-    this.showDoc = false;
+    this.rowInfo = {};
+  }
+
+  getCntnt(cntnt: Content) {
+    this.docLoading = true;
+    this.cwServ.viewContent(cntnt!.id.toString()).subscribe((data: any) => {
+      if (data && data.result && data.result.id) {
+        this.rowInfo = data.result;
+      } else {
+        this.rowInfo = cntnt;
+      }
+      this.setDefCntntData();
+    }, (err: any) => {
+      this.rowInfo = cntnt;
+      this.setDefCntntData();
+    });
+  }
+
+  setDefCntntData(){
+    this.desc = this.rowInfo.description;
+
+    if(Array.isArray(this.rowInfo.contentTags))
+      this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag,id: tag.tagId }));
+    if(Array.isArray(this.rowInfo.contentLanguages))
+      this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng,id: lng.languageId }));
+    this.docLoading = false;
   }
 
   // edit options in documents (workspace)
@@ -789,7 +832,10 @@ export class ContentWorkspaceComponent implements OnInit {
   cntntList() {
     this.cntntLoading = true;
     let params = {
-      hubId: parseInt(this.hubid)
+      pageNo: this.pageNo, pageSize: this.pageSize,
+      searchText: this.searchTxt,
+      ...this.sort
+      // hubId: parseInt(this.hubid)
     };
     // if (this.activeIndex == 1)
     //   params.isActive = true;
@@ -799,7 +845,9 @@ export class ContentWorkspaceComponent implements OnInit {
     this.cwServ.contentList(params)
     .subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        console.log(data, "dadsa")
         this.cntnts = data.result.results;
+        this.totalCount = data.result.totalCount;
       } else {
         this.cntnts = [];
       }
@@ -834,6 +882,23 @@ export class ContentWorkspaceComponent implements OnInit {
       });
   }
 
+  // list of languages
+  getLangs() {
+    this.lngs = [];
+    this.selLngs = [];
+    this.lngServ.lngList({})
+      .subscribe((data: any) => {
+        if (data && Array.isArray(data.result) && data.result.length > 0) {
+          this.lngs = data.result;
+        } else {
+          this.lngs = [];
+        }
+      }, (err: any) => {
+          console.log(err);
+          this.lngs = [];
+      });
+  }
+
   // when changing page size
   pageSizeChange(pageSize: number) {
     this.pageSize = pageSize;
@@ -850,20 +915,23 @@ export class ContentWorkspaceComponent implements OnInit {
     return (tag && tag.id) ? tag.name : '';
   }
 
-  selFromAutoComp(data: any) {
-    const index = this.selTags.findIndex((ele: any) => ele.id == data.id);
+  selFromAutoComp(data: any, type:'selTags'|'selTags2'|'selLngs') {
+    const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this.toastr.clear();
-      this.toastr.info("This tag is already selected", "Selected");
+      this.toastr.info(`This ${type=='selLngs'?'language':'tag'} is already selected`, "Selected");
     } else {
-      this.selTags.push(data);
+      if(type==='selLngs')
+        this[type].push({...data,lid:data.id});
+      else
+        this[type].push({...data,tid:data.id});
     }
   }
 
-  remove(data: any): void {
-    const index = this.selTags.findIndex((ele: any) => ele.id == data.id);
+  remove(data: any, type:'selTags'|'selTags2'|'selLngs'): void {
+    const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
-      this.selTags.splice(index, 1);
+      this[type].splice(index, 1);
     }
   }
 
@@ -924,6 +992,51 @@ export class ContentWorkspaceComponent implements OnInit {
         this.urlDisb = false;
       });
     }
+  }
+
+  updContent($event:any, type: number, disbType: 'descDisb'|'tagsDisb'|'lngDisb'){
+    let cntntData:any = {};let str:string='';
+    switch(type){
+      case 1: str='Description';
+        cntntData = {
+          description: this.desc,updateType: type
+        };break;
+      case 4: str='Tags';
+        cntntData = {
+          contentTags: [],updateType: type
+        };
+        if(this.selTags2 && this.selTags2.length>0){
+          cntntData.contentTags = this.selTags2.map((tag: any) => tag.id );
+        }
+        break;
+      case 3: str='Languages';
+        cntntData = {
+          contentLanguages: [],updateType: type
+        };
+        if(this.selLngs && this.selLngs.length>0){
+          cntntData.contentLanguages = this.selLngs.map((lng: any) => lng.id );
+        }
+        break;
+    }
+    cntntData.id = this.rowInfo.id;
+    this[disbType]  = true;
+    this.cwServ.updContent(cntntData)
+    .subscribe((data: any) => {
+      if (data) {
+        this.toastr.success(`${str} saved successfully`, 'Success!');
+        switch(type){
+          case 1: this.rowInfo.description = this.desc;break;
+          case 4: this.rowInfo.contentTags = this.selTags2;break;
+          case 3: this.rowInfo.contentLanguages = this.selLngs;break;
+        }
+        this.closeEdit($event);
+      } else {
+        this.toastr.error(`Unable to save ${str.toLowerCase()}`, 'Error!');
+      }
+      this[disbType] = false;
+    }, (err: any) => {
+      this[disbType] = false;
+    });
   }
 
   dismissModal() {
