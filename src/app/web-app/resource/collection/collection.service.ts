@@ -10,7 +10,13 @@ export class CollectionService {
   constructor(
     private http: HttpClient
   ) { }
+  // ---- content ---- //
+  //  get content by collection id
+  getContentColctn(id: any) {
+    return this.http.get(`${AppSettings.GET_CONTENT_COLCT}?id=${id}`);
+  }
 
+  // ---- collection ---- //
   // get collection list
   colctnList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();

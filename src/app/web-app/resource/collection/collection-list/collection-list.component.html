@@ -4,7 +4,7 @@
     Collections
     <div class="float-right">
       <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
-        (click)="this.view = !this.view;" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
+        (click)="view = !view;" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
       <button class="btn btn-primary mb-2" (click)="colctnModal(collection, 'add')">New Collection</button>
     </div>
   </h3>

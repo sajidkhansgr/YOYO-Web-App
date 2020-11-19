@@ -22,6 +22,7 @@ export class CollectionInnerComponent implements OnInit {
   selColctn: any;
   colctnForm!: FormGroup;
   multiForm!: number;
+  contentArr!: any[];
 
   constructor(
     private modalService: NgbModal,
@@ -48,6 +49,22 @@ export class CollectionInnerComponent implements OnInit {
       name: ['', [Validators.required]]
     });
     this.multiForm = 0;
+    this.contentArr = [];
+  }
+
+  // ***** content *****
+  // get content by collection
+  getContentColctn() {
+    this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+        this.contentArr = data.result;
+      } else {
+        this.contentArr = [];
+      }
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+    });
   }
 
   // ***** collection *****
@@ -157,7 +174,7 @@ export class CollectionInnerComponent implements OnInit {
     this.colctnSrv.getColctn(this.id).subscribe((data: any) => {
       if (data && data.result) {
         this.selColctn = data.result;
-        this.loading = false;
+        this.getContentColctn();
       } else {
         this.router.navigate(['/web-app/resource/collections']);
       }

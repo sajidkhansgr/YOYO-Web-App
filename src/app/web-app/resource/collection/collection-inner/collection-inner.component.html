@@ -38,7 +38,7 @@
     </div>
   </h3>
   <div class="mt-2 row my-files" *ngIf="view">
-    <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let t of testArr">
+    <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let content of contentArr">
       <div class="card curs-ptr">
         <div class="card-body">
           <div class="imagePreview text-center">
@@ -70,9 +70,9 @@
           </div>
         </div>
         <div class="card-footer">
-          <div class="name">Test</div>
+          <div class="name">{{content.name}}</div>
           <div class="float-left text-secondary d-flex">
-            <div class="date">Oct 10, 2020</div>
+            <div class="date">{{content.updatedDate.split('T')[0]}}</div>
             <div class="mx-2">l</div>
             <div class="items">3 Items</div>
           </div>
