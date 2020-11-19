@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { LMT_PAGE } from '../shared/constants';
 import { HubService } from './hub.service';
 import { Hub } from '../shared/models/hub';
 @Component({
@@ -15,9 +16,9 @@ import { Hub } from '../shared/models/hub';
 })
 export class HubComponent implements OnInit {
   id!: string; routerSubs!: Subscription;
-  arr!: Array<number>; activeIndex!: number;
+  activeIndex!: number;
   hubInfo!: Hub | null; disabled!: boolean;
-  loading!: boolean;
+  loading!: boolean;lmtPage: Array<number> = LMT_PAGE;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -33,11 +34,9 @@ export class HubComponent implements OnInit {
   }
 
   initialiseState() {
-    this.arr = [];
     this.disabled = true; this.hubInfo = null;
     this.getHub();
     setTimeout(() => {
-      this.arr.push(0);
       this.activeIndex = 0;
       this.disabled = false;
     }, 900)
@@ -62,10 +61,6 @@ export class HubComponent implements OnInit {
 
   onTabChange = (event: any) => {
     this.activeIndex = event.index;
-    if (this.arr.indexOf(event.index) === -1) {
-      this.arr.push(event.index);
-    } else {
-    }
   }
 
   ngOnDestroy(): void {

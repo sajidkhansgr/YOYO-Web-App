@@ -2,14 +2,18 @@
 <div class="content-workspace">
   <div class="buttons-row row mt-3 justify-content-between mx-2">
     <div class="dropdown">
-      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addCOntentDD" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addContentDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Add Content
       </button>
-      <div class="dropdown-menu" aria-labelledby="addCOntentDD">
-        <a class="dropdown-item curs-ptr" (click)="openModal(uploadFile)"><i class="fas fa-file-alt mr-1"></i>Upload
-          Files</a>
-        <a class="dropdown-item curs-ptr" (click)="openModal(addUrl)"><i class="fas fa-link mr-1"></i>Add a URL</a>
+      <div class="dropdown-menu" aria-labelledby="addContentDD">
+        <a class="dropdown-item curs-ptr" (click)="openModal(uploadFile, true)">
+          <i class="fas fa-file-alt mr-1"></i>
+          Upload Files
+        </a>
+        <a class="dropdown-item curs-ptr" (click)="openModal(addUrl, true)">
+          <i class="fas fa-link mr-1"></i>
+          Add a URL
+        </a>
       </div>
     </div>
     <div class="btn btn-primary btn-sm float" (click)="workspaceToggle()">
@@ -20,251 +24,28 @@
     <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showDoc && !showWork, 'col-md-6': showDoc || showWork}">
       <div class="card overflow-hidden">
         <div class="card-header border-0">
-          <mat-tab-group>
+          <mat-tab-group (selectedTabChange)="onTabChange($event)">
             <mat-tab label="All">
               <div class="card-body bg-white rounded-bottom px-0 pb-0">
-                <h5 class="card-title px-3">
-                  <div class="heading">
-                    <div class="float-right row mx-0">
-                      <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle mr-2" id="fileDD" data-toggle="dropdown">
-                          <i class="fas fa-cog"></i>
-                        </button>
-                        <div class="cog dropdown-menu dropdown-menu-right pt-0 overflow-hidden" aria-labelledby="fileDD"
-                          (click)="$event.stopPropagation();">
-                          <div class="scrollable py-2">
-                            <span class="ml-2 heading">Visible Columns</span>
-                            <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols"
-                              class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]"
-                              (cdkDropListDropped)="drop($event)">
-                              <button class="dropdown-item pl-2" *ngFor="let col of visbCols;let i=index" cdkDrag>
-                                <span class="ellipsis mr-2">
-                                  <i class="fa fa-ellipsis-v"></i>
-                                  <i class="fa fa-ellipsis-v"></i>
-                                </span>
-                                <i class="text-primary fas fa-eye mr-2"
-                                  (click)="showHideCols(col,'hide',i)"></i>{{col.n}}
-                              </button>
-                              <span *ngIf="visbCols.length==0" class="ml-4 text-secondary">
-                                No visbible columns
-                              </span>
-                            </ul>
-                            <span class="ml-2 heading">Hidden Columns</span>
-                            <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList" [cdkDropListData]="hidCols"
-                              class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]"
-                              (cdkDropListDropped)="drop($event)">
-                              <button class="dropdown-item pl-2" *ngFor="let col of hidCols;let i=index" cdkDrag>
-                                <span class="ellipsis mr-2 mb-1">
-                                  <i class="fa fa-ellipsis-v"></i>
-                                  <i class="fa fa-ellipsis-v"></i>
-                                </span>
-                                <i class="fas fa-eye-slash mr-2" (click)="showHideCols(col,'show',i)"></i>{{col.n}}
-                              </button>
-                              <span *ngIf="hidCols.length==0" class="ml-4 text-secondary">
-                                No hidden columns
-                              </span>
-                            </ul>
-                          </div>
-                          <hr class="mb-2 mt-0">
-                          <div class="float-right mr-2">
-                            <button class="btn btn-secondary btn-sm mr-2"
-                              (click)="closeDropdown($event)">Cancel</button>
-                            <button class="btn btn-primary btn-sm" (click)="saveHdrChngs($event)">Save</button>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="btn btn-light" (click)="view = !view">
-                        <i class="fa" [ngClass]="{'fa-th-large': view, 'fa-list-ul' : !view}"></i>
-                      </div>
-                    </div>
-                    <div class="row mx-0 mb-3">
-                      <div class="dropdown mr-2 mb-1">
-                        <button class="btn btn-light dropdown-toggle" id="fileDD" data-toggle="dropdown">
-                          File Type
-                        </button>
-                        <div class="dropdown-menu" style="width:12rem;" aria-labelledby="fileDD"
-                          (click)="$event.stopPropagation();">
-                          <mat-checkbox class="dropdown-item">Audio</mat-checkbox>
-                          <mat-checkbox class="dropdown-item">Document</mat-checkbox>
-                          <mat-checkbox class="dropdown-item">HTML Content</mat-checkbox>
-                          <mat-checkbox class="dropdown-item">Photo</mat-checkbox>
-                          <mat-checkbox class="dropdown-item">URL</mat-checkbox>
-                          <mat-checkbox class="dropdown-item">Video</mat-checkbox>
-                        </div>
-                      </div>
-                      <div class="dropdown mr-2 mb-1">
-                        <button class="btn btn-light dropdown-toggle" id="propDD" data-toggle="dropdown">
-                          Property
-                        </button>
-                        <div class="dropdown-menu" #propertyDropDown style="width:18.5rem;" aria-labelledby="propDD"
-                          (click)="$event.stopPropagation();">
-                          <mat-checkbox class="dropdown-item" *ngFor="let p of props" [attr.id]="p.id">{{p.name}}
-                          </mat-checkbox>
-                        </div>
-                      </div>
-                      <div class="dropdown mr-2 mb-1">
-                        <button class="btn btn-light dropdown-toggle" id="tagsDD" data-toggle="dropdown">
-                          Tags
-                        </button>
-                        <div class="dropdown-menu" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD"
-                          (click)="$event.stopPropagation();">
-                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                            <mat-label>Match ALL of theese tags</mat-label>
-                            <input matInput placeholder="Match ALL of theese tags">
-                          </mat-form-field>
-                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                            <mat-label>Match ANY of theese tags</mat-label>
-                            <input matInput placeholder="Match ANY of theese tags">
-                          </mat-form-field>
-                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                            <mat-label>Match NONE of theese tags</mat-label>
-                            <input matInput placeholder="Match NONE of theese tags">
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="dropdown mr-2 mb-1">
-                        <button class="btn btn-light dropdown-toggle" id="localeDD" data-toggle="dropdown">
-                          Locale
-                        </button>
-                        <div class="dropdown-menu" #localeDropDown style="width:18rem;" aria-labelledby="localeDD"
-                          (click)="$event.stopPropagation();">
-                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                            <mat-label>Match ALL of these languages</mat-label>
-                            <input matInput placeholder="Match ALL of these languages" class="bg-white">
-                          </mat-form-field>
-                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                            <mat-label>Match ANY of these languages</mat-label>
-                            <input matInput placeholder="Match ANY of these languages">
-                          </mat-form-field>
-                          <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                            <mat-label>Match NONE of theese languages</mat-label>
-                            <input matInput placeholder="Match NONE of theese languages">
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="dropdown mb-1">
-                        <button class="btn btn-light dropdown-toggle" id="authorDD" data-toggle="dropdown">
-                          Author
-                        </button>
-                        <div class="dropdown-menu" #authorDropDown style="width:18rem;" aria-labelledby="authorDD"
-                          (click)="$event.stopPropagation();">
-                          <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
-                            [floatLabel]="'never'">
-                            <i matPrefix class="fas fa-search"></i>
-                            <input matInput placeholder="Search ...">
-                          </mat-form-field>
-                          <div class="dropdown-divider"></div>
-                          <div class="row justify-content-around m-0">
-                            <button class="btn btn-light text-primary">Select all</button>
-                            <button class="btn btn-light">Clear all</button>
-                          </div>
-                          <div class="dropdown-divider"></div>
-                          <div style="max-height: 200px; overflow-y: auto;">
-                            <mat-checkbox class="dropdown-item">ABC (you)</mat-checkbox>
-                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                            <mat-checkbox class="dropdown-item">def</mat-checkbox>
-                          </div>
-                          <hr class="mb-2">
-                          <div class="float-right mr-2">
-                            <button class="btn btn-secondary btn-sm mr-2"
-                              (click)="closeDropdown($event)">Cancel</button>
-                            <button class="btn btn-primary btn-sm">Save</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="search">
-                      <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
-                        <i matPrefix class="fas fa-search"></i>
-                        <input matInput placeholder="Search ...">
-                        <!-- <div matSuffix class="curs-ptr">
-                          <i class="fas fa-sliders-h"></i>
-                        </div> -->
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </h5>
-                <div class="card-text px-3">
-                  <table class="table table-hover text-dark w-100" [class.hide-rows]="showDoc || showWork" *ngIf="view">
-                    <thead>
-                      <tr>
-                        <th class="curs-ptr" *ngFor="let col of cols">
-                          {{col.n}}<i class="fas ml-1"
-                            [ngClass]="{'fa-sort-down align-top': col.dir==1, 'fa-sort-up align-bottom': col.dir==0}"></i>
-                        </th>
-                        <!-- <th scope="col" class="curs-ptr">Name<i class="fas fa-sort-down ml-1 align-top"></i>
-                        </th>
-                        <th scope="col" class="curs-ptr">Size<i class="fas fa-sort-down ml-1 align-top"></i>
-                        </th>
-                        <th scope="col" class="curs-ptr">Added<i class="fas fa-sort-down ml-1 align-top"></i>
-                        </th>
-                        <th scope="col" class="curs-ptr">Authors<i class="fas fa-sort-down ml-1 align-top"></i></th> -->
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <!-- <tr (click)="documentToggle()">
-                        <td>
-                          Group Stock Position - Regional Offices<br />
-                          <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
-                          <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
-                        </td>
-                        <td class="text-hi-dark-grey">790 KB</td>
-                        <td>19 Aug 2020</td>
-                        <td class="text-hi-dark-grey">Andrea D'Souza</td>
-                      </tr> -->
-                      <tr *ngFor="let d of data" (click)="documentToggle()">
-                        <td *ngFor="let col of cols">
-                          <span *ngIf="col.key=='name' else otherRow">
-                            {{d.name}}
-                          </span>
-                          <ng-template #otherRow>{{d[col.key]}}</ng-template>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="row justify-content-between" *ngIf="!view">
-                    <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-0" *ngFor="let d of data"
-                      (click)="documentToggle()" style="max-width:400px;">
-                      <img src="assets/images/discription.png" style="max-height:200px;">
-                      <div class="name bg-hi-grey rounded w-75 mx-auto px-2">{{d.name}}</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-footer row justify-content-between mx-0">
-                  <div class="pages">
-                    <mat-form-field appearance="outline" class="mr-2">
-                      <mat-select>
-                        <mat-option hidden></mat-option>
-                        <mat-option value="10">10</mat-option>
-                        <mat-option value="10">20</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                    <span>Showing 1-10 of 100 </span>
-                  </div>
-                  <ul class="pagination">
-                    <li class="page-item disabled">
-                      <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true"><i
-                          class="fas fa-chevron-left"></i></a>
-                    </li>
-                    <li class="page-item active"><a class="page-link bg-hi-grey" href="javascript:void(0)">1</a>
-                    </li>
-                    <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">2</a>
-                    </li>
-                    <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">3</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link bg-hi-grey" href="javascript:void(0)"><i class="fas fa-chevron-right"></i></a>
-                    </li>
-                  </ul>
-                </div>
+                <ng-container *ngTemplateOutlet="srcHdrTxt"></ng-container>
+                <app-loader [type]="'page'" *ngIf="cntntLoading"></app-loader> <!-- loader -->
+                <ng-container *ngTemplateOutlet="cntntTable"></ng-container>
               </div>
             </mat-tab>
-            <mat-tab label="Processing">Same Table</mat-tab>
-            <mat-tab label="Trash">Same Table</mat-tab>
+            <mat-tab label="Processing">
+              <div class="card-body bg-white rounded-bottom px-0 pb-0">
+                <ng-container *ngTemplateOutlet="srcHdrTxt"></ng-container>
+                <app-loader [type]="'page'" *ngIf="cntntLoading"></app-loader> <!-- loader -->
+                <ng-container *ngTemplateOutlet="cntntTable"></ng-container>
+              </div>
+            </mat-tab>
+            <mat-tab label="Trash">
+              <div class="card-body bg-white rounded-bottom px-0 pb-0">
+                <ng-container *ngTemplateOutlet="srcHdrTxt"></ng-container>
+                <app-loader [type]="'page'" *ngIf="cntntLoading"></app-loader> <!-- loader -->
+                <ng-container *ngTemplateOutlet="cntntTable"></ng-container>
+              </div>
+            </mat-tab>
           </mat-tab-group>
         </div>
       </div>
@@ -302,13 +83,11 @@
                 </div>
                 <div class="edit" style="display: none;">
                   <form>
-                    <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                      [floatLabel]="'never'">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                       <input matInput placeholder="Description" class="ml-0">
                     </mat-form-field>
                     <div class="form-group text-right">
-                      <button type="reset" class="btn btn-secondary btn-sm mr-2"
-                        (click)="closeEdit($event)">Cancel</button>
+                      <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
                       <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                     </div>
                   </form>
@@ -331,13 +110,11 @@
                       </div>
                       <div class="edit" style="display: none;">
                         <form>
-                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                            [floatLabel]="'never'">
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                             <input matInput placeholder="Tags" class="ml-0">
                           </mat-form-field>
                           <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm mr-2"
-                              (click)="closeEdit($event)">Cancel</button>
+                            <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                           </div>
                         </form>
@@ -358,13 +135,11 @@
                         </div>
                         <div class="edit" style="display: none;">
                           <form>
-                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                              [floatLabel]="'never'">
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                               <input matInput placeholder="Author" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button type="reset" class="btn btn-secondary btn-sm mr-2"
-                                (click)="closeEdit($event)">Cancel</button>
+                              <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
                               <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                             </div>
                           </form>
@@ -385,17 +160,14 @@
                         </div>
                         <div class="edit" style="display: none;">
                           <form>
-                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                              [floatLabel]="'never'">
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                               <input matInput placeholder="Released" class="ml-0">
                             </mat-form-field>
-                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                              [floatLabel]="'never'">
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                               <input matInput placeholder="Expired" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button type="reset" class="btn btn-secondary btn-sm mr-2"
-                                (click)="closeEdit($event)">Cancel</button>
+                              <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
                               <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                             </div>
                           </form>
@@ -414,13 +186,11 @@
                       </div>
                       <div class="edit" style="display: none;">
                         <form>
-                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                            [floatLabel]="'never'">
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                             <input matInput placeholder="Language" class="ml-0">
                           </mat-form-field>
                           <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm mr-2"
-                              (click)="closeEdit($event)">Cancel</button>
+                            <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                           </div>
                         </form>
@@ -438,13 +208,11 @@
                       </div>
                       <div class="edit" style="display: none;">
                         <form>
-                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                            [floatLabel]="'never'">
+                          <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                             <input matInput placeholder="Country" class="ml-0">
                           </mat-form-field>
                           <div class="form-group text-right">
-                            <button type="reset" class="btn btn-secondary btn-sm mr-2"
-                              (click)="closeEdit($event)">Cancel</button>
+                            <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                           </div>
                         </form>
@@ -504,13 +272,11 @@
                           </div>
                           <div class="edit" style="display: none;">
                             <form>
-                              <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                                [floatLabel]="'never'">
+                              <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                                 <input matInput placeholder="External ID" class="ml-0">
                               </mat-form-field>
                               <div class="form-group text-right">
-                                <button type="reset" class="btn btn-secondary btn-sm mr-2"
-                                  (click)="closeEdit($event)">Cancel</button>
+                                <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
                                 <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                               </div>
                             </form>
@@ -551,8 +317,7 @@
                     </div>
                     <!-- add comment -->
                     <div class="add-comment mt-4">
-                      <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                        [floatLabel]="'never'">
+                      <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                         <input matInput placeholder="Write a comment..." class="ml-0">
                         <i matSuffix class="fa fa-angle-double-right curs-ptr"></i>
                       </mat-form-field>
@@ -568,8 +333,7 @@
         <div class="card">
           <div class="card-header row m-0">
             <div class="dropdown">
-              <button class="btn btn-light dropdown-toggle" type="button" id="wrkspcDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false" (click)="loadWrkspcs()">
+              <button class="btn btn-light dropdown-toggle" type="button" id="wrkspcDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="loadWrkspcs()">
                 {{selWrkspc ? selWrkspc.name : 'Select a Workspace'}}
               </button>
               <div class="dropdown-menu" aria-labelledby="wrkspcDD">
@@ -579,8 +343,7 @@
                 <ng-template #noLoading>
                   <ng-container *ngIf="wrkspcs.length>0; else noWrkspc">
                     <div class="overflow-auto" style="max-height:130px">
-                      <a class="dropdown-item curs-ptr" [ngClass]="{'active': selWrkspc == ws}"
-                        *ngFor="let ws of wrkspcs" (click)="selectWrkspc(ws)">{{ws.name}}</a>
+                      <a class="dropdown-item curs-ptr" [ngClass]="{'active': selWrkspc == ws}" *ngFor="let ws of wrkspcs" (click)="selectWrkspc(ws)">{{ws.name}}</a>
                     </div>
                   </ng-container>
                   <ng-template #noWrkspc>
@@ -601,8 +364,7 @@
           </div>
           <div class="card-header bg-hi-light-grey py-1 px-2 row m-0">
             <div class="dropdown rounded mr-2">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown"
-                [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown" [disabled]="!selWrkspc">
                 Add
               </button>
               <div class="dropdown-menu" aria-labelledby="btnAddDD">
@@ -613,16 +375,14 @@
               </div>
             </div>
             <div class="dropdown rounded">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown"
-                [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown" [disabled]="!selWrkspc">
                 Users <span class="badge badge-light">11</span>
               </button>
               <div class="dropdown-menu large-dropdown-menu pt-0 overflow-hidden" aria-labelledby="btnUsersDD">
                 <div class="bg-hi-dark-grey p-2">Assign Experience Users</div>
                 <div class="p-3">
                   <form>
-                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
-                      [floatLabel]="'never'">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3" [floatLabel]="'never'">
                       <input matInput placeholder="Add User or Group" class="ml-0">
                     </mat-form-field>
                     <div class="form-group text-right">
@@ -633,8 +393,7 @@
                     <div class="bg-hi-light-grey row m-0 py-1">
                       <div class="col-4 align-self-center">Name</div>
                       <div class="col-8">
-                        <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white"
-                          [floatLabel]="'never'">
+                        <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white" [floatLabel]="'never'">
                           <input matInput placeholder="Add User or Group" class="ml-0">
                           <i matPrefix class="fas fa-search"></i>
                         </mat-form-field>
@@ -650,8 +409,7 @@
               </div>
             </div>
             <div class="dropdown rounded ml-auto">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown"
-                [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown" [disabled]="!selWrkspc">
                 <i class="fas fa-cog"></i>
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDD">
@@ -670,14 +428,12 @@
             <div class="card-body">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-white mb-0 p-0">
-                  <li class="breadcrumb-item curs-ptr text-primary" (click)="backFolder()" style="font-size: 16px;"
-                    *ngIf="folderNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li>
+                  <li class="breadcrumb-item curs-ptr text-primary" (click)="backFolder()" style="font-size: 16px;" *ngIf="folderNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li>
                   <li class="breadcrumb-item no-before">{{selWrkspc.name}}</li>
                   <li class="breadcrumb-item" *ngFor="let folNav of folderNav">{{folNav.name}}</li>
                 </ol>
               </nav>
-              <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeFldrs"
-                class="nav-tabs justify-content-end border-bottom-0 mr-3 w-100" (activeIdChange)="changeDispFldrs()">
+              <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeFldrs" class="nav-tabs justify-content-end border-bottom-0 mr-3 w-100" (activeIdChange)="changeDispFldrs()">
                 <li [ngbNavItem]="1">
                   <a ngbNavLink>Active</a>
                 </li>
@@ -690,26 +446,21 @@
               <div class="main row py-4" *ngIf="folderArr.length > 0 && !folderLoading">
                 <div class="col-3 curs-ptr my-2" *ngFor="let folder of folderArr">
                   <div class="image">
-                    <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}"
-                      (click)="changeFolder(folder)">
+                    <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}" (click)="changeFolder(folder)">
                     <div class="dropdown" style="z-index:1;">
-                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                        data-toggle="dropdown">
+                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD" data-toggle="dropdown">
                         <i class="fas fa-cog"></i>
                       </button>
                       <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                        <a class="dropdown-item curs-ptr"
-                          (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'edit', folder)">
+                        <a class="dropdown-item curs-ptr" (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'edit', folder)">
                           <i class="fas fa-edit mr-1"></i>Edit Item</a>
-                        <a class="dropdown-item curs-ptr"
-                          (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'dupl', folder)">
+                        <a class="dropdown-item curs-ptr" (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'dupl', folder)">
                           <i class="fas fa-clone mr-1"></i>Duplicate Folder</a>
                         <a class="dropdown-item" href="javascript:void(0)">
                           <i class="fas fa-link mr-1"></i>App Link</a>
                         <a class="dropdown-item curs-ptr" (click)="activateFldr(folder)" *ngIf="!folder.isActive">
                           <i class="fas fa-plus mr-1"></i>Activate {{folder.key != 'fldr' ? 'Smart' : ''}} Folder</a>
-                        <a class="dropdown-item curs-ptr text-primary" (click)="deActivateFldr(folder)"
-                          *ngIf="folder.isActive">
+                        <a class="dropdown-item curs-ptr text-primary" (click)="deActivateFldr(folder)" *ngIf="folder.isActive">
                           <i class="fas fa-trash-alt mr-1"></i>Deactivate {{folder.key != 'fldr' ? 'Smart' : ''}}
                           Folder</a>
                         <a class="dropdown-item" href="javascript:void(0)">
@@ -717,14 +468,12 @@
                       </div>
                     </div>
                   </div>
-                  <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
-                    *ngIf="!folder.hideLabelInWorkspace" (click)="changeFolder(folder)">
+                  <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate" *ngIf="!folder.hideLabelInWorkspace" (click)="changeFolder(folder)">
                     {{folder.name}}
                   </div>
                 </div>
               </div>
-              <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;"
-                *ngIf="folderArr.length == 0 && !folderLoading">
+              <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;" *ngIf="folderArr.length == 0 && !folderLoading">
                 No folder found
               </div>
             </div>
@@ -740,58 +489,279 @@
   </div>
 </div>
 
+<ng-template #srcHdrTxt>
+  <h5 class="card-title px-3">
+    <div class="heading">
+      <div class="float-right row mx-0">
+        <div class="dropdown">
+          <button class="btn btn-light dropdown-toggle mr-2" id="fileDD" data-toggle="dropdown">
+            <i class="fas fa-cog"></i>
+          </button>
+          <div class="cog dropdown-menu dropdown-menu-right pt-0 overflow-hidden" aria-labelledby="fileDD" (click)="$event.stopPropagation();">
+            <div class="scrollable py-2">
+              <span class="ml-2 heading">Visible Columns</span>
+              <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols" class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]" (cdkDropListDropped)="drop($event)">
+                <button class="dropdown-item pl-2" *ngFor="let col of visbCols;let i=index" cdkDrag>
+                  <span class="ellipsis mr-2">
+                    <i class="fa fa-ellipsis-v"></i>
+                    <i class="fa fa-ellipsis-v"></i>
+                  </span>
+                  <i class="text-primary fas fa-eye mr-2" (click)="showHideCols(col,'hide',i)"></i>{{col.n}}
+                </button>
+                <span *ngIf="visbCols.length==0" class="ml-4 text-secondary">
+                  No visbible columns
+                </span>
+              </ul>
+              <span class="ml-2 heading">Hidden Columns</span>
+              <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList" [cdkDropListData]="hidCols" class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
+                <button class="dropdown-item pl-2" *ngFor="let col of hidCols;let i=index" cdkDrag>
+                  <span class="ellipsis mr-2 mb-1">
+                    <i class="fa fa-ellipsis-v"></i>
+                    <i class="fa fa-ellipsis-v"></i>
+                  </span>
+                  <i class="fas fa-eye-slash mr-2" (click)="showHideCols(col,'show',i)"></i>{{col.n}}
+                </button>
+                <span *ngIf="hidCols.length==0" class="ml-4 text-secondary">
+                  No hidden columns
+                </span>
+              </ul>
+            </div>
+            <hr class="mb-2 mt-0">
+            <div class="float-right mr-2">
+              <button class="btn btn-secondary btn-sm mr-2" (click)="closeDropdown($event)">Cancel</button>
+              <button class="btn btn-primary btn-sm" (click)="saveHdrChngs($event)">Save</button>
+            </div>
+          </div>
+        </div>
+        <div class="btn btn-light" (click)="view = !view">
+          <i class="fa" [ngClass]="{'fa-th-large': view, 'fa-list-ul' : !view}"></i>
+        </div>
+      </div>
+      <div class="row mx-0 mb-3">
+        <div class="dropdown mr-2 mb-1">
+          <button class="btn btn-light dropdown-toggle" id="fileDD" data-toggle="dropdown">
+            File Type
+          </button>
+          <div class="dropdown-menu" style="width:12rem;" aria-labelledby="fileDD" (click)="$event.stopPropagation();">
+            <mat-checkbox class="dropdown-item">Audio</mat-checkbox>
+            <mat-checkbox class="dropdown-item">Document</mat-checkbox>
+            <mat-checkbox class="dropdown-item">HTML Content</mat-checkbox>
+            <mat-checkbox class="dropdown-item">Photo</mat-checkbox>
+            <mat-checkbox class="dropdown-item">URL</mat-checkbox>
+            <mat-checkbox class="dropdown-item">Video</mat-checkbox>
+          </div>
+        </div>
+        <div class="dropdown mr-2 mb-1">
+          <button class="btn btn-light dropdown-toggle" id="propDD" data-toggle="dropdown">
+            Property
+          </button>
+          <div class="dropdown-menu" #propertyDropDown style="width:18.5rem;" aria-labelledby="propDD" (click)="$event.stopPropagation();">
+            <mat-checkbox class="dropdown-item" *ngFor="let p of props" [attr.id]="p.id">{{p.name}}
+            </mat-checkbox>
+          </div>
+        </div>
+        <div class="dropdown mr-2 mb-1">
+          <button class="btn btn-light dropdown-toggle" id="tagsDD" data-toggle="dropdown">
+            Tags
+          </button>
+          <div class="dropdown-menu" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD" (click)="$event.stopPropagation();">
+            <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+              <mat-label>Match ALL of theese tags</mat-label>
+              <input matInput placeholder="Match ALL of theese tags">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+              <mat-label>Match ANY of theese tags</mat-label>
+              <input matInput placeholder="Match ANY of theese tags">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+              <mat-label>Match NONE of theese tags</mat-label>
+              <input matInput placeholder="Match NONE of theese tags">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="dropdown mr-2 mb-1">
+          <button class="btn btn-light dropdown-toggle" id="localeDD" data-toggle="dropdown">
+            Locale
+          </button>
+          <div class="dropdown-menu" #localeDropDown style="width:18rem;" aria-labelledby="localeDD" (click)="$event.stopPropagation();">
+            <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+              <mat-label>Match ALL of these languages</mat-label>
+              <input matInput placeholder="Match ALL of these languages" class="bg-white">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+              <mat-label>Match ANY of these languages</mat-label>
+              <input matInput placeholder="Match ANY of these languages">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
+              <mat-label>Match NONE of theese languages</mat-label>
+              <input matInput placeholder="Match NONE of theese languages">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="dropdown mb-1">
+          <button class="btn btn-light dropdown-toggle" id="authorDD" data-toggle="dropdown">
+            Author
+          </button>
+          <div class="dropdown-menu" #authorDropDown style="width:18rem;" aria-labelledby="authorDD" (click)="$event.stopPropagation();">
+            <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3" [floatLabel]="'never'">
+              <i matPrefix class="fas fa-search"></i>
+              <input matInput placeholder="Search ...">
+            </mat-form-field>
+            <div class="dropdown-divider"></div>
+            <div class="row justify-content-around m-0">
+              <button class="btn btn-light text-primary">Select all</button>
+              <button class="btn btn-light">Clear all</button>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div style="max-height: 200px; overflow-y: auto;">
+              <mat-checkbox class="dropdown-item">ABC (you)</mat-checkbox>
+              <mat-checkbox class="dropdown-item">def</mat-checkbox>
+              <mat-checkbox class="dropdown-item">def</mat-checkbox>
+              <mat-checkbox class="dropdown-item">def</mat-checkbox>
+              <mat-checkbox class="dropdown-item">def</mat-checkbox>
+              <mat-checkbox class="dropdown-item">def</mat-checkbox>
+              <mat-checkbox class="dropdown-item">def</mat-checkbox>
+            </div>
+            <hr class="mb-2">
+            <div class="float-right mr-2">
+              <button class="btn btn-secondary btn-sm mr-2" (click)="closeDropdown($event)">Cancel</button>
+              <button class="btn btn-primary btn-sm">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="search">
+        <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
+          <i matPrefix class="fas fa-search"></i>
+          <input matInput placeholder="Search ...">
+          <!-- <div matSuffix class="curs-ptr">
+          <i class="fas fa-sliders-h"></i>
+        </div> -->
+        </mat-form-field>
+      </div>
+    </div>
+  </h5>
+</ng-template>
+
+<ng-template #cntntTable>
+  <div *ngIf="!cntntLoading">
+    <div class="card-text px-3">
+      <table class="table table-hover text-dark w-100" [class.hide-rows]="showDoc || showWork" *ngIf="view">
+        <thead>
+          <tr>
+            <th class="curs-ptr" *ngFor="let col of cols">
+              {{col.n}}<i class="fas ml-1" [ngClass]="{'fa-sort-down align-top': col.dir==1, 'fa-sort-up align-bottom': col.dir==0}"></i>
+            </th>
+            <!-- <th scope="col" class="curs-ptr">Name<i class="fas fa-sort-down ml-1 align-top"></i>
+            </th>
+            <th scope="col" class="curs-ptr">Size<i class="fas fa-sort-down ml-1 align-top"></i>
+            </th>
+            <th scope="col" class="curs-ptr">Added<i class="fas fa-sort-down ml-1 align-top"></i>
+            </th>
+            <th scope="col" class="curs-ptr">Authors<i class="fas fa-sort-down ml-1 align-top"></i></th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr (click)="documentToggle()">
+            <td>
+              Group Stock Position - Regional Offices<br />
+              <span class="badge badge-light p-2 mt-2 mt-sm-0">Stock</span>
+              <span class="badge badge-light p-2 mt-2 mt-sm-0">Technical Distributors</span>
+            </td>
+            <td class="text-hi-dark-grey">790 KB</td>
+            <td>19 Aug 2020</td>
+            <td class="text-hi-dark-grey">Andrea D'Souza</td>
+          </tr> -->
+          <tr *ngFor="let d of data" (click)="documentToggle()">
+            <td *ngFor="let col of cols">
+              <span *ngIf="col.key=='name' else otherRow">
+                {{d.name}}
+              </span>
+              <ng-template #otherRow>{{d[col.key]}}</ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="row justify-content-between" *ngIf="!view">
+        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-0" *ngFor="let d of data" (click)="documentToggle()" style="max-width:400px;">
+          <img src="assets/images/discription.png" style="max-height:200px;">
+          <div class="name bg-hi-grey rounded w-75 mx-auto px-2">{{d.name}}</div>
+        </div>
+      </div>
+    </div>
+    <app-pagination [pageSize]="pageSize" [totalCount]="2" [page]="1"
+      (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
+  </div>
+</ng-template>
+
 <!-- upload file modal  -->
 <ng-template #uploadFile let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Upload File</h4>
+    <h4 class="modal-title" id="modal-basic-title">Upload Files</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event)">
-      <input type="file" multiple (change)="fileBrowseHandler($event)">
-      <div class="text-center my-5">
-        <h2><i class="fa fa-upload"></i></h2>
-        <h5>Drag & Drop file here</h5>
-        OR
-        <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
-      </div>
-    </div>
-    <div class="files-list">
-      <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
-        <div class="info mx-auto">
-          <h6 class="name mb-0 text-wrap">
-            {{ file?.name }}
-          </h6>
-          <p class="size mb-0">
-            {{ getSize(file?.size) }}
-          </p>
-          <app-file-progess [progress]="file?.progress"></app-file-progess>
-        </div>
-        <div>
-          <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
+  <form name="cntntForm" (ngSubmit)="onCntntSubmit()" [formGroup]="cntntForm" novalidate>
+    <div class="modal-body" ngbAutofocus>
+      <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event)">
+        <input type="file" multiple (change)="fileBrowseHandler($event)">
+        <input type="hidden" formControlName="img" /> <!-- Validation Field -->
+        <div class="text-center my-5">
+          <h2><i class="fa fa-upload"></i></h2>
+          <h5>Drag & Drop file here</h5>
+          OR
+          <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
         </div>
       </div>
-    </div>
-    <hr>
-    <div class="w-100 dark-bg-hover p-2 rounded" (click)="showPropsSection()">
-      Properties
-      <div class="float-right">
-        <i class="fa fa-angle-up" [ngClass]="{'fa-angle-up': !dispPropsSec,'fa-angle-down': dispPropsSec}"></i>
+      <div class="files-list">
+        <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
+          <div class="info mx-auto">
+            <h6 class="name mb-0 text-wrap">
+              {{ file?.name }}
+            </h6>
+            <p class="size mb-0">
+              {{ getSize(file?.size) }}
+            </p>
+            <app-file-progess [progress]="file?.progress"></app-file-progess>
+          </div>
+          <div>
+            <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="w-100 dark-bg-hover p-2 rounded" (click)="showPropsSection()">
+        Properties
+        <div class="float-right">
+          <i class="fa fa-angle-up" [ngClass]="{'fa-angle-up': !dispPropsSec,'fa-angle-down': dispPropsSec}"></i>
+        </div>
+      </div>
+      <div class="mt-2" *ngIf="dispPropsSec">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-chip-list #chipList1 aria-label="Select tags">
+            <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable" (removed)="remove(d)">
+              {{d.name}}
+              <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+            </mat-chip>
+            <input matInput formControlName="tags" placeholder="Select tags" [matAutocomplete]="auto">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value)" [displayWith]="displayFn">
+            <mat-option *ngFor="let tag of tags" [value]="tag">
+              {{tag.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-hint>Tags help you filter content or create smart folders</mat-hint>
+        </mat-form-field>
       </div>
     </div>
-    <div class="mt-2" *ngIf="dispPropsSec">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Add Tags</mat-label>
-        <input matInput placeholder="Add Tags">
-        <mat-hint>Tags help you filter content or create smart folders</mat-hint>
-      </mat-form-field>
+    <div class="modal-footer">
+      <button class="btn btn-primary" [disabled]="files.length<=0 || cntntDisb">
+        <app-loader [type]="'btn'" *ngIf="cntntDisb"></app-loader>
+        Save
+      </button>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
+  </form>
 </ng-template>
 
 <!-- add url modal  -->
@@ -802,73 +772,78 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Icon</mat-label>
-      <mat-select [(value)]="addURLIcon" (selectionChange)="iconURLHandler()">
-        <mat-option value="def-icon">Default Icon</mat-option>
-        <mat-option value="cust-icon">Choose a Custom Icon</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div class="custom-file-select" appFileDnd *ngIf="addURLIcon=='cust-icon'"
-      (fileDropped)="onFileDropped($event,true)">
-      <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true)" accept="image/*">
-      <div class="text-center my-5">
-        <h2><i class="fa fa-upload"></i></h2>
-        <h5>Drag & Drop file here</h5>
-        OR
-        <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
-      </div>
-    </div>
-    <div class="files-list">
-      <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
-        <div class="info mx-auto">
-          <h6 class="name mb-0 text-wrap">
-            {{ file?.name }}
-          </h6>
-          <p class="size mb-0">
-            {{ getSize(file?.size) }}
-          </p>
-          <app-file-progess [progress]="file?.progress"></app-file-progess>
-        </div>
-        <div>
-          <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
+  <form name="urlForm" (ngSubmit)="onUrlSubmit()" [formGroup]="urlForm" novalidate>
+    <div class="modal-body">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Icon</mat-label>
+        <mat-select (selectionChange)="iconURLHandler($event)" formControlName="iconType" required>
+          <mat-option [value]="1">Default Icon</mat-option>
+          <mat-option [value]="2">Choose a Custom Icon</mat-option>
+        </mat-select>
+        <mat-error *ngIf="urlForm.get('iconType')!.hasError('required')">
+          Icon Type is required
+        </mat-error>
+      </mat-form-field>
+      <div class="custom-file-select" appFileDnd *ngIf="urlForm.controls.img && urlForm.value.iconType==2" (fileDropped)="onFileDropped($event,true,'urlForm')">
+        <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true,'urlForm')" accept="image/*">
+        <input type="hidden" formControlName="img" /> <!-- Validation Field -->
+        <div class="text-center my-5">
+          <h2><i class="fa fa-upload"></i></h2>
+          <h5>Drag & Drop file here</h5>
+          OR
+          <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
         </div>
       </div>
+      <img [src]="iconUrl?iconUrl:defIcon" class="border mt-2 mb-4" style="height: 130px; width: auto;">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Add a Name" formControlName="name" required/>
+        <div matSuffix>.url</div>
+        <mat-error *ngIf="urlForm.get('name')!.hasError('required')">
+          Name is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Description</mat-label>
+        <textarea rows="3" matInput placeholder="Add a Description" formControlName="description"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>URL </mat-label>
+        <input matInput placeholder="Add a URL" formControlName="url" required>
+        <mat-error *ngIf="urlForm.get('name')!.hasError('required')">
+          URL is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-chip-list #chipList1 aria-label="Select tags">
+          <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable" (removed)="remove(d)">
+            {{d.name}}
+            <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+          </mat-chip>
+          <input matInput formControlName="tags" placeholder="Select tags" [matAutocomplete]="auto">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value)" [displayWith]="displayFn">
+          <mat-option *ngFor="let tag of tags" [value]="tag">
+            {{tag.name}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-hint>Tags help you filter content or create smart folders</mat-hint>
+      </mat-form-field>
+      <div class="options">
+        Options<br />
+        <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle" matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br />
+        <mat-checkbox>Can be Shared <i class="fa fa-info-circle" matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
+        <mat-checkbox>View in Showpad <i class="fa fa-info-circle" matTooltip="This permission only works for https links"></i></mat-checkbox><br />
+        <mat-checkbox>Hide name in Workspace</mat-checkbox>
+      </div>
     </div>
-    <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon" class="border mt-2 mb-4"
-      style="height: 130px; width: auto;">
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Name</mat-label>
-      <input matInput placeholder="Add a Name">
-      <div matSuffix>.url</div>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Description</mat-label>
-      <textarea matInput placeholder="Add a Description"></textarea>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>URL *</mat-label>
-      <input matInput placeholder="Add a URL">
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Tags</mat-label>
-      <input matInput placeholder="Add tags">
-    </mat-form-field>
-    <div class="options">
-      Options<br />
-      <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle"
-          matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br />
-      <mat-checkbox>Can be Shared <i class="fa fa-info-circle"
-          matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
-      <mat-checkbox>View in Showpad <i class="fa fa-info-circle"
-          matTooltip="This permission only works for https links"></i></mat-checkbox><br />
-      <mat-checkbox>Hide name in Workspace</mat-checkbox>
+    <div class="modal-footer">
+      <button class="btn btn-primary" [disabled]="urlForm!.invalid || urlDisb">
+        <app-loader [type]="'btn'" *ngIf="urlDisb"></app-loader>
+        Save
+      </button>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
+  </form>
 </ng-template>
 
 <!-- add/edit folder modal  -->
@@ -882,8 +857,7 @@
   </div>
   <form name="folderForm" (ngSubmit)="folderSubmit()" [formGroup]="folderForm" novalidate>
     <div class="modal-body" ngbAutofocus>
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
-        [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed" [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
         General
         <div class="float-right">
           <ng-container *ngIf="!gnrlCollapsed; else elseIcon">
@@ -922,8 +896,7 @@
         </div> -->
         <div class="image border mt-2 mb-4">
           <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon">
-          <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(ip)"><i
-              class="fas fa-trash-alt"></i>
+          <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(ip)"><i class="fas fa-trash-alt"></i>
           </div>
         </div>
         <mat-form-field appearance="outline" class="w-100">
@@ -941,8 +914,7 @@
         </div>
       </div>
       <hr *ngIf="edit">
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed"
-        [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmartFolder" *ngIf="edit">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed" [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmartFolder" *ngIf="edit">
         Edit Contained Smart Folders (0)
         <div class="float-right">
           <ng-container *ngIf="!editSmrtCollapsed; else elseIcon">
@@ -986,8 +958,7 @@
         </div>
       </div>
       <hr *ngIf="edit">
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="locationCollapsed = !locationCollapsed"
-        [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder" *ngIf="edit">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="locationCollapsed = !locationCollapsed" [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder" *ngIf="edit">
         Location
         <div class="float-right">
           <ng-container *ngIf="!locationCollapsed; else elseIcon">
@@ -1051,8 +1022,7 @@
       </div> -->
       <div class="image border mt-2 mb-4">
         <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon">
-        <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(inp)"><i
-            class="fas fa-trash-alt"></i>
+        <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(inp)"><i class="fas fa-trash-alt"></i>
         </div>
       </div>
       <mat-form-field appearance="outline" class="w-100">
@@ -1068,8 +1038,7 @@
         <mat-checkbox class="d-block" formControlName="hideLabelInWorkspace">Hide label in Experience</mat-checkbox>
       </div>
       <hr>
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
-        [attr.aria-expanded]="!gnrlCollapsed" aria-controls="collapseExample">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed" [attr.aria-expanded]="!gnrlCollapsed" aria-controls="collapseExample">
         Smart Folder Settings
         <div class="float-right">
           <ng-container *ngIf="!gnrlCollapsed; else elseIcon">
@@ -1084,8 +1053,7 @@
         <div class="card">
           <div class="card-header row mx-auto w-100">
             <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="fileTypeDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="fileTypeDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 File Type
               </button>
               <div class="dropdown-menu" aria-labelledby="fileTypeDD">
@@ -1098,8 +1066,7 @@
               </div>
             </div>
             <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="propertyDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Property
               </button>
               <div class="dropdown-menu" aria-labelledby="propertyDD">
@@ -1109,8 +1076,7 @@
               </div>
             </div>
             <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="tagsDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="tagsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Tags
               </button>
               <div class="dropdown-menu" aria-labelledby="tagsDD" style="width:18rem;">
@@ -1129,8 +1095,7 @@
               </div>
             </div>
             <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="localeDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="localeDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Locale
               </button>
               <div class="dropdown-menu" aria-labelledby="localeDD" style="width:18rem;">
@@ -1149,8 +1114,7 @@
               </div>
             </div>
             <div class="dropdown">
-              <button class="btn btn-light dropdown-toggle" type="button" id="authorDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="authorDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Author
               </button>
               <div class="dropdown-menu" aria-labelledby="authorDD" style="width:18rem;">
@@ -1275,8 +1239,7 @@
         </div>
         <div class="mb-2">
           <mat-label>Content</mat-label>
-          <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle"
-              matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
+          <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle" matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
         </div>
         <div>
           <mat-label>

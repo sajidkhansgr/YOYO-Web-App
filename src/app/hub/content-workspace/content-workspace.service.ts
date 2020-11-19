@@ -16,9 +16,9 @@ export class ContentWorkspaceService {
     console.log("sdf")
     const formData: FormData = new FormData();
     for (let key in data) {
-      if (data[key]) {
-        if (key === 'folderIcon' && data[key] && data[key].name) {
-          formData.append('folderIcon', data[key], data[key].name);
+      if (data[key] || key === 'IsUrl') {
+        if (key === 'folderIcon' || key === 'Content' || key === 'UrlIcon' && data[key] && data[key].name) {
+          formData.append(key, data[key], data[key].name);
         } else {
           formData.append(key, data[key]);
         }
@@ -163,7 +163,7 @@ export class ContentWorkspaceService {
   }
 
   addContent(data: any) {
-    return this.http.post(`${AppSettings.ADD_CNTNT}`, data)
+    return this.http.post(`${AppSettings.ADD_CNTNT}`, this.freezeFolderObj(data))
   }
 
   updContent(data: any) {

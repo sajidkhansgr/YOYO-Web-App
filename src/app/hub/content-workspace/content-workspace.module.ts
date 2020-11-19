@@ -12,12 +12,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { FileProgessModule } from '../../shared/components/file-progess/file-progess.module';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
+import { PaginationModule } from '../../shared/components/pagination/pagination.module';
 
 import { ContentWorkspaceComponent } from './content-workspace.component';
-import { ContentWorkspaceService } from './content-workspace.service'
+import { ContentWorkspaceService } from './content-workspace.service';
+import { TagsService } from '../tags/tags.service';
 
 @NgModule({
   declarations: [ContentWorkspaceComponent],
@@ -27,9 +31,8 @@ import { ContentWorkspaceService } from './content-workspace.service'
     MatPaginatorModule,
     MatTooltipModule,
     MatCheckboxModule,
-    MatRadioModule,
-    FileProgessModule,
-    LoaderModule,
+    MatRadioModule, MatChipsModule, MatAutocompleteModule,
+    FileProgessModule, LoaderModule,PaginationModule,
     FormsModule, ReactiveFormsModule,
     NgbCollapseModule, NgbDropdownModule, NgbNavModule,
     DragDropModule
@@ -37,6 +40,6 @@ import { ContentWorkspaceService } from './content-workspace.service'
   exports: [
     ContentWorkspaceComponent
   ],
-  providers: [ContentWorkspaceService],
+  providers: [ContentWorkspaceService, TagsService],
 })
 export class ContentWorkspaceModule { }

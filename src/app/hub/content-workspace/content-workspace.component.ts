@@ -2,18 +2,20 @@ import { Component, OnInit, Input } from '@angular/core';
 // import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
-import { DEF_ICON } from '../../shared/constants';
+import { DEF_ICON, PRPS } from '../../shared/constants';
 import { FileHelper } from '../../shared/file-helper';
-import { ContentWorkspaceService } from './content-workspace.service'
 import { Workspace } from '../../shared/models/workspace';
 import { Folder } from '../../shared/models/folder';
+import { Tag } from '../../shared/models/tag';
+import { Content } from '../../shared/models/content';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import { PRPS } from '../../shared/constants';
+import { ContentWorkspaceService } from './content-workspace.service';
+import { TagsService } from '../tags/tags.service';
 
 
 @Component({
@@ -30,7 +32,8 @@ export class ContentWorkspaceComponent implements OnInit {
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: Workspace[]; selWrkspc: Workspace | undefined;
   wrkspcLoading!: boolean; folderLoading!: boolean;
-  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; smartFolderForm!: FormGroup;
+  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; smartFolderForm!: FormGroup;;
+  cntntForm!: FormGroup; urlForm!: FormGroup;
   disabled!: boolean;
   folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
@@ -40,18 +43,25 @@ export class ContentWorkspaceComponent implements OnInit {
   edit!: boolean | undefined;
   activeFldrs!: number; isActiveFldrs!: boolean;
 
+  tags!: Tag[];selTags:Tag[] =[];cntnts!: Content[];
+  selectable = true; removable: boolean = true;
+  urlDisb!: boolean;
+  cntntDisb!: boolean; cntntLoading!: boolean;activeIndex: number = 0;
+  pageNo!: number; pageSize!: number;  @Input() lmtPage: any;
+
   constructor(
     // private route: ActivatedRoute,
     private modalService: NgbModal,
     private cwServ: ContentWorkspaceService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private tagServ: TagsService
   ) { }
 
   ngOnInit(): void {
-    console.log("ds")
     this.initialiseState(); // reset and set based on new parameter this time
+    this.cntntList()
   }
 
   initialiseState() {
@@ -97,6 +107,23 @@ export class ContentWorkspaceComponent implements OnInit {
     this.view = true;
     this.edit = false;
     this.activeFldrs = 1; this.isActiveFldrs = true;
+
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
+    this.cntntDisb = false;
+    this.cntntLoading = true; //use in cntnt listing
+    this.urlDisb = false;
+    this.cntntForm = this.fb.group({
+      img: [''],
+      tags: ['']
+    });
+    this.urlForm = this.fb.group({
+      iconType:['', [Validators.required]],
+      img: ['', [Validators.required]],
+      tags: [''],
+      name: ['', [Validators.required]],
+      description: [''],
+      url: ['', [Validators.required]],
+    });
   }
 
   // ---- folder and smart folder ---- //
@@ -718,9 +745,15 @@ export class ContentWorkspaceComponent implements OnInit {
     this.dispSmart = !this.dispSmart;
   }
 
-
-  iconURLHandler = () => {
-
+  iconURLHandler = ($event:any) => {
+    this.iconUrl = '';
+    if($event.value===1){
+      this.urlForm.removeControl('img');
+    }else if($event.value===2){
+      this.urlForm.addControl('img', new FormControl(''));
+      this.urlForm.controls['img'].setValidators([Validators.required]);
+    }
+    this.urlForm.updateValueAndValidity();
   }
 
   showPropsSection = () => {
@@ -731,13 +764,166 @@ export class ContentWorkspaceComponent implements OnInit {
     this.dispSmFolderSec = !this.dispSmFolderSec;
   }
 
-  openModal(content: any) {
+  openModal(content: any, isTagReq: boolean = false) {
+    if(isTagReq){
+      this.urlForm.reset();
+      this.cntntForm.reset();
+      this.iconUrl = '';
+      this.getTags();
+    }
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
 
       }, (reason) => {
 
       });
+  }
+
+  onTabChange = (event: any) => {
+    this.activeIndex = event.index;
+    this.initialiseState();
+    this.cntntList();
+  }
+
+  // get content listing
+  cntntList() {
+    this.cntntLoading = true;
+    let params = {
+      hubId: parseInt(this.hubid)
+    };
+    // if (this.activeIndex == 1)
+    //   params.isActive = true;
+    // else if (this.activeIndex == 2)
+    //   params.isActive = false;
+
+    this.cwServ.contentList(params)
+    .subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        this.cntnts = data.result.results;
+      } else {
+        this.cntnts = [];
+      }
+      this.cntntLoading = false;
+    }, (err: any) => {
+      this.cntnts = [];
+      this.cntntLoading = false;
+    });
+  }
+
+  // list of tags
+  getTags() {
+    this.tags = [];
+    this.selTags = [];
+    this.custIcon = '';
+    let query = {
+      hubId: parseInt(this.hubid),
+      pageNo: 1,
+      pageSize: 1000
+    }
+    // console.log(query.isActive);
+    this.tagServ.tagList(query)
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          this.tags = data.result.results;
+        } else {
+          this.tags = [];
+        }
+      }, (err: any) => {
+        console.log(err);
+        this.tags = [];
+      });
+  }
+
+  // when changing page size
+  pageSizeChange(pageSize: number) {
+    this.pageSize = pageSize;
+    this.cntntList();
+  }
+
+  // numbers to be displayed for Pagination
+  changePageNo(num: number) {
+    this.pageNo = num;
+    this.cntntList();
+  }
+
+  displayFn = (tag: any) => {
+    return (tag && tag.id) ? tag.name : '';
+  }
+
+  selFromAutoComp(data: any) {
+    const index = this.selTags.findIndex((ele: any) => ele.id == data.id);
+    if (index >= 0) {
+      this.toastr.clear();
+      this.toastr.info("This tag is already selected", "Selected");
+    } else {
+      this.selTags.push(data);
+    }
+  }
+
+  remove(data: any): void {
+    const index = this.selTags.findIndex((ele: any) => ele.id == data.id);
+    if (index >= 0) {
+      this.selTags.splice(index, 1);
+    }
+  }
+
+  onCntntSubmit(){
+    if (this.cntntForm.valid) {
+      this.cntntDisb = true;
+      let cntntData:any = {
+        content: this.files[0],
+        hubId: parseInt(this.hubid),
+        isUrl: false
+      }
+      if(this.selTags && this.selTags.length>0){
+        cntntData.ContentTagsString = this.selTags.map((tag: any) => ({ tagId: tag.id }));
+        cntntData.ContentTagsString = JSON.stringify(cntntData.ContentTagsString)
+      }
+      this.cwServ.addContent(cntntData)
+      .subscribe((data: any) => {
+        if (data) {
+          this.toastr.success('Content added successfully', 'Success!');
+          this.files = [];
+          this.dismissModal();
+        } else {
+          this.toastr.error('Unable to add content', 'Error!');
+        }
+        this.cntntDisb = false;
+      }, (err: any) => {
+        this.cntntDisb = false;
+      });
+    }
+  }
+
+  onUrlSubmit(){
+    if (this.urlForm.valid) {
+      this.urlDisb = true;
+      //need to check icon type for default icon, for now its skip
+      let cntntData:any = {
+        ...this.urlForm.value,
+        urlIcon: this.custIcon,
+        hubId: parseInt(this.hubid),
+        isUrl: true
+      }
+      delete cntntData.img;
+      if(this.selTags && this.selTags.length>0){
+        cntntData.ContentTagsString = this.selTags.map((tag: any) => ({ tagId: tag.id }));
+        cntntData.ContentTagsString = JSON.stringify(cntntData.ContentTagsString)
+      }
+      this.cwServ.addContent(cntntData)
+      .subscribe((data: any) => {
+        if (data) {
+          this.toastr.success('Content added successfully', 'Success!');
+          this.files = [];
+          this.dismissModal();
+        } else {
+          this.toastr.error('Unable to add content', 'Error!');
+        }
+        this.urlDisb = false;
+      }, (err: any) => {
+        this.urlDisb = false;
+      });
+    }
   }
 
   dismissModal() {
@@ -758,36 +944,37 @@ export class ContentWorkspaceComponent implements OnInit {
   // /**
   // * on file drop handler
   // */
-  onFileDropped($event: any, isIcon: boolean = false) {
+  onFileDropped($event: any, isIcon: boolean = false, type:string='') {
     if (!isIcon)
       this.prepareFilesList($event, isIcon);
     else {
-      this.renderImg($event[0]);
+      this.renderImg($event[0],type);
     }
   }
 
   /**
    * handle file from browsing
    */
-  fileBrowseHandler($event: any, isIcon: boolean = false) {
+  fileBrowseHandler($event: any, isIcon: boolean = false, type:string='') {
     if ($event.target && $event.target.files)
       this.prepareFilesList($event.target.files, isIcon);
     // preview image
     let input = $event.target;
     if (input.files && input.files && isIcon) {
-      this.renderImg(input.files[0]);
+      this.renderImg(input.files[0],type);
     }
   }
 
-  renderImg(file: any) {
+  renderImg(file: any,type:string) {
     if (file) {
       let reader = new FileReader();
       reader.onload = (event: any) => {
-        console.log("sd")
         this.addURLIcon = 'cust-icon';
         this.iconUrl = event.target.result;
       };
       this.custIcon = file;
+      if(type==='urlForm')
+        this.urlForm.controls['img'].setValue(this.custIcon);
       reader.readAsDataURL(file);
     }
   }

@@ -8,13 +8,13 @@
     <div>
       <mat-tab-group [selectedIndex]="activeIndex" (selectedTabChange)="onTabChange($event)">
         <mat-tab label="Content & Workspace" [disabled]="disabled">
-          <div *ngIf="arr.indexOf(0)!==-1">
-            <app-content-workspace [hubid]="id"></app-content-workspace>
+          <div *ngIf="activeIndex==0">
+            <app-content-workspace [hubid]="id" [lmtPage]="lmtPage"></app-content-workspace>
           </div>
         </mat-tab>
         <mat-tab label="Tags" [disabled]="disabled">
-          <div *ngIf="arr.indexOf(1)!==-1">
-            <app-tags [hubid]="id"></app-tags>
+          <div *ngIf="activeIndex==1">
+            <app-tags [hubid]="id" [lmtPage]="lmtPage"></app-tags>
           </div>
         </mat-tab>
       </mat-tab-group>

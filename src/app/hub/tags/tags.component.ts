@@ -12,7 +12,6 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 import { TagsService } from './tags.service';
 import { Catg } from '../../shared/models/catg';
 import { Tag } from '../../shared/models/tag';
-import { LMT_PAGE } from '../../shared/constants'
 
 @Component({
   selector: 'app-tags',
@@ -55,6 +54,7 @@ export class TagsComponent implements OnInit {
   columns!: any[];
   activeTags!: number; activeCatgs!: number;
   categoryId!: number | undefined; unCategorized!: boolean | undefined;
+  @Input() lmtPage: any;
 
   constructor(
     private dialog: MatDialog,
@@ -93,7 +93,7 @@ export class TagsComponent implements OnInit {
     this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
     this.catgData = undefined;
     this.catgs = []; this.tags = []; this.allTags = [];
-    this.pageNo = 1; this.pageSize = LMT_PAGE[0]; this.isActiveTag = true; this.isActiveCatg = true;
+    this.pageNo = 1; this.pageSize = this.lmtPage[0]; this.isActiveTag = true; this.isActiveCatg = true;
     this.totalCount = 0;
     this.tagNames = [];
     this.searchTxt = '';
