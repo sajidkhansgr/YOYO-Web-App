@@ -21,31 +21,31 @@ export class CollectionService {
     }
     return this.http.get(`${AppSettings.LIST_COLCT}`, {
       params: queryParams
-    }
-    ).pipe(
-      map((res: any) =>
-        res
-      )
-    );
+    }).pipe(map((res: any) => res));
   }
 
   // add collection
   addColctn(data: any) {
-    return this.http.post(`${AppSettings.ADD_COLCT}`, data)
+    return this.http.post(`${AppSettings.ADD_COLCT}`, data);
   }
 
   // rename collection
   renColctn(data: any) {
-    return this.http.put(`${AppSettings.REN_COLCT}`, data)
+    return this.http.put(`${AppSettings.REN_COLCT}`, data);
   }
 
   // duplicate collection
   duplColctn(data: any) {
-    return this.http.patch(`${AppSettings.DUPL_COLCT}`, data)
+    return this.http.patch(`${AppSettings.DUPL_COLCT}`, data);
   }
 
   // delete collection
   delColctn(id: any) {
-    return this.http.patch(`${AppSettings.DEL_COLCT}?id=${id}`, {})
+    return this.http.patch(`${AppSettings.DEL_COLCT}?id=${id}`, {});
+  }
+
+  //  collection
+  getColctn(id: any) {
+    return this.http.get(`${AppSettings.GET_COLCT}?id=${id}`);
   }
 }

@@ -15,46 +15,11 @@
   </div>
   <app-loader [type]="'page'" *ngIf="loading"></app-loader>
   <div class="mt-2 row collections" *ngIf="view && !loading">
-    <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let colctn of colctnArr"
-      [routerLink]="'/web-app/resource/collections/'+colctn.id">
-      <div class="card curs-ptr">
-        <div class="card-body">
+    <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let colctn of colctnArr">
+      <div class="card">
+        <div class="card-body curs-ptr" (click)="showContent(colctn.id)">
           <div class="imagePreview text-center">
             <img src="assets/images/discription.png">
-          </div>
-          <div class="options rounded">
-            <div class="dropleft">
-              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                <i class="fas fa-share-square"></i>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="shareDD">
-                <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
-              </div>
-            </div>
-            <div class="btn my-1" (click)="delColctn(colctn.id)">
-              <i class="fas fa-trash-alt"></i>
-            </div>
-            <div class="dropleft">
-              <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                <i class="fas fa-ellipsis-h"></i>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="optionsDD">
-                <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i
-                    class="fas fa-copy mr-1"></i>Duplicate</a>
-                <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i
-                    class="fas fa-edit mr-1"></i>Rename</a>
-                <a class="dropdown-item dd">
-                  <i class="fa fa-download mr-1"></i>Download
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item"><i class="fas fa-file-pdf mr-1"></i>As a single PDF</a>
-                    <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
-                  </div>
-                </a>
-              </div>
-            </div>
           </div>
         </div>
         <div class="card-footer">
@@ -66,6 +31,40 @@
           </div>
           <div class="float-right">
             <mat-checkbox></mat-checkbox>
+          </div>
+        </div>
+        <div class="options rounded">
+          <div class="dropleft">
+            <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              <i class="fas fa-share-square"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="shareDD">
+              <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+              <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+            </div>
+          </div>
+          <div class="btn my-1" (click)="delColctn(colctn.id)">
+            <i class="fas fa-trash-alt"></i>
+          </div>
+          <div class="dropleft">
+            <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              <i class="fas fa-ellipsis-h"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="optionsDD">
+              <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i
+                  class="fas fa-copy mr-1"></i>Duplicate</a>
+              <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i
+                  class="fas fa-edit mr-1"></i>Rename</a>
+              <a class="dropdown-item dd">
+                <i class="fa fa-download mr-1"></i>Download
+                <div class="dropdown-menu">
+                  <a class="dropdown-item"><i class="fas fa-file-pdf mr-1"></i>As a single PDF</a>
+                  <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -84,11 +83,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let colctn of colctnArr" [routerLink]="'/web-app/resource/collections/'+colctn.id">
+        <tr *ngFor="let colctn of colctnArr">
           <td class="align-middle">
             <mat-checkbox></mat-checkbox>
           </td>
-          <td class="align-middle">
+          <td class="align-middle curs-ptr" (click)="showContent(colctn.id)">
             <div class="d-flex">
               <div class="imagePreview border mr-2">
                 <img src="assets/images/discription.png">

@@ -6,6 +6,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { CollectionListComponent } from './collection-list.component';
 import { CollectionService } from '../collection.service'
@@ -26,7 +27,8 @@ const routes: Routes = [
     MatInputModule,
     MatTooltipModule,
     LoaderModule,
-    FormsModule, ReactiveFormsModule
+    FormsModule, ReactiveFormsModule,
+    MatDialogModule
   ],
   providers: [CollectionService],
 })

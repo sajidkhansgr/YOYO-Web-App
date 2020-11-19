@@ -76,13 +76,13 @@ export class WebAppComponent implements OnInit {
 
   openModal() {
     this.modalService.open(ChngPassComponent, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
-    .then((result: any) => {
-      console.log(`Closed with: ${result}`);
-    }, (reason: any) => {
-      console.log(`Dismissed ${(reason)}`);
-    });
+      .then((result: any) => {
+        console.log(`Closed with: ${result}`);
+      }, (reason: any) => {
+        console.log(`Dismissed ${(reason)}`);
+      });
   }
-  
+
   disMissMdodal() {
     if (this.modalService)
       this.modalService.dismissAll();

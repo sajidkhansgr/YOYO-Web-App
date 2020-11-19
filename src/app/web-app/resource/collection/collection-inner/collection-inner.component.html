@@ -1,6 +1,7 @@
-<div class="main main-employee p-3 container mt-3">
+<app-loader [type]="'page'" *ngIf="loading"></app-loader>
+<div class="main main-employee p-3 container mt-3" *ngIf="!loading">
   <h3 class="mb-4 clearfix heading align-self-center">
-    Testabc
+    {{selColctn.name}}
     <div class="float-right d-flex">
       <div class="btn btn-light" (click)="openModal(email)">
         <i class="fa fa-envelope mr-1"></i>
@@ -13,8 +14,12 @@
           <i class="fas fa-ellipsis-h"></i>
         </div>
         <div class="dropdown-menu" aria-labelledby="optionsDD">
-          <a class="dropdown-item curs-ptr" (click)="openModal(duplicate)"><i class="fas fa-copy mr-1"></i>Duplicate</a>
-          <a class="dropdown-item curs-ptr" (click)="openModal(rename)"><i class="fas fa-edit mr-1"></i>Rename</a>
+          <a class="dropdown-item curs-ptr" (click)="colctnModal(collection, 'dupl')">
+            <i class="fas fa-copy mr-1"></i>Duplicate
+          </a>
+          <a class="dropdown-item curs-ptr" (click)="colctnModal(collection, 'ren')">
+            <i class="fas fa-edit mr-1"></i>Rename
+          </a>
           <a class="dropdown-item dd curs-ptr">
             <i class="fa fa-download mr-1"></i>Download
             <div class="dropdown-menu">
@@ -22,7 +27,9 @@
               <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
             </div>
           </a>
-          <a class="dropdown-item curs-ptr"><i class="fas fa-trash-alt mr-1"></i>Delete</a>
+          <a class="dropdown-item curs-ptr" (click)="delColctn()">
+            <i class="fas fa-trash-alt mr-1"></i>Delete
+          </a>
         </div>
       </div>
       <i class="fa mr-4 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
@@ -144,23 +151,32 @@
   <div class="btn btn-primary align-self-center"><i class="fas fa-trash-alt mr-1"></i>Delete</div>
 </div>
 
-<!-- new collection modal -->
-<ng-template #newCollection let-modal>
+<!-- new/rename/duplicate collection modal -->
+<ng-template #collection let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Create a Collection</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{multiForm == 1 ? 'Add' : multiForm == 2 ? 'Rename' : 'Duplicate'}}
+      Collection</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body" ngbAutofocus>
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Name</mat-label>
-      <input matInput type="text" placeholder="New Collection Name">
-    </mat-form-field>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
+  <form name="colctnForm" (ngSubmit)="submitColctn()" [formGroup]="colctnForm">
+    <div class="modal-body" ngbAutofocus>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="New Collection Name" required formControlName="name">
+        <mat-error *ngIf="colctnForm.get('name')!.hasError('required')">
+          Name is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" [disabled]="colctnForm!.invalid || disabled">
+        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+        Save
+      </button>
+    </div>
+  </form>
 </ng-template>
 
 <!-- add resource modal -->
@@ -276,44 +292,6 @@
   </div>
 </ng-template>
 
-<!-- duplicate collection modal -->
-<ng-template #duplicate let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Duplicate Collection</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body" ngbAutofocus>
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Collection Name</mat-label>
-      <input type="text" matInput placeholder="Collection Name">
-    </mat-form-field>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
-</ng-template>
-
-<!-- rename collection modal -->
-<ng-template #rename let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Rename Collection</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body" ngbAutofocus>
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Collection Name</mat-label>
-      <input type="text" matInput placeholder="Collection Name">
-    </mat-form-field>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
-</ng-template>
-
 <!-- share with colleagues -->
 <ng-template #shareColl let-modal>
   <div class="modal-header">
@@ -376,7 +354,7 @@
   </div>
   <div class="modal-body" ngbAutofocus>
     <ul class="list-unstyled">
-      <li (click)="openModal(newCollection)" class="d-flex text-primary px-3 curs-ptr">
+      <li (click)="colctnModal(collection, 'add')" class="d-flex text-primary px-3 curs-ptr">
         <div class="icon mr-2"><i class="fas fa-folder-plus" style="font-size:40px;"></i></div>
         <div class="info align-self-center">Create a new Collection</div>
       </li>

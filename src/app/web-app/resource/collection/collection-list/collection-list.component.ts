@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
 
 import { CollectionService } from '../collection.service';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-collection-list',
@@ -21,7 +24,9 @@ export class CollectionListComponent implements OnInit {
     private modalService: NgbModal,
     private colctnSrv: CollectionService,
     private fb: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -38,19 +43,35 @@ export class CollectionListComponent implements OnInit {
     this.multiForm = 0;
   }
 
+  // show content
+  showContent(id: any) {
+    this.router.navigate(['/web-app/resource/collections/' + id]);
+  }
+
   // ***** collection *****
   // delete collection
   delColctn(id: any) {
-    this.colctnSrv.delColctn(id).subscribe((data: any) => {
-      // console.log(data);
-      if (data) {
-        this.toastr.success(data.message || 'Collection deleted successfully', 'Success!');
-        this.listColct();
-      }
-    }, (err: any) => {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to delete this collection?`,
+        title: `Delete Collection`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.colctnSrv.delColctn(id).subscribe((data: any) => {
+          // console.log(data);
+          if (data) {
+            this.toastr.success(data.message || 'Collection deleted successfully', 'Success!');
+            this.listColct();
+          }
+        }, (err: any) => {
 
-    });
+        });
+      }
+    })
   }
+
   // collection open modal
   colctnModal(modal: any, type: string, colctn?: any) {
     if (type == 'add') {
@@ -92,7 +113,7 @@ export class CollectionListComponent implements OnInit {
     this.colctnSrv.duplColctn(colctnData).subscribe((data: any) => {
       console.log(data);
       if (data) {
-        this.toastr.success(data.message || 'Collection renamed successfully', 'Success!');
+        this.toastr.success(data.message || 'Collection duplicated successfully', 'Success!');
         this.listColct();
       }
       this.dismissModal();

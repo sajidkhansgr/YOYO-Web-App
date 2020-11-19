@@ -964,60 +964,60 @@ header {
               max-height: 200px;
             }
           }
-
-          .options {
-            opacity: 0;
-            transition: opacity linear 0.5s;
-            position: absolute;
-            top: 50px;
-            right: 10px;
-            background-color: rgba($primary, 0.7);
-            width: 50px;
-            padding: 10px 5px;
-
-            .btn {
-              width: 40px;
-              height: 40px;
-              color: #fff;
-            }
-
-            .btn:hover {
-              background-color: rgba($primary, 0.5);
-            }
-
-            .dropdown-menu {
-              background-color: rgba($primary, 0.7);
-              margin-right: 5px;
-
-              .dropdown-item {
-                color: #fff;
-              }
-
-              .dd {
-                .dropdown-menu {
-                  top: 55%;
-                  left: 100%;
-                  width: fit-content;
-                  display: none !important;
-                }
-              }
-
-              .dd:hover {
-                .dropdown-menu {
-                  display: block !important;
-                }
-              }
-
-              .dropdown-item:hover {
-                background-color: rgba($primary, 0.5);
-              }
-            }
-          }
         }
 
         .card-footer {
           .float-left {
             font-size: 12px;
+          }
+        }
+
+        .options {
+          opacity: 0;
+          transition: opacity linear 0.5s;
+          position: absolute;
+          top: 50px;
+          right: 10px;
+          background-color: rgba($primary, 0.7);
+          width: 50px;
+          padding: 10px 5px;
+
+          .btn {
+            width: 40px;
+            height: 40px;
+            color: #fff;
+          }
+
+          .btn:hover {
+            background-color: rgba($primary, 0.5);
+          }
+
+          .dropdown-menu {
+            background-color: rgba($primary, 0.7);
+            margin-right: 5px;
+
+            .dropdown-item {
+              color: #fff;
+            }
+
+            .dd {
+              .dropdown-menu {
+                top: 55%;
+                left: 100%;
+                width: fit-content;
+                display: none !important;
+              }
+            }
+
+            .dd:hover {
+              .dropdown-menu {
+                display: block !important;
+              }
+            }
+
+            .dropdown-item:hover {
+              background-color: rgba($primary, 0.5);
+            }
           }
         }
       }
