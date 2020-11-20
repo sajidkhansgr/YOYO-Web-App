@@ -87,8 +87,7 @@
                     </mat-form-field>
                     <div class="form-group text-right">
                       <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('d')">Cancel</button>
-                      <button class="btn btn-primary btn-sm" [disabled]="disb.d"
-                        (click)="updContent('d')">
+                      <button class="btn btn-primary btn-sm" [disabled]="disb.d" (click)="updContent('d')">
                         <app-loader [type]="'btn'" *ngIf="disb.d"></app-loader>Submit
                       </button>
                     </div>
@@ -138,8 +137,7 @@
                             </mat-form-field>
                             <div class="form-group text-right">
                               <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('t')">Cancel</button>
-                              <button class="btn btn-primary btn-sm" [disabled]="disb.t"
-                                (click)="updContent('t')">
+                              <button class="btn btn-primary btn-sm" [disabled]="disb.t" (click)="updContent('t')">
                                 <app-loader [type]="'btn'" *ngIf="disb.t"></app-loader>Submit
                               </button>
                             </div>
@@ -183,8 +181,7 @@
                             </mat-form-field>
                             <div class="form-group text-right">
                               <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('l')">Cancel</button>
-                              <button class="btn btn-primary btn-sm" [disabled]="disb.l"
-                                (click)="updContent('l')">
+                              <button class="btn btn-primary btn-sm" [disabled]="disb.l" (click)="updContent('l')">
                                 <app-loader [type]="'btn'" *ngIf="disb.l"></app-loader>Submit
                               </button>
                             </div>
@@ -282,7 +279,8 @@
                           <div class="text-hi-dark-grey">
                             <ul class="list-unstyled">
                               <li>
-                                <i [ngClass]="{'fa-check': rowInfo.canBeShared,'fa-times': !rowInfo.canBeShared}" class="mr-1 fas"></i>
+                                <i [ngClass]="{'fa-check': rowInfo.canBeShared,'fa-times': !rowInfo.canBeShared}"
+                                  class="mr-1 fas"></i>
                                 Can be shared
                               </li>
                               <!-- <li><i class="fas fa-check mr-1"></i>Can be downloaded</li>
@@ -353,8 +351,7 @@
                             </ul>
                             <div class="form-group text-right">
                               <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('p')">Cancel</button>
-                              <button class="btn btn-primary btn-sm" [disabled]="disb.p"
-                                (click)="updContent('p')">
+                              <button class="btn btn-primary btn-sm" [disabled]="disb.p" (click)="updContent('p')">
                                 <app-loader [type]="'btn'" *ngIf="disb.p"></app-loader>Submit
                               </button>
                             </div>
@@ -483,8 +480,9 @@
                         <i matSuffix class="fa fa-angle-double-right curs-ptr"></i>
                       </mat-form-field>
                       <div class="form-group text-right">
-                        <button [disabled]="disb.cmnt || !cmnt" (click)="addCmnt('cmnt')" class="btn btn-primary text-white btn-sm">
-                            <app-loader [type]="'btn'" *ngIf="disb.cmnt"></app-loader>Submit
+                        <button [disabled]="disb.cmnt || !cmnt" (click)="addCmnt('cmnt')"
+                          class="btn btn-primary text-white btn-sm">
+                          <app-loader [type]="'btn'" *ngIf="disb.cmnt"></app-loader>Submit
                         </button>
                       </div>
                     </div>
@@ -876,10 +874,10 @@
         </tbody>
       </table>
       <div class="row justify-content-between" *ngIf="!view">
-        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-0" *ngFor="let cntnt of cntnts"
-          (click)="toggleInfo(cntnt)" style="max-width:400px;" [ngClass]="{'fa-angle-up':(rowInfo.id === cntnt.id)}">
+        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-2 p-3 rounded" *ngFor="let cntnt of cntnts"
+          (click)="toggleInfo(cntnt)" style="max-width:400px;" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id)}">
           <img [src]="cntnt.img" alt="Thumbnail" style="max-height:200px;">
-          <div class="name bg-hi-grey rounded w-75 mx-auto px-2">{{cntnt.name}}</div>
+          <div class="name bg-hi-grey rounded w-75 mx-auto px-2 my-2">{{cntnt.name}}</div>
         </div>
       </div>
     </div>

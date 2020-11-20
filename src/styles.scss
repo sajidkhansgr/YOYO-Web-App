@@ -45,7 +45,8 @@ body {
   background-color: lighten($color: $hi-dark-grey, $amount: 10);
 }
 
-.bg-hi-dark-grey {
+.bg-hi-dark-grey,
+.sel-row {
   background-color: $hi-dark-grey;
 }
 
