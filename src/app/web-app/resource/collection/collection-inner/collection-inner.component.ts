@@ -22,7 +22,8 @@ export class CollectionInnerComponent implements OnInit {
   selColctn: any;
   colctnForm!: FormGroup;
   multiForm!: number;
-  contentArr!: any[];
+  contentArr!: any[]; selContentArr: any;
+  showBotDiv!: boolean;
 
   constructor(
     private modalService: NgbModal,
@@ -44,15 +45,29 @@ export class CollectionInnerComponent implements OnInit {
 
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
-    this.selColctn = undefined;
+    this.selColctn = undefined; this.selContentArr = [];
     this.colctnForm = this.fb.group({
       name: ['', [Validators.required]]
     });
     this.multiForm = 0;
     this.contentArr = [];
+    this.showBotDiv = false;
   }
 
   // ***** content *****
+  // on selecting a content
+  selMe(val: any, id: number) {
+    if (val) {
+      this.selContentArr.push(id);
+    } else {
+      this.selContentArr = this.selContentArr.filter((data: any) => data != id);
+    }
+    if (this.selContentArr.length > 0) {
+      this.showBotDiv = true;
+    } else {
+      this.showBotDiv = false;
+    }
+  }
   // get content by collection
   getContentColctn() {
     this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
