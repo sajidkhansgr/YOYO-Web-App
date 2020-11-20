@@ -12,6 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CollectionInnerComponent } from './collection-inner.component';
 import { CollectionService } from '../collection.service';
 import { LoaderModule } from '../../../../shared/components/loader/loader.module';
+import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
 
 const routes: Routes = [
   { path: '', component: CollectionInnerComponent }
@@ -31,6 +32,6 @@ const routes: Routes = [
     FormsModule, ReactiveFormsModule,
     MatDialogModule
   ],
-  providers: [CollectionService]
+  providers: [CollectionService, ContentWorkspaceService]
 })
 export class CollectionInnerModule { }

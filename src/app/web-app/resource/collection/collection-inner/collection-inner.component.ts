@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CollectionService } from '../collection.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service'
 
 
 @Component({
@@ -24,6 +25,7 @@ export class CollectionInnerComponent implements OnInit {
   multiForm!: number;
   contentArr!: any[]; selContentArr: any;
   showBotDiv!: boolean;
+  workspcArr!: any[];
 
   constructor(
     private modalService: NgbModal,
@@ -32,7 +34,8 @@ export class CollectionInnerComponent implements OnInit {
     private toastr: ToastrService,
     private router: Router,
     private fb: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cwServ: ContentWorkspaceService
   ) { }
 
   ngOnInit(): void {
@@ -52,9 +55,33 @@ export class CollectionInnerComponent implements OnInit {
     this.multiForm = 0;
     this.contentArr = [];
     this.showBotDiv = false;
+    this.workspcArr = [];
   }
 
-  // ***** content *****
+  // ***** workspace *****
+  // get list of workspaces
+  getWrkspcList() {
+    // this.wrkspcLoading = true;
+    this.cwServ.wrkspcList({})
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          // console.log(data);
+          this.workspcArr = data.result.results;
+        }
+        // this.wrkspcLoading = false;
+      }, (err: any) => {
+        console.log(err);
+        // this.wrkspcLoading = false;
+      });
+  }
+
+  // ***** resource/content *****
+  // add resource modal
+  addResourceModal(modal: any) {
+    this.getWrkspcList();
+    this.openModal(modal);
+  }
+
   // on selecting a content
   selMe(val: any, id: number) {
     if (val) {
