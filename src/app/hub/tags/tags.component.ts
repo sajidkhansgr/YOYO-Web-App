@@ -37,7 +37,7 @@ export class TagsComponent implements OnInit {
     }
   }
   selTag!: any;
-  catgLoading!: boolean; tagLoading!: boolean;
+  catgLoading!: boolean; tagLoading!: boolean;docLoading!: boolean;
   rowInfo: any;
   showRowInfo!: boolean;
   showCatgIn!: boolean;
@@ -74,7 +74,7 @@ export class TagsComponent implements OnInit {
     this.input = undefined; this.searInit = false;
     this.selTag = 'all';
     this.catgLoading = true; this.tagLoading = true;
-    this.rowInfo = undefined;
+    this.rowInfo = {};
     this.showRowInfo = false;
     this.showCatgIn = false;
     this.catgForm = this.fb.group({
@@ -199,7 +199,7 @@ export class TagsComponent implements OnInit {
           if (data) {
             // console.log(data);
             this.toastr.success(data.message || 'Tag updated successfully', 'Success!');
-            this.closeInfo();
+            this.closeDoc();
             this.getTags();
           } else {
             this.toastr.error('Unable to update Tag', 'Error!');
@@ -541,22 +541,27 @@ export class TagsComponent implements OnInit {
   // toggle tags
   toggleInfo(row: Tag) {
     if (this.showRowInfo && this.rowInfo.id == row.id) {
-      this.showRowInfo = false;
-      this.rowInfo = {};
+      this.closeDoc();
     } else {
-      this.rowInfo = row;
-      this.rowInfo.categoryIDs = [];
-      for (let i = 0; i < row.categories.length; i++) {
-        this.rowInfo.categoryIDs.push((row.categories[i].id).toString());
-      }
+      this.showRowInfo = true;
+      this.docLoading = true;
+      setTimeout(() => {
+        this.rowInfo = row;
+        this.rowInfo.categoryIDs = [];
+        for (let i = 0; i < row.categories.length; i++) {
+          this.rowInfo.categoryIDs.push((row.categories[i].id).toString());
+        }
+        this.docLoading = false;
+      }, 900);
       // console.log(this.rowInfo.categoryIDs);
       // console.log(this.rowInfo.categories);
-      this.showRowInfo = true;
     }
   }
 
-  closeInfo = () => {
+  closeDoc = () => {
     this.showRowInfo = false
+    this.rowInfo = {};
+    this.docLoading = false;
   }
 
   ngOnDestroy(): void {

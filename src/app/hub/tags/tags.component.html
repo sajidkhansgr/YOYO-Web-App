@@ -146,7 +146,7 @@
                   </tr>
                 </thead>
                 <tbody *ngIf="!tagLoading && tags.length > 0">
-                  <tr (click)="toggleInfo(tag)" *ngFor="let tag of tags">
+                  <tr (click)="toggleInfo(tag)" *ngFor="let tag of tags" [ngClass]="{'sel-row':(rowInfo.id === tag.id)}">
                     <td>
                       {{tag.name}}
                     </td>
@@ -168,12 +168,13 @@
       </div>
     </div>
     <div class="workspace w-100 col-md-4 mt-4" *ngIf="showRowInfo">
-      <div class="document">
+      <app-loader [type]="'page'" *ngIf="docLoading"></app-loader>
+      <div class="document" *ngIf="!docLoading">
         <div class="card">
           <div class="card-header row m-0">
             <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">{{rowInfo.name}}</h5>
             <div class="mr-2 col-1 ml-auto">
-              <div class="btn btn-light" (click)="closeInfo()">
+              <div class="btn btn-light" (click)="closeDoc()">
                 <i class="fas fa-times"></i>
               </div>
             </div>

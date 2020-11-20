@@ -189,6 +189,7 @@ export class CommnComponent implements OnInit {
 
   closeDoc = () => {
     this.showRowInfo = false;
+    this.docLoading = false;
     this.rowInfo = {};
   }
 
@@ -244,7 +245,7 @@ export class CommnComponent implements OnInit {
         if (data) {
           this.toastr.success(data.message || 'Annoucement added successfully', 'Success!');
           this.getAncmnts();
-          this.disMissMdodal();
+          this.dismissModal();
           //get all annoucem
         } else {
           this.toastr.error(data.result.data || 'Unable to add Annoucement', 'Error!');
@@ -263,7 +264,7 @@ export class CommnComponent implements OnInit {
           this.toastr.success(data.message || 'Annoucement updated successfully', 'Success!');
           this.rowInfo = {};
           this.getAncmnts();
-          this.disMissMdodal();
+          this.dismissModal();
           //get all annoucem
         } else {
           this.toastr.error(data.result.data || 'Unable to update Annoucement', 'Error!');
@@ -419,13 +420,13 @@ export class CommnComponent implements OnInit {
     this.openModal(content, true);
   }
 
-  disMissMdodal() {
+  dismissModal() {
     if (this.modalService)
       this.modalService.dismissAll();
   }
 
   ngOnDestroy(): void {
     this.dialog.closeAll();
-    this.disMissMdodal();
+    this.dismissModal();
   }
 }

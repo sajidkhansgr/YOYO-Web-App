@@ -190,7 +190,7 @@
             </tr>
           </thead>
           <tbody *ngIf="!loading && ancmnts.length > 0">
-            <tr *ngFor="let ancmnt of ancmnts" (click)="toggleInfo(ancmnt)">
+            <tr *ngFor="let ancmnt of ancmnts" (click)="toggleInfo(ancmnt)" [ngClass]="{'sel-row':(rowInfo.id === ancmnt.id)}">
               <td *ngFor="let col of cols">
                 <span [ngSwitch]="col.k">
                   <span *ngSwitchCase="'sendToGroup'">

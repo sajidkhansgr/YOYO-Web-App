@@ -106,7 +106,7 @@
                   </tr>
                 </thead>
                 <tbody *ngIf="!loading && grps.length > 0">
-                  <tr *ngFor="let grp of grps" (click)="toggleInfo(grp)" [ngClass]="{'deact': !grp.isActive}">
+                  <tr *ngFor="let grp of grps" (click)="toggleInfo(grp)" [ngClass]="{'deact': !grp.isActive,'sel-row':(rowInfo.id === grp.id)}">
                     <td>
                       <span class="d-block">{{grp.name}}</span>
                     </td>

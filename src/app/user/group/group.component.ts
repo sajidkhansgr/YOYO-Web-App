@@ -175,7 +175,7 @@ export class GroupComponent implements OnInit {
     this.grpServ.addGroup(grpData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Group added successfully', 'Success!');
-        this.disMissMdodal();
+        this.dismissModal();
         this.grpsList();
       } else {
         this.toastr.error(data.result.data || 'Unable to add Group', 'Error!');
@@ -191,7 +191,7 @@ export class GroupComponent implements OnInit {
     this.grpServ.updGroup(grpData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Group updated successfully', 'Success!');
-        this.disMissMdodal();
+        this.dismissModal();
         this.grpsList();
       } else {
         this.toastr.error(data.result.data || 'Unable to update Group', 'Error!');
@@ -313,7 +313,7 @@ export class GroupComponent implements OnInit {
     }
   }
 
-  disMissMdodal() {
+  dismissModal() {
     if (this.modalService)
       this.modalService.dismissAll();
   }
@@ -330,7 +330,7 @@ export class GroupComponent implements OnInit {
 
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    this.disMissMdodal();
+    this.dismissModal();
   }
 
 }

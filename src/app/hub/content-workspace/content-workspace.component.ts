@@ -19,6 +19,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 import { ContentWorkspaceService } from './content-workspace.service';
 import { TagsService } from '../tags/tags.service';
 import { LanguageService } from '../../shared/services/language.service';
+import { TokenDataService } from '../../shared/services/token-data.service';
 
 @Component({
   selector: 'app-content-workspace',
@@ -58,6 +59,8 @@ export class ContentWorkspaceComponent implements OnInit {
   lngs!: Language[]; selLngs: Language[] = [];
   edits:any;disb:any; //disb and edits used in single edits
 
+  usrInfo: any | null;
+
   constructor(
     // private route: ActivatedRoute,
     private modalService: NgbModal,
@@ -66,7 +69,8 @@ export class ContentWorkspaceComponent implements OnInit {
     private toastr: ToastrService,
     private dialog: MatDialog,
     private tagServ: TagsService,
-    private lngServ: LanguageService
+    private lngServ: LanguageService,
+    private tokenDataServ: TokenDataService
   ) { }
 
   ngOnInit(): void {
@@ -77,6 +81,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   initialiseState() {
+    this.usrInfo = this.tokenDataServ.getUser();
     this.files = []; this.addURLIcon = ''; this.iconUrl = '';
     this.dispGnrl = true; this.dispSettings = true; this.dispSmart = false;
     this.dispPropsSec = true; this.dispSmFolderSec = true;
@@ -106,10 +111,9 @@ export class ContentWorkspaceComponent implements OnInit {
     this.disabled = false;
     this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
-    this.visbCols = [{ n: "Role", key: "role", dir: 1, }];
-    this.hidCols = [{ n: "Property", key: "prop", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, },
-    { n: "License Type", key: "lic", dir: 1, }, { n: "License Type", key: "lic", dir: 1, }];
-    this.cols = [{ n: "Name", dir: 1, key: "name" }, { n: "Role", key: "role", dir: 1, }];
+    this.visbCols = [{ n: "Added", k:"createdDate", dir: 1}];
+    this.hidCols = [{ n: "Likes", k:"likes", dir: 1},{ n: "Size", k:"size", dir: 1}];
+    this.cols = [{ n: "Name", dir: 1, k:"name" }, { n: "Added", k:"createdDate", dir: 1 }];
     this.props = PRPS;
     this.view = true;
     this.edit = false;
@@ -751,6 +755,7 @@ export class ContentWorkspaceComponent implements OnInit {
   closeDoc = () => {
     this.showRowInfo = false;
     this.showWork = false;
+    this.docLoading = false;
     this.rowInfo = {};
   }
 
@@ -1096,6 +1101,11 @@ export class ContentWorkspaceComponent implements OnInit {
     this.cwServ.addCmntToContent(cmntData)
       .subscribe((data: any) => {
         if (data) {
+          this.rowInfo.comments.push({
+            createdByFullName:this.usrInfo && this.usrInfo .fN?this.usrInfo.fN:'User',
+            createdDate: new Date(),
+            commentText: this.cmnt
+          })
           this.cmnt = '';
           this.toastr.success(`Comment saved successfully`, 'Success!');
         } else {
@@ -1205,4 +1215,12 @@ export class ContentWorkspaceComponent implements OnInit {
   getSize(bytes: any) {
     return FileHelper.formatBytes(bytes, 2);
   }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this.dismissModal();
+    if(!!this.subscription)
+      this.subscription.unsubscribe();
+  }
+
 }
