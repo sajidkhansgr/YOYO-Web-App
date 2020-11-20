@@ -37,7 +37,7 @@
       <button class="btn btn-primary" (click)="openModal(addResource)">Add Resource</button>
     </div>
   </h3>
-  <div class="mt-2 row my-files" *ngIf="view">
+  <div class="mt-2 row my-files" *ngIf="view && contentArr.length > 0">
     <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let content of contentArr">
       <div class="card curs-ptr">
         <div class="card-body">
@@ -83,6 +83,9 @@
       </div>
     </div>
   </div>
+  <div class="text-center mt-5 text-secondary" style="font-size: 20px;" *ngIf="view && contentArr.length == 0">
+    No Content Found
+  </div>
   <div class="mt-2 row my-files" *ngIf="!view">
     <table class="table table-hover">
       <thead>
@@ -95,8 +98,8 @@
           <th></th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let t of testArr">
+      <tbody *ngIf="contentArr.length > 0">
+        <tr *ngFor="let content of contentArr">
           <td class="align-middle">
             <mat-checkbox></mat-checkbox>
           </td>
@@ -105,10 +108,10 @@
               <div class="imagePreview border mr-2">
                 <img src="assets/images/discription.png">
               </div>
-              <div class="name align-self-center">Abc def</div>
+              <div class="name align-self-center">{{content.name}}</div>
             </div>
           </td>
-          <td class="align-middle">16 Oct, 2020 14:40</td>
+          <td class="align-middle">{{content.updatedDate.split('T')[0]}}</td>
           <td class="align-middle options">
             <div class="d-flex">
               <div class="dropleft">
@@ -133,6 +136,9 @@
         </tr>
       </tbody>
     </table>
+    <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;" *ngIf="contentArr.length == 0">
+      No Content Found
+    </div>
   </div>
 </div>
 

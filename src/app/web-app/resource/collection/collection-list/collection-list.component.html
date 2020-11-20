@@ -15,60 +15,67 @@
   </div>
   <app-loader [type]="'page'" *ngIf="loading"></app-loader>
   <div class="mt-2 row collections" *ngIf="view && !loading">
-    <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let colctn of colctnArr">
-      <div class="card">
-        <div class="card-body curs-ptr" (click)="showContent(colctn.id)">
-          <div class="imagePreview text-center">
-            <img src="assets/images/discription.png">
-          </div>
-        </div>
-        <div class="card-footer">
-          <div class="name">{{colctn.name}}</div>
-          <div class="float-left text-secondary d-flex">
-            <div class="date">{{colctn.updatedDate.split('T')[0]}}</div>
-            <div class="mx-2">l</div>
-            <!-- <div class="items">{{colctn.collectionContents.length}} Item(s)</div> -->
-          </div>
-          <div class="float-right">
-            <mat-checkbox></mat-checkbox>
-          </div>
-        </div>
-        <div class="options rounded">
-          <div class="dropleft">
-            <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              <i class="fas fa-share-square"></i>
-            </button>
-            <div class="dropdown-menu" aria-labelledby="shareDD">
-              <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-              <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+    <ng-container *ngIf="colctnArr.length > 0; else noColctn">
+      <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let colctn of colctnArr">
+        <div class="card">
+          <div class="card-body curs-ptr" (click)="showContent(colctn.id)">
+            <div class="imagePreview text-center">
+              <img src="assets/images/discription.png">
             </div>
           </div>
-          <div class="btn my-1" (click)="delColctn(colctn.id)">
-            <i class="fas fa-trash-alt"></i>
+          <div class="card-footer">
+            <div class="name">{{colctn.name}}</div>
+            <div class="float-left text-secondary d-flex">
+              <div class="date">{{colctn.updatedDate.split('T')[0]}}</div>
+              <div class="mx-2">l</div>
+              <!-- <div class="items">{{colctn.collectionContents.length}} Item(s)</div> -->
+            </div>
+            <div class="float-right">
+              <mat-checkbox></mat-checkbox>
+            </div>
           </div>
-          <div class="dropleft">
-            <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              <i class="fas fa-ellipsis-h"></i>
-            </button>
-            <div class="dropdown-menu" aria-labelledby="optionsDD">
-              <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i
-                  class="fas fa-copy mr-1"></i>Duplicate</a>
-              <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i
-                  class="fas fa-edit mr-1"></i>Rename</a>
-              <a class="dropdown-item dd">
-                <i class="fa fa-download mr-1"></i>Download
-                <div class="dropdown-menu">
-                  <a class="dropdown-item"><i class="fas fa-file-pdf mr-1"></i>As a single PDF</a>
-                  <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
-                </div>
-              </a>
+          <div class="options rounded">
+            <div class="dropleft">
+              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                <i class="fas fa-share-square"></i>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="shareDD">
+                <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+              </div>
+            </div>
+            <div class="btn my-1" (click)="delColctn(colctn.id)">
+              <i class="fas fa-trash-alt"></i>
+            </div>
+            <div class="dropleft">
+              <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="optionsDD">
+                <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i
+                    class="fas fa-copy mr-1"></i>Duplicate</a>
+                <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i
+                    class="fas fa-edit mr-1"></i>Rename</a>
+                <a class="dropdown-item dd">
+                  <i class="fa fa-download mr-1"></i>Download
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item"><i class="fas fa-file-pdf mr-1"></i>As a single PDF</a>
+                    <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
+    <ng-template #noColctn>
+      <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;">
+        No Collections Found
+      </div>
+    </ng-template>
   </div>
   <div class="mt-2 row collections" *ngIf="!view && !loading">
     <table class="table table-hover">
@@ -82,7 +89,7 @@
           <th></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="colctnArr.length > 0">
         <tr *ngFor="let colctn of colctnArr">
           <td class="align-middle">
             <mat-checkbox></mat-checkbox>
@@ -135,6 +142,9 @@
         </tr>
       </tbody>
     </table>
+    <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;" *ngIf="colctnArr.length == 0">
+      No Collections Found
+    </div>
   </div>
 </div>
 
