@@ -1,13 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 // import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
-import { DEF_ICON, PRPS } from '../../shared/constants';
+import { DEF_ICON, PRPS, DEF_IMG } from '../../shared/constants';
 import { FileHelper } from '../../shared/file-helper';
 import { Workspace } from '../../shared/models/workspace';
 import { Folder } from '../../shared/models/folder';
@@ -28,7 +29,7 @@ export class ContentWorkspaceComponent implements OnInit {
   showWork!: boolean;
   @Input() hubid: any; routerSubs!: Subscription;
   addURLIcon!: string; iconUrl!: any;
-  defIcon: any = DEF_ICON; custIcon: any; files!: any[];
+  defIcon: any = DEF_ICON; custIcon: any; files!: any[];defImg: any = DEF_IMG;
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: Workspace[]; selWrkspc: Workspace | undefined;
@@ -46,17 +47,16 @@ export class ContentWorkspaceComponent implements OnInit {
 
   tags!: Tag[]; selTags: Tag[] = []; selTags2: Tag[] = [];//using in selTags add and selTags2 form
   cntnts!: any[]; totalCount!: number; sort: any = {}; searchTxt!: string;
+  searchTxtChng: Subject<string> = new Subject<string>();
+  private subscription!: Subscription;
   selectable = true; removable: boolean = true;
   urlDisb!: boolean;
   cntntDisb!: boolean; cntntLoading!: boolean; activeIndex: number = 0;
   pageNo!: number; pageSize!: number; @Input() lmtPage: any;
   showRowInfo!: boolean; rowInfo!: any; docLoading!: boolean;
-  desc!: string; isShared!:boolean;
-
-  descDisb!: boolean; tagsDisb!: boolean; availDisb!: boolean; lngDisb!: boolean;
-  permsDisb!: boolean;
-
+  desc!: string; isShared!:boolean;cmnt!:string;
   lngs!: Language[]; selLngs: Language[] = [];
+  edits:any;disb:any; //disb and edits used in single edits
 
   constructor(
     // private route: ActivatedRoute,
@@ -120,11 +120,8 @@ export class ContentWorkspaceComponent implements OnInit {
     this.totalCount = 0;
     this.cntntLoading = true; //use in cntnt listing
     this.urlDisb = false;
-    this.descDisb = false; //used in update
-    this.tagsDisb = false; //used in update
-    this.availDisb = false; //used in update
-    this.lngDisb = false; //used in update
-    this.permsDisb = false; //used in update
+    this.edits = {};
+    this.disb = {};
     this.cntntForm = this.fb.group({
       img: [''],
       tags: ['']
@@ -137,6 +134,16 @@ export class ContentWorkspaceComponent implements OnInit {
       description: [''],
       url: ['', [Validators.required]],
     });
+    this.subscription = this.searchTxtChng
+      .pipe(
+        debounceTime(1000),
+        distinctUntilChanged(),
+        tap(() => {
+          this.pageNo = 1;
+          this.cntntList();
+        })
+      )
+      .subscribe();
   }
 
   // ---- folder and smart folder ---- //
@@ -731,7 +738,10 @@ export class ContentWorkspaceComponent implements OnInit {
       this.showRowInfo = true;
       this.showWork = false;
       this.rowInfo = {};
+      this.edits = {};
+      this.disb = {};
       this.desc = '';
+      this.cmnt = '';
       this.selTags2 = [];
       this.selLngs = [];
       this.getCntnt(row);
@@ -761,6 +771,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   setDefCntntData() {
     this.desc = this.rowInfo.description;
+    this.rowInfo.img =  this.getImg(this.rowInfo);
     this.isShared = this.rowInfo.canBeShared;
     if (Array.isArray(this.rowInfo.contentTags))
       this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId }));
@@ -774,24 +785,26 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // edit options in documents (workspace)
-  openEdit = (event: any) => {
-    event = event.target;
-    (event.parentNode.parentNode.parentNode.childNodes[1] as HTMLElement).style.display = 'none';
-    (event.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'block';
+  openEdit = (type: any) => {
+    this.edits[type] = true;
+    // event = event.target;
+    // (event.parentNode.parentNode.parentNode.childNodes[1] as HTMLElement).style.display = 'none';
+    // (event.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'block';
   }
 
-  closeEdit = (event: any,type: number=0,isUpd:boolean=true) => {
+  closeEdit(type: string,isUpd:boolean=true){
     if(type && isUpd){
       switch (type) {
-        case 1: this.desc = this.rowInfo.description; break;
-        case 4: this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId })); break;
-        case 3: this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng, id: lng.languageId })); break;
-        case 2: this.isShared = this.rowInfo.canBeShared; break;
+        case 'd': this.desc = this.rowInfo.description; break;
+        case 't': this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId })); break;
+        case 'l': this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng, id: lng.languageId })); break;
+        case 'p': this.isShared = this.rowInfo.canBeShared; break;
       }
     }
-    event = event.target;
-    (event.parentNode.parentNode.parentNode.parentNode.childNodes[1] as HTMLElement).style.display = 'block';
-    (event.parentNode.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'none';
+    this.edits[type] = false;
+    // event = event.target;
+    // (event.parentNode.parentNode.parentNode.parentNode.childNodes[1] as HTMLElement).style.display = 'block';
+    // (event.parentNode.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'none';
   }
 
   showGeneral = () => {
@@ -848,6 +861,8 @@ export class ContentWorkspaceComponent implements OnInit {
   // get content listing
   cntntList() {
     this.cntntLoading = true;
+
+    this.closeDoc();
     let params = {
       pageNo: this.pageNo, pageSize: this.pageSize,
       searchText: this.searchTxt,
@@ -858,12 +873,13 @@ export class ContentWorkspaceComponent implements OnInit {
     //   params.isActive = true;
     // else if (this.activeIndex == 2)
     //   params.isActive = false;
-
     this.cwServ.contentList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          console.log(data, "dadsa")
           this.cntnts = data.result.results;
+          for(let k=0;k<this.cntnts.length;k++){
+            this.cntnts[k].img =  this.getImg(this.cntnts[k]);
+          }
           this.totalCount = data.result.totalCount;
         } else {
           this.cntnts = [];
@@ -1011,54 +1027,83 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  updContent($event: any, type: number, disbType: 'descDisb' | 'tagsDisb' | 'lngDisb'| 'permsDisb') {
+  updContent(type: string) {
     let cntntData: any = {}; let str: string = '';
     switch (type) {
-      case 1: str = 'Description';
+      case 'd': str = 'Description';
         cntntData = {
-          description: this.desc, updateType: type
+          description: this.desc, updateType: 1
         }; break;
-      case 4: str = 'Tags';
+      case 't': str = 'Tags';
         cntntData = {
-          contentTags: [], updateType: type
+          contentTags: [], updateType: 4
         };
         if (this.selTags2 && this.selTags2.length > 0) {
           cntntData.contentTags = this.selTags2.map((tag: any) => tag.id);
         }
         break;
-      case 3: str = 'Languages';
+      case 'l': str = 'Languages';
         cntntData = {
-          contentLanguages: [], updateType: type
+          contentLanguages: [], updateType: 3
         };
         if (this.selLngs && this.selLngs.length > 0) {
           cntntData.contentLanguages = this.selLngs.map((lng: any) => lng.id);
         }
         break;
-      case 2: str = 'Permissions';
+      case 'p': str = 'Permissions';
         cntntData = {
-          canBeShared: this.isShared, updateType: type
+          canBeShared: this.isShared, updateType: 2
         };
         break;
     }
     cntntData.id = this.rowInfo.id;
-    this[disbType] = true;
+    this.disb[type] = true;
     this.cwServ.updContent(cntntData)
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(`${str} saved successfully`, 'Success!');
           switch (type) {
-            case 1: this.rowInfo.description = this.desc; break;
-            case 4: this.rowInfo.contentTags = this.selTags2; break;
-            case 3: this.rowInfo.contentLanguages = this.selLngs; break;
-            case 2: this.rowInfo.canBeShared = this.isShared; break;
+            case 'd': this.rowInfo.description = this.desc; break;
+            case 't': this.rowInfo.contentTags = this.selTags2.map((tag: any) => ({ ...tag, tagId: tag.id }));break;
+            case 'l': this.rowInfo.contentLanguages = this.selLngs.map((lng: any) => ({ ...lng, languageId: lng.id }));break;
+            case 'p': this.rowInfo.canBeShared = this.isShared; break;
           }
-          this.closeEdit($event,type,false);
+          this.closeEdit(type,false);
         } else {
           this.toastr.error(`Unable to save ${str.toLowerCase()}`, 'Error!');
         }
-        this[disbType] = false;
+        this.disb[type] = false;
       }, (err: any) => {
-        this[disbType] = false;
+        this.disb[type] = false;
+      });
+  }
+
+  getImg(data: any): string{
+    if(data.urlIconPath)
+      return data.urlIconPath;
+    else if(Array.isArray(data.pdfImages) && data.pdfImages.length>0)
+      return data.pdfImages[0].imagePath;
+    else
+      return this.defImg;
+  }
+
+  addCmnt(type: string){
+    let cmntData = {
+      commentText: this.cmnt,
+      contentId: this.rowInfo.id,
+    }
+    this.disb[type] = true;
+    this.cwServ.addCmntToContent(cmntData)
+      .subscribe((data: any) => {
+        if (data) {
+          this.cmnt = '';
+          this.toastr.success(`Comment saved successfully`, 'Success!');
+        } else {
+          this.toastr.error(`Unable to add comment`, 'Error!');
+        }
+        this.disb[type] = false;
+      }, (err: any) => {
+        this.disb[type] = false;
       });
   }
 

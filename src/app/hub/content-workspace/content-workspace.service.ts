@@ -176,5 +176,9 @@ export class ContentWorkspaceService {
     });
   }
 
+  addCmntToContent(data: any) {
+    return this.http.post(`${AppSettings.ADD_CMNT_CNTNT}`, data)
+  }
+
 
 }
