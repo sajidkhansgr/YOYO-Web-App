@@ -301,7 +301,7 @@ export class UserListComponent implements OnInit {
         // console.log(data, 'data');
         if (data) {
           this.toastr.success(data.message || 'User added successfully', 'Success!');
-          this.disMissMdodal();
+          this.dismissModal();
           this.userList();
         }
         this.usrLoading = false;
@@ -318,7 +318,7 @@ export class UserListComponent implements OnInit {
         // console.log(data, 'data');
         if (data) {
           this.toastr.success(data.message || 'User updated successfully', 'Success!');
-          this.disMissMdodal();
+          this.dismissModal();
           this.isEdit = false;
           this.userList();
         }
@@ -450,15 +450,16 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  disMissMdodal() {
+  dismissModal() {
     if (this.modalService)
       this.modalService.dismissAll();
   }
 
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    this.disMissMdodal();
-    this.subscription.unsubscribe();
+    this.dismissModal();
+    if(!!this.subscription)
+      this.subscription.unsubscribe();
   }
 
 }

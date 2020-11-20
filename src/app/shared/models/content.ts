@@ -17,7 +17,7 @@ export interface Content {
   isActive: false,
   likes: number;
   contentTags: any; //Array
-  comments: any;//Array
+  comments?: Comment[];//Array
   contentLanguages: any;//Array
   contentWorkspaceFolders: any;//Array
   pdfImages: any;//Array
@@ -27,4 +27,12 @@ export interface Content {
   updatedByFullName: string;
   createdBy: number;
   updatedBy: number;
+}
+
+export interface Comment{
+  id: number;
+  commentText: string;
+  createdByFullName: string;
+  createdDate: string;
+  contentId: number;
 }

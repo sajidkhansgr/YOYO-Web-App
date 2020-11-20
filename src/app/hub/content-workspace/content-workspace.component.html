@@ -468,9 +468,11 @@
                         <div class="dp"><i class="fa fa-user-circle"></i></div>
                       </div>
                       <div class="col-11 p-0">
-                        <div class="user-name">{{cmnt}} <span class="date ml-3 text-hi-grey">{{cmnt}}</span>
+                        <div class="user-name">
+                          {{cmnt.createdByFullName}}
+                          <span class="date ml-3 text-hi-grey">{{(cmnt.createdDate|date:'dd MMM, yyyy')||'N/A'}}</span>
                         </div>
-                        <div class="comment text-hi-dark-grey">{{cmnt}}</div>
+                        <div class="comment text-hi-dark-grey">{{cmnt.commentText||'N/A'}}</div>
                       </div>
                     </div>
                     <div class="add-comment mt-4">
@@ -673,7 +675,7 @@
   <h5 class="card-title px-3">
     <div class="heading">
       <div class="float-right row mx-0">
-        <div class="dropdown">
+        <div class="dropdown" *ngIf="view">
           <button class="btn btn-light dropdown-toggle mr-2" id="fileDD" data-toggle="dropdown">
             <i class="fas fa-cog"></i>
           </button>
@@ -861,14 +863,22 @@
             <td>19 Aug 2020</td>
             <td class="text-hi-dark-grey">Andrea D'Souza</td>
           </tr> -->
-          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)">
+          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id)}">
             <td *ngFor="let col of cols">
-              <span *ngIf="col.key=='name' else otherRow">
-                {{cntnt.name}}
-                <span *ngFor="let tg of cntnt.contentTags"
-                  class="badge badge-light p-2 mt-2 mt-sm-0">{{tg.tagId}}</span>
+              <span [ngSwitch]="col.k">
+                <span *ngSwitchCase="'name'">
+                  {{cntnt.name}}<br />
+                  <span *ngFor="let tg of cntnt.contentTags"
+                    class="badge badge-light p-2 mt-2 mt-sm-0">{{tg.tagId}}</span>
+                </span>
+                <span *ngSwitchCase="'createdDate'">
+                  {{(cntnt.createdDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}
+                </span>
+                <span *ngSwitchCase="'size'">
+                  {{getSize(cntnt.size)}}
+                </span>
+                <span *ngSwitchDefault>{{cntnt[col.k]}}</span>
               </span>
-              <ng-template #otherRow>{{cntnt[col.key]}}</ng-template>
             </td>
           </tr>
         </tbody>
