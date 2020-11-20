@@ -16,9 +16,10 @@ import { Router } from '@angular/router';
 export class CollectionListComponent implements OnInit {
   view!: boolean; disabled!: boolean; loading!: boolean;
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
-  colctnArr: any; selColctn: any;
+  colctnArr!: any[]; selColctn: any; selColctnArr!: any[];
   colctnForm!: FormGroup;
   multiForm!: number;
+  showBotDiv!: boolean;
 
   constructor(
     private modalService: NgbModal,
@@ -36,11 +37,12 @@ export class CollectionListComponent implements OnInit {
 
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
-    this.colctnArr = []; this.selColctn = undefined;
+    this.colctnArr = []; this.selColctn = undefined; this.selColctnArr = [];
     this.colctnForm = this.fb.group({
       name: ['', [Validators.required]]
     });
     this.multiForm = 0;
+    this.showBotDiv = false;
   }
 
   // show content
@@ -49,6 +51,20 @@ export class CollectionListComponent implements OnInit {
   }
 
   // ***** collection *****
+  // on selecting a collection
+  selMe(val: any, id: number) {
+    if (val) {
+      this.selColctnArr.push(id);
+    } else {
+      this.selColctnArr = this.selColctnArr.filter((data: any) => data != id);
+    }
+    if (this.selColctnArr.length > 0) {
+      this.showBotDiv = true;
+    } else {
+      this.showBotDiv = false;
+    }
+  }
+
   // delete collection
   delColctn(id: any) {
     this.dialog.open(ConfirmDialogComponent, {

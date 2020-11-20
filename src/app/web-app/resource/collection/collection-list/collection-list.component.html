@@ -31,7 +31,7 @@
               <!-- <div class="items">{{colctn.collectionContents.length}} Item(s)</div> -->
             </div>
             <div class="float-right">
-              <mat-checkbox></mat-checkbox>
+              <mat-checkbox (change)="selMe($event.checked, colctn.id)"></mat-checkbox>
             </div>
           </div>
           <div class="options rounded">
@@ -92,7 +92,7 @@
       <tbody *ngIf="colctnArr.length > 0">
         <tr *ngFor="let colctn of colctnArr">
           <td class="align-middle">
-            <mat-checkbox></mat-checkbox>
+            <mat-checkbox (change)="selMe($event.checked, colctn.id)"></mat-checkbox>
           </td>
           <td class="align-middle curs-ptr" (click)="showContent(colctn.id)">
             <div class="d-flex">
@@ -149,8 +149,8 @@
 </div>
 
 <!-- fixed div on selecting a collection -->
-<div class="row mx-auto fixed-bottom px-3" style="width: 90%; background-color: #fff; height: 50px;">
-  <div class="selected-items text-secondary align-self-center">1 item selected</div>
+<div class="row mx-auto fixed-bottom px-3" style="width: 90%; background-color: #fff; height: 50px;" *ngIf="showBotDiv">
+  <div class="selected-items text-secondary align-self-center">{{selColctnArr.length}} item(s) selected</div>
   <div class="mr-1 ml-3 align-self-center">|</div>
   <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
   <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openModal(email)"><i
