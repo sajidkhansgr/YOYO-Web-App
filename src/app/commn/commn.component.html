@@ -247,11 +247,10 @@
   </div>
 </ng-template>
 
-
 <!-- new announcment Modal -->
 <ng-template #anncModal let-modal class="custom-modal">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{isEdit?'Edit':'New'}} Announcement</h4>
+    <h4 class="modal-title">{{isEdit?'Edit':'New'}} Announcement</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>

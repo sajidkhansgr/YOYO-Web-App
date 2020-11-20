@@ -51,9 +51,11 @@ export class ContentWorkspaceComponent implements OnInit {
   cntntDisb!: boolean; cntntLoading!: boolean; activeIndex: number = 0;
   pageNo!: number; pageSize!: number; @Input() lmtPage: any;
   showRowInfo!: boolean; rowInfo!: any; docLoading!: boolean;
-  desc!: string;
+  desc!: string; isShared!:boolean;
 
   descDisb!: boolean; tagsDisb!: boolean; availDisb!: boolean; lngDisb!: boolean;
+  permsDisb!: boolean;
+
   lngs!: Language[]; selLngs: Language[] = [];
 
   constructor(
@@ -122,6 +124,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.tagsDisb = false; //used in update
     this.availDisb = false; //used in update
     this.lngDisb = false; //used in update
+    this.permsDisb = false; //used in update
     this.cntntForm = this.fb.group({
       img: [''],
       tags: ['']
@@ -758,11 +761,15 @@ export class ContentWorkspaceComponent implements OnInit {
 
   setDefCntntData() {
     this.desc = this.rowInfo.description;
-
+    this.isShared = this.rowInfo.canBeShared;
     if (Array.isArray(this.rowInfo.contentTags))
       this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId }));
+    else
+      this.rowInfo.contentTags = []
     if (Array.isArray(this.rowInfo.contentLanguages))
       this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng, id: lng.languageId }));
+    else
+      this.rowInfo.contentLanguages = []
     this.docLoading = false;
   }
 
@@ -772,7 +779,16 @@ export class ContentWorkspaceComponent implements OnInit {
     (event.parentNode.parentNode.parentNode.childNodes[1] as HTMLElement).style.display = 'none';
     (event.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'block';
   }
-  closeEdit = (event: any) => {
+
+  closeEdit = (event: any,type: number=0,isUpd:boolean=true) => {
+    if(type && isUpd){
+      switch (type) {
+        case 1: this.desc = this.rowInfo.description; break;
+        case 4: this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId })); break;
+        case 3: this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng, id: lng.languageId })); break;
+        case 2: this.isShared = this.rowInfo.canBeShared; break;
+      }
+    }
     event = event.target;
     (event.parentNode.parentNode.parentNode.parentNode.childNodes[1] as HTMLElement).style.display = 'block';
     (event.parentNode.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'none';
@@ -995,7 +1011,7 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  updContent($event: any, type: number, disbType: 'descDisb' | 'tagsDisb' | 'lngDisb') {
+  updContent($event: any, type: number, disbType: 'descDisb' | 'tagsDisb' | 'lngDisb'| 'permsDisb') {
     let cntntData: any = {}; let str: string = '';
     switch (type) {
       case 1: str = 'Description';
@@ -1018,6 +1034,11 @@ export class ContentWorkspaceComponent implements OnInit {
           cntntData.contentLanguages = this.selLngs.map((lng: any) => lng.id);
         }
         break;
+      case 2: str = 'Permissions';
+        cntntData = {
+          canBeShared: this.isShared, updateType: type
+        };
+        break;
     }
     cntntData.id = this.rowInfo.id;
     this[disbType] = true;
@@ -1029,8 +1050,9 @@ export class ContentWorkspaceComponent implements OnInit {
             case 1: this.rowInfo.description = this.desc; break;
             case 4: this.rowInfo.contentTags = this.selTags2; break;
             case 3: this.rowInfo.contentLanguages = this.selLngs; break;
+            case 2: this.rowInfo.canBeShared = this.isShared; break;
           }
-          this.closeEdit($event);
+          this.closeEdit($event,type,false);
         } else {
           this.toastr.error(`Unable to save ${str.toLowerCase()}`, 'Error!');
         }

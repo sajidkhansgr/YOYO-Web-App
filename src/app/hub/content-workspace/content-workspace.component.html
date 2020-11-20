@@ -86,7 +86,7 @@
                       <input matInput placeholder="Description" [(ngModel)]="desc" name="desc" class="ml-0">
                     </mat-form-field>
                     <div class="form-group text-right">
-                      <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                      <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event,1)">Cancel</button>
                       <button class="btn btn-primary btn-sm" [disabled]="descDisb"
                         (click)="updContent($event, 1,'descDisb')">
                         <app-loader [type]="'btn'" *ngIf="descDisb"></app-loader>Submit
@@ -137,7 +137,7 @@
                               </mat-autocomplete>
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event,4)">Cancel</button>
                               <button class="btn btn-primary btn-sm" [disabled]="tagsDisb"
                                 (click)="updContent($event, 4,'tagsDisb')">
                                 <app-loader [type]="'btn'" *ngIf="tagsDisb"></app-loader>Submit
@@ -182,7 +182,7 @@
                               </mat-autocomplete>
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event,3)">Cancel</button>
                               <button class="btn btn-primary btn-sm" [disabled]="lngDisb"
                                 (click)="updContent($event, 3,'lngDisb')">
                                 <app-loader [type]="'btn'" *ngIf="lngDisb"></app-loader>Submit
@@ -281,15 +281,18 @@
                         <div class="view">
                           <div class="text-hi-dark-grey">
                             <ul class="list-unstyled">
-                              <li><i class="fas fa-check mr-1"></i>Can be shared</li>
-                              <li><i class="fas fa-check mr-1"></i>Can be downloaded</li>
+                              <li>
+                                <i [ngClass]="{'fa-check': rowInfo.canBeShared,'fa-times': !rowInfo.canBeShared}" class="mr-1 fas"></i>
+                                Can be shared
+                              </li>
+                              <!-- <li><i class="fas fa-check mr-1"></i>Can be downloaded</li>
                               <ul class="list-unstyled ml-3">
                                 <li><i class="fas fa-check mr-1"></i>Internally</li>
                                 <li><i class="fas fa-check mr-1"></i>Externally</li>
                               </ul>
                               <li><i class="fas fa-check mr-1"></i>Can be annotated</li>
                               <li><i class="fas fa-check mr-1"></i>Pages can be separated</li>
-                              <li><i class="fas fa-times mr-1"></i>Page group are enforced</li>
+                              <li><i class="fas fa-times mr-1"></i>Page group are enforced</li> -->
                             </ul>
                           </div>
                         </div>
@@ -297,9 +300,9 @@
                           <div>
                             <ul class="list-unstyled">
                               <li>
-                                <mat-checkbox>Can be shared</mat-checkbox>
+                                <mat-checkbox [(ngModel)]="isShared" name="isShared">Can be shared</mat-checkbox>
                               </li>
-                              <li>
+                              <!-- <li>
                                 <mat-checkbox>Can be downloaded</mat-checkbox>
                               </li>
                               <ul class="list-unstyled ml-3">
@@ -324,24 +327,18 @@
                                   <div class="col-5 pr-0">
                                     <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
                                       [floatLabel]="'never'">
-                                      <!-- <mat-label>Page</mat-label> -->
                                       <mat-select placeholder="Page">
                                         <mat-option hidden selected></mat-option>
-                                        <mat-option value="1">
-                                          1
-                                        </mat-option>
+                                        <mat-option value="1">1</mat-option>
                                       </mat-select>
                                     </mat-form-field>
                                   </div>
                                   <div class="col-5 pr-0">
                                     <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
                                       [floatLabel]="'never'">
-                                      <!-- <mat-label>Page</mat-label> -->
                                       <mat-select placeholder="Page">
                                         <mat-option hidden selected></mat-option>
-                                        <mat-option value="1">
-                                          1
-                                        </mat-option>
+                                        <mat-option value="1">1</mat-option>
                                       </mat-select>
                                     </mat-form-field>
                                   </div>
@@ -352,11 +349,14 @@
                               </li>
                               <li class="ml-2">
                                 <a href="javascript:void(0)"><i class="fas fa-plus mr-1"></i>Add another</a>
-                              </li>
+                              </li> -->
                             </ul>
                             <div class="form-group text-right">
-                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
-                              <button class="btn btn-primary btn-sm">Submit</button>
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event,2)">Cancel</button>
+                              <button class="btn btn-primary btn-sm" [disabled]="permsDisb"
+                                (click)="updContent($event, 2,'permsDisb')">
+                                <app-loader [type]="'btn'" *ngIf="permsDisb"></app-loader>Submit
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -891,7 +891,7 @@
 <!-- upload file modal  -->
 <ng-template #uploadFile let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Upload Files</h4>
+    <h4 class="modal-title">Upload Files</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -963,7 +963,7 @@
 <!-- add url modal  -->
 <ng-template #addUrl let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Add a URL</h4>
+    <h4 class="modal-title">Add a URL</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -1051,7 +1051,7 @@
 <!-- add/edit folder modal  -->
 <ng-template #folderModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{edit ? 'Edit' : edit == undefined ? 'Duplicate' : 'Add'}} Folder
+    <h4 class="modal-title">{{edit ? 'Edit' : edit == undefined ? 'Duplicate' : 'Add'}} Folder
     </h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
@@ -1135,7 +1135,7 @@
           <mat-checkbox class="ml-3">Add</mat-checkbox>
           <div class="row mx-0 justify-content-between">
             <mat-form-field appearance="outline">
-              <input matInput type="text" placeholder="Search tags, languagees, countries">
+              <input matInput type="text" placeholder="Search tags, languages, countries">
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-select>
@@ -1147,17 +1147,17 @@
         <div class="remove">
           <mat-checkbox class="ml-3">Remove</mat-checkbox>
           <mat-form-field appearance="outline" class="d-block">
-            <input matInput type="text" placeholder="Search tags, languagees, countries">
+            <input matInput type="text" placeholder="Search tags, languages, countries">
           </mat-form-field>
         </div>
         <div class="replace">
           <mat-checkbox class="ml-3">Replace</mat-checkbox>
           <div class="row mx-0 justify-content-between">
             <mat-form-field appearance="outline">
-              <input matInput type="text" placeholder="Search tags, languagees, countries">
+              <input matInput type="text" placeholder="Search tags, languages, countries">
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <input matInput type="text" placeholder="Search tags, languagees, countries">
+              <input matInput type="text" placeholder="Search tags, languaees, countries">
             </mat-form-field>
           </div>
         </div>
@@ -1194,7 +1194,7 @@
 <!-- add/edit smart folder modal  -->
 <ng-template #smartFolderModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{edit ? 'Edit' : 'Add'}} Smart Folder</h4>
+    <h4 class="modal-title">{{edit ? 'Edit' : 'Add'}} Smart Folder</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -1402,7 +1402,7 @@
 <!-- edit workspace modal  -->
 <ng-template #editWorkspace let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{edit ? 'Edit' : 'Duplicate'}} Workspace</h4>
+    <h4 class="modal-title">{{edit ? 'Edit' : 'Duplicate'}} Workspace</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -1522,7 +1522,7 @@
 <!-- add workspace modal  -->
 <ng-template #addWorkspace let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Create Workspace</h4>
+    <h4 class="modal-title">Create Workspace</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
