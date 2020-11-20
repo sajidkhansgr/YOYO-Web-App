@@ -25,7 +25,8 @@ export class CollectionInnerComponent implements OnInit {
   multiForm!: number;
   contentArr!: any[]; selContentArr: any;
   showBotDiv!: boolean;
-  workspcArr!: any[];
+  workspcArr!: any[]; colctnArr!: any[]; fldrArr!: any[]; wid!: number | undefined; fid!: number | undefined;
+  showAll!: boolean;
 
   constructor(
     private modalService: NgbModal,
@@ -55,30 +56,102 @@ export class CollectionInnerComponent implements OnInit {
     this.multiForm = 0;
     this.contentArr = [];
     this.showBotDiv = false;
-    this.workspcArr = [];
+    this.workspcArr = []; this.colctnArr = []; this.fldrArr = []; this.wid = undefined; this.fid = undefined;
+    this.showAll = true;
   }
 
-  // ***** workspace *****
-  // get list of workspaces
-  getWrkspcList() {
-    // this.wrkspcLoading = true;
-    this.cwServ.wrkspcList({})
-      .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          // console.log(data);
-          this.workspcArr = data.result.results;
-        }
-        // this.wrkspcLoading = false;
-      }, (err: any) => {
-        console.log(err);
-        // this.wrkspcLoading = false;
-      });
+  // -------------------------- need to replace these by api's for user
+  // // ----- for 'add resource' modal -----
+  // // get list of workspaces
+  // getWrkspcList() {
+  //   // this.wrkspcLoading = true;
+  //   this.cwServ.wrkspcList({})
+  //     .subscribe((data: any) => {
+  //       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+  //         // console.log(data);
+  //         this.workspcArr = data.result.results;
+  //       }
+  //       // this.wrkspcLoading = false;
+  //     }, (err: any) => {
+  //       console.log(err);
+  //       // this.wrkspcLoading = false;
+  //     });
+  // }
+
+  // // get list of folders
+  // getFolderList() {
+  //   // this.folderLoading = true;
+  //   let query = {
+  //     workspaceId: this.wid,
+  //     folderId: this.fid
+  //   };
+  //   this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
+  //     console.log(data);
+  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+  //       for (let i = 0; i < data.result.results.length; i++) {
+  //         this.fldrArr.push({ ...data.result.results[i], key: 'fldr' });
+  //       }
+  //     } else {
+  //     }
+  //     // this.folderLoading = false;
+  //   }, (err: any) => {
+  //     // this.folderLoading = false;
+  //   });
+  // }
+
+  // // get list of smart folders
+  // getSmartFolderList() {
+  //   // this.folderLoading = true;
+  //   let query = {
+  //     workspaceId: this.wid,
+  //     folderId: this.fid
+  //   };
+  //   this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
+  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+  //       for (let i = 0; i < data.result.results.length; i++) {
+  //         this.fldrArr.push({ ...data.result.results[i], key: 'smtFldr' });
+  //       }
+  //     } else {
+  //     }
+  //     // this.folderLoading = false;
+  //   }, (err: any) => {
+  //     // this.folderLoading = false;
+  //   });
+  // }
+  // -------------------------------------------
+
+  // show folders on workspace click
+  showWorkspcFldrs(wid: number, fid?: number) {
+    this.wid = fid ? this.wid : wid;
+    this.fid = fid;
+    this.fldrArr = [];
+    // this.getFolderList();
+    // this.getSmartFolderList();
+    // this.showAll = false;
+    // console.log(this.wid);
+    // console.log(this.fid);
   }
 
-  // ***** resource/content *****
+  // get collection list
+  listColct() {
+    // this.loading = true;
+    this.colctnSrv.colctnList({}).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+        this.colctnArr = data.result;
+      } else {
+        this.colctnArr = [];
+      }
+      // this.loading = false;
+    }, (err: any) => {
+      // this.loading = false;
+    });
+  }
+
+  // ----- resource/content -----
   // add resource modal
   addResourceModal(modal: any) {
-    this.getWrkspcList();
+    // this.getWrkspcList(); -----------
+    this.listColct();
     this.openModal(modal);
   }
 
@@ -95,6 +168,7 @@ export class CollectionInnerComponent implements OnInit {
       this.showBotDiv = false;
     }
   }
+
   // get content by collection
   getContentColctn() {
     this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
@@ -109,7 +183,7 @@ export class CollectionInnerComponent implements OnInit {
     });
   }
 
-  // ***** collection *****
+  // ----- collection -----
   // delete collection
   delColctn() {
     this.dialog.open(ConfirmDialogComponent, {

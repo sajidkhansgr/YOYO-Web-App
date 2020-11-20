@@ -200,17 +200,61 @@
         <input matInput placeholder="Search">
       </mat-form-field>
     </div>
-    <!-- experiences -->
-    <div class="text-secondary font-weight-bold my-2">Workspaces</div>
-    <div class="exp d-flex border-bottom p-2 dark-bg-hover" *ngFor="let workspc of workspcArr">
-      <div class="icon align-self-center mr-2">
-        <img src="assets/images/discription.png" style="max-height:50px;">
+    <div *ngIf="showAll">
+      <!-- experiences -->
+      <div class="text-secondary font-weight-bold my-2">Workspaces</div>
+      <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let workspc of workspcArr"
+        (click)="showWorkspcFldrs(workspc.id)">
+        <div class="icon align-self-center mr-2">
+          <img src="assets/images/discription.png" style="max-height:50px;">
+        </div>
+        <div class="name align-self-center">
+          {{workspc.name}}
+        </div>
+        <div class="arrow align-self-center ml-auto mr-3">
+          <i class="fa fa-angle-right"></i>
+        </div>
       </div>
-      <div class="name align-self-center">
-        {{workspc.name}}
+      <!-- my files -->
+      <div class="text-secondary font-weight-bold my-2">My Files</div>
+      <div class="d-flex border-bottom p-2 dark-bg-hover">
+        <div class="icon align-self-center mr-2">
+          <img src="assets/images/discription.png" style="max-height:50px;">
+        </div>
+        <div class="name align-self-center">
+          Static data
+        </div>
+        <div class="arrow align-self-center ml-auto mr-3">
+          <i class="fa fa-angle-right"></i>
+        </div>
       </div>
-      <div class="arrow align-self-center ml-auto mr-3">
-        <i class="fa fa-angle-right"></i>
+      <!-- collections -->
+      <div class="text-secondary font-weight-bold my-2">Collections</div>
+      <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr">
+        <div class="icon align-self-center mr-2">
+          <img src="assets/images/discription.png" style="max-height:50px;">
+        </div>
+        <div class="name align-self-center">
+          {{colctn.name}}
+        </div>
+        <div class="arrow align-self-center ml-auto mr-3">
+          <i class="fa fa-angle-right"></i>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!showAll">
+      <div>Nav</div>
+      <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr"
+        (click)="showWorkspcFldrs(0, fldr.id)">
+        <div class="icon align-self-center mr-2">
+          <img src="assets/images/discription.png" style="max-height:50px;">
+        </div>
+        <div class="name align-self-center">
+          {{fldr.name}}
+        </div>
+        <div class="arrow align-self-center ml-auto mr-3">
+          <i class="fa fa-angle-right"></i>
+        </div>
       </div>
     </div>
   </div>
