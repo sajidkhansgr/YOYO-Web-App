@@ -147,6 +147,8 @@ export class AppSettings {
 
   public static GET_CNTNT = `api/Content/GetById`;
 
+  public static ADD_CMNT_CNTNT = `api/Content/AddCommentToContent`;
+
   // Language
   public static LIST_LNG = `api/Language/GetAll`;
 

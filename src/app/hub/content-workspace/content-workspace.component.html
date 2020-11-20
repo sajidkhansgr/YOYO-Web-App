@@ -67,29 +67,29 @@
           <div class="card-body">
             <div class="discription row">
               <div class="col-6 text-center">
-                <img src="assets/images/discription.png">
+                <img [src]="rowInfo.img" alt="Thumbnail">
               </div>
               <div class="col-6 align-self-center text-hi-dark work-div dark-bg-hover rounded p-2">
                 <h6 class="font-weight-bold">
                   Description
-                  <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                  <a class="float-right text-hi-dark-grey" *ngIf="!edits.d" (click)="openEdit('d')">
                     <i class=" fas fa-edit"></i>
                   </a>
                 </h6>
-                <div class="view">
+                <div class="view" *ngIf="!edits.d">
                   <p class="disc-text">{{rowInfo.description||'No Description'}}</p>
                 </div>
-                <div class="edit" style="display: none;">
+                <div class="edit" *ngIf="edits.d">
                   <div>
                     <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
                       [floatLabel]="'never'">
                       <input matInput placeholder="Description" [(ngModel)]="desc" name="desc" class="ml-0">
                     </mat-form-field>
                     <div class="form-group text-right">
-                      <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event,1)">Cancel</button>
-                      <button class="btn btn-primary btn-sm" [disabled]="descDisb"
-                        (click)="updContent($event, 1,'descDisb')">
-                        <app-loader [type]="'btn'" *ngIf="descDisb"></app-loader>Submit
+                      <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('d')">Cancel</button>
+                      <button class="btn btn-primary btn-sm" [disabled]="disb.d"
+                        (click)="updContent('d')">
+                        <app-loader [type]="'btn'" *ngIf="disb.d"></app-loader>Submit
                       </button>
                     </div>
                   </div>
@@ -104,11 +104,11 @@
                       <div class="tags work-div dark-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Tags
-                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                          <a class="float-right text-hi-dark-grey" *ngIf="!edits.t" (click)="openEdit('t')">
                             <i class=" fas fa-edit"></i>
                           </a>
                         </div>
-                        <div class="view">
+                        <div class="view" *ngIf="!edits.t">
                           <div *ngIf="rowInfo.contentTags && rowInfo.contentTags.length>0 else noCntntTag">
                             <span *ngFor="let tg of rowInfo.contentTags"
                               class="badge badge-light text-success">{{tg.tagId}}</span>
@@ -117,7 +117,7 @@
                             <div class="text-hi-dark-grey">No Tags</div>
                           </ng-template>
                         </div>
-                        <div class="edit" style="display: none;">
+                        <div class="edit" *ngIf="edits.t">
                           <div>
                             <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white">
                               <mat-chip-list aria-label="Select tags">
@@ -137,10 +137,10 @@
                               </mat-autocomplete>
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event,4)">Cancel</button>
-                              <button class="btn btn-primary btn-sm" [disabled]="tagsDisb"
-                                (click)="updContent($event, 4,'tagsDisb')">
-                                <app-loader [type]="'btn'" *ngIf="tagsDisb"></app-loader>Submit
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('t')">Cancel</button>
+                              <button class="btn btn-primary btn-sm" [disabled]="disb.t"
+                                (click)="updContent('t')">
+                                <app-loader [type]="'btn'" *ngIf="disb.t"></app-loader>Submit
                               </button>
                             </div>
                           </div>
@@ -149,11 +149,11 @@
                       <div class="language work-div dark-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Language
-                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                          <a class="float-right text-hi-dark-grey" *ngIf="!edits.l" (click)="openEdit('l')">
                             <i class="fas fa-edit"></i>
                           </a>
                         </div>
-                        <div class="view">
+                        <div class="view" *ngIf="!edits.l">
                           <div *ngIf="rowInfo.contentLanguages && rowInfo.contentLanguages.length>0 else noCntntLng">
                             <span *ngFor="let lng of rowInfo.contentLanguages"
                               class="badge badge-light text-success">{{lng.languageId}}</span>
@@ -162,7 +162,7 @@
                             <div class="text-hi-dark-grey">No Languages</div>
                           </ng-template>
                         </div>
-                        <div class="edit" style="display: none;">
+                        <div class="edit" *ngIf="edits.l">
                           <div>
                             <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white">
                               <mat-chip-list aria-label="Select Languages">
@@ -182,10 +182,10 @@
                               </mat-autocomplete>
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event,3)">Cancel</button>
-                              <button class="btn btn-primary btn-sm" [disabled]="lngDisb"
-                                (click)="updContent($event, 3,'lngDisb')">
-                                <app-loader [type]="'btn'" *ngIf="lngDisb"></app-loader>Submit
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('l')">Cancel</button>
+                              <button class="btn btn-primary btn-sm" [disabled]="disb.l"
+                                (click)="updContent('l')">
+                                <app-loader [type]="'btn'" *ngIf="disb.l"></app-loader>Submit
                               </button>
                             </div>
                           </div>
@@ -194,21 +194,21 @@
                       <div class="country work-div dark-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Country
-                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                          <a class="float-right text-hi-dark-grey" *ngIf="!edits.c" (click)="openEdit('c')">
                             <i class="fas fa-edit"></i>
                           </a>
                         </div>
-                        <div class="view">
+                        <div class="view" *ngIf="!edits.c">
                           <div class="text-hi-dark-grey">No Country</div>
                         </div>
-                        <div class="edit" style="display: none;">
+                        <div class="edit" *ngIf="edits.c">
                           <div>
                             <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
                               [floatLabel]="'never'">
                               <input matInput placeholder="Country" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('c')">Cancel</button>
                               <button class="btn btn-primary btn-sm">Submit</button>
                             </div>
                           </div>
@@ -217,23 +217,23 @@
                       <div class="author work-div dark-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Author
-                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                          <a class="float-right text-hi-dark-grey" *ngIf="!edits.a" (click)="openEdit('a')">
                             <i class="fas fa-edit"></i>
                           </a>
                         </div>
-                        <div class="view">
+                        <div class="view" *ngIf="!edits.a">
                           <div class="text-hi-dark-grey">
                             Andrea D'Souza
                           </div>
                         </div>
-                        <div class="edit" style="display: none;">
+                        <div class="edit" *ngIf="edits.a">
                           <div>
                             <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
                               [floatLabel]="'never'">
                               <input matInput placeholder="Author" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('a')">Cancel</button>
                               <button class="btn btn-primary btn-sm">Submit</button>
                             </div>
                           </div>
@@ -242,17 +242,17 @@
                       <div class="availibility work-div dark-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Availibility
-                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                          <a class="float-right text-hi-dark-grey" *ngIf="!edits.av" (click)="openEdit('av')">
                             <i class="fas fa-edit"></i>
                           </a>
                         </div>
-                        <div class="view">
+                        <div class="view" *ngIf="!edits.av">
                           <div class="text-hi-dark-grey">
                             Released : Yes<br />
                             Expired : Never
                           </div>
                         </div>
-                        <div class="edit" style="display: none;">
+                        <div class="edit" *ngIf="edits.av">
                           <div>
                             <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
                               [floatLabel]="'never'">
@@ -263,7 +263,7 @@
                               <input matInput placeholder="Expired" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
-                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('av')">Cancel</button>
                               <button class="btn btn-primary btn-sm">Submit</button>
                             </div>
                           </div>
@@ -274,11 +274,11 @@
                       <div class="permissions work-div dark-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Permissions
-                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                          <a class="float-right text-hi-dark-grey" *ngIf="!edits.p" (click)="openEdit('p')">
                             <i class="fas fa-edit"></i>
                           </a>
                         </div>
-                        <div class="view">
+                        <div class="view" *ngIf="!edits.p">
                           <div class="text-hi-dark-grey">
                             <ul class="list-unstyled">
                               <li>
@@ -296,7 +296,7 @@
                             </ul>
                           </div>
                         </div>
-                        <div class="edit" style="display: none;">
+                        <div class="edit" *ngIf="edits.p">
                           <div>
                             <ul class="list-unstyled">
                               <li>
@@ -352,10 +352,10 @@
                               </li> -->
                             </ul>
                             <div class="form-group text-right">
-                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event,2)">Cancel</button>
-                              <button class="btn btn-primary btn-sm" [disabled]="permsDisb"
-                                (click)="updContent($event, 2,'permsDisb')">
-                                <app-loader [type]="'btn'" *ngIf="permsDisb"></app-loader>Submit
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('p')">Cancel</button>
+                              <button class="btn btn-primary btn-sm" [disabled]="disb.p"
+                                (click)="updContent('p')">
+                                <app-loader [type]="'btn'" *ngIf="disb.p"></app-loader>Submit
                               </button>
                             </div>
                           </div>
@@ -364,20 +364,20 @@
                       <div class="optimization work-div dark-bg-hover rounded p-2">
                         <div class="font-weight-bold mb-1">
                           Optimization
-                          <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                          <a class="float-right text-hi-dark-grey" *ngIf="!edits.o" (click)="openEdit('o')">
                             <i class="fas fa-edit"></i>
                           </a>
                         </div>
-                        <div class="view">
+                        <div class="view" *ngIf="!edits.o">
                           <div class="text-hi-dark-grey">
                             Use Optimized File : Yes
                           </div>
                         </div>
-                        <div class="edit" style="display: none;">
+                        <div class="edit" *ngIf="edits.o">
                           <div>
                             <mat-checkbox>Use Optimized File</mat-checkbox>
                             <div class="form-group text-right">
-                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit($event)">Cancel</button>
+                              <button class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('o')">Cancel</button>
                               <button class="btn btn-primary btn-sm">Submit</button>
                             </div>
                           </div>
@@ -427,16 +427,16 @@
                         <div class="extId mt-3 work-div dark-bg-hover rounded p-2">
                           <div class="font-weight-bold mb-1">
                             External ID
-                            <a class="float-right text-hi-dark-grey" (click)="openEdit($event)">
+                            <a class="float-right text-hi-dark-grey" *ngIf="!edits.e" (click)="openEdit('e')">
                               <i class=" fas fa-edit"></i>
                             </a>
                           </div>
-                          <div class="view">
+                          <div class="view" *ngIf="!edits.e">
                             <div class="text-hi-dark-grey">
                               No external ID
                             </div>
                           </div>
-                          <div class="edit" style="display: none;">
+                          <div class="edit" *ngIf="edits.e">
                             <form>
                               <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
                                 [floatLabel]="'never'">
@@ -444,7 +444,7 @@
                               </mat-form-field>
                               <div class="form-group text-right">
                                 <button type="reset" class="btn btn-secondary btn-sm mr-2"
-                                  (click)="closeEdit($event)">Cancel</button>
+                                  (click)="closeEdit('e')">Cancel</button>
                                 <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                               </div>
                             </form>
@@ -460,36 +460,33 @@
                             </div>
                           </div>
                         </div>
-
                       </div>
                     </div>
                   </div>
                 </mat-tab>
                 <mat-tab label="Comments">
                   <div class="comments">
-                    <!-- comment -->
-                    <div class="file-comment row pl-3 mt-3 mx-0">
+                    <div class="file-comment row pl-3 mt-3 mx-0" *ngFor="let cmnt of rowInfo.comments">
                       <div class="col-1 align-self-center p-0">
                         <div class="dp"><i class="fa fa-user-circle"></i></div>
                       </div>
                       <div class="col-11 p-0">
-                        <div class="user-name">Mike Tilly <span class="date ml-3 text-hi-grey">Jan 17,
-                            2020</span>
+                        <div class="user-name">{{cmnt}} <span class="date ml-3 text-hi-grey">{{cmnt}}</span>
                         </div>
-                        <div class="comment text-hi-dark-grey">Lorem ipsum dolor sit amet consectetur
-                          adipisicing
-                          elit.
-                          Reprehenderit
-                          provident saepe amet ipsum</div>
+                        <div class="comment text-hi-dark-grey">{{cmnt}}</div>
                       </div>
                     </div>
-                    <!-- add comment -->
                     <div class="add-comment mt-4">
                       <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
                         [floatLabel]="'never'">
-                        <input matInput placeholder="Write a comment..." class="ml-0">
+                        <input matInput placeholder="Write a comment..." [(ngModel)]="cmnt" name="cmnt" class="ml-0">
                         <i matSuffix class="fa fa-angle-double-right curs-ptr"></i>
                       </mat-form-field>
+                      <div class="form-group text-right">
+                        <button [disabled]="disb.cmnt || !cmnt" (click)="addCmnt('cmnt')" class="btn btn-primary text-white btn-sm">
+                            <app-loader [type]="'btn'" *ngIf="disb.cmnt"></app-loader>Submit
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </mat-tab>
@@ -825,7 +822,8 @@
       <div class="search">
         <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
           <i matPrefix class="fas fa-search"></i>
-          <input matInput placeholder="Search ...">
+          <input matInput placeholder="Search ..." autocomplete="disabled" [(ngModel)]="searchTxt"
+            (ngModelChange)='searchTxtChng.next($event)'>
           <!-- <div matSuffix class="curs-ptr">
           <i class="fas fa-sliders-h"></i>
         </div> -->
@@ -869,6 +867,8 @@
             <td *ngFor="let col of cols">
               <span *ngIf="col.key=='name' else otherRow">
                 {{cntnt.name}}
+                <span *ngFor="let tg of cntnt.contentTags"
+                  class="badge badge-light p-2 mt-2 mt-sm-0">{{tg.tagId}}</span>
               </span>
               <ng-template #otherRow>{{cntnt[col.key]}}</ng-template>
             </td>
@@ -878,7 +878,7 @@
       <div class="row justify-content-between" *ngIf="!view">
         <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-0" *ngFor="let cntnt of cntnts"
           (click)="toggleInfo(cntnt)" style="max-width:400px;" [ngClass]="{'fa-angle-up':(rowInfo.id === cntnt.id)}">
-          <img src="assets/images/discription.png" style="max-height:200px;">
+          <img [src]="cntnt.img" alt="Thumbnail" style="max-height:200px;">
           <div class="name bg-hi-grey rounded w-75 mx-auto px-2">{{cntnt.name}}</div>
         </div>
       </div>

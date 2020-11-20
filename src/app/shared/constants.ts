@@ -1,6 +1,6 @@
 const LMT_PAGE: Array<number> = [10, 20, 30];
 
-const DEF_IMG: string = "assets/images/def-img";
+const DEF_IMG: string = "assets/images/def-img.png";
 
 const DEF_ICON: string = "assets/images/def-icon.png";
 
