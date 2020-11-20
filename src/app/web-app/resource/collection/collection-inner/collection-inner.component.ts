@@ -9,6 +9,7 @@ import { CollectionService } from '../collection.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service'
+import { parse } from 'path';
 
 
 @Component({
@@ -41,7 +42,7 @@ export class CollectionInnerComponent implements OnInit {
 
   ngOnInit(): void {
     this.routerSubs = this.route.params.subscribe(params => {
-      this.id = params['cid'];
+      this.id = parseInt(params['cid']);
       this.initialiseState();
       this.getColctn();
     });
@@ -155,6 +156,30 @@ export class CollectionInnerComponent implements OnInit {
     this.openModal(modal);
   }
 
+  // remove content from collection
+  delContent(id: number) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to remove this content from collection?`,
+        title: `Remove Content`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        let data: any = {
+          collectionId: this.id,
+          contentIds: [id]
+        }
+        this.colctnSrv.delContentColctn(data).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(data.message || 'Content removed successfully', 'Success!');
+            this.getContentColctn();
+          }
+        });
+      }
+    })
+  }
+
   // on selecting a content
   selMe(val: any, id: number) {
     if (val) {
@@ -171,6 +196,7 @@ export class CollectionInnerComponent implements OnInit {
 
   // get content by collection
   getContentColctn() {
+    this.loading = true;
     this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.contentArr = data.result;

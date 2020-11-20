@@ -158,10 +158,6 @@ export class AppSettings {
 
   public static ADD_COLCT = `api/Collection/Add`;
 
-  public static ADD_CONTENT_COLCT = `api/Collection/AddContent`;
-
-  public static GET_CONTENT_COLCT = `api/Collection/GetContentByCollection`;
-
   public static REN_COLCT = `api/Collection/Rename`;
 
   public static DUPL_COLCT = `api/Collection/Duplicate`;
@@ -170,5 +166,9 @@ export class AppSettings {
 
   public static GET_COLCT = `api/Collection/GetById`;
 
-  public static REM_COLCT = `api/Collection/RemoveFromCollection`;
+  public static ADD_CONTENT_COLCT = `api/Collection/AddContent`;
+
+  public static GET_CONTENT_COLCT = `api/Collection/GetContentByCollection`;
+
+  public static REM_CONTENT_COLCT = `api/Collection/RemoveFromCollection`;
 }

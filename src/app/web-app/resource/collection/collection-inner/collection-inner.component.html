@@ -54,17 +54,17 @@
                 <h6 class="ml-2 text-white-50">External Sharing</h6>
                 <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
                 <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
-                <div class="dropdown-divider"></div>
+                <!-- <div class="dropdown-divider"></div>
                 <h6 class="ml-2 text-white-50">Internal Sharing</h6>
                 <a class="dropdown-item" (click)="openModal(shareColl)"><i class="fa fa-user-friends mr-1"></i>Share
                   with
-                  colleagues</a>
+                  colleagues</a> -->
               </div>
             </div>
             <div class="btn my-1" (click)="openModal(addtoCollection)">
               <i class="fas fa-folder-plus"></i>
             </div>
-            <div class="btn">
+            <div class="btn" (click)="delContent(content.id)">
               <i class="fas fa-trash-alt"></i>
             </div>
           </div>

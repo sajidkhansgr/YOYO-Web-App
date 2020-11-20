@@ -11,6 +11,12 @@ export class CollectionService {
     private http: HttpClient
   ) { }
   // ---- content ---- //
+  // remove content from collection
+  //  get content by collection id
+  delContentColctn(data: any) {
+    return this.http.post(`${AppSettings.REM_CONTENT_COLCT}`, data);
+  }
+
   //  get content by collection id
   getContentColctn(id: any) {
     return this.http.get(`${AppSettings.GET_CONTENT_COLCT}?id=${id}`);
