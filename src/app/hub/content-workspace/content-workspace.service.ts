@@ -148,7 +148,7 @@ export class ContentWorkspaceService {
   contentList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
-      if (params[key]) {
+      if (params[key] || key == 'IsAscending') {
         queryParams = queryParams.set(key, params[key]);
       }
     }

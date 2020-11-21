@@ -94,7 +94,7 @@ export class UserListComponent implements OnInit {
   }
 
   // numbers to be displayed for Pagination
-  paginationNum(num: number) {
+  changePageNo(num: number) {
     this.pageNo = num;
     this.userList();
   }
@@ -154,6 +154,7 @@ export class UserListComponent implements OnInit {
 
   sortChange(col: any, index: number) {
     this.loading = true;
+    this.pageNo = 1;
     let colData = { ...col };
     for (let k = 0; k < this.cols.length; k++) {
       this.cols[k].asc = false;

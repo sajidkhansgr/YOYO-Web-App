@@ -11,14 +11,10 @@ export class TagsService {
     private http: HttpClient
   ) { }
   // -------- Tag --------
-  // activate tag
-  tagAct(id: any) {
-    return this.http.patch(`${AppSettings.ACT_TAG}?id=${id}`, {});
-  }
 
-  // deactivate tag
-  tagDeact(id: any) {
-    return this.http.patch(`${AppSettings.DEACT_TAG}?id=${id}`, {});
+  actDeactGrp(id: any, isAct: boolean) {
+    let url= isAct?AppSettings.ACT_TAG:AppSettings.DEACT_TAG;
+    return this.http.patch(`${url}?id=${id}`, {});
   }
 
   // update tag
@@ -30,7 +26,7 @@ export class TagsService {
   tagList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
     for (let key in params) {
-      if (params[key] || key == 'isActive') {
+      if (params[key] || key == 'IsAscending' || key == 'isActive') {
         queryParams = queryParams.set(key, params[key]);
       }
     }

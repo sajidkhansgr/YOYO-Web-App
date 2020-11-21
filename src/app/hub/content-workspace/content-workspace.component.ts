@@ -111,9 +111,9 @@ export class ContentWorkspaceComponent implements OnInit {
     this.disabled = false;
     this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
-    this.visbCols = [{ n: "Added", k:"createdDate", dir: 1}];
-    this.hidCols = [{ n: "Likes", k:"likes", dir: 1},{ n: "Size", k:"size", dir: 1}];
-    this.cols = [{ n: "Name", dir: 1, k:"name" }, { n: "Added", k:"createdDate", dir: 1 }];
+    this.visbCols = [{ n: "Added", k:"createdDate", asc: false}];
+    this.hidCols = [{ n: "Likes", k:"likes", asc: false},{ n: "Size", k:"size", asc: false},{ n: "Last Updated", k:"updatedDate", asc: false}];
+    this.cols = [{ n: "Name", asc: false, k:"name" }, { n: "Added", k:"createdDate", asc: false }];
     this.props = PRPS;
     this.view = true;
     this.edit = false;
@@ -863,10 +863,26 @@ export class ContentWorkspaceComponent implements OnInit {
     this.cntntList();
   }
 
+
+  sortChange(col: any, index: number) {
+    this.cntntLoading = true;
+    this.pageNo = 1;
+    let colData = { ...col };
+    for (let k = 0; k < this.cols.length; k++) {
+      this.cols[k].asc = false;
+    }
+    colData.asc = !colData.asc;
+    this.cols[index].asc = colData.asc;
+    this.sort = {
+      SortColumn: col.k,
+      IsAscending: colData.asc,
+    }
+    this.cntntList();
+  }
+
   // get content listing
   cntntList() {
     this.cntntLoading = true;
-
     this.closeDoc();
     let params = {
       pageNo: this.pageNo, pageSize: this.pageSize,
@@ -1102,7 +1118,7 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.rowInfo.comments.push({
-            createdByFullName:this.usrInfo && this.usrInfo .fN?this.usrInfo.fN:'User',
+            createdByFullName:this.usrInfo && this.usrInfo.fN?this.usrInfo.fN:'User',
             createdDate: new Date(),
             commentText: this.cmnt
           })

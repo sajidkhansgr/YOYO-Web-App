@@ -87,7 +87,7 @@ export class GroupComponent implements OnInit {
   }
 
   // numbers to be displayed for Pagination
-  paginationNum(num: number) {
+  changePageNo(num: number) {
     this.pageNo = num;
     this.grpsList();
   }
@@ -133,6 +133,7 @@ export class GroupComponent implements OnInit {
 
   sortChange(col: any, index: number) {
     this.loading = true;
+    this.pageNo = 1;
     let colData = { ...col };
     for (let k = 0; k < this.cols.length; k++) {
       this.cols[k].asc = false;
@@ -206,8 +207,8 @@ export class GroupComponent implements OnInit {
     let actDeac: string = `${this.rowInfo.isActive?'deactivate':'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to ${this.rowInfo.isActive?'deactivate':'activate'} this group?`,
-        title: `${this.rowInfo.isActive?'Deactivate':'Activate'} Group`
+        msg: `Are you sure you want to ${actDeac} this group?`,
+        title: `${this.rowInfo.isActive?'Deactivate':'Activate'} group`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
@@ -218,7 +219,7 @@ export class GroupComponent implements OnInit {
             this.toastr.success(`Group ${actDeac}d successfully`, 'Success!');
             this.grpsList();
           } else {
-            this.toastr.error(`Unable to ${actDeac}d group`, 'Error!');
+            this.toastr.error(`Unable to ${actDeac} group`, 'Error!');
           }
         }, (err: any) => {
 

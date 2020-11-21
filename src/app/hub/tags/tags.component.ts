@@ -50,8 +50,7 @@ export class TagsComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames!: string[];
   searchTxt!: string;
-  sortColumn!: string; isAsc!: boolean | undefined;
-  columns!: any[];
+  cols!: any[];sort: any = {};
   activeTags!: number; activeCatgs!: number;
   categoryId!: number | undefined; unCategorized!: boolean | undefined;
   @Input() lmtPage: any;
@@ -97,15 +96,10 @@ export class TagsComponent implements OnInit {
     this.totalCount = 0;
     this.tagNames = [];
     this.searchTxt = '';
-    this.sortColumn = ''; this.isAsc = undefined;
-    this.columns = [{ dispName: "Name", isAsc: true, isSelected: false, key: "name" }, { dispName: "Status", isAsc: true, isSelected: false, key: "status" }, { dispName: "Date Modified", isAsc: true, isSelected: false, key: "updatedDate" }];
+    this.cols = [{ n: "Name", asc: false, k:"name" }, { n: "Status", asc: false, k:"status" }, { n: "Date Modified", asc: false, k:"updatedDate" }];
     this.activeTags = 1; this.activeCatgs = 1;
     this.categoryId = undefined; this.unCategorized = undefined;
   }
-
-  // initForms() {
-  //   this.tagForm.patchValue({ name: '' });
-  // }
 
   // resetCh() {
   //   this.tagForm.reset()
@@ -125,55 +119,28 @@ export class TagsComponent implements OnInit {
   }
 
   // numbers to be displayed for Pagination
-  paginationNum(num: number) {
+  changePageNo(num: number) {
     this.pageNo = num;
     this.getTags();
   }
 
-  // activate tag
-  actTag(tag: any) {
+  actDeactTag() {
+    let actDeac: string = `${this.rowInfo.isActive?'deactivate':'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to activate this tag?`,
-        title: `Activate tag`
+        msg: `Are you sure you want to ${actDeac} this tag?`,
+        title: `${this.rowInfo.isActive?'Deactivate':'Activate'} tag`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        // console.log(tag);
-        this.tagServ.tagAct(tag.id).subscribe((data: any) => {
+        console.log(result);
+        this.tagServ.actDeactGrp(this.rowInfo.id.toString(),this.rowInfo.isActive?false:true).subscribe((data: any) => {
           if (data) {
-            this.toastr.success('Tag activated successfully', 'Success!');
-            this.showRowInfo = false
+            this.toastr.success(`Tag ${actDeac}d successfully`, 'Success!');
             this.getTags();
           } else {
-            this.toastr.error('Unable to activate tag', 'Error!');
-          }
-        }, (err: any) => {
-
-        });
-      }
-    })
-  }
-
-  // deactivate tag
-  deactTag(tag: any) {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to deactivate this tag?`,
-        title: `Deactivate tag`
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        // console.log(tag);
-        this.tagServ.tagDeact(tag.id).subscribe((data: any) => {
-          if (data) {
-            this.toastr.success('Tag deactivated successfully', 'Success!');
-            this.showRowInfo = false
-            this.getTags();
-          } else {
-            this.toastr.error('Unable to deactivate tag', 'Error!');
+            this.toastr.error(`Unable to ${actDeac} tag`, 'Error!');
           }
         }, (err: any) => {
 
@@ -224,19 +191,19 @@ export class TagsComponent implements OnInit {
   }
 
   // tags sorting
-  sort(col: string) {
-    this.sortColumn = col;
-    this.isAsc = !this.isAsc;
-    this.getTags();
-    this.columns.filter((val) => {
-      if (val.key == col) {
-        val.isAsc = !val.isAsc;
-        val.isSelected = true;
-      } else {
-        val.isAsc = true;
-        val.isSelected = false;
+    sortChange(col: any, index: number) {
+      this.pageNo = 1;
+      let colData = { ...col };
+      for (let k = 0; k < this.cols.length; k++) {
+        this.cols[k].asc = false;
       }
-    });
+      colData.asc = !colData.asc;
+      this.cols[index].asc = colData.asc;
+      this.sort = {
+        SortColumn: col.k,
+        ascending: colData.asc,
+      }
+      this.getTags()
   }
 
   // change tags listing - table
@@ -258,16 +225,16 @@ export class TagsComponent implements OnInit {
   // list of tags
   getTags() {
     this.tagLoading = true;
+    this.closeDoc();
     let query = {
       hubId: parseInt(this.hubid),
       pageNo: this.pageNo,
       pageSize: this.pageSize,
       searchText: this.searchTxt,
-      isAscending: this.isAsc,
-      sortColumn: this.sortColumn,
       isActive: this.isActiveTag,
       categoryId: this.categoryId,
-      unCategorized: this.unCategorized
+      unCategorized: this.unCategorized,
+      ...this.sort
     }
     // console.log(query.isActive);
     this.tagServ.tagList(query)

@@ -136,12 +136,10 @@
             <div class="card-text px-3">
               <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
                 <thead>
-                  <tr>
-                    <th class="curs-ptr" [ngClass]="{'font-weight-normal': !col.isSelected}" *ngFor="let col of columns"
-                      (click)="sort(col.key)">
-                      {{col.dispName}}
-                      <i class="fas ml-1"
-                        [ngClass]="{'fa-sort-down align-top': col.isAsc, 'fa-sort-up align-bottom': !col.isAsc}"></i>
+                  <tr><!-- font-weight-normal': !col.isSelected -->
+                    <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
+                      {{col.n}}<i class="fas ml-1"
+                        [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
                     </th>
                   </tr>
                 </thead>
@@ -151,7 +149,7 @@
                       {{tag.name}}
                     </td>
                     <td class="text-hi-dark-grey">No Status</td>
-                    <td>{{tag.updatedDate.split('T')[0]}}</td>
+                    <td>{{(tag.updatedDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -162,7 +160,7 @@
               <app-loader [type]="'page'" *ngIf="tagLoading"></app-loader>
             </div>
             <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
-              (pageSizeChange)="pageSizeChange($event)" (paginationNum)="paginationNum($event)"></app-pagination>
+              (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
           </div>
         </div>
       </div>
@@ -180,15 +178,9 @@
             </div>
           </div>
           <div class="card-header bg-hi-light-grey d-flex">
-            <div class="btn btn-sm btn-light mr-2" (click)="deactTag(rowInfo)" *ngIf="rowInfo.isActive">
-              <i class="fas fa-trash-alt"></i>
-            </div>
-            <div class="btn btn-sm btn-light mr-2" (click)="actTag(rowInfo)" *ngIf="!rowInfo.isActive">
-              <i class="fas fa-plus"></i>
-            </div>
-            <div class="btn btn-sm btn-light" (click)="updTagModal(editTag)">
-              <i class="fas fa-edit"></i>
-            </div>
+            <button class="btn btn-sm btn-light" (click)="actDeactTag()">
+              {{rowInfo.isActive?'Deactivate':'Activate'}}
+            </button>
           </div>
           <div class="card-body">
             <div class="doc-details details border-bottom mb-3 pb-3">

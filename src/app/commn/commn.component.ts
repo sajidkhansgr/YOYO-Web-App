@@ -153,6 +153,7 @@ export class CommnComponent implements OnInit {
 
   sortChange(col: any, index: number) {
     this.loading = true;
+    this.pageNo = 1;
     let colData = { ...col };
     for (let k = 0; k < this.cols.length; k++) {
       this.cols[k].asc = false;
