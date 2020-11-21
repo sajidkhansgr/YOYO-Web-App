@@ -95,6 +95,16 @@ body {
   }
 }
 
+// modal
+.modal-dialog {
+  .modal-content {
+    .modal-body {
+      max-height: 65vh;
+      overflow-y: auto;
+    }
+  }
+}
+
 // breadcrumb
 .breadcrumb {
   .breadcrumb-item {

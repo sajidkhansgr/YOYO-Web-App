@@ -72,7 +72,7 @@
         <div class="card-footer">
           <div class="name">{{content.name}}</div>
           <div class="float-left text-secondary d-flex">
-            <div class="date">{{content.updatedDate.split('T')[0]}}</div>
+            <div class="date">{{(content.updatedDate|date:'dd MMM, yyyy')||'N/A'}}</div>
             <div class="mx-2">l</div>
             <div class="items">0 Items</div>
           </div>
@@ -111,7 +111,7 @@
               <div class="name align-self-center">{{content.name}}</div>
             </div>
           </td>
-          <td class="align-middle">{{content.updatedDate.split('T')[0]}}</td>
+          <td class="align-middle">{{(content.updatedDate|date:'dd MMM, yyyy')||'N/A'}}</td>
           <td class="align-middle options">
             <div class="d-flex">
               <div class="dropleft">
