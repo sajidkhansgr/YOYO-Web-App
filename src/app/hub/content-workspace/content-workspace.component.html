@@ -672,7 +672,7 @@
 </div>
 
 <ng-template #srcHdrTxt>
-  <h5 class="card-title px-3">
+  <div class="card-title px-3">
     <div class="heading">
       <div class="float-right row mx-0">
         <div class="dropdown" *ngIf="view">
@@ -819,6 +819,13 @@
           </div>
         </div>
       </div>
+      <!-- filters -->
+      <div class="card-title px-3">
+        <span class="mr-2">Filtered by:</span>
+        <div class="btn btn-outline-primary btn-sm rounded-pill" style="padding: 0.15rem 0.5rem; font-size:0.75rem;">
+          Audio
+          <i class="fas fa-times"></i></div>
+      </div>
       <div class="search">
         <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
           <i matPrefix class="fas fa-search"></i>
@@ -830,7 +837,7 @@
         </mat-form-field>
       </div>
     </div>
-  </h5>
+  </div>
 </ng-template>
 
 <ng-template #cntntTable>
@@ -863,7 +870,8 @@
             <td>19 Aug 2020</td>
             <td class="text-hi-dark-grey">Andrea D'Souza</td>
           </tr> -->
-          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id)}">
+          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)"
+            [ngClass]="{'sel-row':(rowInfo.id === cntnt.id)}">
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
                 <span *ngSwitchCase="'name'">

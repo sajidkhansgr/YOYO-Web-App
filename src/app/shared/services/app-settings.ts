@@ -61,6 +61,8 @@ export class AppSettings {
 
   public static ACT_WRKSPC = `api/Workspace/Activate`;
 
+  public static GET_WRKSPC_EMP = `api/Workspace/GetAllByEmployee`;
+
   // ---- FOLDER ---- //
 
   public static LIST_FLDR_WRKSPC = `api/Folder/GetAllByWorkspace`;
@@ -105,6 +107,7 @@ export class AppSettings {
 
   public static ACT_CATG = `api/Category/Activate`;
 
+  // ---- NOTIFICATION ---- //
 
   public static NOTIFICATIONS = `api/Notification/EmployeeNotifications`;
 
