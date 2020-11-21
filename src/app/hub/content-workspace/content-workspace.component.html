@@ -110,7 +110,7 @@
                         <div class="view" *ngIf="!edits.t">
                           <div *ngIf="rowInfo.contentTags && rowInfo.contentTags.length>0 else noCntntTag">
                             <span *ngFor="let tg of rowInfo.contentTags"
-                              class="badge badge-light text-success">{{tg.tagId}}</span>
+                              class="badge badge-light text-success">{{tg.tagName}}</span>
                           </div>
                           <ng-template #noCntntTag>
                             <div class="text-hi-dark-grey">No Tags</div>
@@ -154,7 +154,7 @@
                         <div class="view" *ngIf="!edits.l">
                           <div *ngIf="rowInfo.contentLanguages && rowInfo.contentLanguages.length>0 else noCntntLng">
                             <span *ngFor="let lng of rowInfo.contentLanguages"
-                              class="badge badge-light text-success">{{lng.languageId}}</span>
+                              class="badge badge-light text-success">{{lng.languageName}}</span>
                           </div>
                           <ng-template #noCntntLng>
                             <div class="text-hi-dark-grey">No Languages</div>
@@ -877,7 +877,7 @@
                 <span *ngSwitchCase="'name'">
                   {{cntnt.name}}<br />
                   <span *ngFor="let tg of cntnt.contentTags"
-                    class="badge badge-light p-2 mt-2 mt-sm-0">{{tg.tagId}}</span>
+                    class="badge badge-light p-2 mt-2 mt-sm-0">{{tg.tagName}}</span>
                 </span>
                 <span *ngSwitchCase="'createdDate'">
                   {{(cntnt.createdDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}

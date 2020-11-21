@@ -21,6 +21,7 @@ import { TokenDataService } from './shared/services/token-data.service';
 import { DataService } from './shared/services/data.service';
 import { HeaderModule } from './home-layout/header/header.module';
 import { SidebarModule } from './home-layout/sidebar/sidebar.module';
+import { LoaderModule } from './shared/components/loader/loader.module';
 
 const appRoutes: Routes = [
     { path : '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
@@ -49,7 +50,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     ToastrModule.forRoot(), // ToastrModule added
     RouterModule.forRoot(appRoutes),
-    HeaderModule, SidebarModule
+    HeaderModule, SidebarModule, LoaderModule
   ],
   providers: [
      { provide: UrlSerializer, useClass: CustomUrlSerializer },

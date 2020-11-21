@@ -32,7 +32,7 @@ export class AppComponent {
     this.getToken();
     setTimeout(() => {
       this.isVisb = true;
-    }, 900)
+    }, 2000)
   }
 
   getToken() {

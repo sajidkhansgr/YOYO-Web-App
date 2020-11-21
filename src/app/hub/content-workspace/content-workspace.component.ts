@@ -779,11 +779,11 @@ export class ContentWorkspaceComponent implements OnInit {
     this.rowInfo.img =  this.getImg(this.rowInfo);
     this.isShared = this.rowInfo.canBeShared;
     if (Array.isArray(this.rowInfo.contentTags))
-      this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId }));
+      this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId, name: tag.tagName }));
     else
       this.rowInfo.contentTags = []
     if (Array.isArray(this.rowInfo.contentLanguages))
-      this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng, id: lng.languageId }));
+      this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng, id: lng.languageId, name: lng.languageName }));
     else
       this.rowInfo.contentLanguages = []
     this.docLoading = false;
@@ -1085,8 +1085,8 @@ export class ContentWorkspaceComponent implements OnInit {
           this.toastr.success(`${str} saved successfully`, 'Success!');
           switch (type) {
             case 'd': this.rowInfo.description = this.desc; break;
-            case 't': this.rowInfo.contentTags = this.selTags2.map((tag: any) => ({ ...tag, tagId: tag.id }));break;
-            case 'l': this.rowInfo.contentLanguages = this.selLngs.map((lng: any) => ({ ...lng, languageId: lng.id }));break;
+            case 't': this.rowInfo.contentTags = this.selTags2.map((tag: any) => ({ ...tag, tagId: tag.id,tagName: tag.name}));break;
+            case 'l': this.rowInfo.contentLanguages = this.selLngs.map((lng: any) => ({ ...lng, languageId: lng.id,languageName: lng.name}));break;
             case 'p': this.rowInfo.canBeShared = this.isShared; break;
           }
           this.closeEdit(type,false);

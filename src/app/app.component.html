@@ -3,3 +3,4 @@
   <app-sidebar *ngIf="isToken && !isAuthPage() && !isWebApp()"></app-sidebar>
   <router-outlet></router-outlet>
 </div>
+<app-loader [type]="'page'" *ngIf="!isVisb"></app-loader>
