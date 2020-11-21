@@ -151,6 +151,15 @@ button[aria-label="Close"]:focus {
 
 
 // material
+.workspace-nav {
+  .float-right {
+    padding-bottom: 10px;
+  }
+
+  .mat-tab-label {
+    min-width: 90px !important;
+  }
+}
 
 mat-checkbox {
   label {
