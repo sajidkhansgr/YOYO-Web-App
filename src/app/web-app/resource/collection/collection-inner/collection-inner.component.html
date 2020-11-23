@@ -1,7 +1,7 @@
 <app-loader [type]="'page'" *ngIf="loading"></app-loader>
 <div class="main main-employee p-3 container mt-3" *ngIf="!loading">
   <h3 class="mb-4 clearfix heading align-self-center">
-    {{selColctn ? selColctn.name : 'N/A'}}
+    {{selColctn!.name}}
     <div class="float-right d-flex">
       <div class="btn btn-light" (click)="openModal(email)">
         <i class="fa fa-envelope mr-1"></i>
@@ -77,7 +77,7 @@
             <div class="items">0 Items</div>
           </div>
           <div class="float-right">
-            <mat-checkbox (change)="selMe($event.checked, content.id)"></mat-checkbox>
+            <mat-checkbox (change)="selMe($event.checked, content)"></mat-checkbox>
           </div>
         </div>
       </div>
@@ -101,7 +101,7 @@
       <tbody *ngIf="contentArr.length > 0">
         <tr *ngFor="let content of contentArr">
           <td class="align-middle">
-            <mat-checkbox (change)="selMe($event.checked, content.id)"></mat-checkbox>
+            <mat-checkbox (change)="selMe($event.checked, content)"></mat-checkbox>
           </td>
           <td class="align-middle">
             <div class="d-flex">
@@ -200,70 +200,77 @@
         <input matInput placeholder="Search">
       </mat-form-field>
     </div>
-    <div *ngIf="showAll">
-      <!-- experiences -->
-      <div class="text-secondary font-weight-bold my-2">Workspaces</div>
-      <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let workspc of workspcArr"
-        (click)="showWorkspcFldrs(workspc)">
-        <div class="icon align-self-center mr-2">
-          <img src="assets/images/discription.png" style="max-height:50px;">
+    <!-- nav -->
+    <nav aria-label="breadcrumb" *ngIf="!showAll">
+      <ol class="breadcrumb bg-white mb-0 p-0">
+        <!-- <li class="breadcrumb-item curs-ptr text-primary" (click)="backFolder()" style="font-size: 16px;"
+          *ngIf="folderNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li> -->
+        <li class="breadcrumb-item curs-ptr text-primary" (click)="showAll = true;">Home</li>
+        <!-- <li class="breadcrumb-item no-before">{{selWrkspc!.name}}</li> -->
+        <li class="breadcrumb-item" *ngFor="let c of contentNav">{{c.name}}</li>
+      </ol>
+    </nav>
+    <ng-container *ngIf="(wrkspcLoading && colctnLoading) || (fldrLoading && sFldrLoading); else loaded">
+      <app-loader [type]="'page'"></app-loader>
+    </ng-container>
+    <ng-template #loaded>
+      <div *ngIf="showAll">
+        <!-- experiences -->
+        <div class="text-secondary font-weight-bold my-2">Workspaces</div>
+        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let workspc of workspcArr"
+          (click)="showWorkspcFldrs(workspc)">
+          <div class="icon align-self-center mr-2">
+            <img src="assets/images/discription.png" style="max-height:50px;">
+          </div>
+          <div class="name align-self-center">
+            {{workspc.name}}
+          </div>
+          <div class="arrow align-self-center ml-auto mr-3">
+            <i class="fa fa-angle-right"></i>
+          </div>
         </div>
-        <div class="name align-self-center">
-          {{workspc.name}}
+        <!-- my files -->
+        <div class="text-secondary font-weight-bold my-2">My Files</div>
+        <div class="d-flex border-bottom p-2 dark-bg-hover">
+          <div class="icon align-self-center mr-2">
+            <img src="assets/images/discription.png" style="max-height:50px;">
+          </div>
+          <div class="name align-self-center">
+            Static data
+          </div>
+          <div class="arrow align-self-center ml-auto mr-3">
+            <i class="fa fa-angle-right"></i>
+          </div>
         </div>
-        <div class="arrow align-self-center ml-auto mr-3">
-          <i class="fa fa-angle-right"></i>
-        </div>
-      </div>
-      <!-- my files -->
-      <div class="text-secondary font-weight-bold my-2">My Files</div>
-      <div class="d-flex border-bottom p-2 dark-bg-hover">
-        <div class="icon align-self-center mr-2">
-          <img src="assets/images/discription.png" style="max-height:50px;">
-        </div>
-        <div class="name align-self-center">
-          Static data
-        </div>
-        <div class="arrow align-self-center ml-auto mr-3">
-          <i class="fa fa-angle-right"></i>
-        </div>
-      </div>
-      <!-- collections -->
-      <div class="text-secondary font-weight-bold my-2">Collections</div>
-      <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr">
-        <div class="icon align-self-center mr-2">
-          <img src="assets/images/discription.png" style="max-height:50px;">
-        </div>
-        <div class="name align-self-center">
-          {{colctn.name}}
-        </div>
-        <div class="arrow align-self-center ml-auto mr-3">
-          <i class="fa fa-angle-right"></i>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="!showAll">
-      <!-- <nav aria-label="breadcrumb">
-        <ol class="breadcrumb bg-white mb-0 p-0">
-          <li class="breadcrumb-item curs-ptr text-primary" (click)="backFolder()" style="font-size: 16px;"
-            *ngIf="folderNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li>
-          <li class="breadcrumb-item no-before">{{selWrkspc.name}}</li>
-          <li class="breadcrumb-item" *ngFor="let folNav of folderNav">{{folNav.name}}</li>
-        </ol>
-      </nav> -->
-      <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr"
-        (click)="showWorkspcFldrs(0, fldr)">
-        <div class="icon align-self-center mr-2">
-          <img src="assets/images/discription.png" style="max-height:50px;">
-        </div>
-        <div class="name align-self-center">
-          {{fldr.name}}
-        </div>
-        <div class="arrow align-self-center ml-auto mr-3">
-          <i class="fa fa-angle-right"></i>
+        <!-- collections -->
+        <div class="text-secondary font-weight-bold my-2">Collections</div>
+        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr">
+          <div class="icon align-self-center mr-2">
+            <img src="assets/images/discription.png" style="max-height:50px;">
+          </div>
+          <div class="name align-self-center">
+            {{colctn.name}}
+          </div>
+          <div class="arrow align-self-center ml-auto mr-3">
+            <i class="fa fa-angle-right"></i>
+          </div>
         </div>
       </div>
-    </div>
+      <div *ngIf="!showAll">
+        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr"
+          (click)="showWorkspcFldrs(undefined, fldr)">
+          <div class="icon align-self-center mr-2">
+            <img src="assets/images/discription.png" style="max-height:50px;">
+          </div>
+          <div class="name align-self-center">
+            {{fldr.name}}
+          </div>
+          <div class="arrow align-self-center ml-auto mr-3">
+            <i class="fa fa-angle-right"></i>
+          </div>
+        </div>
+      </div>
+    </ng-template>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">0 Items Selected</button>
