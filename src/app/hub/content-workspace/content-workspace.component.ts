@@ -20,6 +20,7 @@ import { ContentWorkspaceService } from './content-workspace.service';
 import { TagsService } from '../tags/tags.service';
 import { LanguageService } from '../../shared/services/language.service';
 import { TokenDataService } from '../../shared/services/token-data.service';
+import { FileService } from '../../shared/services/file.service';
 
 @Component({
   selector: 'app-content-workspace',
@@ -70,14 +71,15 @@ export class ContentWorkspaceComponent implements OnInit {
     private dialog: MatDialog,
     private tagServ: TagsService,
     private lngServ: LanguageService,
-    private tokenDataServ: TokenDataService
+    private tokenDataServ: TokenDataService,
+    private fileServ: FileService
   ) { }
 
   ngOnInit(): void {
     this.initialiseState(); // reset and set based on new parameter this time
     this.getTags();
     this.getLangs();
-    this.cntntList()
+    this.cntntList();
   }
 
   initialiseState() {
@@ -241,6 +243,31 @@ export class ContentWorkspaceComponent implements OnInit {
     this.edit ? this.updSmartFolder() : this.addSmartFolder();
   }
 
+
+    // actDeactTag() {
+    //   let actDeac: string = `${this.rowInfo.isActive?'deactivate':'activate'}`;
+    //   this.dialog.open(ConfirmDialogComponent, {
+    //     data: {
+    //       msg: `Are you sure you want to ${actDeac} this tag?`,
+    //       title: `${this.rowInfo.isActive?'Deactivate':'Activate'} tag`
+    //     },
+    //     autoFocus: false
+    //   }).afterClosed().subscribe(result => {
+    //     if (result) {
+    //       console.log(result);
+    //       this.tagServ.actDeactGrp(this.rowInfo.id.toString(),this.rowInfo.isActive?false:true).subscribe((data: any) => {
+    //         if (data) {
+    //           this.toastr.success(`Tag ${actDeac}d successfully`, 'Success!');
+    //           this.getTags();
+    //         } else {
+    //           this.toastr.error(`Unable to ${actDeac} tag`, 'Error!');
+    //         }
+    //       }, (err: any) => {
+    //
+    //       });
+    //     }
+    //   })
+    // }
   // activate smart folder
   actSmartFolder(folder: any) {
     this.dialog.open(ConfirmDialogComponent, {
@@ -1131,6 +1158,47 @@ export class ContentWorkspaceComponent implements OnInit {
       }, (err: any) => {
         this.disb[type] = false;
       });
+  }
+
+  tashCntnt() {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to move ${this.rowInfo.name} to the trash?`,
+        title: `Move to trash`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.cwServ.trashCntnt(this.rowInfo.id.toString()).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(`Content successfully moved to trash`, 'Success!');
+            this.cntntList();
+          } else {
+            this.toastr.error(`Unable to trash content`, 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
+  downloadFile(){
+    let statUrl = 'Icon/Test/Url/7/b8c1176d-c9a6-4c82-8868-9e1403d080b3.png';
+    this.fileServ.downloadFile(statUrl).subscribe((data: any) => {
+      if (data) {
+          // this.blob = new Blob([data], {type: 'application/pdf'});
+          var downloadURL = window.URL.createObjectURL(data);
+          var link = document.createElement('a');
+          link.href = downloadURL;
+          link.download = "my file.png";
+          link.click();
+      } else {
+        this.toastr.error(`Unable to download file`, 'Error!');
+      }
+    }, (err: any) => {
+
+    });
   }
 
   dismissModal() {

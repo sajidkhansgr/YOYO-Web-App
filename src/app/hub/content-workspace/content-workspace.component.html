@@ -74,8 +74,8 @@
               <div class="dropdown-menu" aria-labelledby="optDD">
                 <a class="dropdown-item curs-ptr" (click)="openModal(uplNewVer)"><i
                     class="fas fa-upload mr-1"></i>Upload new version</a>
-                <a class="dropdown-item curs-ptr"><i class="fas fa-download mr-1"></i>Download</a>
-                <a class="dropdown-item curs-ptr"><i class="fas fa-trash mr-1"></i>Move to trash</a>
+                <a class="dropdown-item curs-ptr" (click)="downloadFile()"><i class="fas fa-download mr-1"></i>Download</a>
+                <a class="dropdown-item curs-ptr" (click)="tashCntnt();"><i class="fas fa-trash mr-1"></i>Move to trash</a>
               </div>
             </div>
           </div>
@@ -878,7 +878,7 @@
             <th scope="col" class="curs-ptr">Authors<i class="fas fa-sort-down ml-1 align-top"></i></th> -->
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="cntnts.length > 0">
           <!-- <tr (click)="toggleInfo()">
             <td>
               Group Stock Position - Regional Offices<br />
@@ -913,6 +913,9 @@
           </tr>
         </tbody>
       </table>
+      <div class="text-center text-secondary" *ngIf="cntnts.length<= 0">
+        No Content found
+      </div>
       <div class="row justify-content-between" *ngIf="!view">
         <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-2 p-3 rounded" *ngFor="let cntnt of cntnts"
           (click)="toggleInfo(cntnt)" style="max-width:400px;" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id)}">

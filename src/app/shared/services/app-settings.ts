@@ -152,6 +152,8 @@ export class AppSettings {
 
   public static ADD_CMNT_CNTNT = `api/Content/AddCommentToContent`;
 
+  public static TRASH_CNTNT = `api/Content/MoveToTrash`;
+
   // Language
   public static LIST_LNG = `api/Language/GetAll`;
 

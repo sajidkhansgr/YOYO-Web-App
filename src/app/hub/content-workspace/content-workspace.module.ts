@@ -23,6 +23,7 @@ import { ContentWorkspaceComponent } from './content-workspace.component';
 import { ContentWorkspaceService } from './content-workspace.service';
 import { TagsService } from '../tags/tags.service';
 import { LanguageService } from '../../shared/services/language.service';
+import { FileService } from '../../shared/services/file.service';
 
 @NgModule({
   declarations: [ContentWorkspaceComponent],
@@ -41,6 +42,6 @@ import { LanguageService } from '../../shared/services/language.service';
   exports: [
     ContentWorkspaceComponent
   ],
-  providers: [ContentWorkspaceService, TagsService, LanguageService],
+  providers: [ContentWorkspaceService, TagsService, LanguageService, FileService],
 })
 export class ContentWorkspaceModule { }

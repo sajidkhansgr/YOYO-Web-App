@@ -185,5 +185,8 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.ADD_CMNT_CNTNT}`, data)
   }
 
+  trashCntnt(id: any) {
+    return this.http.post(`${AppSettings.TRASH_CNTNT}?id=${id}`, {});
+  }
 
 }
