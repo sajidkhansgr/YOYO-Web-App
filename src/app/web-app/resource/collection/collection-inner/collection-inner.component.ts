@@ -10,7 +10,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service'
 import { Collection as Colctn } from '../../../../shared/models/collection';
-import { Workspace as Wrkspc } from '../../../../shared/models/workspace';
+import { Workspace as Wrkspc, Workspace } from '../../../../shared/models/workspace';
 import { Folder } from '../../../../shared/models/folder';
 import { Content } from '../../../../shared/models/content';
 
@@ -23,14 +23,14 @@ import { Content } from '../../../../shared/models/content';
 export class CollectionInnerComponent implements OnInit {
   view: boolean = true; id!: number; routerSubs!: Subscription;
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
-  disabled!: boolean; loading!: boolean;
+  disabled!: boolean; loading!: boolean; wrkspcLoading!: boolean; colctnLoading!: boolean; fldrLoading!: boolean; sFldrLoading!: boolean;
   selColctn!: Colctn | undefined;
   colctnForm!: FormGroup;
   multiForm!: number;
-  contentArr!: Colctn[]; selContentArr: any;
+  contentArr!: Content[]; selContentArr!: Content[];
   showBotDiv!: boolean;
-  workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; wid!: number | undefined; fid!: number | undefined;
-  showAll!: boolean;
+  workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined;
+  showAll!: boolean; contentNav!: any[];
 
   constructor(
     private modalService: NgbModal,
@@ -53,6 +53,7 @@ export class CollectionInnerComponent implements OnInit {
 
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
+    this.wrkspcLoading = true; this.colctnLoading = true; this.fldrLoading = false; this.sFldrLoading = false;
     this.selColctn = undefined; this.selContentArr = [];
     this.colctnForm = this.fb.group({
       name: ['', [Validators.required]]
@@ -60,55 +61,55 @@ export class CollectionInnerComponent implements OnInit {
     this.multiForm = 0;
     this.contentArr = [];
     this.showBotDiv = false;
-    this.workspcArr = []; this.colctnArr = []; this.fldrArr = []; this.wid = undefined; this.fid = undefined;
-    this.showAll = true;
+    this.workspcArr = []; this.colctnArr = []; this.fldrArr = []; this.selWrkspc = undefined; this.selFldr = undefined;
+    this.showAll = true; this.contentNav = [];
   }
 
   // ----- for 'add resource' modal -----
   // get list of workspaces
   getWrkspcList() {
-    // this.wrkspcLoading = true;
+    this.wrkspcLoading = true;
     this.cwServ.wrkspcListEmp()
       .subscribe((data: any) => {
         // console.log(data);
         if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
           this.workspcArr = data.result;
         }
-        // this.wrkspcLoading = false;
+        this.wrkspcLoading = false;
       }, (err: any) => {
         console.log(err);
-        // this.wrkspcLoading = false;
+        this.wrkspcLoading = false;
       });
   }
 
   // get list of folders
   getFolderList() {
-    // this.folderLoading = true;
+    this.fldrLoading = true;
     let query = {
-      workspaceId: this.wid,
-      folderId: this.fid,
+      workspaceId: this.selWrkspc!.id,
+      folderId: this.selFldr ? this.selFldr!.id : undefined,
       isActive: true
     };
     this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         for (let i = 0; i < data.result.results.length; i++) {
           this.fldrArr.push({ ...data.result.results[i], key: 'fldr' });
         }
       } else {
       }
-      // this.folderLoading = false;
+      this.fldrLoading = false;
     }, (err: any) => {
-      // this.folderLoading = false;
+      this.fldrLoading = false;
     });
   }
 
   // get list of smart folders
   getSmartFolderList() {
-    // this.folderLoading = true;
+    this.sFldrLoading = true;
     let query = {
-      workspaceId: this.wid,
-      folderId: this.fid,
+      workspaceId: this.selWrkspc!.id,
+      folderId: this.selFldr ? this.selFldr!.id : undefined,
       isActive: true
     };
     this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
@@ -118,36 +119,39 @@ export class CollectionInnerComponent implements OnInit {
         }
       } else {
       }
-      // this.folderLoading = false;
+      this.sFldrLoading = false;
     }, (err: any) => {
-      // this.folderLoading = false;
+      this.sFldrLoading = false;
     });
   }
 
   // show folders on workspace click
-  showWorkspcFldrs(wid: any, fid?: any) {
-    this.wid = fid ? this.wid : wid;
-    this.fid = fid;
-    this.fldrArr = [];
-    this.getFolderList();
-    this.getSmartFolderList();
+  showWorkspcFldrs(wrkspc: Wrkspc | undefined, fldr?: Folder) {
+    if (fldr) {
+      this.contentNav.push(fldr);
+      this.selFldr = fldr;
+      this.fldrArr = [];
+      this.getFolderList();
+      this.getSmartFolderList();
+    } else {
+      this.selWrkspc = wrkspc;
+      this.contentNav.push(wrkspc);
+    }
     this.showAll = false;
-    // console.log(this.wid);
-    // console.log(this.fid);
   }
 
   // get collection list
-  listColct() {
-    // this.loading = true;
+  listColctn() {
+    this.colctnLoading = true;
     this.colctnSrv.colctnList({}).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.colctnArr = data.result;
       } else {
         this.colctnArr = [];
       }
-      // this.loading = false;
+      this.colctnLoading = false;
     }, (err: any) => {
-      // this.loading = false;
+      this.colctnLoading = false;
     });
   }
 
@@ -155,7 +159,7 @@ export class CollectionInnerComponent implements OnInit {
   // add resource modal
   addResourceModal(modal: any) {
     this.getWrkspcList();
-    this.listColct();
+    this.listColctn();
     this.openModal(modal);
   }
 
@@ -184,11 +188,11 @@ export class CollectionInnerComponent implements OnInit {
   }
 
   // on selecting a content
-  selMe(val: any, id: number) {
+  selMe(val: any, content: Content) {
     if (val) {
-      this.selContentArr.push(id);
+      this.selContentArr.push(content);
     } else {
-      this.selContentArr = this.selContentArr.filter((data: any) => data != id);
+      this.selContentArr = this.selContentArr.filter((data: any) => data.id != content.id);
     }
     if (this.selContentArr.length > 0) {
       this.showBotDiv = true;

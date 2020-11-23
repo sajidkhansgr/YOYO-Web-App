@@ -30,7 +30,7 @@ export class ContentWorkspaceComponent implements OnInit {
   showWork!: boolean;
   @Input() hubid: any; routerSubs!: Subscription;
   addURLIcon!: string; iconUrl!: any;
-  defIcon: any = DEF_ICON; custIcon: any; files!: any[];defImg: any = DEF_IMG;
+  defIcon: any = DEF_ICON; custIcon: any; files!: any[]; defImg: any = DEF_IMG;
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: Workspace[]; selWrkspc: Workspace | undefined;
@@ -55,9 +55,9 @@ export class ContentWorkspaceComponent implements OnInit {
   cntntDisb!: boolean; cntntLoading!: boolean; activeIndex: number = 0;
   pageNo!: number; pageSize!: number; @Input() lmtPage: any;
   showRowInfo!: boolean; rowInfo!: any; docLoading!: boolean;
-  desc!: string; isShared!:boolean;cmnt!:string;
+  desc!: string; isShared!: boolean; cmnt!: string;
   lngs!: Language[]; selLngs: Language[] = [];
-  edits:any;disb:any; //disb and edits used in single edits
+  edits: any; disb: any; //disb and edits used in single edits
 
   usrInfo: any | null;
 
@@ -111,9 +111,9 @@ export class ContentWorkspaceComponent implements OnInit {
     this.disabled = false;
     this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
-    this.visbCols = [{ n: "Added", k:"createdDate", asc: false}];
-    this.hidCols = [{ n: "Likes", k:"likes", asc: false},{ n: "Size", k:"size", asc: false},{ n: "Last Updated", k:"updatedDate", asc: false}];
-    this.cols = [{ n: "Name", asc: false, k:"name" }, { n: "Added", k:"createdDate", asc: false }];
+    this.visbCols = [{ n: "Added", k: "createdDate", asc: false }];
+    this.hidCols = [{ n: "Likes", k: "likes", asc: false }, { n: "Size", k: "size", asc: false }, { n: "Last Updated", k: "updatedDate", asc: false }];
+    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Added", k: "createdDate", asc: false }];
     this.props = PRPS;
     this.view = true;
     this.edit = false;
@@ -626,7 +626,7 @@ export class ContentWorkspaceComponent implements OnInit {
       if (this.addWrkspcForm.valid) {
         wrkspcData = {
           ...this.addWrkspcForm.value,
-          hubId: this.selWrkspc!.hubId
+          hubId: parseInt(this.hubid)
         };
       } else if (this.updWrkspcForm.valid) {
         wrkspcData = {
@@ -776,7 +776,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   setDefCntntData() {
     this.desc = this.rowInfo.description;
-    this.rowInfo.img =  this.getImg(this.rowInfo);
+    this.rowInfo.img = this.getImg(this.rowInfo);
     this.isShared = this.rowInfo.canBeShared;
     if (Array.isArray(this.rowInfo.contentTags))
       this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId, name: tag.tagName }));
@@ -797,8 +797,8 @@ export class ContentWorkspaceComponent implements OnInit {
     // (event.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'block';
   }
 
-  closeEdit(type: string,isUpd:boolean=true){
-    if(type && isUpd){
+  closeEdit(type: string, isUpd: boolean = true) {
+    if (type && isUpd) {
       switch (type) {
         case 'd': this.desc = this.rowInfo.description; break;
         case 't': this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId })); break;
@@ -898,8 +898,8 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.cntnts = data.result.results;
-          for(let k=0;k<this.cntnts.length;k++){
-            this.cntnts[k].img =  this.getImg(this.cntnts[k]);
+          for (let k = 0; k < this.cntnts.length; k++) {
+            this.cntnts[k].img = this.getImg(this.cntnts[k]);
           }
           this.totalCount = data.result.totalCount;
         } else {
@@ -1085,11 +1085,11 @@ export class ContentWorkspaceComponent implements OnInit {
           this.toastr.success(`${str} saved successfully`, 'Success!');
           switch (type) {
             case 'd': this.rowInfo.description = this.desc; break;
-            case 't': this.rowInfo.contentTags = this.selTags2.map((tag: any) => ({ ...tag, tagId: tag.id,tagName: tag.name}));break;
-            case 'l': this.rowInfo.contentLanguages = this.selLngs.map((lng: any) => ({ ...lng, languageId: lng.id,languageName: lng.name}));break;
+            case 't': this.rowInfo.contentTags = this.selTags2.map((tag: any) => ({ ...tag, tagId: tag.id, tagName: tag.name })); break;
+            case 'l': this.rowInfo.contentLanguages = this.selLngs.map((lng: any) => ({ ...lng, languageId: lng.id, languageName: lng.name })); break;
             case 'p': this.rowInfo.canBeShared = this.isShared; break;
           }
-          this.closeEdit(type,false);
+          this.closeEdit(type, false);
         } else {
           this.toastr.error(`Unable to save ${str.toLowerCase()}`, 'Error!');
         }
@@ -1099,16 +1099,16 @@ export class ContentWorkspaceComponent implements OnInit {
       });
   }
 
-  getImg(data: any): string{
-    if(data.urlIconPath)
+  getImg(data: any): string {
+    if (data.urlIconPath)
       return data.urlIconPath;
-    else if(Array.isArray(data.pdfImages) && data.pdfImages.length>0)
+    else if (Array.isArray(data.pdfImages) && data.pdfImages.length > 0)
       return data.pdfImages[0].imagePath;
     else
       return this.defImg;
   }
 
-  addCmnt(type: string){
+  addCmnt(type: string) {
     let cmntData = {
       commentText: this.cmnt,
       contentId: this.rowInfo.id,
@@ -1118,7 +1118,7 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.rowInfo.comments.push({
-            createdByFullName:this.usrInfo && this.usrInfo.fN?this.usrInfo.fN:'User',
+            createdByFullName: this.usrInfo && this.usrInfo.fN ? this.usrInfo.fN : 'User',
             createdDate: new Date(),
             commentText: this.cmnt
           })
@@ -1235,7 +1235,7 @@ export class ContentWorkspaceComponent implements OnInit {
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this.dismissModal();
-    if(!!this.subscription)
+    if (!!this.subscription)
       this.subscription.unsubscribe();
   }
 
