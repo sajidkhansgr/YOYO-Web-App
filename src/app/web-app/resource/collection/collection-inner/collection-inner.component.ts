@@ -9,7 +9,10 @@ import { CollectionService } from '../collection.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service'
-import { parse } from 'path';
+import { Collection as Colctn } from '../../../../shared/models/collection';
+import { Workspace as Wrkspc } from '../../../../shared/models/workspace';
+import { Folder } from '../../../../shared/models/folder';
+import { Content } from '../../../../shared/models/content';
 
 
 @Component({
@@ -21,12 +24,12 @@ export class CollectionInnerComponent implements OnInit {
   view: boolean = true; id!: number; routerSubs!: Subscription;
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
   disabled!: boolean; loading!: boolean;
-  selColctn: any;
+  selColctn!: Colctn | undefined;
   colctnForm!: FormGroup;
   multiForm!: number;
-  contentArr!: any[]; selContentArr: any;
+  contentArr!: Colctn[]; selContentArr: any;
   showBotDiv!: boolean;
-  workspcArr!: any[]; colctnArr!: any[]; fldrArr!: any[]; wid!: number | undefined; fid!: number | undefined;
+  workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; wid!: number | undefined; fid!: number | undefined;
   showAll!: boolean;
 
   constructor(
@@ -61,74 +64,74 @@ export class CollectionInnerComponent implements OnInit {
     this.showAll = true;
   }
 
-  // -------------------------- need to replace these by api's for user
-  // // ----- for 'add resource' modal -----
-  // // get list of workspaces
-  // getWrkspcList() {
-  //   // this.wrkspcLoading = true;
-  //   this.cwServ.wrkspcList({})
-  //     .subscribe((data: any) => {
-  //       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-  //         // console.log(data);
-  //         this.workspcArr = data.result.results;
-  //       }
-  //       // this.wrkspcLoading = false;
-  //     }, (err: any) => {
-  //       console.log(err);
-  //       // this.wrkspcLoading = false;
-  //     });
-  // }
+  // ----- for 'add resource' modal -----
+  // get list of workspaces
+  getWrkspcList() {
+    // this.wrkspcLoading = true;
+    this.cwServ.wrkspcListEmp()
+      .subscribe((data: any) => {
+        // console.log(data);
+        if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+          this.workspcArr = data.result;
+        }
+        // this.wrkspcLoading = false;
+      }, (err: any) => {
+        console.log(err);
+        // this.wrkspcLoading = false;
+      });
+  }
 
-  // // get list of folders
-  // getFolderList() {
-  //   // this.folderLoading = true;
-  //   let query = {
-  //     workspaceId: this.wid,
-  //     folderId: this.fid
-  //   };
-  //   this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
-  //     console.log(data);
-  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-  //       for (let i = 0; i < data.result.results.length; i++) {
-  //         this.fldrArr.push({ ...data.result.results[i], key: 'fldr' });
-  //       }
-  //     } else {
-  //     }
-  //     // this.folderLoading = false;
-  //   }, (err: any) => {
-  //     // this.folderLoading = false;
-  //   });
-  // }
+  // get list of folders
+  getFolderList() {
+    // this.folderLoading = true;
+    let query = {
+      workspaceId: this.wid,
+      folderId: this.fid,
+      isActive: true
+    };
+    this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
+      console.log(data);
+      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        for (let i = 0; i < data.result.results.length; i++) {
+          this.fldrArr.push({ ...data.result.results[i], key: 'fldr' });
+        }
+      } else {
+      }
+      // this.folderLoading = false;
+    }, (err: any) => {
+      // this.folderLoading = false;
+    });
+  }
 
-  // // get list of smart folders
-  // getSmartFolderList() {
-  //   // this.folderLoading = true;
-  //   let query = {
-  //     workspaceId: this.wid,
-  //     folderId: this.fid
-  //   };
-  //   this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
-  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-  //       for (let i = 0; i < data.result.results.length; i++) {
-  //         this.fldrArr.push({ ...data.result.results[i], key: 'smtFldr' });
-  //       }
-  //     } else {
-  //     }
-  //     // this.folderLoading = false;
-  //   }, (err: any) => {
-  //     // this.folderLoading = false;
-  //   });
-  // }
-  // -------------------------------------------
+  // get list of smart folders
+  getSmartFolderList() {
+    // this.folderLoading = true;
+    let query = {
+      workspaceId: this.wid,
+      folderId: this.fid,
+      isActive: true
+    };
+    this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        for (let i = 0; i < data.result.results.length; i++) {
+          this.fldrArr.push({ ...data.result.results[i], key: 'smtFldr' });
+        }
+      } else {
+      }
+      // this.folderLoading = false;
+    }, (err: any) => {
+      // this.folderLoading = false;
+    });
+  }
 
   // show folders on workspace click
-  showWorkspcFldrs(wid: number, fid?: number) {
+  showWorkspcFldrs(wid: any, fid?: any) {
     this.wid = fid ? this.wid : wid;
     this.fid = fid;
     this.fldrArr = [];
-    // this.getFolderList();
-    // this.getSmartFolderList();
-    // this.showAll = false;
+    this.getFolderList();
+    this.getSmartFolderList();
+    this.showAll = false;
     // console.log(this.wid);
     // console.log(this.fid);
   }
@@ -151,7 +154,7 @@ export class CollectionInnerComponent implements OnInit {
   // ----- resource/content -----
   // add resource modal
   addResourceModal(modal: any) {
-    // this.getWrkspcList(); -----------
+    this.getWrkspcList();
     this.listColct();
     this.openModal(modal);
   }
@@ -256,11 +259,11 @@ export class CollectionInnerComponent implements OnInit {
       if (this.multiForm == 1) {
         this.addColctn(colctnData);
       } else if (this.multiForm == 2) {
-        colctnData.id = this.selColctn.id;
+        colctnData.id = this.selColctn!.id;
         this.renColct(colctnData);
       } else if (this.multiForm == 3) {
         colctnData.collectionNewName = colctnData.name;
-        colctnData.sourceCollectionId = this.selColctn.id;
+        colctnData.sourceCollectionId = this.selColctn!.id;
         this.duplColct(colctnData);
       }
     }
