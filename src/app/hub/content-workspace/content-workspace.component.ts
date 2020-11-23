@@ -1033,6 +1033,7 @@ export class ContentWorkspaceComponent implements OnInit {
           if (data) {
             this.toastr.success('Content added successfully', 'Success!');
             this.files = [];
+            this.cntntList();
             this.dismissModal();
           } else {
             this.toastr.error('Unable to add content', 'Error!');
@@ -1064,6 +1065,7 @@ export class ContentWorkspaceComponent implements OnInit {
           if (data) {
             this.toastr.success('Content added successfully', 'Success!');
             this.files = [];
+            this.cntntList();
             this.dismissModal();
           } else {
             this.toastr.error('Unable to add content', 'Error!');
@@ -1129,6 +1131,8 @@ export class ContentWorkspaceComponent implements OnInit {
   getImg(data: any): string {
     if (data.urlIconPath)
       return data.urlIconPath;
+    if (data.contentPath)
+      return data.contentPath;
     else if (Array.isArray(data.pdfImages) && data.pdfImages.length > 0)
       return data.pdfImages[0].imagePath;
     else
@@ -1220,6 +1224,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // * on file drop handler
   // */
   onFileDropped($event: any, isIcon: boolean = false, type: string = '') {
+    console.log("das, file drop")
     if (!isIcon)
       this.prepareFilesList($event, isIcon);
     else {
@@ -1231,6 +1236,7 @@ export class ContentWorkspaceComponent implements OnInit {
    * handle file from browsing
    */
   fileBrowseHandler($event: any, isIcon: boolean = false, type: string = '') {
+    console.log("das, file browser")
     if ($event.target && $event.target.files)
       this.prepareFilesList($event.target.files, isIcon);
     // preview image

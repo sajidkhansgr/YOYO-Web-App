@@ -101,7 +101,6 @@ export class CommnComponent implements OnInit {
     this.selGrps = [];
     if (this.isEdit && this.rowInfo && this.rowInfo.id) {
       this.enbDisbDateTime({ checked: true });
-      this.changeGrp({ value: this.rowInfo.sendToGroup });
       if(this.rowInfo.scheduledOn){
         let datePipe = new DatePipe("en-US");
         this.rowInfo.date = datePipe.transform(new Date(this.rowInfo.scheduledOn), 'yyyy-MM-dd');
@@ -113,6 +112,12 @@ export class CommnComponent implements OnInit {
         ...this.rowInfo,
         sendLater: true
       })
+      this.changeGrp({ value: this.rowInfo.sendToGroup });
+      if (this.rowInfo.sendToGroup === 2) {
+          this.selWrkSpcs = this.rowInfo.recipients;
+      } else if (this.rowInfo.sendToGroup === 3) {
+          this.selGrps = this.rowInfo.recipients;
+      }
     } else {
       this.rowInfo = {};
       this.ancmntForm.patchValue({

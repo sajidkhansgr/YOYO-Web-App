@@ -6,7 +6,7 @@ export interface Announcement {
   requestToUpdate: boolean;
   sendLater: boolean;
   sendToGroup: number;
-  recipients: Array<number>;
+  recipients: Array<any>;
   scheduledOn: string;
   archivedOn?: string;
   deliveryStatus?: number;

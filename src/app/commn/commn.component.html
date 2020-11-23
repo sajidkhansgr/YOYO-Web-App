@@ -63,7 +63,10 @@
                         <div class="recipients">
                           <label class="text-hi-dark-grey mb-0 mt-2">Recipients</label>
                           <div class="value">
-                            {{rowInfo.sendToGroup===1?'All Users':''}}
+                            <span *ngIf="rowInfo.sendToGroup===1">All Users</span>
+                            <span *ngIf="rowInfo.sendToGroup!=1 && rowInfo.recipients && rowInfo.recipients.length>0">
+                              <span *ngFor="let rcp of rowInfo.recipients" class="badge badge-light p-2 mt-2 mt-sm-0">{{rcp.name}}</span>
+                            </span>
                           </div>
                         </div>
                         <div class="requestUpdate">
@@ -194,7 +197,10 @@
               <td *ngFor="let col of cols">
                 <span [ngSwitch]="col.k">
                   <span *ngSwitchCase="'sendToGroup'">
-                    {{ancmnt.sendToGroup===1?'All Users':''}}
+                    <span *ngIf="ancmnt.sendToGroup===1">All Users</span>
+                    <span *ngIf="ancmnt.sendToGroup!=1 && ancmnt.recipients && ancmnt.recipients.length>0">
+                      <span *ngFor="let rcp of ancmnt.recipients" class="badge badge-light p-2 mt-2 mt-sm-0">{{rcp.name}}</span>
+                    </span>
                   </span>
                   <span *ngSwitchCase="'deliveredOn'">
                     {{(ancmnt[col.k]|date:'dd MMM, yyyy')||'N/A'}}
@@ -347,8 +353,9 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Close</button>
-      <button class="btn btn-primary" [disabled]="ancmntForm!.invalid || disabled">
+      <button type="button" class="btn btn-secondary" [disabled]="disabled" (click)="modal.dismiss('Cross click')">Close</button>
+      <button class="btn btn-primary" [disabled]="ancmntForm!.invalid || (ancmntForm.value.sendToGroup==2 && selWrkSpcs.length<=0)
+        || (ancmntForm.value.sendToGroup==3 && selGrps.length<=0) || disabled">
         <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
         {{isEdit?'Update':'Save'}}
       </button>
