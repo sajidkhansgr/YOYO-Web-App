@@ -1,1 +1,23 @@
+.__options {
+  ._options {
+    display: none;
+    opacity: 0;
+  }
+}
 
+.card {
+  min-height: 73px;
+}
+
+.card:hover {
+  ._options {
+    display: flex;
+    opacity: 1;
+  }
+
+  .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

@@ -203,9 +203,9 @@
     <!-- nav -->
     <nav aria-label="breadcrumb" *ngIf="!showAll">
       <ol class="breadcrumb bg-white mb-0 p-0">
-        <!-- <li class="breadcrumb-item curs-ptr text-primary" (click)="backFolder()" style="font-size: 16px;"
-          *ngIf="folderNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li> -->
-        <li class="breadcrumb-item curs-ptr text-primary" (click)="showAll = true;">Home</li>
+        <li class="breadcrumb-item curs-ptr text-primary" (click)="backNav()" style="font-size: 16px;"
+          *ngIf="contentNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li>
+        <!-- <li class="breadcrumb-item curs-ptr text-primary" (click)="showAll = true;">Home</li> -->
         <!-- <li class="breadcrumb-item no-before">{{selWrkspc!.name}}</li> -->
         <li class="breadcrumb-item" *ngFor="let c of contentNav">{{c.name}}</li>
       </ol>

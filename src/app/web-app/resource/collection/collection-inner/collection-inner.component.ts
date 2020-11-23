@@ -125,6 +125,21 @@ export class CollectionInnerComponent implements OnInit {
     });
   }
 
+  // get collection list
+  listColctn() {
+    this.colctnLoading = true;
+    this.colctnSrv.colctnList({}).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+        this.colctnArr = data.result;
+      } else {
+        this.colctnArr = [];
+      }
+      this.colctnLoading = false;
+    }, (err: any) => {
+      this.colctnLoading = false;
+    });
+  }
+
   // show folders on workspace click
   showWorkspcFldrs(wrkspc: Wrkspc | undefined, fldr?: Folder) {
     if (fldr) {
@@ -140,19 +155,13 @@ export class CollectionInnerComponent implements OnInit {
     this.showAll = false;
   }
 
-  // get collection list
-  listColctn() {
-    this.colctnLoading = true;
-    this.colctnSrv.colctnList({}).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.colctnArr = data.result;
-      } else {
-        this.colctnArr = [];
-      }
-      this.colctnLoading = false;
-    }, (err: any) => {
-      this.colctnLoading = false;
-    });
+  // back nav click
+  backNav() {
+    this.contentNav.pop();
+    this.selFldr = this.contentNav[this.contentNav.length - 1];
+    this.showAll = true;
+    console.log(this.contentNav);
+    console.log(this.selFldr);
   }
 
   // ----- resource/content -----
