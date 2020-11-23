@@ -1,7 +1,7 @@
 <app-loader [type]="'page'" *ngIf="loading"></app-loader>
 <div class="main main-employee p-3 container mt-3" *ngIf="!loading">
   <h3 class="mb-4 clearfix heading align-self-center">
-    {{selColctn.name}}
+    {{selColctn ? selColctn.name : 'N/A'}}
     <div class="float-right d-flex">
       <div class="btn btn-light" (click)="openModal(email)">
         <i class="fa fa-envelope mr-1"></i>
