@@ -24,13 +24,13 @@ import { Content } from '../../../../shared/models/content';
 export class CollectionInnerComponent implements OnInit {
   view: boolean = true; id!: number; routerSubs!: Subscription;
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
-  disabled!: boolean; loading!: boolean; wrkspcLoading!: boolean; colctnLoading!: boolean; fldrLoading!: boolean; sFldrLoading!: boolean;
+  disabled!: boolean; loading!: boolean; wrkspcLoading!: boolean; colctnLoading!: boolean; fldrLoading!: boolean; sFldrLoading!: boolean; contentLoading!: boolean;
   selColctn!: Colctn | undefined;
   colctnForm!: FormGroup;
   multiForm!: number;
   contentArr!: Content[]; selContentArr!: Content[];
   showBotDiv!: boolean;
-  workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined; mdlCntntArr!: Content[];
+  workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined; mdlCntntArr!: Content[]; addContentArr!: Content[];
   showAll!: boolean; contentNav!: any[];
 
   constructor(
@@ -55,7 +55,7 @@ export class CollectionInnerComponent implements OnInit {
 
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
-    this.wrkspcLoading = true; this.colctnLoading = true; this.fldrLoading = false; this.sFldrLoading = false;
+    this.wrkspcLoading = true; this.colctnLoading = true; this.fldrLoading = false; this.sFldrLoading = false; this.contentLoading = false;
     this.selColctn = undefined; this.selContentArr = [];
     this.colctnForm = this.fb.group({
       name: ['', [Validators.required]]
@@ -63,17 +63,17 @@ export class CollectionInnerComponent implements OnInit {
     this.multiForm = 0;
     this.contentArr = [];
     this.showBotDiv = false;
-    this.workspcArr = []; this.colctnArr = []; this.fldrArr = []; this.selWrkspc = undefined; this.selFldr = undefined;
-    this.showAll = true; this.contentNav = []; this.mdlCntntArr = [];
+    this.workspcArr = []; this.colctnArr = []; this.fldrArr = []; this.selWrkspc = undefined; this.selFldr = undefined; this.mdlCntntArr = []; this.addContentArr = [];
+    this.showAll = true; this.contentNav = [];
   }
 
   // ----- for 'add resource' modal -----
   // selecting contents to add
   selectContent(content: Content, val: boolean) {
     if (val) {
-      console.log(content)
+      this.addContentArr.push(content);
     } else {
-      console.log('rem')
+      this.addContentArr = this.addContentArr.filter((data: any) => data.id != content.id);
     }
   }
 
@@ -187,6 +187,29 @@ export class CollectionInnerComponent implements OnInit {
   }
 
   // ----- resource/content -----
+  // add selected content
+  addContent() {
+    this.disabled = true;
+    let data: any = {
+      id: this.id,
+      contents: []
+    };
+    for (let i = 0; i < this.addContentArr.length; i++) {
+      data.contents.push(this.addContentArr[i].contentId);
+    }
+    this.colctnSrv.addContentColctn(data).subscribe((data: any) => {
+      if (data) {
+        this.toastr.success(data.message || 'Content added successfully', 'Success!');
+        this.getContentColctn();
+      }
+      this.dismissModal();
+      this.disabled = false;
+    }, (err: any) => {
+      this.dismissModal();
+      this.disabled = false;
+    });
+  }
+
   // add resource modal
   addResourceModal(modal: any) {
     this.getWrkspcList();
@@ -234,6 +257,7 @@ export class CollectionInnerComponent implements OnInit {
 
   // get content by smart folder
   getContentSmtFldr() {
+    this.contentLoading = true;
     let query: any = {
       workspaceId: this.selWrkspc!.id,
       folderId: this.selFldr ? this.selFldr!.id : undefined
@@ -242,13 +266,15 @@ export class CollectionInnerComponent implements OnInit {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.mdlCntntArr.push(...data.result);
       }
+      this.contentLoading = false;
     }, (err: any) => {
-
+      this.contentLoading = false;
     });
   }
 
   // get content by folder
   getContentFldr() {
+    this.contentLoading = true;
     let query: any = {
       workspaceId: this.selWrkspc!.id,
       folderId: this.selFldr ? this.selFldr!.id : undefined
@@ -256,10 +282,11 @@ export class CollectionInnerComponent implements OnInit {
     this.cntntServ.contentByFolder(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.mdlCntntArr.push(...data.result);
-        console.log(this.mdlCntntArr);
+        // console.log(this.mdlCntntArr);
       }
+      this.contentLoading = false;
     }, (err: any) => {
-
+      this.contentLoading = false;
     });
   }
 
@@ -269,6 +296,7 @@ export class CollectionInnerComponent implements OnInit {
     if (colctn) {
       id = colctn.id;
       this.contentNav = [colctn];
+      this.contentLoading = true;
     } else {
       this.loading = true;
       id = this.id;
@@ -280,9 +308,19 @@ export class CollectionInnerComponent implements OnInit {
       } else if (data && data.result && Array.isArray(data.result) && data.result.length == 0) {
         colctn ? this.mdlCntntArr = [] : this.contentArr = [];
       }
-      colctn ? this.showAll = false : this.loading = false;
+      if (colctn) {
+        this.showAll = false;
+        this.contentLoading = false;
+      } else {
+        this.loading = false;
+      }
     }, (err: any) => {
-      colctn ? this.showAll = false : this.loading = false;
+      if (colctn) {
+        this.showAll = false;
+        this.contentLoading = false;
+      } else {
+        this.loading = false;
+      }
     });
   }
 

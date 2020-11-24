@@ -27,9 +27,10 @@ export interface Content {
   updatedByFullName: string;
   createdBy: number;
   updatedBy: number;
+  contentId?: number;
 }
 
-export interface Comment{
+export interface Comment {
   id: number;
   commentText: string;
   createdByFullName: string;

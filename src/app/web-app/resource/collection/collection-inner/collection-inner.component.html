@@ -193,7 +193,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body" ngbAutofocus>
+  <div class="modal-body min-height-val" ngbAutofocus>
     <div class="search">
       <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white" [floatLabel]="'never'">
         <i matPrefix class="fas fa-search"></i>
@@ -210,8 +210,9 @@
         <li class="breadcrumb-item" *ngFor="let c of contentNav">{{c.name}}</li>
       </ol>
     </nav>
-    <ng-container *ngIf="(wrkspcLoading && colctnLoading) || (fldrLoading && sFldrLoading); else loaded">
-      <app-loader [type]="'page'"></app-loader>
+    <ng-container
+      *ngIf="(wrkspcLoading && colctnLoading) || (fldrLoading && sFldrLoading) || contentLoading; else loaded">
+      <app-loader [type]="'div'"></app-loader>
     </ng-container>
     <ng-template #loaded>
       <div *ngIf="showAll">
@@ -283,13 +284,19 @@
           </div>
         </ng-container>
         <ng-template #noDATA>
-          No Data Found
+          <div class="text-secondary text-center mt-5">
+            No Data Found
+          </div>
         </ng-template>
       </div>
     </ng-template>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">0 Items Selected</button>
+    <button type="button" class="btn btn-primary" (click)="addContent()"
+      [disabled]="addContentArr.length == 0 || disabled">
+      <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+      {{addContentArr.length == 0 ? '0 Items Selected' : 'Insert ' + addContentArr.length + ' item(s)'}}
+    </button>
   </div>
 </ng-template>
 
