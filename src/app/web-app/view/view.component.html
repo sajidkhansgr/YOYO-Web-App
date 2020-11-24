@@ -1,0 +1,9 @@
+<app-loader [type]="'page'" *ngIf="loading"></app-loader>
+<div *ngIf="!loading">
+  <div *ngIf="cntnt else noCntnt">
+    {{cntnt.name||'N/A'}}
+  </div>
+  <ng-template #noCntnt>
+      No Content found
+  </ng-template>
+</div>

@@ -1,0 +1,89 @@
+<header>
+  <nav class="navbar navbar-expand navbar-light bg-white pl-3">
+    <a class="navbar-brand pr-3 border-right py-2" href="javascript:void(0)">
+      <img src="assets/images/logo.png" alt="Hi Force"></a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item align-self-center">
+          <a class="nav-link" [routerLinkActive]="['active']"
+            [routerLink]="'/web-app/resource/collections'">Resource</a>
+        </li>
+        <li class="nav-item align-self-center">
+          <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/web-app/share'">Shares</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav toggle-navbar">
+        <li class="nav-item align-self-center">
+          <a class="nav-link" href="javascript:void(0)"><i class="fas fa-search align-bottom icon-size"></i></a>
+        </li>
+        <li class="nav-item align-self-center ml-2 dropdown notification">
+          <a class="nav-link" href="javascript:void(0)" id="notificatioDD" data-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-bell align-bottom icon-size"></i>
+          </a>
+          <div class="dropdown-menu large-dropdown dropdown-menu-right" aria-labelledby="notificatioDD">
+            <h5 class="dropdown-item text-dark font-weight-bold no-bg-hover">Notifications<small
+                class="badge badge-danger float-right">8</small></h5>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item row m-0 mt-2" href="javascript:void(0)">
+              <div class="col-3 align-self-center"><img src="assets/images/avatar.png" class="w-100"></div>
+              <div class="col-9 align-self-center row">
+                <div>
+                  <div class="name">Regina Cooper</div>
+                  <div class="time-active text-hi-dark-grey"><small>1 min ago</small></div>
+                </div>
+                <div class="ml-auto align-self-center">
+                  <i class="fas fa-times p-1"></i>
+                </div>
+              </div>
+            </a>
+            <a class="dropdown-item row m-0 mt-2" href="javascript:void(0)">
+              <div class="col-3 align-self-center"><img src="assets/images/avatar.png" class="w-100"></div>
+              <div class="col-9 align-self-center row">
+                <div>
+                  <div class="name">Regina Cooper</div>
+                  <div class="time-active text-hi-dark-grey"><small>1 min ago</small></div>
+                </div>
+                <div class="ml-auto align-self-center">
+                  <i class="fas fa-times p-1"></i>
+                </div>
+              </div>
+            </a>
+          </div>
+        </li>
+        <li class="nav-item align-self-center dropdown ml-4 user">
+          <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="userDropdown" role="button"
+            data-toggle="dropdown" aria-expanded="false">
+            <img src="assets/images/avatar.png">
+            <span class="align-middle">{{userInfo && userInfo.fN?userInfo.fN:'User'}}</span>
+          </a>
+          <div class="dropdown-menu large-dropdown dropdown-menu-right" aria-labelledby="userDropdown">
+            <h6 class="dropdown-item row m-0 p-2 mt-2 no-bg-hover text-dark">
+              <div class="col-3"><img src="assets/images/avatar.png" class="w-100"></div>
+              <div class="col-9 align-self-center row">
+                <div>
+                  <div class="username">{{userInfo && userInfo.fN?userInfo.fN:'User'}}</div>
+                  <div class="position text-hi-grey"><small>Manager</small></div>
+                </div>
+                <div class="ml-auto align-self-center">
+                  <span class="badge badge-danger">8</span>
+                </div>
+              </div>
+            </h6>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" [routerLink]="'/web-app/personal-settings'"><i class="fas fa-user mr-2"></i>My
+              Profile</a>
+            <a class="dropdown-item" [routerLink]="'/dashboard'"><i class="fas fa-user-shield mr-2"></i>Admin</a>
+            <a class="dropdown-item curs-ptr" (click)="openModal()"><i class="fas fa-lock mr-2"></i>Change Password</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript:void(0)" (click)="logout();">
+              <i class="fas fa-sign-out-alt mr-2"></i>Logout
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="navbar-light toggle-navbar-bottom">
+    <ul class="navbar-nav toggle-navbar-bottom-nav list-unstyled justify-content-end mb-0 bg-white"></ul>
+  </div>
+</header>

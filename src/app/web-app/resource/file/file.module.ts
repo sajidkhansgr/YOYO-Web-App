@@ -10,6 +10,7 @@ import { MatRadioModule } from '@angular/material/radio';
 
 import { FileComponent } from './file.component';
 import { FileService } from './file.service';
+import { ContentWorkspaceService } from '../../../hub/content-workspace/content-workspace.service';
 import { LoaderModule } from '../../../shared/components/loader/loader.module';
 
 const routes: Routes = [
@@ -25,6 +26,6 @@ const routes: Routes = [
     MatTooltipModule, MatSlideToggleModule, MatRadioModule,
     LoaderModule
   ],
-  providers: [FileService]
+  providers: [FileService, ContentWorkspaceService]
 })
 export class FileModule { }

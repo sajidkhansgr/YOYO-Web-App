@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenDataService } from '../../shared/services/token-data.service';
-import { DataService } from '../../shared/services/data.service';
+// import { DataService } from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private tokenDataServ: TokenDataService,
-    private dataServ: DataService,
+    // private dataServ: DataService,
     private router: Router
   ) { }
 
@@ -107,7 +107,6 @@ export class HeaderComponent implements OnInit {
       // for sidebar (width)
       document.querySelector('.sidebar')!.classList.add('closeSidebar');
     }, 500);
-
     this.temp = 'open';
   }
 
