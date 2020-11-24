@@ -154,6 +154,8 @@ export class AppSettings {
 
   public static TRASH_CNTNT = `api/Content/MoveToTrash`;
 
+  public static MY_FILES = `api/Content/GetMyContent`;
+
   // Language
   public static LIST_LNG = `api/Language/GetAll`;
 

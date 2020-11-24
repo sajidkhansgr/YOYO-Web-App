@@ -45,127 +45,147 @@
           </div>
         </div>
       </h3>
-      <div class="text-right" *ngIf="view">
-        Sort by:
-        <span class="text-primary mr-2 curs-ptr">Name<i class="fa fa-sort-down align-top ml-1"></i></span>
-        <span class="text-primary curs-ptr">Date Modified<i class="fa fa-sort-down align-top ml-1"></i></span>
-      </div>
-      <!-- folders -->
-      <div class="text-secondary">Folders</div>
-      <div class="mt-2 row my-files" *ngIf="view">
-        <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0">
-          <div class="card curs-ptr">
-            <div class="card-body d-flex">
-              <div class="name align-self-center px-0"><i class="fas fa-folder mr-1"></i>Folder name 1234</div>
-              <div class="d-flex p-0 __options ml-auto">
-                <div class="_options">
-                  <div class="btn btn-light btn-sm mr-1"><i class="fas fa-edit"></i></div>
-                  <div class="btn btn-light btn-sm mr-1"><i class="fas fa-trash-alt"></i></div>
+      <div *ngIf="view">
+        <app-loader [type]="'page'" *ngIf="loading"></app-loader>
+        <div *ngIf="!loading">
+          <div class="text-right">
+          Sort by:
+          <span class="text-primary mr-2 curs-ptr">Name<i class="fa fa-sort-down align-top ml-1"></i></span>
+          <span class="text-primary curs-ptr">Date Modified<i class="fa fa-sort-down align-top ml-1"></i></span>
+          </div>
+          <!-- folders -->
+          <div class="text-secondary" *ngIf="!loading && folders.length>0">Folders</div>
+          <div class="mt-2 row my-files">
+          <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let fl of folders">
+            <div class="card curs-ptr">
+              <div class="card-body d-flex">
+                <div class="name align-self-center px-0"><i class="fas fa-folder mr-1"></i>{{fl.name}}</div>
+                <div class="d-flex p-0 __options ml-auto">
+                  <div class="_options">
+                    <div class="btn btn-light btn-sm mr-1"><i class="fas fa-edit"></i></div>
+                    <div class="btn btn-light btn-sm mr-1"><i class="fas fa-trash-alt"></i></div>
+                  </div>
+                  <mat-checkbox class="align-self-center"></mat-checkbox>
                 </div>
-                <mat-checkbox class="align-self-center"></mat-checkbox>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <!-- files -->
-      <div class="text-secondary">Files</div>
-      <div class="mt-2 row my-files" *ngIf="view">
-        <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let t of testArr">
-          <div class="card curs-ptr">
-            <div class="card-body">
-              <div class="imagePreview text-center">
-                <img src="assets/images/discription.png">
-              </div>
-              <div class="options rounded">
-                <div class="dropleft">
-                  <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                    <i class="fas fa-share-square"></i>
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="shareDD">
-                    <h6 class="ml-2 text-white-50">External Sharing</h6>
-                    <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                    <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
-                    <div class="dropdown-divider"></div>
-                    <h6 class="ml-2 text-white-50">Internal Sharing</h6>
-                    <a class="dropdown-item" (click)="openModal(shareColl)"><i class="fa fa-user-friends mr-1"></i>Share
-                      with
-                      colleagues</a>
-                  </div>
-                </div>
-                <div class="btn my-1" (click)="openModal(addtoCollection)">
-                  <i class="fas fa-folder-plus"></i>
-                </div>
-                <div class="btn">
-                  <i class="fas fa-trash-alt"></i>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer">
-              <div class="name">Test</div>
-              <div class="float-left text-secondary d-flex">
-                <div class="date">Oct 10, 2020</div>
-                <div class="mx-2">l</div>
-                <div class="items">3 Items</div>
-              </div>
-              <div class="float-right">
-                <mat-checkbox></mat-checkbox>
-              </div>
-            </div>
           </div>
-        </div>
-      </div>
-      <div class="mt-2 row my-files" *ngIf="!view">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>
-                <mat-checkbox></mat-checkbox>
-              </th>
-              <th>Name<i class="fas fa-sort-down ml-1 align-top"></i></th>
-              <th>Date Modified<i class="fas fa-sort-down ml-1 align-top"></i></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let t of testArr">
-              <td class="align-middle">
-                <mat-checkbox></mat-checkbox>
-              </td>
-              <td class="align-middle">
-                <div class="d-flex">
-                  <div class="imagePreview border mr-2">
-                    <img src="assets/images/discription.png">
-                  </div>
-                  <div class="name align-self-center">Abc def</div>
+          <!-- files -->
+          <div class="text-secondary" *ngIf="!loading && files.length>0">Files</div>
+          <div class="mt-2 row my-files">
+          <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let f of files">
+            <div class="card curs-ptr">
+              <div class="card-body">
+                <div class="imagePreview text-center">
+                  <img src="assets/images/discription.png">
                 </div>
-              </td>
-              <td class="align-middle">16 Oct, 2020 14:40</td>
-              <td class="align-middle options">
-                <div class="d-flex">
+                <div class="options rounded">
                   <div class="dropleft">
                     <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
                       aria-expanded="false">
                       <i class="fas fa-share-square"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="shareDD">
+                      <h6 class="ml-2 text-white-50">External Sharing</h6>
                       <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                      <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a
-                        link</a>
+                      <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+                      <div class="dropdown-divider"></div>
+                      <h6 class="ml-2 text-white-50">Internal Sharing</h6>
+                      <a class="dropdown-item" (click)="openModal(shareColl)"><i class="fa fa-user-friends mr-1"></i>Share
+                        with
+                        colleagues</a>
                     </div>
                   </div>
-                  <div class="btn" (click)="openModal(addtoCollection)">
+                  <div class="btn my-1" (click)="openModal(addtoCollection)">
                     <i class="fas fa-folder-plus"></i>
                   </div>
                   <div class="btn">
                     <i class="fas fa-trash-alt"></i>
                   </div>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </div>
+              <div class="card-footer">
+                <div class="name">{{f.name}}</div>
+                <div class="float-left text-secondary d-flex">
+                  <div class="date">{{(f.createdDate|date:'dd MMM, yyyy')||'N/A'}}</div>
+                  <div class="mx-2">l</div>
+                  <div class="items">3 Items</div>
+                </div>
+                <div class="float-right">
+                  <mat-checkbox></mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="text-center text-secondary" *ngIf="!loading && files.length<=0 && folders.length<=0">
+          No data found
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!view">
+        <app-loader [type]="'page'" *ngIf="loading"></app-loader>
+        <div class="mt-2 row my-files" *ngIf="!loading">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  <mat-checkbox></mat-checkbox>
+                </th>
+                <th>Name<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                <th>Date Modified<i class="fas fa-sort-down ml-1 align-top"></i></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody *ngIf="allFiles.length<=0">
+              <tr *ngFor="let aF of allFiles">
+                <td class="align-middle">
+                  <mat-checkbox></mat-checkbox>
+                </td>
+                <td class="align-middle">
+                  <div class="d-flex">
+                    <div *ngIf="aF.isFldr">
+                        <i class="fas fa-folder mr-1"></i>
+                        <div class="name align-self-center">{{aF.name}}</div>
+                    </div>
+                    <div *ngIf="!aF.isFldr">
+                        <div class="imagePreview border mr-2">
+                          <img src="assets/images/discription.png">
+                        </div>
+                        <div class="name align-self-center">{{aF.name}}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="align-middle">{{(aF.createdDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}</td>
+                <td class="align-middle options">
+                  <div class="d-flex">
+                    <div class="dropleft">
+                      <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="fas fa-share-square"></i>
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="shareDD">
+                        <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                        <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a
+                          link</a>
+                      </div>
+                    </div>
+                    <div class="btn" (click)="openModal(addtoCollection)">
+                      <i class="fas fa-folder-plus"></i>
+                    </div>
+                    <div class="btn">
+                      <i class="fas fa-trash-alt"></i>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="text-center text-secondary" *ngIf="allFiles.length == 0">
+            No data found
+          </div>
+        </div>
       </div>
     </div>
   </div>

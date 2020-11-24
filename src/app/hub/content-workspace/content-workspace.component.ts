@@ -1131,8 +1131,8 @@ export class ContentWorkspaceComponent implements OnInit {
   getImg(data: any): string {
     if (data.urlIconPath)
       return data.urlIconPath;
-    if (data.contentPath)
-      return data.contentPath;
+    // if (data.contentPath)
+    //   return data.contentPath;
     else if (Array.isArray(data.pdfImages) && data.pdfImages.length > 0)
       return data.pdfImages[0].imagePath;
     else
@@ -1188,14 +1188,14 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   downloadFile(){
-    let statUrl = 'Icon/Test/Url/7/b8c1176d-c9a6-4c82-8868-9e1403d080b3.png';
+    let statUrl = 'https://pbs.twimg.com/media/EnjjNh-XYAAJiHo?format=png&name=small';
     this.fileServ.downloadFile(statUrl).subscribe((data: any) => {
       if (data) {
           // this.blob = new Blob([data], {type: 'application/pdf'});
           var downloadURL = window.URL.createObjectURL(data);
           var link = document.createElement('a');
           link.href = downloadURL;
-          link.download = "my file.png";
+          link.download = "example twitter file.png";
           link.click();
       } else {
         this.toastr.error(`Unable to download file`, 'Error!');
