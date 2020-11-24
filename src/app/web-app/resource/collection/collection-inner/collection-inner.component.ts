@@ -8,12 +8,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { CollectionService } from '../collection.service';
 import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service'
 import { ContentService } from '../../../../shared/services/content.service';
+import { FileService } from '../../file/file.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Collection as Colctn } from '../../../../shared/models/collection';
 import { Workspace as Wrkspc, Workspace } from '../../../../shared/models/workspace';
 import { Folder } from '../../../../shared/models/folder';
 import { Content } from '../../../../shared/models/content';
+import { data } from 'jquery';
 
 
 @Component({
@@ -42,7 +44,8 @@ export class CollectionInnerComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private cwServ: ContentWorkspaceService,
-    private cntntServ: ContentService
+    private cntntServ: ContentService,
+    private fileServ: FileService
   ) { }
 
   ngOnInit(): void {
@@ -75,6 +78,30 @@ export class CollectionInnerComponent implements OnInit {
     } else {
       this.addContentArr = this.addContentArr.filter((data: any) => data.id != content.id);
     }
+  }
+
+  // show my files
+  showMyFiles() {
+    this.fldrLoading = true; this.contentLoading = true;
+    this.fileServ.myFiles({}).subscribe((data: any) => {
+      if (data && data.result) {
+        if (Array.isArray(data.result.contents) && data.result.contents.length > 0) {
+          this.mdlCntntArr = data.result.contents;
+        } else if (Array.isArray(data.result.contents) && data.result.contents.length == 0) {
+          this.mdlCntntArr = [];
+        }
+        if (Array.isArray(data.result.folders) && data.result.folders.length > 0) {
+          this.fldrArr = data.result.folders;
+        } else if (Array.isArray(data.result.folders) && data.result.folders.length == 0) {
+          this.fldrArr = [];
+        }
+      }
+      this.showAll = false;
+      this.fldrLoading = false; this.contentLoading = false;
+    }, (err: any) => {
+      this.showAll = false;
+      this.fldrLoading = false; this.contentLoading = false;
+    });
   }
 
   // get list of workspaces
@@ -195,7 +222,7 @@ export class CollectionInnerComponent implements OnInit {
       contents: []
     };
     for (let i = 0; i < this.addContentArr.length; i++) {
-      data.contents.push(this.addContentArr[i].contentId);
+      data.contents.push(this.addContentArr[i].contentId ? this.addContentArr[i].contentId : this.addContentArr[i].id);
     }
     this.colctnSrv.addContentColctn(data).subscribe((data: any) => {
       if (data) {

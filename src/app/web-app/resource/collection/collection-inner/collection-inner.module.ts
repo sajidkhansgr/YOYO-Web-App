@@ -14,6 +14,7 @@ import { CollectionService } from '../collection.service';
 import { LoaderModule } from '../../../../shared/components/loader/loader.module';
 import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
 import { ContentService } from '../../../../shared/services/content.service';
+import { FileService } from '../../file/file.service';
 
 const routes: Routes = [
   { path: '', component: CollectionInnerComponent }
@@ -33,6 +34,6 @@ const routes: Routes = [
     FormsModule, ReactiveFormsModule,
     MatDialogModule
   ],
-  providers: [CollectionService, ContentWorkspaceService, ContentService]
+  providers: [CollectionService, ContentWorkspaceService, ContentService, FileService]
 })
 export class CollectionInnerModule { }
