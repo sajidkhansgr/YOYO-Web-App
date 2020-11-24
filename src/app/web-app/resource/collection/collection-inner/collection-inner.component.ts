@@ -6,9 +6,10 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 
 import { CollectionService } from '../collection.service';
+import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service'
+import { ContentService } from '../../../../shared/services/content.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service'
 import { Collection as Colctn } from '../../../../shared/models/collection';
 import { Workspace as Wrkspc, Workspace } from '../../../../shared/models/workspace';
 import { Folder } from '../../../../shared/models/folder';
@@ -29,7 +30,7 @@ export class CollectionInnerComponent implements OnInit {
   multiForm!: number;
   contentArr!: Content[]; selContentArr!: Content[];
   showBotDiv!: boolean;
-  workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined;
+  workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined; mdlCntntArr!: Content[];
   showAll!: boolean; contentNav!: any[];
 
   constructor(
@@ -40,7 +41,8 @@ export class CollectionInnerComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private cwServ: ContentWorkspaceService
+    private cwServ: ContentWorkspaceService,
+    private cntntServ: ContentService
   ) { }
 
   ngOnInit(): void {
@@ -62,10 +64,19 @@ export class CollectionInnerComponent implements OnInit {
     this.contentArr = [];
     this.showBotDiv = false;
     this.workspcArr = []; this.colctnArr = []; this.fldrArr = []; this.selWrkspc = undefined; this.selFldr = undefined;
-    this.showAll = true; this.contentNav = [];
+    this.showAll = true; this.contentNav = []; this.mdlCntntArr = [];
   }
 
   // ----- for 'add resource' modal -----
+  // selecting contents to add
+  selectContent(content: Content, val: boolean) {
+    if (val) {
+      console.log(content)
+    } else {
+      console.log('rem')
+    }
+  }
+
   // get list of workspaces
   getWrkspcList() {
     this.wrkspcLoading = true;
@@ -90,6 +101,7 @@ export class CollectionInnerComponent implements OnInit {
       folderId: this.selFldr ? this.selFldr!.id : undefined,
       isActive: true
     };
+    // console.log(query);
     this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
       // console.log(data);
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
@@ -145,23 +157,33 @@ export class CollectionInnerComponent implements OnInit {
     if (fldr) {
       this.contentNav.push(fldr);
       this.selFldr = fldr;
-      this.fldrArr = [];
-      this.getFolderList();
-      this.getSmartFolderList();
+      this.mdlCntntArr = [];
+      this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr();
     } else {
       this.selWrkspc = wrkspc;
-      this.contentNav.push(wrkspc);
+      this.contentNav = [wrkspc];
     }
+    this.fldrArr = [];
+    this.getFolderList();
+    this.getSmartFolderList();
     this.showAll = false;
   }
 
   // back nav click
   backNav() {
     this.contentNav.pop();
-    this.selFldr = this.contentNav[this.contentNav.length - 1];
-    this.showAll = true;
-    console.log(this.contentNav);
-    console.log(this.selFldr);
+    this.selFldr = this.contentNav.length > 1 ? this.contentNav[this.contentNav.length - 1] : undefined;
+    this.fldrArr = [];
+    this.mdlCntntArr = [];
+    if (this.contentNav.length == 0) {
+      this.showAll = true;
+    } else {
+      this.getFolderList();
+      this.getSmartFolderList();
+      this.selFldr ? this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr() : undefined;
+    }
+    // console.log(this.contentNav);
+    // console.log(this.selFldr);
   }
 
   // ----- resource/content -----
@@ -210,18 +232,57 @@ export class CollectionInnerComponent implements OnInit {
     }
   }
 
-  // get content by collection
-  getContentColctn() {
-    this.loading = true;
-    this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
+  // get content by smart folder
+  getContentSmtFldr() {
+    let query: any = {
+      workspaceId: this.selWrkspc!.id,
+      folderId: this.selFldr ? this.selFldr!.id : undefined
+    };
+    this.cntntServ.contentBySmartFolder(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.contentArr = data.result;
-      } else {
-        this.contentArr = [];
+        this.mdlCntntArr.push(...data.result);
       }
-      this.loading = false;
     }, (err: any) => {
-      this.loading = false;
+
+    });
+  }
+
+  // get content by folder
+  getContentFldr() {
+    let query: any = {
+      workspaceId: this.selWrkspc!.id,
+      folderId: this.selFldr ? this.selFldr!.id : undefined
+    };
+    this.cntntServ.contentByFolder(query).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+        this.mdlCntntArr.push(...data.result);
+        console.log(this.mdlCntntArr);
+      }
+    }, (err: any) => {
+
+    });
+  }
+
+  // get content by collection
+  getContentColctn(colctn?: Colctn) {
+    let id: number;
+    if (colctn) {
+      id = colctn.id;
+      this.contentNav = [colctn];
+    } else {
+      this.loading = true;
+      id = this.id;
+    }
+    this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
+      // console.log(data);
+      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+        colctn ? this.mdlCntntArr = data.result : this.contentArr = data.result;
+      } else if (data && data.result && Array.isArray(data.result) && data.result.length == 0) {
+        colctn ? this.mdlCntntArr = [] : this.contentArr = [];
+      }
+      colctn ? this.showAll = false : this.loading = false;
+    }, (err: any) => {
+      colctn ? this.showAll = false : this.loading = false;
     });
   }
 

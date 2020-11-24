@@ -21,4 +21,5 @@ export interface Folder {
   authorIds?: string;
   smartFolderTags?: Array<any>;
   smartFolderFilters?: Array<any>;
+  key?: string;
 }

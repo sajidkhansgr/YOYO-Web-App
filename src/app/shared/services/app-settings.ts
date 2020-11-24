@@ -154,6 +154,10 @@ export class AppSettings {
 
   public static TRASH_CNTNT = `api/Content/MoveToTrash`;
 
+  public static GET_CNTNT_FLDR = `api/Content/GetContentByWorkspaceFolder`;
+
+  public static GET_CNTNT_SMT_FLDR = `api/Content/GetContentBySmartFolder`;
+
   // Language
   public static LIST_LNG = `api/Language/GetAll`;
 

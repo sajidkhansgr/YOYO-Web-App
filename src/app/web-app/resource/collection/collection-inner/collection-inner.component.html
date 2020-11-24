@@ -203,8 +203,8 @@
     <!-- nav -->
     <nav aria-label="breadcrumb" *ngIf="!showAll">
       <ol class="breadcrumb bg-white mb-0 p-0">
-        <li class="breadcrumb-item curs-ptr text-primary" (click)="backNav()" style="font-size: 16px;"
-          *ngIf="contentNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li>
+        <li class="curs-ptr text-primary mr-2" (click)="backNav()" style="font-size: 16px;" *ngIf="contentNav.length>0">
+          <i class="fa fa-arrow-left align-self-center"></i></li>
         <!-- <li class="breadcrumb-item curs-ptr text-primary" (click)="showAll = true;">Home</li> -->
         <!-- <li class="breadcrumb-item no-before">{{selWrkspc!.name}}</li> -->
         <li class="breadcrumb-item" *ngFor="let c of contentNav">{{c.name}}</li>
@@ -244,7 +244,8 @@
         </div>
         <!-- collections -->
         <div class="text-secondary font-weight-bold my-2">Collections</div>
-        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr">
+        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr"
+          (click)="getContentColctn(colctn)">
           <div class="icon align-self-center mr-2">
             <img src="assets/images/discription.png" style="max-height:50px;">
           </div>
@@ -257,18 +258,33 @@
         </div>
       </div>
       <div *ngIf="!showAll">
-        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr"
-          (click)="showWorkspcFldrs(undefined, fldr)">
-          <div class="icon align-self-center mr-2">
-            <img src="assets/images/discription.png" style="max-height:50px;">
+        <ng-container *ngIf="fldrArr.length>0 || mdlCntntArr.length>0; else noDATA">
+          <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr"
+            (click)="showWorkspcFldrs(undefined, fldr)">
+            <div class="icon align-self-center mr-2">
+              <img src="{{fldr.folderIconPath}}" style="max-height:50px;">
+            </div>
+            <div class="name align-self-center">
+              {{fldr.name}}
+            </div>
+            <div class="arrow align-self-center ml-auto mr-3">
+              <i class="fa fa-angle-right"></i>
+            </div>
           </div>
-          <div class="name align-self-center">
-            {{fldr.name}}
+          <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let content of mdlCntntArr">
+            <mat-checkbox class="align-self-center mr-2" (change)="selectContent(content, $event.checked)">
+            </mat-checkbox>
+            <div class="icon align-self-center mr-2">
+              <img src="{{content.pdfImages[0].imagePath}}" style="max-height:50px;">
+            </div>
+            <div class="name align-self-center">
+              {{content.name}}
+            </div>
           </div>
-          <div class="arrow align-self-center ml-auto mr-3">
-            <i class="fa fa-angle-right"></i>
-          </div>
-        </div>
+        </ng-container>
+        <ng-template #noDATA>
+          No Data Found
+        </ng-template>
       </div>
     </ng-template>
   </div>
