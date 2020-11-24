@@ -6,8 +6,9 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 
 import { CollectionService } from '../collection.service';
-import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service'
 import { ContentService } from '../../../../shared/services/content.service';
+import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
+import { ExpService } from '../../exp/exp.service';
 import { FileService } from '../../file/file.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -15,7 +16,6 @@ import { Collection as Colctn } from '../../../../shared/models/collection';
 import { Workspace as Wrkspc, Workspace } from '../../../../shared/models/workspace';
 import { Folder } from '../../../../shared/models/folder';
 import { Content } from '../../../../shared/models/content';
-import { data } from 'jquery';
 
 
 @Component({
@@ -43,9 +43,10 @@ export class CollectionInnerComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private cwServ: ContentWorkspaceService,
+    private expServ: ExpService,
     private cntntServ: ContentService,
-    private fileServ: FileService
+    private fileServ: FileService,
+    private cwServ: ContentWorkspaceService
   ) { }
 
   ngOnInit(): void {
@@ -107,7 +108,7 @@ export class CollectionInnerComponent implements OnInit {
   // get list of workspaces
   getWrkspcList() {
     this.wrkspcLoading = true;
-    this.cwServ.wrkspcListEmp()
+    this.expServ.wrkspcListEmp()
       .subscribe((data: any) => {
         // console.log(data);
         if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {

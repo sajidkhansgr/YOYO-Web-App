@@ -134,11 +134,6 @@ export class ContentWorkspaceService {
     );
   }
 
-  // get workspace list by employee
-  wrkspcListEmp(): Observable<any[]> {
-    return this.http.get(`${AppSettings.GET_WRKSPC_EMP}`).pipe(map((res: any) => res));
-  }
-
   // add workspace
   addWrkspc(data: any) {
     return this.http.post(`${AppSettings.ADD_WRKSPC}`, data)
