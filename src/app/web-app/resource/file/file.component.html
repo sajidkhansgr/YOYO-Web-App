@@ -44,7 +44,7 @@
               Add
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="addBtnDD">
-              <a class="dropdown-item curs-ptr" (click)="openModal(addFolder)"><i class="fas fa-folder-plus mr-1"></i>
+              <a class="dropdown-item curs-ptr" (click)="openModal(fldrModal,'addFldr')"><i class="fas fa-folder-plus mr-1"></i>
                 Create Folder
               </a>
               <a class="dropdown-item curs-ptr" (click)="openModal(addURL)"><i class="fa fa-link mr-1"></i>Add URL</a>
@@ -73,10 +73,10 @@
                   <div class="name align-self-center px-0"><i class="fas fa-folder mr-1"></i>{{fl.name}}</div>
                   <div class="d-flex p-0 __options ml-auto">
                     <div class="_options">
-                      <div class="btn btn-light btn-sm mr-1"><i class="fas fa-edit"></i></div>
-                      <div class="btn btn-light btn-sm mr-1"><i class="fas fa-trash-alt"></i></div>
+                      <div class="btn btn-light btn-sm mr-1" (click)="$event.stopPropagation();setSelRow(fldrModal,fl);"><i class="fas fa-edit"></i></div>
+                      <div class="btn btn-light btn-sm mr-1" (click)="$event.stopPropagation();"><i class="fas fa-trash-alt"></i></div>
                     </div>
-                    <mat-checkbox class="align-self-center"></mat-checkbox>
+                    <mat-checkbox class="align-self-center" (click)="$event.stopPropagation();"></mat-checkbox>
                   </div>
                 </div>
               </div>
@@ -93,24 +93,24 @@
                   </div>
                   <div class="options rounded">
                     <div class="dropleft">
-                      <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="$event.stopPropagation();">
                         <i class="fas fa-share-square"></i>
                       </button>
                       <div class="dropdown-menu" aria-labelledby="shareDD">
                         <h6 class="ml-2 text-white-50">External Sharing</h6>
-                        <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                        <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+                        <a class="dropdown-item" (click)="$event.stopPropagation();openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                        <a class="dropdown-item" (click)="$event.stopPropagation();openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
                         <div class="dropdown-divider"></div>
                         <h6 class="ml-2 text-white-50">Internal Sharing</h6>
-                        <a class="dropdown-item" (click)="openModal(shareColl)"><i class="fa fa-user-friends mr-1"></i>Share
+                        <a class="dropdown-item" (click)="$event.stopPropagation();openModal(shareColl)"><i class="fa fa-user-friends mr-1"></i>Share
                           with
                           colleagues</a>
                       </div>
                     </div>
-                    <div class="btn my-1" (click)="openModal(addtoCollection)">
+                    <div class="btn my-1" (click)="$event.stopPropagation();openModal(addtoCollection)">
                       <i class="fas fa-folder-plus"></i>
                     </div>
-                    <div class="btn">
+                    <div class="btn" (click)="$event.stopPropagation();">
                       <i class="fas fa-trash-alt"></i>
                     </div>
                   </div>
@@ -122,7 +122,7 @@
                     <div class="mx-2">l</div>
                     <div class="items">3 Items</div>
                   </div>
-                  <div class="float-right">
+                  <div class="float-right" (click)="$event.stopPropagation();">
                     <mat-checkbox></mat-checkbox>
                   </div>
                 </div>
@@ -171,19 +171,22 @@
                 <td class="align-middle options">
                   <div class="d-flex">
                     <div class="dropleft">
-                      <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="$event.stopPropagation();openModal(getLink)">
                         <i class="fas fa-share-square"></i>
                       </button>
                       <div class="dropdown-menu" aria-labelledby="shareDD">
-                        <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                        <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a
+                        <a class="dropdown-item" (click)="$event.stopPropagation();openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                        <a class="dropdown-item" (click)="$event.stopPropagation();openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a
                           link</a>
                       </div>
                     </div>
-                    <div class="btn" (click)="openModal(addtoCollection)">
+                    <div *ngIf="!aF.isFldr" class="btn" (click)="$event.stopPropagation();openModal(addtoCollection)">
                       <i class="fas fa-folder-plus"></i>
                     </div>
-                    <div class="btn">
+                    <div *ngIf="aF.isFldr" class="btn" (click)="$event.stopPropagation();setSelRow(fldrModal,aF);">
+                      <i class="fas fa-edit"></i>
+                    </div>
+                    <div class="btn" (click)="$event.stopPropagation();">
                       <i class="fas fa-trash-alt"></i>
                     </div>
                   </div>
@@ -311,22 +314,30 @@
   </ng-template>
 
   <!-- add folder -->
-  <ng-template #addFolder let-modal>
+  <ng-template #fldrModal let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">New Folder</h4>
+      <h4 class="modal-title" id="modal-basic-title">{{frmType=='updFldr'?'Rename':'Add'}} Folder</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body" ngbAutofocus>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Folder Name</mat-label>
-        <input type="text" matInput placeholder="Folder Name">
-      </mat-form-field>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Create</button>
-    </div>
+    <form name="folderForm" (ngSubmit)="onSubmit()" [formGroup]="folderForm" novalidate>
+      <div class="modal-body" ngbAutofocus>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Folder Name</mat-label>
+          <input type="text" matInput placeholder="Folder Name" formControlName="name" required>
+          <mat-error *ngIf="folderForm.get('name')!.hasError('required')">
+            Folder Name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" [disabled]="fldrLoad">
+          <app-loader [type]="'btn'" *ngIf="fldrLoad"></app-loader>
+          Save
+        </button>
+      </div>
+    </form>
   </ng-template>
 
   <!-- add url -->

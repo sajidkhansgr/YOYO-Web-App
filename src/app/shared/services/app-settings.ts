@@ -79,6 +79,10 @@ export class AppSettings {
 
   public static ACT_FLDR = `api/Folder/Activate`;
 
+  public static ADD_FLDR_EMPL = `api/Folder/AddFolderByEmployee`;
+
+  public static UPD_FLDR_EMPL = `api/Folder/UpdateFolderByEmployee`;
+
   // ---- SMART FOLDER ---- //
 
   public static LIST_SMT_FLDR_WRKSPC = `api/SmartFolder/GetAllByWorkspace`;

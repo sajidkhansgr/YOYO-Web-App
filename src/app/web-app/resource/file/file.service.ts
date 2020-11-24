@@ -15,4 +15,12 @@ export class FileService {
     return this.http.get(`${AppSettings.MY_FILES}`);
   }
 
+  addFldr(data: any) {
+    return this.http.post(`${AppSettings.ADD_FLDR_EMPL}`, data);
+  }
+
+  updFldr(data: any) {
+    return this.http.post(`${AppSettings.UPD_FLDR_EMPL}`, data);
+  }
+
 }
