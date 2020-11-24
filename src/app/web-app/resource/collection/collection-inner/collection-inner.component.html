@@ -222,7 +222,7 @@
         <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let workspc of workspcArr"
           (click)="showWorkspcFldrs(workspc)">
           <div class="icon align-self-center mr-2">
-            <img src="assets/images/discription.png" style="max-height:50px;">
+            <img src="assets/images/discription.png" style="max-height:50px; width: 40px;">
           </div>
           <div class="name align-self-center">
             {{workspc.name}}
@@ -233,12 +233,12 @@
         </div>
         <!-- my files -->
         <div class="text-secondary font-weight-bold my-2">My Files</div>
-        <div class="d-flex border-bottom p-2 dark-bg-hover">
-          <div class="icon align-self-center mr-2">
-            <img src="assets/images/discription.png" style="max-height:50px;">
+        <div class="d-flex border-bottom p-2 dark-bg-hover" (click)="showMyFiles()">
+          <div class="icon text-center mr-2" style="height:50px; width: 40px;">
+            <i class="fas fa-folder mt-3"></i>
           </div>
           <div class="name align-self-center">
-            Static data
+            My Files
           </div>
           <div class="arrow align-self-center ml-auto mr-3">
             <i class="fa fa-angle-right"></i>
@@ -249,7 +249,7 @@
         <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr"
           (click)="getContentColctn(colctn)">
           <div class="icon align-self-center mr-2">
-            <img src="assets/images/discription.png" style="max-height:50px;">
+            <img src="assets/images/discription.png" style="max-height:50px; width: 40px;">
           </div>
           <div class="name align-self-center">
             {{colctn.name}}
@@ -264,7 +264,7 @@
           <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr"
             (click)="showWorkspcFldrs(undefined, fldr)">
             <div class="icon align-self-center mr-2">
-              <img src="{{fldr.folderIconPath}}" style="max-height:50px;">
+              <img src="{{fldr.folderIconPath}}" style="max-height:50px; width: 40px;">
             </div>
             <div class="name align-self-center">
               {{fldr.name}}
@@ -277,7 +277,8 @@
             <mat-checkbox class="align-self-center mr-2" (change)="selectContent(content, $event.checked)">
             </mat-checkbox>
             <div class="icon align-self-center mr-2">
-              <img src="{{content.pdfImages[0].imagePath}}" style="max-height:50px;">
+              <img src="{{content.pdfImages[0] ? content.pdfImages[0].imagePath : ''}}"
+                style="max-height:50px; width: 40px;">
             </div>
             <div class="name align-self-center">
               {{content.name}}
