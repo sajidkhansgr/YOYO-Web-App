@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { FileService } from './file.service';
 import { ContentWorkspaceService } from '../../../hub/content-workspace/content-workspace.service';
@@ -11,15 +12,18 @@ import { ContentWorkspaceService } from '../../../hub/content-workspace/content-
   styleUrls: ['./file.component.scss']
 })
 export class FileComponent implements OnInit {
-  view: boolean = true;disabled!: boolean;
+  view: boolean = true;fldrLoad!: boolean;
   files!:any[];loading!: boolean;folders!:any[];
   folderNav!:any[];
   selFolder:any={};
   allFiles:any[]=[];selFiles:any[]=[];selFolders:any[]=[];
   testArr = [1,2,3,4,5,6,7,8,9];
+  folderForm!: FormGroup;
+  frmType!: string;selFldrData!:any;
 
   constructor(
     private router: Router,
+    private fb: FormBuilder,
     private modalService: NgbModal,
     private toastr: ToastrService,
     private fileServ: FileService,
@@ -29,9 +33,14 @@ export class FileComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.folderNav = [];
-    // setTimeout(()=>{
-      this.getFiles();
-    // },9000)
+    this.getFiles();
+    this.initForm();
+  }
+
+  initForm(){
+    this.folderForm = this.fb.group({
+      name: ['', [Validators.required]]
+    });
   }
 
   getFiles(){
@@ -105,7 +114,17 @@ export class FileComponent implements OnInit {
     }
   }
 
-  openModal(content: any) {
+  openModal(content: any,type: string='') {
+    this.frmType = type;
+    if(this.frmType=='addFldr' || this.frmType=='updFldr'){
+      if(this.fldrLoad){
+        this.toastr.info("Please wait for previous request");
+        return;
+      }
+      this.folderForm.reset();
+      if(this.frmType=='updFldr')
+        this.folderForm.patchValue({...this.selFldrData});
+    }
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
 
     }, (reason) => {
@@ -113,55 +132,82 @@ export class FileComponent implements OnInit {
     });
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
+  setSelRow(content: any,fldr:any){
+    if(this.fldrLoad){
+      this.toastr.info("Please wait for previous request");
+    }else{
+      this.selFldrData = fldr;
+      this.openModal(content,'updFldr');
     }
   }
 
+  onSubmit(){
+    if (this.folderForm.valid) {
+      this.fldrLoad = true;
+      let fldrData: any = {
+        ...this.folderForm.value,
+        workspaceId: null,
+        folderId: this.selFolder.id?this.selFolder.id:null
+      }
+      if (this.frmType=='updFldr') {
+        this.editFolder(fldrData);
+      } else {
+        console.log("addFolder");
+        this.addFolder(fldrData);
+      }
+    }
+  }
 
   // add folder
-  addFolder(folderData: any) {
-      // console.log(folderData);
-      this.cwServ.addFolder(folderData)
-        .subscribe((data: any) => {
-          // console.log(data);
-          if (data) {
-            this.toastr.success(data.message || 'Folder added successfully', 'Success!');
-          } else {
-            this.toastr.error('Unable to add Folder', 'Error!');
-          }
-          this.disabled = false;
-          this.dismissModal();
-        }, (err: any) => {
-          console.log(err);
-          this.disabled = false;
-          this.dismissModal();
-        });
+  addFolder(fldrData: any) {
+    this.fileServ.addFldr(fldrData)
+      .subscribe((data: any) => {
+        // console.log(data);
+        if (data) {
+          this.toastr.success(data.message || 'Folder added successfully', 'Success!');
+          this.getFiles();
+        } else {
+          this.toastr.error('Unable to add Folder', 'Error!');
+        }
+        this.fldrLoad = false;
+        this.dismissModal();
+      }, (err: any) => {
+        console.log(err);
+        this.fldrLoad = false;
+        this.dismissModal();
+      });
   }
 
   // edit/rename folder
-  editFolder(folderData: any) {
-      // console.log(folderData);
-      this.cwServ.addFolder(folderData)
-        .subscribe((data: any) => {
-          // console.log(data);
-          if (data) {
-            this.toastr.success(data.message || 'Folder rename successfully', 'Success!');
-          } else {
-            this.toastr.error('Unable to rename Folder', 'Error!');
-          }
-          this.disabled = false;
-          this.dismissModal();
-        }, (err: any) => {
-          console.log(err);
-          this.disabled = false;
-          this.dismissModal();
-        });
+  editFolder(fldrData: any) {
+    fldrData.id = this.selFldrData.id;
+    this.fileServ.updFldr(fldrData)
+      .subscribe((data: any) => {
+        // console.log(data);
+        if (data) {
+          this.toastr.success(data.message || 'Folder rename successfully', 'Success!');
+          this.succEeditFldr('folderNav');
+          this.succEeditFldr('allFiles');
+          this.succEeditFldr('folders');
+          this.succEeditFldr('files');
+          this.succEeditFldr('selFolders');
+          this.succEeditFldr('selFiles');
+        } else {
+          this.toastr.error('Unable to rename Folder', 'Error!');
+        }
+        this.fldrLoad = false;
+        this.dismissModal();
+      }, (err: any) => {
+        this.fldrLoad = false;
+        this.dismissModal();
+      });
+  }
+
+  succEeditFldr(type:'folderNav'|'allFiles'|'folders'|'files'|'selFolders'|'selFiles'){
+    const index = this[type].findIndex((ele: any) => ele.id == this.selFldrData.id);
+    if (index >= 0) {
+      this[type][index].name = this.folderForm.value.name;
+    }
   }
 
   // upload button

@@ -5,27 +5,27 @@ import { AppSettings } from '../shared/services/app-settings';
 @Injectable()
 export class AuthService {
 
-    constructor(
-      private http: HttpClient
-    ){ }
+  constructor(
+    private http: HttpClient
+  ) { }
 
-    login(data: any) {
-      return this.http.post(
-          `${AppSettings.LOGIN}`, data
-        );
-    }
+  login(data: any) {
+    return this.http.post(
+      `${AppSettings.LOGIN}`, data
+    );
+  }
 
-    forgotPass(data: any) {
-      return this.http.post( `${AppSettings.FORG_PASS}`, data );
-    }
+  forgotPass(data: any) {
+    return this.http.post(`${AppSettings.FORG_PASS}`, data);
+  }
 
-    resetPass(data: any) {
-      return this.http.post(
-        `${AppSettings.RESET_PASS}`, data );
-    }
+  resetPass(data: any) {
+    return this.http.post(
+      `${AppSettings.RESET_PASS}`, data);
+  }
 
-    createPass(data: any) {
-      return this.http.post(
-        `${AppSettings.RESET_PASS}`, data );
-    }
+  createPass(data: any) {
+    return this.http.post(
+      `${AppSettings.RESET_PASS}`, data);
+  }
 }
