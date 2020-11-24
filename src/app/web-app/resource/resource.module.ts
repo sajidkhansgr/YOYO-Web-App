@@ -11,7 +11,7 @@ const routes: Routes = [
     children: [
       { path: 'collections', loadChildren: () => import('./collection/collection.module').then(m => m.CollectionModule) },
       { path: 'experiences', loadChildren: () => import('./exp/exp.module').then(m => m.ExpModule) },
-      { path: 'my-files', loadChildren: () => import('./files/files.module').then(m => m.FilesModule) }
+      { path: 'my-files', loadChildren: () => import('./file/file.module').then(m => m.FileModule) }
     ]
   }
 ];

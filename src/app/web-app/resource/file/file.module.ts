@@ -8,23 +8,23 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 
-import { FilesComponent } from './files.component';
+import { FileComponent } from './file.component';
+import { FileService } from './file.service';
+import { LoaderModule } from '../../../shared/components/loader/loader.module';
 
 const routes: Routes = [
-  { path: '', component: FilesComponent }
+  { path: '', component: FileComponent }
 ];
 
 @NgModule({
-  declarations: [FilesComponent],
+  declarations: [FileComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTooltipModule,
-    MatSlideToggleModule,
-    MatRadioModule
-  ]
+    MatCheckboxModule, MatFormFieldModule, MatInputModule,
+    MatTooltipModule, MatSlideToggleModule, MatRadioModule,
+    LoaderModule
+  ],
+  providers: [FileService]
 })
-export class FilesModule { }
+export class FileModule { }

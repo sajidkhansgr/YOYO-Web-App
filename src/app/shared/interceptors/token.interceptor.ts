@@ -8,7 +8,7 @@ import {environment} from '../../../environments/environment';
 export class TokenInterceptor implements HttpInterceptor {
   constructor(private tokenDataServ: TokenDataService) {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if(request.url.includes('content.googleapis.com')){
+    if(request.url.includes('content.googleapis.com') || request.url.includes('twimg.com')){
       // google apis
     }else{
       let url = `${environment.API_ENDPOINT}${request.url}`;
@@ -17,7 +17,7 @@ export class TokenInterceptor implements HttpInterceptor {
         'Pragma': 'no-cache, no-store, must-revalidate',
         'If-Modified-Since': '0'
       };
-      let excUrls = ['Login','ForgotPassword','ResetPassword'];
+      let excUrls = ['Login','ForgotPassword','ResetPassword','Icon'];
 
       if(excUrls.filter(sUrl => request.url.includes(sUrl)).length>0){
         //no need of auth
