@@ -10,11 +10,12 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { CollectionInnerComponent } from './collection-inner.component';
-import { CollectionService } from '../collection.service';
 import { LoaderModule } from '../../../../shared/components/loader/loader.module';
-import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
+import { CollectionService } from '../collection.service';
 import { ContentService } from '../../../../shared/services/content.service';
 import { FileService } from '../../file/file.service';
+import { ExpService } from '../../exp/exp.service';
+import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
 
 const routes: Routes = [
   { path: '', component: CollectionInnerComponent }
@@ -34,6 +35,6 @@ const routes: Routes = [
     FormsModule, ReactiveFormsModule,
     MatDialogModule
   ],
-  providers: [CollectionService, ContentWorkspaceService, ContentService, FileService]
+  providers: [CollectionService, ExpService, ContentService, FileService, ContentWorkspaceService]
 })
 export class CollectionInnerModule { }
