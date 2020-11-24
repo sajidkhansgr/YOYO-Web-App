@@ -202,13 +202,14 @@
     </div>
     <!-- nav -->
     <nav aria-label="breadcrumb" *ngIf="!showAll">
-      <ol class="breadcrumb bg-white mb-0 p-0">
+      <ol class="breadcrumb bg-white mb-0 p-0 ml-1">
         <li class="curs-ptr text-primary mr-2" (click)="backNav()" style="font-size: 16px;" *ngIf="contentNav.length>0">
           <i class="fa fa-arrow-left align-self-center"></i></li>
         <!-- <li class="breadcrumb-item curs-ptr text-primary" (click)="showAll = true;">Home</li> -->
         <!-- <li class="breadcrumb-item no-before">{{selWrkspc!.name}}</li> -->
         <li class="breadcrumb-item" *ngFor="let c of contentNav">{{c.name}}</li>
       </ol>
+      <hr class="mt-1">
     </nav>
     <ng-container
       *ngIf="(wrkspcLoading && colctnLoading) || (fldrLoading && sFldrLoading) || contentLoading; else loaded">
