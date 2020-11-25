@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
-import { DEF_ICON, PRPS, DEF_IMG } from '../../shared/constants';
+import { DEF_ICON, PRPS, DEF_IMG, FILE_TYPES } from '../../shared/constants';
 import { FileHelper } from '../../shared/file-helper';
 import { Workspace } from '../../shared/models/workspace';
 import { Folder } from '../../shared/models/folder';
@@ -61,6 +61,8 @@ export class ContentWorkspaceComponent implements OnInit {
   edits: any; disb: any; //disb and edits used in single edits
 
   usrInfo: any | null;
+
+  fileTypes: any = FILE_TYPES; fileTypeArr: any = []; propsArr: any = [];
 
   constructor(
     // private route: ActivatedRoute,
@@ -242,6 +244,24 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- smart folder ---- //
+  addFileType(val: boolean, id: number) {
+    if (val) {
+      this.fileTypeArr.push(id);
+    } else {
+      this.fileTypeArr = this.fileTypeArr.filter((data: any) => data != id);
+    }
+    console.log(this.fileTypeArr);
+  }
+
+  addProps(val: boolean, id: number) {
+    if (val) {
+      this.propsArr.push(id);
+    } else {
+      this.propsArr = this.propsArr.filter((data: any) => data != id);
+    }
+    console.log((this.propsArr).toString());
+  }
+
   // smart folder submit functions (add/update)
   smartFolderSubmit() {
     this.edit ? this.updSmartFolder() : this.addSmartFolder();
@@ -331,7 +351,8 @@ export class ContentWorkspaceComponent implements OnInit {
         workspaceId: this.selWrkspc!.id,
         folderId: this.selFolder!.folderId,
         isActive: this.selFolder!.isActive,
-        propertyIds: 1
+        propertyIds: this.propsArr.length > 0 ? (this.propsArr).toString() : undefined,
+        fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
       // console.log(folderData);
       this.cwServ.updSmartFolder(folderData)
@@ -363,7 +384,8 @@ export class ContentWorkspaceComponent implements OnInit {
         workspaceId: this.selWrkspc!.id,
         folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].id : 0,
         isActive: true,
-        propertyIds: 1
+        propertyIds: this.propsArr.length > 0 ? (this.propsArr).toString() : undefined,
+        fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
       // console.log(folderData);
       this.cwServ.addSmartFolder(folderData)
@@ -737,13 +759,6 @@ export class ContentWorkspaceComponent implements OnInit {
     let nData = this.cols.slice(0, 1);
     this.cols = [...nData, ...this.visbCols];
     this.closeDropdown(event);
-  }
-
-  // outside click - dropdown
-  outsideCloseDD = (dropdown: any, event: any) => {
-    if (dropdown!.classList.contains('show') && !event.target!.classList.contains('fas')) {
-      dropdown!.classList.remove('show');
-    }
   }
 
   // toggle dropdown
