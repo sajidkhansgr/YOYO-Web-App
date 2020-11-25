@@ -31,7 +31,7 @@ export class CollectionService {
   colctnList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
-      if (params[key]) {
+      if (params[key] || key == 'pageNo' || key == 'pageSize') {
         queryParams = queryParams.set(key, params[key]);
       }
     }
