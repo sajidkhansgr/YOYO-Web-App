@@ -969,8 +969,8 @@ export class ContentWorkspaceComponent implements OnInit {
     let params = {
       pageNo: this.pageNo, pageSize: this.pageSize,
       searchText: this.searchTxt,
-      ...this.sort
-      // hubId: parseInt(this.hubid)
+      ...this.sort,
+      hubId: parseInt(this.hubid)
     };
     // if (this.activeIndex == 1)
     //   params.isActive = true;

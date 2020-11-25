@@ -50,7 +50,10 @@ export class LoginComponent implements OnInit {
             this.toastr.success('Login successfully', 'Success');
             this.dataServ.passDataSend('login');
             let nav= HttpHelper.redirectToUrl(this.redirectUrl);
-            this.router.navigate([nav]);
+            if(nav==='/dashboard' && data.result.roleId==3)
+              this.router.navigate(['/web-app/resource/experiences']);
+            else
+              this.router.navigate([nav]);
           } else {
             this.toastr.error(data.message || 'Please check email or password!', 'Error!');
             this.disabled = false;

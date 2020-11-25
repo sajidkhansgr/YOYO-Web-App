@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { ExpListComponent } from './exp-list.component';
 
+import { ExpService } from '../exp.service';
+import { LoaderModule } from '../../../../shared/components/loader/loader.module';
+
 const routes: Routes = [
   { path: '', component: ExpListComponent }
 ];
@@ -11,7 +14,9 @@ const routes: Routes = [
   declarations: [ExpListComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
-  ]
+    RouterModule.forChild(routes),
+    LoaderModule
+  ],
+  providers: [ExpService]
 })
 export class ExpListModule { }
