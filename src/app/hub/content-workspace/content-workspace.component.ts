@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
-import { DEF_ICON, PRPS, DEF_IMG, FILE_TYPES } from '../../shared/constants';
+import { DEF_ICON, DEF_IMG, FILE_TYPES } from '../../shared/constants';
 import { FileHelper } from '../../shared/file-helper';
 import { Workspace } from '../../shared/models/workspace';
 import { Folder } from '../../shared/models/folder';
@@ -42,7 +42,7 @@ export class ContentWorkspaceComponent implements OnInit {
   folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; contentArr!: Content[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
-  props: any;
+  // props: any;
   view!: boolean;
   edit!: boolean | undefined;
   activeFldrs!: number; isActiveFldrs!: boolean;
@@ -118,7 +118,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.visbCols = [{ n: "Added", k: "createdDate", asc: false }];
     this.hidCols = [{ n: "Likes", k: "likes", asc: false }, { n: "Size", k: "size", asc: false }, { n: "Last Updated", k: "updatedDate", asc: false }];
     this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Added", k: "createdDate", asc: false }];
-    this.props = PRPS;
+    // this.props = PRPS;
     this.view = true;
     this.edit = false;
     this.activeFldrs = 1; this.isActiveFldrs = true;
@@ -244,6 +244,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- smart folder ---- //
+  // add file type filter for smart folder
   addFileType(val: boolean, id: number) {
     if (val) {
       this.fileTypeArr.push(id);
@@ -253,14 +254,14 @@ export class ContentWorkspaceComponent implements OnInit {
     console.log(this.fileTypeArr);
   }
 
-  addProps(val: boolean, id: number) {
-    if (val) {
-      this.propsArr.push(id);
-    } else {
-      this.propsArr = this.propsArr.filter((data: any) => data != id);
-    }
-    console.log((this.propsArr).toString());
-  }
+  // addProps(val: boolean, id: number) {
+  //   if (val) {
+  //     this.propsArr.push(id);
+  //   } else {
+  //     this.propsArr = this.propsArr.filter((data: any) => data != id);
+  //   }
+  //   console.log((this.propsArr).toString());
+  // }
 
   // smart folder submit functions (add/update)
   smartFolderSubmit() {
@@ -351,7 +352,7 @@ export class ContentWorkspaceComponent implements OnInit {
         workspaceId: this.selWrkspc!.id,
         folderId: this.selFolder!.folderId,
         isActive: this.selFolder!.isActive,
-        propertyIds: this.propsArr.length > 0 ? (this.propsArr).toString() : undefined,
+        // propertyIds: this.propsArr.length > 0 ? (this.propsArr).toString() : undefined,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
       // console.log(folderData);
@@ -383,7 +384,7 @@ export class ContentWorkspaceComponent implements OnInit {
         workspaceId: this.selWrkspc!.id,
         folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].id : 0,
         isActive: true,
-        propertyIds: this.propsArr.length > 0 ? (this.propsArr).toString() : undefined,
+        // propertyIds: this.propsArr.length > 0 ? (this.propsArr).toString() : undefined,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
       // console.log(folderData);

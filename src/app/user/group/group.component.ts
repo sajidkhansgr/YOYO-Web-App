@@ -5,7 +5,7 @@ import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { PRPS } from '../../shared/constants';
+// import { PRPS } from '../../shared/constants';
 import { GroupService } from './group.service';
 import { HubService } from '../../hub/hub.service';
 import { DataService } from '../../shared/services/data.service';
@@ -37,7 +37,7 @@ export class GroupComponent implements OnInit {
       this.searInit = true;
     }
   }
-  props: any = PRPS;
+  // props: any = PRPS;
   exps: any = [
     { id: 1, name: "Exp 1" }, { id: 2, name: "Exp 2" }, { id: 3, name: "Exp 3" }
   ];
@@ -204,17 +204,17 @@ export class GroupComponent implements OnInit {
   }
 
   actDeactGrp() {
-    let actDeac: string = `${this.rowInfo.isActive?'deactivate':'activate'}`;
+    let actDeac: string = `${this.rowInfo.isActive ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
         msg: `Are you sure you want to ${actDeac} this group?`,
-        title: `${this.rowInfo.isActive?'Deactivate':'Activate'} group`
+        title: `${this.rowInfo.isActive ? 'Deactivate' : 'Activate'} group`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
         console.log(result);
-        this.grpServ.actDeactGrp(this.rowInfo.id.toString(),this.rowInfo.isActive?false:true).subscribe((data: any) => {
+        this.grpServ.actDeactGrp(this.rowInfo.id.toString(), this.rowInfo.isActive ? false : true).subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Group ${actDeac}d successfully`, 'Success!');
             this.grpsList();

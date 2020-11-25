@@ -21,7 +21,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-6 align-self-center row justify-content-end">
-                <div class="dropdown mr-2">
+                <!-- <div class="dropdown mr-2">
                   <button class="btn btn-light dropdown-toggle" id="propDD" data-toggle="dropdown">
                     Property
                   </button>
@@ -36,7 +36,7 @@
                       </div>
                     </button>
                   </div>
-                </div>
+                </div> -->
                 <div class="dropdown mr-2">
                   <button class="btn btn-light dropdown-toggle" id="divisionDD" data-toggle="dropdown">
                     Division
@@ -106,7 +106,8 @@
                   </tr>
                 </thead>
                 <tbody *ngIf="!loading && grps.length > 0">
-                  <tr *ngFor="let grp of grps" (click)="toggleInfo(grp)" [ngClass]="{'deact': !grp.isActive,'sel-row':(rowInfo.id === grp.id)}">
+                  <tr *ngFor="let grp of grps" (click)="toggleInfo(grp)"
+                    [ngClass]="{'deact': !grp.isActive,'sel-row':(rowInfo.id === grp.id)}">
                     <td>
                       <span class="d-block">{{grp.name}}</span>
                     </td>
