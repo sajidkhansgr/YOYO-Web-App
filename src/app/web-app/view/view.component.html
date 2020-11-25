@@ -1,9 +1,54 @@
-<app-loader [type]="'page'" *ngIf="loading"></app-loader>
-<div *ngIf="!loading">
-  <div *ngIf="cntnt else noCntnt">
-    {{cntnt.name||'N/A'}}
+<!-- <app-loader [type]="'page'" *ngIf="loading"></app-loader>
+<div *ngIf="!loading"> -->
+<div class="row mx-0">
+  <!-- *ngIf="cntnt else noCntnt" -->
+  <div class="heading bg-white w-100 row mx-0">
+    <div class="col-4 align-self-center">test name.pdf</div>
+    <div class="col-4 align-self-center d-flex justify-content-center">
+      <div class="btn" placement="bottom" ngbTooltip="{{leftSide ? 'Hide Pages' : 'Show Pages'}}"
+        (click)="leftSide = !leftSide"><i class="fas fa-th-large"></i></div>
+      <div class="dropdown">
+        <button class="btn" type="button" id="moreDD" data-toggle="dropdown">
+          <i class="fas fa-ellipsis-h"></i>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="moreDD">
+          <button class="dropdown-item curs-ptr"><i class="fas fa-download"></i> Download</button>
+          <button class="dropdown-item curs-ptr"><i class="fas fa-thumbs-up"></i> Like</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 text-right align-self-center">
+      <div class="btn"><i class="fas fa-expand-alt"></i></div>
+      <div class="btn"><i class="fas fa-times"></i></div>
+    </div>
   </div>
-  <ng-template #noCntnt>
-      No Content found
-  </ng-template>
+  <div class="side-body col-2 bg-white text-center" *ngIf="leftSide">
+    <div class="bg-hi-grey rounded px-3 py-1 my-3 w-fit mx-auto">test name.pdf</div>
+    <div class="d-flex my-3 active">
+      <mat-checkbox class="align-self-center mb-4"></mat-checkbox>
+      <div>
+        <div class="thumbnail">
+          <img src="assets/images/discription.png" class="w-50">
+        </div>
+        <div class="num py-1 px-2 mx-auto mt-1 rounded w-fit">1</div>
+      </div>
+    </div>
+    <div class="d-flex my-3" *ngFor="let t of testArr">
+      <mat-checkbox class="align-self-center mb-4"></mat-checkbox>
+      <div>
+        <div class="thumbnail">
+          <img src="assets/images/discription.png" class="w-50">
+        </div>
+        <div class="num py-1 px-2 mx-auto mt-1 rounded w-fit">1</div>
+      </div>
+    </div>
+  </div>
+  <div class="main-body border" [ngClass]="{'col-10': leftSide, 'col-12': !leftSide}">
+    <!-- {{cntnt.contentPath||'N/A'}} -->
+    test
+  </div>
 </div>
+<!-- <ng-template #noCntnt>
+    No Content found
+  </ng-template>
+</div> -->

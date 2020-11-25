@@ -12,8 +12,10 @@ import { Content } from '../../shared/models/content';
 })
 export class ViewComponent implements OnInit {
   routerSubs!: Subscription;
-  id!: string;cntnt!:Content | null;
-  loading:boolean = true;
+  id!: string; cntnt!: Content | null;
+  loading!: boolean;
+  leftSide!: boolean;
+  testArr = [1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1];
   constructor(
     private route: ActivatedRoute,
     private toastr: ToastrService,
@@ -27,30 +29,32 @@ export class ViewComponent implements OnInit {
     });
   }
 
-  initialiseState(){
-    if(this.id!='0'){
-      this.getCntnt();
+  initialiseState() {
+    if (this.id != '0') {
+      this.loading = true;
+      this.leftSide = true;
+      // this.getCntnt();
     }
   }
 
-  getCntnt(){
+  getCntnt() {
     this.cwServ.viewContent(this.id)
-      .subscribe((data:any)=>{
+      .subscribe((data: any) => {
         // console.log(data, "")
-        if(data && data.result && data.result.id){
+        if (data && data.result && data.result.id) {
           this.cntnt = data.result;
-        }else{
+        } else {
           this.cntnt = null
         }
         this.loading = false;
-      },(err:any)=>{
+      }, (err: any) => {
         this.cntnt = null;
         this.loading = false;
       })
   }
 
   ngOnDestroy(): void {
-    if(!!this.routerSubs)
+    if (!!this.routerSubs)
       this.routerSubs.unsubscribe();
   }
 
