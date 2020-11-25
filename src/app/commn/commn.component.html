@@ -297,10 +297,10 @@
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input matInput formControlName="usrWrkSpcs" placeholder="Select user workspaces(s)" [matAutocomplete]="auto">
+          <input matInput #wrkSpcInp formControlName="usrWrkSpcs" placeholder="Select user workspaces(s)" [matAutocomplete]="auto1">
           <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value, 'selWrkSpcs')"
+        <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selWrkSpcs',wrkSpcInp)"
           [displayWith]="displayFn">
           <mat-option *ngFor="let wrkSpc of wrkSpcs" [value]="wrkSpc">
             {{wrkSpc.name}} <br />
@@ -317,10 +317,10 @@
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input matInput formControlName="usrGrps" placeholder="Select user group(s)" [matAutocomplete]="auto">
+          <input matInput #grpInp formControlName="usrGrps" placeholder="Select user group(s)" [matAutocomplete]="auto2">
           <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selGrps')"
+        <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selGrps',grpInp)"
           [displayWith]="displayFn">
           <mat-option *ngFor="let grp of grps" [value]="grp">
             {{grp.name}}

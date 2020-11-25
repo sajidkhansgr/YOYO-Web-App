@@ -19,6 +19,7 @@ import { CommnService } from './commn.service';
 import { GroupService } from '../user/group/group.service';
 import { ContentWorkspaceService } from '../hub/content-workspace/content-workspace.service';
 import { PaginationModule } from '../shared/components/pagination/pagination.module';
+import { CustomPipeModule } from '../shared/pipes/custom-pipe.module';
 
 const routes: Routes = [
   { path: '', component: CommnComponent }
@@ -32,7 +33,8 @@ const routes: Routes = [
     MatFormFieldModule, MatInputModule, MatCheckboxModule, MatSelectModule,
     MatDatepickerModule, MatNativeDateModule, MatTabsModule,
     MatChipsModule, MatAutocompleteModule,
-    NgbModule, LoaderModule, PaginationModule
+    NgbModule, LoaderModule, PaginationModule,
+    CustomPipeModule
   ],
   providers: [CommnService, GroupService, ContentWorkspaceService]
 })

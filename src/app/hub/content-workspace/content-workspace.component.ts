@@ -63,6 +63,8 @@ export class ContentWorkspaceComponent implements OnInit {
   usrInfo: any | null;
 
   fileTypes: any = FILE_TYPES; fileTypeArr: any = []; propsArr: any = [];
+  selUsrGrpWrkspc!: any[];selUsrGrpLoad!: boolean;isUrGrpLoad!:boolean;selUsrGrpTxt!:'';
+  cntntTag!:any;urlTag!:any;cntntInfoTag!:any;cntntLng!:any;
 
   constructor(
     // private route: ActivatedRoute,
@@ -115,9 +117,11 @@ export class ContentWorkspaceComponent implements OnInit {
     this.disabled = false;
     this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = []; this.contentArr = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
-    this.visbCols = [{ n: "Added", k: "createdDate", asc: false }];
-    this.hidCols = [{ n: "Likes", k: "likes", asc: false }, { n: "Size", k: "size", asc: false }, { n: "Last Updated", k: "updatedDate", asc: false }];
-    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Added", k: "createdDate", asc: false }];
+    let cmnCols = [ { n: "Added", k: "createdDate", asc: false },{ n: "Size", k: "size", asc: false },
+    { n: "Last Updated", k: "updatedDate", asc: false }];
+    this.visbCols = [...cmnCols];
+    this.hidCols = [{ n: "Likes", k: "likes", asc: false }];
+    this.cols = [{ n: "Name", asc: false, k: "name" },...cmnCols];
     // this.props = PRPS;
     this.view = true;
     this.edit = false;
@@ -132,12 +136,12 @@ export class ContentWorkspaceComponent implements OnInit {
     this.disb = {};
     this.cntntForm = this.fb.group({
       img: [''],
-      tags: ['']
+      // tags: ['']
     });
     this.urlForm = this.fb.group({
       iconType: ['', [Validators.required]],
       img: ['', [Validators.required]],
-      tags: [''],
+      // tags: [''], using ngModel
       name: ['', [Validators.required]],
       description: [''],
       url: ['', [Validators.required]],
@@ -704,9 +708,11 @@ export class ContentWorkspaceComponent implements OnInit {
   // selected workspace
   selectWrkspc(wrkspc: Workspace) {
     this.selWrkspc = wrkspc;
-    // console.log(wrkspc);
     this.folderNav = [];
-    this.listFolders()
+    this.listFolders();
+    this.selUsrGrpWrkspc = [];
+    this.isUrGrpLoad = false;
+    this.selUsrGrpTxt = '';
   }
 
   // list of workspaces
@@ -729,6 +735,68 @@ export class ContentWorkspaceComponent implements OnInit {
     if (this.wrkspcs.length == 0) {
       this.getWrkspcList();
     }
+  }
+
+  getUsrGrpsFormWrkspc(){
+    if(!this.isUrGrpLoad){
+      this.usrGrpInWrkspce();
+    }
+    this.isUrGrpLoad = true;
+  }
+
+  usrGrpInWrkspce(){
+    this.selUsrGrpLoad = true;
+    this.selUsrGrpWrkspc = [];
+    this.cwServ.usrGrpWrkspcList({ hubid: this.hubid, workspaceId: this.selWrkspc!.id })
+      .subscribe((data: any) => {
+        if (data && Array.isArray(data.result) && data.result.length > 0) {
+          this.selUsrGrpWrkspc = data.result;
+        }
+        this.selUsrGrpLoad = false;
+      }, (err: any) => {
+        this.selUsrGrpLoad = false;
+      });
+  }
+
+  remUsrGrpInWrkspce(d:any){
+    this.selUsrGrpLoad = true;
+    let data:any = {
+      workspaceId: this.selWrkspc!.id,
+      entityId: d.id, isGroup: d.isGroup
+    }
+    this.cwServ.remUsrGrpWrkspc(data)
+      .subscribe((data: any) => {
+        if (data) {
+          this.toastr.success(`${d.isGroup?'Group':'User'} removed from workspace`);
+          this.usrGrpInWrkspce();
+        }else{
+          this.selUsrGrpLoad = false;
+          this.toastr.error(`Unable to remove ${d.isGroup?'group':'user'} from workspace`);
+        }
+      }, (err: any) => {
+        this.selUsrGrpLoad = false;
+        this.toastr.error(`Unable to remove ${d.isGroup?'group':'user'} from workspace`);
+      });
+  }
+
+  addUsrGrpInWrkspce(d:any){
+    this.selUsrGrpLoad = true;
+    let data:any = {
+      // workspaceId: this.selWrkspc!.id,
+    }
+    this.cwServ.addUsrGrpWrkspc(data)
+      .subscribe((data: any) => {
+        if (data) {
+          this.toastr.success(`Added successfully`);
+          this.usrGrpInWrkspce();
+        }else{
+          this.selUsrGrpLoad = false;
+          this.toastr.error(`Unable to add`);
+        }
+      }, (err: any) => {
+        this.selUsrGrpLoad = false;
+        this.toastr.error(`Unable to add`);
+      });
   }
 
   // drag and drop
@@ -1044,7 +1112,7 @@ export class ContentWorkspaceComponent implements OnInit {
     return (tag && tag.id) ? tag.name : '';
   }
 
-  selFromAutoComp(data: any, type: 'selTags' | 'selTags2' | 'selLngs') {
+  selFromAutoComp(data: any, type: 'selTags' | 'selTags2' | 'selLngs',autoSel: any) {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this.toastr.clear();
@@ -1054,6 +1122,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this[type].push({ ...data, lid: data.id });
       else
         this[type].push({ ...data, tid: data.id });
+      autoSel.value = '';
     }
   }
 

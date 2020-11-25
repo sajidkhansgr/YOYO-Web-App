@@ -216,4 +216,39 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.TRASH_CNTNT}?id=${id}`, {});
   }
 
+  // get all users and groupd in workspace
+  usrGrpWrkspcList(params: any): Observable<any[]> {
+    let queryParams = new HttpParams();
+    for (let key in params) {
+      if (params[key]) {
+        queryParams = queryParams.set(key, params[key]);
+      }
+    }
+    return this.http.get(`${AppSettings.LIST_USR_GRP_WRKSPC}`, {
+      params: queryParams
+    }
+    ).pipe(
+      map((res: any) =>
+        res
+      )
+    );
+  }
+  //  add usr/grp to workspace
+  addUsrGrpWrkspc(data: any) {
+    return this.http.post(`${AppSettings.ADD_USR_GRP_WRKSPC}`, data);
+  }
+  //  remove usr/grp to workspace
+  remUsrGrpWrkspc(data: any) {
+    return this.http.post(`${AppSettings.REM_USR_GRP_WRKSPC}`, data);
+  }
+
+
+
+
+
+
+
+
+
+
 }
