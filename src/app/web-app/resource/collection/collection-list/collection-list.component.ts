@@ -173,7 +173,7 @@ export class CollectionListComponent implements OnInit {
   // get collection list
   listColct() {
     this.loading = true;
-    this.colctnSrv.colctnList({ pageNo: 0, pageSize: 0 }).subscribe((data: any) => {
+    this.colctnSrv.colctnList({ pageNo: 0 }).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         this.colctnArr = data.result.results;
       } else {
@@ -181,6 +181,7 @@ export class CollectionListComponent implements OnInit {
       }
       this.loading = false;
     }, (err: any) => {
+      this.colctnArr = [];
       this.loading = false;
     });
   }
@@ -196,6 +197,10 @@ export class CollectionListComponent implements OnInit {
   dismissModal() {
     if (this.modalService)
       this.modalService.dismissAll();
+  }
+
+  ngOnDestroy(): void {
+    this.dismissModal();
   }
 
 }

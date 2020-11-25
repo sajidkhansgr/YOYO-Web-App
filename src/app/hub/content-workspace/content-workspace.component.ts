@@ -367,7 +367,6 @@ export class ContentWorkspaceComponent implements OnInit {
           this.disabled = false;
           this.dismissModal();
         }, (err: any) => {
-          // console.log(err);
           this.disabled = false;
           this.dismissModal();
         });
@@ -400,7 +399,6 @@ export class ContentWorkspaceComponent implements OnInit {
           this.disabled = false;
           this.dismissModal();
         }, (err: any) => {
-          console.log(err);
           this.disabled = false;
           this.dismissModal();
         });
@@ -536,7 +534,6 @@ export class ContentWorkspaceComponent implements OnInit {
       // console.log(folderData);
       this.cwServ.addFolder(folderData)
         .subscribe((data: any) => {
-          // console.log(data);
           if (data) {
             this.toastr.success(data.message || 'Folder added successfully', 'Success!');
             this.listFolders()
@@ -546,7 +543,6 @@ export class ContentWorkspaceComponent implements OnInit {
           this.disabled = false;
           this.dismissModal();
         }, (err: any) => {
-          console.log(err);
           this.disabled = false;
           this.dismissModal();
         });
@@ -723,7 +719,6 @@ export class ContentWorkspaceComponent implements OnInit {
         }
         this.wrkspcLoading = false;
       }, (err: any) => {
-        console.log(err);
         this.wrkspcLoading = false;
       });
   }
@@ -1001,8 +996,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.custIcon = '';
     let query = {
       hubId: parseInt(this.hubid),
-      pageNo: 1,
-      pageSize: 1000
+      pageNo: 1, pageSize: 1000
     }
     // console.log(query.isActive);
     this.tagServ.tagList(query)
@@ -1013,7 +1007,6 @@ export class ContentWorkspaceComponent implements OnInit {
           this.tags = [];
         }
       }, (err: any) => {
-        console.log(err);
         this.tags = [];
       });
   }
@@ -1030,7 +1023,6 @@ export class ContentWorkspaceComponent implements OnInit {
           this.lngs = [];
         }
       }, (err: any) => {
-        console.log(err);
         this.lngs = [];
       });
   }

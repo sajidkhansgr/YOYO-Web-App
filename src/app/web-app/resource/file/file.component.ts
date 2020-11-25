@@ -162,7 +162,6 @@ export class FileComponent implements OnInit {
   addFolder(fldrData: any) {
     this.fileServ.addFldr(fldrData)
       .subscribe((data: any) => {
-        // console.log(data);
         if (data) {
           this.toastr.success(data.message || 'Folder added successfully', 'Success!');
           this.getFiles();
@@ -172,7 +171,6 @@ export class FileComponent implements OnInit {
         this.fldrLoad = false;
         this.dismissModal();
       }, (err: any) => {
-        console.log(err);
         this.fldrLoad = false;
         this.dismissModal();
       });
@@ -183,7 +181,6 @@ export class FileComponent implements OnInit {
     fldrData.id = this.selFldrData.id;
     this.fileServ.updFldr(fldrData)
       .subscribe((data: any) => {
-        // console.log(data);
         if (data) {
           this.toastr.success(data.message || 'Folder rename successfully', 'Success!');
           this.succEeditFldr('folderNav');

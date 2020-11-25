@@ -249,7 +249,6 @@ export class TagsComponent implements OnInit {
         }
         this.tagLoading = false;
       }, (err: any) => {
-        console.log(err);
         this.tags = [];
         this.tagLoading = false;
       });

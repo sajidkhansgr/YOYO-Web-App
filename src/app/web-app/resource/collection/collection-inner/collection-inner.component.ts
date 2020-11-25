@@ -16,7 +16,6 @@ import { Workspace as Wrkspc, Workspace } from '../../../../shared/models/worksp
 import { Folder } from '../../../../shared/models/folder';
 import { Content } from '../../../../shared/models/content';
 
-
 @Component({
   selector: 'app-collection-inner',
   templateUrl: './collection-inner.component.html',
@@ -114,7 +113,6 @@ export class CollectionInnerComponent implements OnInit {
         }
         this.wrkspcLoading = false;
       }, (err: any) => {
-        console.log(err);
         this.wrkspcLoading = false;
       });
   }
@@ -166,7 +164,7 @@ export class CollectionInnerComponent implements OnInit {
   // get collection list
   listColctn() {
     this.colctnLoading = true;
-    this.colctnSrv.colctnList({ pageNo: 0, pageSize: 0 }).subscribe((data: any) => {
+    this.colctnSrv.colctnList({ pageNo: 0 }).subscribe((data: any) => {
       console.log(data);
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         this.colctnArr = data.result.results;
@@ -175,6 +173,7 @@ export class CollectionInnerComponent implements OnInit {
       }
       this.colctnLoading = false;
     }, (err: any) => {
+      this.colctnArr = [];
       this.colctnLoading = false;
     });
   }
@@ -351,7 +350,6 @@ export class CollectionInnerComponent implements OnInit {
     });
   }
 
-  // ----- collection -----
   // delete collection
   delColctn() {
     this.dialog.open(ConfirmDialogComponent, {
@@ -485,6 +483,10 @@ export class CollectionInnerComponent implements OnInit {
   dismissModal() {
     if (this.modalService)
       this.modalService.dismissAll();
+  }
+
+  ngOnDestroy(): void {
+    this.dismissModal();
   }
 
 }

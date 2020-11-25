@@ -27,7 +27,6 @@ export class ExpListComponent implements OnInit {
         }else{
           this.wrkSpcs = [];
         }
-        console.log(data);
         this.loading = false;
       }, (err:any)=>{
         this.wrkSpcs = [];

@@ -354,7 +354,6 @@ export class CommnComponent implements OnInit {
           } else {
           }
         }, (err: any) => {
-          console.log(err);
         });
     }
   }
@@ -368,7 +367,6 @@ export class CommnComponent implements OnInit {
           } else {
           }
         }, (err: any) => {
-          console.log(err);
         });
     }
   }
