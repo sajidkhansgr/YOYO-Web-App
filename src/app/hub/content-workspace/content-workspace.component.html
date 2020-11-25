@@ -74,8 +74,10 @@
               <div class="dropdown-menu" aria-labelledby="optDD">
                 <a class="dropdown-item curs-ptr" (click)="openModal(uplNewVer)"><i
                     class="fas fa-upload mr-1"></i>Upload new version</a>
-                <a class="dropdown-item curs-ptr" (click)="downloadFile()"><i class="fas fa-download mr-1"></i>Download</a>
-                <a class="dropdown-item curs-ptr" (click)="tashCntnt();"><i class="fas fa-trash mr-1"></i>Move to trash</a>
+                <a class="dropdown-item curs-ptr" (click)="downloadFile()"><i
+                    class="fas fa-download mr-1"></i>Download</a>
+                <a class="dropdown-item curs-ptr" (click)="tashCntnt();"><i class="fas fa-trash mr-1"></i>Move to
+                  trash</a>
               </div>
             </div>
           </div>
@@ -632,7 +634,8 @@
               </ul>
               <hr class="mt-0">
               <app-loader [type]="'page'" *ngIf="folderLoading"></app-loader>
-              <div class="main row py-4" *ngIf="folderArr.length > 0 && !folderLoading">
+              <div class="main row py-4" *ngIf="(folderArr.length > 0 || contentArr.length > 0) && !folderLoading">
+                <!-- folders and smart folders -->
                 <div class="col-3 curs-ptr my-2" *ngFor="let folder of folderArr">
                   <div class="image">
                     <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}"
@@ -667,10 +670,20 @@
                     {{folder.name}}
                   </div>
                 </div>
+                <!-- content -->
+                <div class="col-3 curs-ptr my-2" *ngFor="let content of contentArr">
+                  <div class="image">
+                    <img
+                      src="{{content.pdfImages[0] ? content.pdfImages[0].imagePath : 'assets/images/folderIcon.png'}}">
+                  </div>
+                  <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate">
+                    {{content.name}}
+                  </div>
+                </div>
               </div>
               <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;"
-                *ngIf="folderArr.length == 0 && !folderLoading">
-                No folder found
+                *ngIf="folderArr.length == 0 && contentArr.length == 0 && !folderLoading">
+                No data found
               </div>
             </div>
           </ng-container>

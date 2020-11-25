@@ -6,7 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 
 import { CollectionService } from '../collection.service';
-import { ContentService } from '../../../../shared/services/content.service';
 import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
 import { ExpService } from '../../exp/exp.service';
 import { FileService } from '../../file/file.service';
@@ -44,7 +43,6 @@ export class CollectionInnerComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private expServ: ExpService,
-    private cntntServ: ContentService,
     private fileServ: FileService,
     private cwServ: ContentWorkspaceService
   ) { }
@@ -290,7 +288,7 @@ export class CollectionInnerComponent implements OnInit {
       workspaceId: this.selWrkspc!.id,
       folderId: this.selFldr ? this.selFldr!.id : undefined
     };
-    this.cntntServ.contentBySmartFolder(query).subscribe((data: any) => {
+    this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.mdlCntntArr.push(...data.result);
       }
@@ -307,7 +305,7 @@ export class CollectionInnerComponent implements OnInit {
       workspaceId: this.selWrkspc!.id,
       folderId: this.selFldr ? this.selFldr!.id : undefined
     };
-    this.cntntServ.contentByFolder(query).subscribe((data: any) => {
+    this.cwServ.contentByFolder(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.mdlCntntArr.push(...data.result);
         // console.log(this.mdlCntntArr);
