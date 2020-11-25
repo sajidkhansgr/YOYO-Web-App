@@ -755,12 +755,8 @@
             File Type
           </button>
           <div class="dropdown-menu" style="width:12rem;" aria-labelledby="fileDD" (click)="$event.stopPropagation();">
-            <mat-checkbox class="dropdown-item">Audio</mat-checkbox>
-            <mat-checkbox class="dropdown-item">Document</mat-checkbox>
-            <mat-checkbox class="dropdown-item">HTML Content</mat-checkbox>
-            <mat-checkbox class="dropdown-item">Photo</mat-checkbox>
-            <mat-checkbox class="dropdown-item">URL</mat-checkbox>
-            <mat-checkbox class="dropdown-item">Video</mat-checkbox>
+            <mat-checkbox class="dropdown-item" *ngFor="let ft of fileTypes" [attr.id]="ft.id">{{ft.name}}
+            </mat-checkbox>
           </div>
         </div>
         <div class="dropdown mr-2 mb-1">
@@ -1318,13 +1314,10 @@
                 aria-haspopup="true" aria-expanded="false">
                 File Type
               </button>
-              <div class="dropdown-menu" aria-labelledby="fileTypeDD">
-                <mat-checkbox class="dropdown-item">Audio</mat-checkbox>
-                <mat-checkbox class="dropdown-item">Document</mat-checkbox>
-                <mat-checkbox class="dropdown-item">HTML Content</mat-checkbox>
-                <mat-checkbox class="dropdown-item">Photo</mat-checkbox>
-                <mat-checkbox class="dropdown-item">URL</mat-checkbox>
-                <mat-checkbox class="dropdown-item">Video</mat-checkbox>
+              <div class="dropdown-menu" aria-labelledby="fileTypeDD" (click)="$event.stopPropagation();">
+                <mat-checkbox class="dropdown-item" *ngFor="let ft of fileTypes"
+                  (change)="addFileType($event.checked, ft.id)">{{ft.name}}
+                </mat-checkbox>
               </div>
             </div>
             <div class="dropdown mr-2">
@@ -1332,10 +1325,10 @@
                 aria-haspopup="true" aria-expanded="false">
                 Property
               </button>
-              <div class="dropdown-menu" aria-labelledby="propertyDD">
-                <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
-                <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
-                <mat-checkbox class="dropdown-item">Can't be annotated</mat-checkbox>
+              <div class="dropdown-menu" aria-labelledby="propertyDD" (click)="$event.stopPropagation();">
+                <mat-checkbox class="dropdown-item" *ngFor="let p of props" (change)="addProps($event.checked, p.id)">
+                  {{p.name}}
+                </mat-checkbox>
               </div>
             </div>
             <div class="dropdown mr-2">

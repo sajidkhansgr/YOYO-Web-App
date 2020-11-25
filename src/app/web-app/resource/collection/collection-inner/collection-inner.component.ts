@@ -167,8 +167,9 @@ export class CollectionInnerComponent implements OnInit {
   listColctn() {
     this.colctnLoading = true;
     this.colctnSrv.colctnList({}).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.colctnArr = data.result;
+      console.log(data);
+      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        this.colctnArr = data.result.results;
       } else {
         this.colctnArr = [];
       }
