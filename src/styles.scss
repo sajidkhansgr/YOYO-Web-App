@@ -866,6 +866,14 @@ header {
         min-height: 100px;
         position: relative;
 
+        @media (min-width: 1300px) {
+          min-height: 130px;
+        }
+
+        @media (min-width: 1600px) {
+          min-height: 160px;
+        }
+
         img {
           position: absolute;
           top: 50%;
@@ -873,6 +881,16 @@ header {
           transform: translate(-50%, -50%);
           max-height: 100px;
           max-width: 100px;
+
+          @media (min-width: 1300px) {
+            max-height: 130px;
+            max-width: 130px;
+          }
+
+          @media (min-width: 1600px) {
+            max-height: 160px;
+            max-width: 160px;
+          }
         }
 
         .dropdown {

@@ -39,7 +39,7 @@ export class ContentWorkspaceComponent implements OnInit {
   addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; smartFolderForm!: FormGroup;;
   cntntForm!: FormGroup; urlForm!: FormGroup;
   disabled!: boolean;
-  folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[];
+  folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; contentArr!: Content[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
   props: any;
@@ -111,7 +111,7 @@ export class ContentWorkspaceComponent implements OnInit {
       // more fields need to be added
     });
     this.disabled = false;
-    this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
+    this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = []; this.contentArr = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
     this.visbCols = [{ n: "Added", k: "createdDate", asc: false }];
     this.hidCols = [{ n: "Likes", k: "likes", asc: false }, { n: "Size", k: "size", asc: false }, { n: "Last Updated", k: "updatedDate", asc: false }];
@@ -163,13 +163,15 @@ export class ContentWorkspaceComponent implements OnInit {
   // change displayed folders and smart foldera (isActive)
   changeDispFldrs() {
     this.activeFldrs == 1 ? this.isActiveFldrs = true : this.isActiveFldrs = false;
+    this.dispFolder = this.folderNav[this.folderNav.length - 1];
     this.listFolders();
   }
 
   // back nav folder
   backFolder() {
     this.folderNav.pop();
-    this.listFolders()
+    this.dispFolder = this.folderNav[this.folderNav.length - 1];
+    this.listFolders();
   }
 
   // change folder (show sub folders)
@@ -186,6 +188,8 @@ export class ContentWorkspaceComponent implements OnInit {
     this.folderArr = [];
     this.getFolderList();
     this.getSmartFolderList();
+    this.contentArr = [];
+    this.dispFolder ? this.dispFolder.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr() : undefined;
     // setTimeout(() => {
     //   console.log(this.folderArr)
     // }, 1000)
@@ -244,30 +248,30 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
 
-    // actDeactTag() {
-    //   let actDeac: string = `${this.rowInfo.isActive?'deactivate':'activate'}`;
-    //   this.dialog.open(ConfirmDialogComponent, {
-    //     data: {
-    //       msg: `Are you sure you want to ${actDeac} this tag?`,
-    //       title: `${this.rowInfo.isActive?'Deactivate':'Activate'} tag`
-    //     },
-    //     autoFocus: false
-    //   }).afterClosed().subscribe(result => {
-    //     if (result) {
-    //       console.log(result);
-    //       this.tagServ.actDeactGrp(this.rowInfo.id.toString(),this.rowInfo.isActive?false:true).subscribe((data: any) => {
-    //         if (data) {
-    //           this.toastr.success(`Tag ${actDeac}d successfully`, 'Success!');
-    //           this.getTags();
-    //         } else {
-    //           this.toastr.error(`Unable to ${actDeac} tag`, 'Error!');
-    //         }
-    //       }, (err: any) => {
-    //
-    //       });
-    //     }
-    //   })
-    // }
+  // actDeactTag() {
+  //   let actDeac: string = `${this.rowInfo.isActive?'deactivate':'activate'}`;
+  //   this.dialog.open(ConfirmDialogComponent, {
+  //     data: {
+  //       msg: `Are you sure you want to ${actDeac} this tag?`,
+  //       title: `${this.rowInfo.isActive?'Deactivate':'Activate'} tag`
+  //     },
+  //     autoFocus: false
+  //   }).afterClosed().subscribe(result => {
+  //     if (result) {
+  //       console.log(result);
+  //       this.tagServ.actDeactGrp(this.rowInfo.id.toString(),this.rowInfo.isActive?false:true).subscribe((data: any) => {
+  //         if (data) {
+  //           this.toastr.success(`Tag ${actDeac}d successfully`, 'Success!');
+  //           this.getTags();
+  //         } else {
+  //           this.toastr.error(`Unable to ${actDeac} tag`, 'Error!');
+  //         }
+  //       }, (err: any) => {
+  //
+  //       });
+  //     }
+  //   })
+  // }
   // activate smart folder
   actSmartFolder(folder: any) {
     this.dialog.open(ConfirmDialogComponent, {
@@ -824,6 +828,42 @@ export class ContentWorkspaceComponent implements OnInit {
     // (event.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'block';
   }
 
+  // get content by smart folder ---- bug at backend
+  getContentSmtFldr() {
+    // this.contentLoading = true;
+    let query: any = {
+      // workspaceId: this.selWrkspc!.id,
+      smartFolderId: this.dispFolder ? this.dispFolder!.id : undefined
+    };
+    this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+        this.contentArr.push(...data.result);
+      }
+      // this.contentLoading = false;
+    }, (err: any) => {
+      // this.contentLoading = false;
+    });
+  }
+
+  // get content by folder
+  getContentFldr() {
+    // this.contentLoading = true;
+    let query: any = {
+      workspaceId: this.selWrkspc!.id,
+      folderId: this.dispFolder ? this.dispFolder!.id : undefined
+    };
+    this.cwServ.contentByFolder(query).subscribe((data: any) => {
+      // console.log(data);
+      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+        this.contentArr.push(...data.result);
+        // console.log(this.mdlCntntArr);
+      }
+      // this.contentLoading = false;
+    }, (err: any) => {
+      // this.contentLoading = false;
+    });
+  }
+
   closeEdit(type: string, isUpd: boolean = true) {
     if (type && isUpd) {
       switch (type) {
@@ -1187,16 +1227,16 @@ export class ContentWorkspaceComponent implements OnInit {
     })
   }
 
-  downloadFile(){
+  downloadFile() {
     let statUrl = 'https://pbs.twimg.com/media/EnjjNh-XYAAJiHo?format=png&name=small';
     this.fileServ.downloadFile(statUrl).subscribe((data: any) => {
       if (data) {
-          // this.blob = new Blob([data], {type: 'application/pdf'});
-          var downloadURL = window.URL.createObjectURL(data);
-          var link = document.createElement('a');
-          link.href = downloadURL;
-          link.download = "example twitter file.png";
-          link.click();
+        // this.blob = new Blob([data], {type: 'application/pdf'});
+        var downloadURL = window.URL.createObjectURL(data);
+        var link = document.createElement('a');
+        link.href = downloadURL;
+        link.download = "example twitter file.png";
+        link.click();
       } else {
         this.toastr.error(`Unable to download file`, 'Error!');
       }

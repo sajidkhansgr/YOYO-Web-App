@@ -144,7 +144,34 @@ export class ContentWorkspaceService {
     return this.http.put(`${AppSettings.UPD_WRKSPC}`, data)
   }
 
-  //Content
+  // ---- content ---- //
+  // get content by folder
+  contentByFolder(params: any): Observable<any[]> {
+    let queryParams = new HttpParams();
+    for (let key in params) {
+      if (params[key]) {
+        queryParams = queryParams.set(key, params[key]);
+      }
+    }
+    return this.http.get(`${AppSettings.GET_CNTNT_FLDR}`, {
+      params: queryParams
+    }).pipe(map((res: any) => res));
+  }
+
+  // get content by smart folder
+  contentBySmartFolder(params: any): Observable<any[]> {
+    let queryParams = new HttpParams();
+    for (let key in params) {
+      if (params[key]) {
+        queryParams = queryParams.set(key, params[key]);
+      }
+    }
+    return this.http.get(`${AppSettings.GET_CNTNT_SMT_FLDR}`, {
+      params: queryParams
+    }).pipe(map((res: any) => res));
+  }
+
+  // get all content list
   contentList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
@@ -162,24 +189,29 @@ export class ContentWorkspaceService {
     );
   }
 
+  // add content
   addContent(data: any) {
     return this.http.post(`${AppSettings.ADD_CNTNT}`, this.freezeFolderObj(data))
   }
 
+  // update content
   updContent(data: any) {
     return this.http.post(`${AppSettings.UPD_CNTNT}`, data)
   }
 
+  // view content
   viewContent(id: string) {
     return this.http.get(`${AppSettings.GET_CNTNT}`, {
       params: { id }
     });
   }
 
+  // add comment to content
   addCmntToContent(data: any) {
     return this.http.post(`${AppSettings.ADD_CMNT_CNTNT}`, data)
   }
 
+  // delete content
   trashCntnt(id: any) {
     return this.http.post(`${AppSettings.TRASH_CNTNT}?id=${id}`, {});
   }
