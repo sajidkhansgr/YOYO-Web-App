@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ViewComponent } from './view.component';
 import { ContentWorkspaceService } from '../../hub/content-workspace/content-workspace.service';
@@ -15,7 +17,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    LoaderModule
+    LoaderModule,
+    MatCheckboxModule,
+    NgbTooltipModule
   ],
   providers: [ContentWorkspaceService]
 })
