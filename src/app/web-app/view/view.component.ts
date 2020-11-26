@@ -35,7 +35,7 @@ export class ViewComponent implements OnInit {
       this.loading = true;
       this.leftSide = true; this.rightSide = false;
       this.infoToggle = true; this.enggToggle = true; this.tagsToggle = true;
-      // this.getCntnt();
+      this.getCntnt();
     }
   }
 

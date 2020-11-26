@@ -23,11 +23,39 @@
 .left-body {
   min-width: 250px;
   width: 250px;
+
+  .thumbnail {
+    width: 186px;
+
+  }
+
+  @media(min-width: 1500px) {
+    min-width: 350px;
+    width: 350px;
+
+    .thumbnail {
+      width: 286px;
+    }
+  }
+
+  @media (max-width: 1140px) {
+    min-width: 200px;
+    width: 200px;
+
+    .thumbnail {
+      width: 138px;
+    }
+  }
 }
 
 .right-body {
   min-width: 500px;
   width: 500px;
+
+  @media (max-width: 1140px) {
+    min-width: 400px;
+    width: 400px;
+  }
 
   .bg-warning.text-white {
     font-size: 0.8rem;
