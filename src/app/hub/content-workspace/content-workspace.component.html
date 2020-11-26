@@ -565,7 +565,7 @@
             <div class="dropdown rounded">
               <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown"
                 (click)="getUsrGrpsFormWrkspc();" [disabled]="!selWrkspc">
-                Users <span class="badge badge-light">11</span>
+                Users <span class="badge badge-light" *ngIf="!selUsrGrpLoad && selUsrGrpWrkspc">{{selUsrGrpWrkspc.length}}</span>
               </button>
               <div class="dropdown-menu large-dropdown-menu py-0 overflow-hidden" aria-labelledby="btnUsersDD"
                 (click)="$event.stopPropagation();">
@@ -574,10 +574,24 @@
                   <form>
                     <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
                       [floatLabel]="'never'">
-                      <input matInput placeholder="Add User or Group" class="ml-0">
+                      <mat-chip-list aria-label="Select tags">
+                        <mat-chip *ngFor="let d of selUsrGrps" [selectable]="selectable" [removable]="removable"
+                          (removed)="remove(d,'selUsrGrps')">
+                          {{d.name}}
+                          <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+                        </mat-chip>
+                        <input matInput #unSelGrpInp [(ngModel)]="unSelUsrGrpTxt" name="unSelUsrGrpTxt"
+                          placeholder="Add User or Group" [matAutocomplete]="auto3">
+                      </mat-chip-list>
+                      <mat-autocomplete #auto3="matAutocomplete"
+                        (optionSelected)="selFromAutoComp($event.option.value,'selUsrGrps',unSelGrpInp);" [displayWith]="displayFn">
+                        <mat-option (click)="$event.stopPropagation();" *ngFor="let unUsrGpW of unSelUsrGrpWrkspc|filterName: unSelUsrGrpTxt: 'name'" [value]="unUsrGpW">
+                          {{unUsrGpW.name}}
+                        </mat-option>
+                      </mat-autocomplete>
                     </mat-form-field>
                     <div class="form-group text-right">
-                      <button class="btn btn-success text-white btn-sm">Submit</button>
+                      <button class="btn btn-success text-white btn-sm" [disabled]="selUsrGrps.length<=0 || usrGrpWrkSpcDisb" (click)="addUsrGrpInWrkspce();">Submit</button>
                     </div>
                   </form>
                   <div class="border">
@@ -603,8 +617,7 @@
                         </li>
                       </ul>
                       <ng-template #noSelUsrGrp>
-                        <div>No User or Group in Workspace
-                        </div>
+                        <div class="text-center">No User or Group in Workspace</div>
                       </ng-template>
                     </div>
                   </div>

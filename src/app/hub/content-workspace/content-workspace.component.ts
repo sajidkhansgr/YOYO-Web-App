@@ -64,7 +64,8 @@ export class ContentWorkspaceComponent implements OnInit {
 
   fileTypes: any = FILE_TYPES; fileTypeArr: any = []; propsArr: any = [];
   selUsrGrpWrkspc!: any[];selUsrGrpLoad!: boolean;isUrGrpLoad!:boolean;selUsrGrpTxt!:'';
-  cntntTag!:any;urlTag!:any;cntntInfoTag!:any;cntntLng!:any;
+  unSelUsrGrpWrkspc!: any[];unSelUsrGrpLoad!: boolean;unSelUsrGrpTxt!:'';selUsrGrps:any[]=[];
+  cntntTag!:any;urlTag!:any;cntntInfoTag!:any;cntntLng!:any;usrGrpWrkSpcDisb: boolean = false;
 
   constructor(
     // private route: ActivatedRoute,
@@ -713,6 +714,10 @@ export class ContentWorkspaceComponent implements OnInit {
     this.selUsrGrpWrkspc = [];
     this.isUrGrpLoad = false;
     this.selUsrGrpTxt = '';
+    this.unSelUsrGrpWrkspc = [];
+    this.unSelUsrGrpTxt = '';
+    this.selUsrGrps = [];
+    this.usrGrpWrkSpcDisb = false;
   }
 
   // list of workspaces
@@ -739,22 +744,24 @@ export class ContentWorkspaceComponent implements OnInit {
 
   getUsrGrpsFormWrkspc(){
     if(!this.isUrGrpLoad){
-      this.usrGrpInWrkspce();
+      this.selUsrGrps = [];
+      this.usrGrpInWrkspce(true,'selUsrGrpLoad','selUsrGrpWrkspc');
+      this.usrGrpInWrkspce(false,'unSelUsrGrpLoad','unSelUsrGrpWrkspc');
     }
     this.isUrGrpLoad = true;
   }
 
-  usrGrpInWrkspce(){
-    this.selUsrGrpLoad = true;
-    this.selUsrGrpWrkspc = [];
-    this.cwServ.usrGrpWrkspcList({ hubid: this.hubid, workspaceId: this.selWrkspc!.id })
+  usrGrpInWrkspce(isLinked: boolean, var1: 'selUsrGrpLoad'|'unSelUsrGrpLoad', var2: 'selUsrGrpWrkspc'|'unSelUsrGrpWrkspc'){
+    this[var1] = true;
+    this[var2] = [];
+    this.cwServ.usrGrpWrkspcList({ hubid: this.hubid, workspaceId: this.selWrkspc!.id,LinkedData: isLinked })
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
-          this.selUsrGrpWrkspc = data.result;
+          this[var2] = data.result;
         }
-        this.selUsrGrpLoad = false;
+        this[var1] = false;
       }, (err: any) => {
-        this.selUsrGrpLoad = false;
+        this[var1] = false;
       });
   }
 
@@ -768,35 +775,48 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(`${d.isGroup?'Group':'User'} removed from workspace`);
-          this.usrGrpInWrkspce();
+          this.usrGrpInWrkspce(true,'selUsrGrpLoad','selUsrGrpWrkspc');
+          this.usrGrpInWrkspce(false,'unSelUsrGrpLoad','unSelUsrGrpWrkspc');
         }else{
           this.selUsrGrpLoad = false;
           this.toastr.error(`Unable to remove ${d.isGroup?'group':'user'} from workspace`);
         }
       }, (err: any) => {
         this.selUsrGrpLoad = false;
-        this.toastr.error(`Unable to remove ${d.isGroup?'group':'user'} from workspace`);
       });
   }
 
-  addUsrGrpInWrkspce(d:any){
-    this.selUsrGrpLoad = true;
-    let data:any = {
-      // workspaceId: this.selWrkspc!.id,
+  addUsrGrpInWrkspce(){
+    if(this.selUsrGrps.length>0){
+      this.usrGrpWrkSpcDisb = true;
+      let data:any = {
+        hubid: parseInt(this.hubid),
+        workspaceId: this.selWrkspc!.id,
+        groupIds: [], employeeIds: []
+      }
+      for(let k=0;k<this.selUsrGrps.length;k++){
+        if(this.selUsrGrps[k].isGroup)
+          data.groupIds.push(this.selUsrGrps[k].id)
+        else
+          data.employeeIds.push(this.selUsrGrps[k].id)
+      }
+      this.cwServ.addUsrGrpWrkspc(data)
+        .subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(`Added successfully`);
+            this.selUsrGrps = [];
+            this.usrGrpInWrkspce(true,'selUsrGrpLoad','selUsrGrpWrkspc');
+            this.usrGrpInWrkspce(false,'unSelUsrGrpLoad','unSelUsrGrpWrkspc');
+          }else{
+            this.toastr.error(`Unable to add`);
+          }
+          this.usrGrpWrkSpcDisb = false;
+        }, (err: any) => {
+          this.usrGrpWrkSpcDisb = false;
+        });
+    }else{
+      this.toastr.error(`No user or group is selected`);
     }
-    this.cwServ.addUsrGrpWrkspc(data)
-      .subscribe((data: any) => {
-        if (data) {
-          this.toastr.success(`Added successfully`);
-          this.usrGrpInWrkspce();
-        }else{
-          this.selUsrGrpLoad = false;
-          this.toastr.error(`Unable to add`);
-        }
-      }, (err: any) => {
-        this.selUsrGrpLoad = false;
-        this.toastr.error(`Unable to add`);
-      });
   }
 
   // drag and drop
@@ -1112,13 +1132,15 @@ export class ContentWorkspaceComponent implements OnInit {
     return (tag && tag.id) ? tag.name : '';
   }
 
-  selFromAutoComp(data: any, type: 'selTags' | 'selTags2' | 'selLngs',autoSel: any) {
+  selFromAutoComp(data: any, type: 'selTags' | 'selTags2' | 'selLngs'|'selUsrGrps',autoSel: any) {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this.toastr.clear();
-      this.toastr.info(`This ${type == 'selLngs' ? 'language' : 'tag'} is already selected`, "Selected");
+      this.toastr.info(`This ${type == 'selLngs' ? 'language' : type == 'selUsrGrps'?'one':'tag'} is already selected`, "Selected");
     } else {
-      if (type === 'selLngs')
+      if (type === 'selUsrGrps')
+        this[type].push({ ...data });
+      else if (type === 'selLngs')
         this[type].push({ ...data, lid: data.id });
       else
         this[type].push({ ...data, tid: data.id });
@@ -1126,7 +1148,7 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  remove(data: any, type: 'selTags' | 'selTags2' | 'selLngs'): void {
+  remove(data: any, type: 'selTags' | 'selTags2' | 'selLngs' | 'selUsrGrps'): void {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this[type].splice(index, 1);

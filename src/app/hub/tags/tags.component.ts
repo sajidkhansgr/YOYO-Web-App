@@ -432,6 +432,10 @@ export class TagsComponent implements OnInit {
     // console.log(catg);
   }
 
+  cancelCatg(){
+    this.showCatgIn = !this.showCatgIn;
+    this.catgForm.reset();
+  }
 
   // get category
   // getCatg(id: number) {
