@@ -142,7 +142,8 @@
                                   {{d.name}}
                                   <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
                                 </mat-chip>
-                                <input matInput #cntInfoInp [(ngModel)]="cntntInfoTag" name="cntntInfoTag" placeholder="Select tags" [matAutocomplete]="autoT">
+                                <input matInput #cntInfoInp [(ngModel)]="cntntInfoTag" name="cntntInfoTag"
+                                  placeholder="Select tags" [matAutocomplete]="autoT">
                               </mat-chip-list>
                               <mat-autocomplete #autoT="matAutocomplete"
                                 (optionSelected)="selFromAutoComp($event.option.value,'selTags2',cntInfoInp)"
@@ -186,7 +187,8 @@
                                   {{d.name}}
                                   <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
                                 </mat-chip>
-                                <input matInput #lngInp [(ngModel)]="cntntLng" name="cntntLng" placeholder="Select Languages" [matAutocomplete]="autoL">
+                                <input matInput #lngInp [(ngModel)]="cntntLng" name="cntntLng"
+                                  placeholder="Select Languages" [matAutocomplete]="autoL">
                               </mat-chip-list>
                               <mat-autocomplete #autoL="matAutocomplete"
                                 (optionSelected)="selFromAutoComp($event.option.value,'selLngs',lngInp)"
@@ -561,11 +563,12 @@
               </div>
             </div>
             <div class="dropdown rounded">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown" (click)="getUsrGrpsFormWrkspc();"
-                [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown"
+                (click)="getUsrGrpsFormWrkspc();" [disabled]="!selWrkspc">
                 Users <span class="badge badge-light">11</span>
               </button>
-              <div class="dropdown-menu large-dropdown-menu pt-0 overflow-hidden" aria-labelledby="btnUsersDD">
+              <div class="dropdown-menu large-dropdown-menu py-0 overflow-hidden" aria-labelledby="btnUsersDD"
+                (click)="$event.stopPropagation();">
                 <div class="bg-hi-dark-grey p-2">Assign Experience Users</div>
                 <div class="p-3">
                   <form>
@@ -583,17 +586,20 @@
                       <div class="col-8">
                         <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white"
                           [floatLabel]="'never'">
-                          <input matInput placeholder="Add User or Group" class="ml-0" [(ngModel)]="selUsrGrpTxt" name="selUsrGrpTxt">
+                          <input matInput placeholder="Add User or Group" class="ml-0" [(ngModel)]="selUsrGrpTxt"
+                            name="selUsrGrpTxt">
                           <i matPrefix class="fas fa-search"></i>
                         </mat-form-field>
                       </div>
                     </div>
                     <app-loader [type]="'div'" *ngIf="selUsrGrpLoad"></app-loader>
-                    <div *ngIf="!selUsrGrpLoad && selUsrGrpWrkspc">
-                      <ul class="list-unstyled p-2" *ngIf="selUsrGrpWrkspc.length>0 else noSelUsrGrp">
+                    <div *ngIf="!selUsrGrpLoad && selUsrGrpWrkspc" class="scroll-div">
+                      <ul class="list-unstyled p-2 mb-0" *ngIf="selUsrGrpWrkspc.length>0 else noSelUsrGrp">
                         <li *ngFor="let usrGpW of selUsrGrpWrkspc | filterName : selUsrGrpTxt: 'name'">
-                          <i  class="fas mr-1" [ngClass]="{'fa-user-friends': usrGpW.isGroup,'fa-user': !usrGpW.isGroup}"></i>{{usrGpW.name}}
-                          <a class="text-hi-dark float-right" (click)="remUsrGrpInWrkspce(usrGpW)"><i class="fas fa-times"></i></a>
+                          <i class="fas mr-1"
+                            [ngClass]="{'fa-user-friends': usrGpW.isGroup,'fa-user': !usrGpW.isGroup}"></i>{{usrGpW.name}}
+                          <a class="text-hi-dark float-right" (click)="remUsrGrpInWrkspce(usrGpW)"><i
+                              class="fas fa-times"></i></a>
                         </li>
                       </ul>
                       <ng-template #noSelUsrGrp>
@@ -996,10 +1002,11 @@
               {{d.name}}
               <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
             </mat-chip>
-            <input matInput #cntntTgInp [(ngModel)]="cntntTag" name="cntntTag" [ngModelOptions]="{standalone: true}" placeholder="Select tags" [matAutocomplete]="auto2">
+            <input matInput #cntntTgInp [(ngModel)]="cntntTag" name="cntntTag" [ngModelOptions]="{standalone: true}"
+              placeholder="Select tags" [matAutocomplete]="auto2">
           </mat-chip-list>
-          <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags',cntntTgInp)"
-            [displayWith]="displayFn">
+          <mat-autocomplete #auto2="matAutocomplete"
+            (optionSelected)="selFromAutoComp($event.option.value,'selTags',cntntTgInp)" [displayWith]="displayFn">
             <mat-option *ngFor="let tag of tags|filterName: cntntTag: 'name'" [value]="tag">
               {{tag.name}}
             </mat-option>
@@ -1075,10 +1082,11 @@
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input matInput #urlTgInp [(ngModel)]="urlTag" name="urlTag" [ngModelOptions]="{standalone: true}"  placeholder="Select tags" [matAutocomplete]="auto1">
+          <input matInput #urlTgInp [(ngModel)]="urlTag" name="urlTag" [ngModelOptions]="{standalone: true}"
+            placeholder="Select tags" [matAutocomplete]="auto1">
         </mat-chip-list>
-        <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags',urlTgInp)"
-          [displayWith]="displayFn">
+        <mat-autocomplete #auto1="matAutocomplete"
+          (optionSelected)="selFromAutoComp($event.option.value,'selTags',urlTgInp)" [displayWith]="displayFn">
           <mat-option *ngFor="let tag of tags|filterName: urlTag: 'name'" [value]="tag">
             {{tag.name}}
           </mat-option>
