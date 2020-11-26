@@ -63,6 +63,12 @@ export class AppSettings {
 
   public static GET_WRKSPC_EMP = `api/Workspace/GetAllByEmployee`;
 
+  public static LIST_USR_GRP_WRKSPC = `api/Workspace/GetUserAndGroupList`;
+
+  public static ADD_USR_GRP_WRKSPC = `api/Workspace/AddUserAndGroupToWorkspace`;
+
+  public static REM_USR_GRP_WRKSPC = `api/Workspace/RemoveUserOrGroupFromWorkspace`;
+
   // ---- FOLDER ---- //
 
   public static LIST_FLDR_WRKSPC = `api/Folder/GetAllByWorkspace`;

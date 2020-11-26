@@ -5,18 +5,18 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FilterNamePipe implements PipeTransform {
 
-  transform(items: any[], searTxt: string, key: string): any[] {
+  transform(items: any[], searTxt: any, key: string): any[] {
     if (!items)
       return [];
-    if (!searTxt || !key)
+    if (!searTxt || !key || typeof(searTxt)==='object')
       return items;
-    let finalResult = items.filter(item => {
+    let finalRes = items.filter(item => {
        if(item && item[key])
         return item[key].toLowerCase().indexOf(searTxt.toLowerCase()) > -1
       return
     });
-    if (finalResult && finalResult.length > 0) {
-      return finalResult;
+    if (finalRes && finalRes.length > 0) {
+      return finalRes;
     } else {
       return [];
     }

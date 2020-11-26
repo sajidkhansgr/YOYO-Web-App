@@ -375,13 +375,14 @@ export class CommnComponent implements OnInit {
     return (grp && grp.id) ? grp.name : '';
   }
 
-  selFromAutoComp(data: any, type: 'selGrps' | 'selWrkSpcs') {
+  selFromAutoComp(data: any, type: 'selGrps' | 'selWrkSpcs',autoSel: any) {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this.toastr.clear();
       this.toastr.info("This" + type === 'selGrps' ? 'group' : 'workspace' + " is already selected", "Selected");
     } else {
       this[type].push(data);
+      autoSel.value = '';
     }
   }
 

@@ -142,12 +142,12 @@
                                   {{d.name}}
                                   <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
                                 </mat-chip>
-                                <input matInput placeholder="Select tags" [matAutocomplete]="autoT">
+                                <input matInput #cntInfoInp [(ngModel)]="cntntInfoTag" name="cntntInfoTag" placeholder="Select tags" [matAutocomplete]="autoT">
                               </mat-chip-list>
                               <mat-autocomplete #autoT="matAutocomplete"
-                                (optionSelected)="selFromAutoComp($event.option.value,'selTags2')"
+                                (optionSelected)="selFromAutoComp($event.option.value,'selTags2',cntInfoInp)"
                                 [displayWith]="displayFn">
-                                <mat-option *ngFor="let tag of tags" [value]="tag">
+                                <mat-option *ngFor="let tag of tags|filterName: cntntInfoTag: 'name'" [value]="tag">
                                   {{tag.name}}
                                 </mat-option>
                               </mat-autocomplete>
@@ -186,12 +186,12 @@
                                   {{d.name}}
                                   <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
                                 </mat-chip>
-                                <input matInput placeholder="Select Languages" [matAutocomplete]="autoL">
+                                <input matInput #lngInp [(ngModel)]="cntntLng" name="cntntLng" placeholder="Select Languages" [matAutocomplete]="autoL">
                               </mat-chip-list>
                               <mat-autocomplete #autoL="matAutocomplete"
-                                (optionSelected)="selFromAutoComp($event.option.value,'selLngs')"
+                                (optionSelected)="selFromAutoComp($event.option.value,'selLngs',lngInp)"
                                 [displayWith]="displayFn">
-                                <mat-option *ngFor="let lng of lngs" [value]="lng">
+                                <mat-option *ngFor="let lng of lngs|filterName: cntntLng: 'name'" [value]="lng">
                                   {{lng.name}}
                                 </mat-option>
                               </mat-autocomplete>
@@ -561,7 +561,7 @@
               </div>
             </div>
             <div class="dropdown rounded">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown"
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown" (click)="getUsrGrpsFormWrkspc();"
                 [disabled]="!selWrkspc">
                 Users <span class="badge badge-light">11</span>
               </button>
@@ -574,7 +574,7 @@
                       <input matInput placeholder="Add User or Group" class="ml-0">
                     </mat-form-field>
                     <div class="form-group text-right">
-                      <button type="submit" class="btn btn-success text-white btn-sm">Submit</button>
+                      <button class="btn btn-success text-white btn-sm">Submit</button>
                     </div>
                   </form>
                   <div class="border">
@@ -583,16 +583,24 @@
                       <div class="col-8">
                         <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white"
                           [floatLabel]="'never'">
-                          <input matInput placeholder="Add User or Group" class="ml-0">
+                          <input matInput placeholder="Add User or Group" class="ml-0" [(ngModel)]="selUsrGrpTxt" name="selUsrGrpTxt">
                           <i matPrefix class="fas fa-search"></i>
                         </mat-form-field>
                       </div>
                     </div>
-                    <ul class="list-unstyled p-2">
-                      <li><i class="fas fa-user-friends mr-1"></i>HES & Hi-Force
-                        <a href="javascript:void(0)" class="text-hi-dark float-right"><i class="fas fa-times"></i></a>
-                      </li>
-                    </ul>
+                    <app-loader [type]="'div'" *ngIf="selUsrGrpLoad"></app-loader>
+                    <div *ngIf="!selUsrGrpLoad && selUsrGrpWrkspc">
+                      <ul class="list-unstyled p-2" *ngIf="selUsrGrpWrkspc.length>0 else noSelUsrGrp">
+                        <li *ngFor="let usrGpW of selUsrGrpWrkspc | filterName : selUsrGrpTxt: 'name'">
+                          <i  class="fas mr-1" [ngClass]="{'fa-user-friends': usrGpW.isGroup,'fa-user': !usrGpW.isGroup}"></i>{{usrGpW.name}}
+                          <a class="text-hi-dark float-right" (click)="remUsrGrpInWrkspce(usrGpW)"><i class="fas fa-times"></i></a>
+                        </li>
+                      </ul>
+                      <ng-template #noSelUsrGrp>
+                        <div>No User or Group in Workspace
+                        </div>
+                      </ng-template>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -988,11 +996,11 @@
               {{d.name}}
               <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
             </mat-chip>
-            <input matInput formControlName="tags" placeholder="Select tags" [matAutocomplete]="auto">
+            <input matInput #cntntTgInp [(ngModel)]="cntntTag" name="cntntTag" [ngModelOptions]="{standalone: true}" placeholder="Select tags" [matAutocomplete]="auto2">
           </mat-chip-list>
-          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags')"
+          <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags',cntntTgInp)"
             [displayWith]="displayFn">
-            <mat-option *ngFor="let tag of tags" [value]="tag">
+            <mat-option *ngFor="let tag of tags|filterName: cntntTag: 'name'" [value]="tag">
               {{tag.name}}
             </mat-option>
           </mat-autocomplete>
@@ -1067,11 +1075,11 @@
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input matInput formControlName="tags" placeholder="Select tags" [matAutocomplete]="auto">
+          <input matInput #urlTgInp [(ngModel)]="urlTag" name="urlTag" [ngModelOptions]="{standalone: true}"  placeholder="Select tags" [matAutocomplete]="auto1">
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags')"
+        <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags',urlTgInp)"
           [displayWith]="displayFn">
-          <mat-option *ngFor="let tag of tags" [value]="tag">
+          <mat-option *ngFor="let tag of tags|filterName: urlTag: 'name'" [value]="tag">
             {{tag.name}}
           </mat-option>
         </mat-autocomplete>

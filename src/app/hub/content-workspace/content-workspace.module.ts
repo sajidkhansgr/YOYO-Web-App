@@ -24,6 +24,7 @@ import { ContentWorkspaceService } from './content-workspace.service';
 import { TagsService } from '../tags/tags.service';
 import { LanguageService } from '../../shared/services/language.service';
 import { FileService } from '../../shared/services/file.service';
+import { CustomPipeModule } from '../../shared/pipes/custom-pipe.module';
 
 @NgModule({
   declarations: [ContentWorkspaceComponent],
@@ -37,7 +38,8 @@ import { FileService } from '../../shared/services/file.service';
     FileProgessModule, LoaderModule,PaginationModule,
     FormsModule, ReactiveFormsModule,
     NgbCollapseModule, NgbDropdownModule, NgbNavModule,
-    DragDropModule
+    DragDropModule,
+    CustomPipeModule
   ],
   exports: [
     ContentWorkspaceComponent
