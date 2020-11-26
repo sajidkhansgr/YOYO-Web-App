@@ -14,7 +14,8 @@ export class ViewComponent implements OnInit {
   routerSubs!: Subscription;
   id!: string; cntnt!: Content | null;
   loading!: boolean;
-  leftSide!: boolean;
+  leftSide!: boolean; rightSide!: boolean;
+  infoToggle!: boolean; enggToggle!: boolean; tagsToggle!: boolean;
   testArr = [1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1];
   constructor(
     private route: ActivatedRoute,
@@ -32,7 +33,8 @@ export class ViewComponent implements OnInit {
   initialiseState() {
     if (this.id != '0') {
       this.loading = true;
-      this.leftSide = true;
+      this.leftSide = true; this.rightSide = false;
+      this.infoToggle = true; this.enggToggle = true; this.tagsToggle = true;
       // this.getCntnt();
     }
   }

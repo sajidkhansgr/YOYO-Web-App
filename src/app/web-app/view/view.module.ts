@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ViewComponent } from './view.component';
@@ -19,7 +22,9 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     LoaderModule,
     MatCheckboxModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    MatTabsModule,
+    MatFormFieldModule, MatInputModule
   ],
   providers: [ContentWorkspaceService]
 })
