@@ -63,9 +63,9 @@ export class ContentWorkspaceComponent implements OnInit {
   usrInfo: any | null;
 
   fileTypes: any = FILE_TYPES; fileTypeArr: any = []; propsArr: any = [];
-  selUsrGrpWrkspc!: any[];selUsrGrpLoad!: boolean;isUrGrpLoad!:boolean;selUsrGrpTxt!:'';
-  unSelUsrGrpWrkspc!: any[];unSelUsrGrpLoad!: boolean;unSelUsrGrpTxt!:'';selUsrGrps:any[]=[];
-  cntntTag!:any;urlTag!:any;cntntInfoTag!:any;cntntLng!:any;usrGrpWrkSpcDisb: boolean = false;
+  selUsrGrpWrkspc!: any[]; selUsrGrpLoad!: boolean; isUrGrpLoad!: boolean; selUsrGrpTxt!: '';
+  unSelUsrGrpWrkspc!: any[]; unSelUsrGrpLoad!: boolean; unSelUsrGrpTxt!: ''; selUsrGrps: any[] = [];
+  cntntTag!: any; urlTag!: any; cntntInfoTag!: any; cntntLng!: any; usrGrpWrkSpcDisb: boolean = false;
 
   constructor(
     // private route: ActivatedRoute,
@@ -118,11 +118,11 @@ export class ContentWorkspaceComponent implements OnInit {
     this.disabled = false;
     this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = []; this.contentArr = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
-    let cmnCols = [ { n: "Added", k: "createdDate", asc: false },{ n: "Size", k: "size", asc: false },
+    let cmnCols = [{ n: "Added", k: "createdDate", asc: false }, { n: "Size", k: "size", asc: false },
     { n: "Last Updated", k: "updatedDate", asc: false }];
     this.visbCols = [...cmnCols];
     this.hidCols = [{ n: "Likes", k: "likes", asc: false }];
-    this.cols = [{ n: "Name", asc: false, k: "name" },...cmnCols];
+    this.cols = [{ n: "Name", asc: false, k: "name" }, ...cmnCols];
     // this.props = PRPS;
     this.view = true;
     this.edit = false;
@@ -742,19 +742,19 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  getUsrGrpsFormWrkspc(){
-    if(!this.isUrGrpLoad){
+  getUsrGrpsFormWrkspc() {
+    if (!this.isUrGrpLoad) {
       this.selUsrGrps = [];
-      this.usrGrpInWrkspce(true,'selUsrGrpLoad','selUsrGrpWrkspc');
-      this.usrGrpInWrkspce(false,'unSelUsrGrpLoad','unSelUsrGrpWrkspc');
+      this.usrGrpInWrkspce(true, 'selUsrGrpLoad', 'selUsrGrpWrkspc');
+      this.usrGrpInWrkspce(false, 'unSelUsrGrpLoad', 'unSelUsrGrpWrkspc');
     }
     this.isUrGrpLoad = true;
   }
 
-  usrGrpInWrkspce(isLinked: boolean, var1: 'selUsrGrpLoad'|'unSelUsrGrpLoad', var2: 'selUsrGrpWrkspc'|'unSelUsrGrpWrkspc'){
+  usrGrpInWrkspce(isLinked: boolean, var1: 'selUsrGrpLoad' | 'unSelUsrGrpLoad', var2: 'selUsrGrpWrkspc' | 'unSelUsrGrpWrkspc') {
     this[var1] = true;
     this[var2] = [];
-    this.cwServ.usrGrpWrkspcList({ hubid: this.hubid, workspaceId: this.selWrkspc!.id,LinkedData: isLinked })
+    this.cwServ.usrGrpWrkspcList({ hubid: this.hubid, workspaceId: this.selWrkspc!.id, LinkedData: isLinked })
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
           this[var2] = data.result;
@@ -765,37 +765,37 @@ export class ContentWorkspaceComponent implements OnInit {
       });
   }
 
-  remUsrGrpInWrkspce(d:any){
+  remUsrGrpInWrkspce(d: any) {
     this.selUsrGrpLoad = true;
-    let data:any = {
+    let data: any = {
       workspaceId: this.selWrkspc!.id,
       entityId: d.id, isGroup: d.isGroup
     }
     this.cwServ.remUsrGrpWrkspc(data)
       .subscribe((data: any) => {
         if (data) {
-          this.toastr.success(`${d.isGroup?'Group':'User'} removed from workspace`);
-          this.usrGrpInWrkspce(true,'selUsrGrpLoad','selUsrGrpWrkspc');
-          this.usrGrpInWrkspce(false,'unSelUsrGrpLoad','unSelUsrGrpWrkspc');
-        }else{
+          this.toastr.success(`${d.isGroup ? 'Group' : 'User'} removed from workspace`);
+          this.usrGrpInWrkspce(true, 'selUsrGrpLoad', 'selUsrGrpWrkspc');
+          this.usrGrpInWrkspce(false, 'unSelUsrGrpLoad', 'unSelUsrGrpWrkspc');
+        } else {
           this.selUsrGrpLoad = false;
-          this.toastr.error(`Unable to remove ${d.isGroup?'group':'user'} from workspace`);
+          this.toastr.error(`Unable to remove ${d.isGroup ? 'group' : 'user'} from workspace`);
         }
       }, (err: any) => {
         this.selUsrGrpLoad = false;
       });
   }
 
-  addUsrGrpInWrkspce(){
-    if(this.selUsrGrps.length>0){
+  addUsrGrpInWrkspce() {
+    if (this.selUsrGrps.length > 0) {
       this.usrGrpWrkSpcDisb = true;
-      let data:any = {
+      let data: any = {
         hubid: parseInt(this.hubid),
         workspaceId: this.selWrkspc!.id,
         groupIds: [], employeeIds: []
       }
-      for(let k=0;k<this.selUsrGrps.length;k++){
-        if(this.selUsrGrps[k].isGroup)
+      for (let k = 0; k < this.selUsrGrps.length; k++) {
+        if (this.selUsrGrps[k].isGroup)
           data.groupIds.push(this.selUsrGrps[k].id)
         else
           data.employeeIds.push(this.selUsrGrps[k].id)
@@ -805,16 +805,16 @@ export class ContentWorkspaceComponent implements OnInit {
           if (data) {
             this.toastr.success(`Added successfully`);
             this.selUsrGrps = [];
-            this.usrGrpInWrkspce(true,'selUsrGrpLoad','selUsrGrpWrkspc');
-            this.usrGrpInWrkspce(false,'unSelUsrGrpLoad','unSelUsrGrpWrkspc');
-          }else{
+            this.usrGrpInWrkspce(true, 'selUsrGrpLoad', 'selUsrGrpWrkspc');
+            this.usrGrpInWrkspce(false, 'unSelUsrGrpLoad', 'unSelUsrGrpWrkspc');
+          } else {
             this.toastr.error(`Unable to add`);
           }
           this.usrGrpWrkSpcDisb = false;
         }, (err: any) => {
           this.usrGrpWrkSpcDisb = false;
         });
-    }else{
+    } else {
       this.toastr.error(`No user or group is selected`);
     }
   }
@@ -1132,11 +1132,11 @@ export class ContentWorkspaceComponent implements OnInit {
     return (tag && tag.id) ? tag.name : '';
   }
 
-  selFromAutoComp(data: any, type: 'selTags' | 'selTags2' | 'selLngs'|'selUsrGrps',autoSel: any) {
+  selFromAutoComp(data: any, type: 'selTags' | 'selTags2' | 'selLngs' | 'selUsrGrps', autoSel: any) {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this.toastr.clear();
-      this.toastr.info(`This ${type == 'selLngs' ? 'language' : type == 'selUsrGrps'?'one':'tag'} is already selected`, "Selected");
+      this.toastr.info(`This ${type == 'selLngs' ? 'language' : type == 'selUsrGrps' ? 'one' : 'tag'} is already selected`, "Selected");
     } else {
       if (type === 'selUsrGrps')
         this[type].push({ ...data });

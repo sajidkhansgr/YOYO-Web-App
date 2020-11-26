@@ -7,11 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/confirm-dialog.module';
-import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { GroupComponent } from './group.component';
 import { GroupService } from './group.service';
+import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/confirm-dialog.module';
+import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { PaginationModule } from '../../shared/components/pagination/pagination.module';
+import { CustomPipeModule } from '../../shared/pipes/custom-pipe.module';
 
 @NgModule({
   declarations: [GroupComponent],
@@ -21,7 +22,7 @@ import { PaginationModule } from '../../shared/components/pagination/pagination.
     MatFormFieldModule, MatInputModule, MatSelectModule, MatSelectModule,
     MatChipsModule, MatAutocompleteModule,
     ConfirmDialogModule, LoaderModule,
-    PaginationModule
+    PaginationModule, CustomPipeModule
   ],
   exports: [
     GroupComponent

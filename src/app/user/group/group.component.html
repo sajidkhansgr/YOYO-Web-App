@@ -159,15 +159,16 @@
               <div class="description">
                 <label class="text-hi-dark-grey mb-0 mt-2">Description</label>
                 <div class="value">
-                  d for description....
+                  {{rowInfo.description||'N/A'}}
                 </div>
               </div>
             </div>
             <div class="doc-details assigned-divisions border-bottom mb-3 pb-3">
-              <div class="heading text-hi-dark-grey font-weight-bold">Assigned Division(s)</div>
+              <div class="heading text-hi-dark-grey font-weight-bold">Assigned Hub(s)</div>
               <div class="value mt-2">
                 <ul class="list-unstyled mb-0">
-                  <li>Hi-force</li>
+                  <li *ngFor="let gH of rowInfo.groupHubs">{{gH.name}}</li>
+                  <li *ngIf="rowInfo.groupHubs.length<=0">No Assigned Hub</li>
                 </ul>
               </div>
             </div>
@@ -176,7 +177,7 @@
               <div class="creation-date">
                 <label class="text-hi-dark-grey mb-0 mt-2">Creation Date</label>
                 <div class="value">
-                  20 Jun 2016
+                  {{(rowInfo.createdDate|date:'dd MMM, yyyy')||'N/A'}}
                 </div>
               </div>
               <div class="deactivated-users">
@@ -258,7 +259,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Description</mat-label>
-        <textarea matInput placeholder="Type Description"></textarea>
+        <textarea matInput placeholder="Type Description" formControlName="description"></textarea>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-chip-list #chipList aria-label="Recipient  Names *">
@@ -266,24 +267,16 @@
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input #divName matInput formControlName="division" placeholder="Add Division *" [matAutocomplete]="auto">
+          <input #hubName matInput [(ngModel)]="hubTxt" name="hubTxt" [ngModelOptions]="{standalone: true}" placeholder="Add Hub" [matAutocomplete]="auto">
           <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selDivIds($event.option.value)"
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,hubName)"
           [displayWith]="displayFn">
-          <mat-option *ngFor="let div of divArr" [value]="div">
+          <mat-option *ngFor="let div of divArr| filterName : hubTxt: 'name'" [value]="div">
             {{div.name}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-      <!-- <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Assign to Divisons</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let div of divArr" [attr.id]="div.id" [value]="div.name">
-            {{div.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field> -->
     </div>
     <div class="modal-footer">
       <button type="submit" class="btn btn-primary" [disabled]="groupForm!.invalid || disabled">

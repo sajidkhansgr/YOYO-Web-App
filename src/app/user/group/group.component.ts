@@ -47,11 +47,8 @@ export class GroupComponent implements OnInit {
   groupForm!: FormGroup; grpDetail!: Group | null;
   disabled: boolean = false; docLoading: boolean = true;
   selectable = true; removable = true;
-  selDiv: any = []; divNameInp: any; sort: any = {};
+  selDiv: any = []; sort: any = {};hubTxt!:any;
   showRowInfo: boolean = false; rowInfo: any; isEdit!: boolean;
-  @ViewChild("divName", { static: false }) set divName(el: ElementRef) {
-    this.divNameInp = el;
-  }
   totalCount!: number;
 
   constructor(
@@ -70,7 +67,7 @@ export class GroupComponent implements OnInit {
     this.getHubs();
     this.groupForm = this.fb.group({
       name: ['', Validators.required],
-      division: ['']
+      description:['']
     });
   }
 
@@ -164,6 +161,9 @@ export class GroupComponent implements OnInit {
       let grpData: any = {
         ...this.groupForm.value
       }
+      if(this.selDiv && this.selDiv.length>0){
+        grpData.groupHubs = this.selDiv.map((h: any) => ({ hubId: h.id }));
+      }
       if (this.isEdit) {
         this.editGrp(grpData);
       } else {
@@ -236,9 +236,27 @@ export class GroupComponent implements OnInit {
       //directly setting w/o hit api
       this.showRowInfo = true;
       this.docLoading = true;
+      this.hubTxt = '';
+      this.selDiv = [];
       setTimeout(() => {
         this.rowInfo = row;
+        if(Array.isArray(this.rowInfo.groupHubs)){
+          for(let k=0;k<this.rowInfo.groupHubs.length;k++){
+            let isFound= false;
+            for(let l=0;l<this.divArr.length;l++){
+              if(this.rowInfo.groupHubs[k].hubId===this.divArr[l].id){
+                isFound = true;
+                this.selDiv.push(this.divArr[l]);
+                this.rowInfo.groupHubs[k].name = this.divArr[l].name;
+              }
+              if(isFound)break;
+            }
+          }
+        }else{
+          this.rowInfo.groupHubs = [];
+        }
         this.docLoading = false;
+
       }, 900)
     }
   }
@@ -246,32 +264,20 @@ export class GroupComponent implements OnInit {
   closeDoc = () => {
     this.showRowInfo = false;
     this.rowInfo = {};
+    this.selDiv = [];
   }
-
-  outsideCloseDD = (dropdown: any, event: any) => {
-    if (dropdown!.classList.contains('show') && !event.target!.classList.contains('form-check-input')) {
-      dropdown!.classList.remove('show');
-    }
-  }
-
-  // toggleDropdown = (event: any) => {
-  //   if (event.target!.classList.contains('fas')) {
-  //     event.target.parentNode.nextSibling!.classList.toggle('show');
-  //   } else {
-  //     event.target.nextSibling!.classList.toggle('show');
-  //   }
-  // }
 
   displayFn = (div: any) => {
     return (div && div.id) ? div.name : '';
   }
-  selDivIds(div: any) { //div - dvision
+  selFromAutoComp(div: any, autoSel: any) { //div - dvision
     const index = this.selDiv.findIndex((ele: any) => ele.id == div.id);
     if (index >= 0) {
       this.toastr.clear();
-      this.toastr.info("This division is already selected", "Selected");
+      this.toastr.info("This hub is already selected", "Selected");
     } else {
       this.selDiv.push(div);
+      autoSel.value = '';
       // this.msgForm.controls['RecipientName'].setValue({});
       // this.divNameInp.nativeElement.value = '';
     }
@@ -293,7 +299,6 @@ export class GroupComponent implements OnInit {
   }
 
   openModal(content: any, type: boolean) {
-    this.groupForm.reset();
     this.isEdit = type;
     this.setFormData();
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
@@ -305,6 +310,9 @@ export class GroupComponent implements OnInit {
   }
 
   setFormData() {
+    this.groupForm.reset();
+    if(!this.isEdit)
+      this.selDiv = [];
     if (this.isEdit && this.rowInfo && this.rowInfo.id) {
       this.groupForm.patchValue({
         ...this.rowInfo
