@@ -8,7 +8,7 @@ import {environment} from '../../../environments/environment';
 export class TokenInterceptor implements HttpInterceptor {
   constructor(private tokenDataServ: TokenDataService) {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if(request.url.includes('content.googleapis.com') || request.url.includes('twimg.com')){
+    if(request.url.includes('content.googleapis.com') || request.urlWithParams.includes('isSpecDownExc')){
       // google apis
     }else{
       let url = `${environment.API_ENDPOINT}${request.url}`;

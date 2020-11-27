@@ -4,13 +4,15 @@
     <div class="heading bg-white w-100 row mx-0">
       <div class="col-4 align-self-center">{{cntnt.name}}</div>
       <div class="col-4 align-self-center d-flex justify-content-center">
-        <div class="btn" placement="bottom" ngbTooltip="{{leftSide?'Hide Pages':'Show Pages'}}" (click)="leftSide = !leftSide"><i class="fas fa-th-large"></i></div>
+        <div class="btn" placement="bottom" *ngIf="cntnt.contentType==1" ngbTooltip="{{leftSide?'Hide Pages':'Show Pages'}}" (click)="leftSide = !leftSide">
+          <i class="fas fa-th-large"></i>
+        </div>
         <div class="dropdown">
           <button class="btn" type="button" id="moreDD" data-toggle="dropdown">
             <i class="fas fa-ellipsis-h"></i>
           </button>
           <div class="dropdown-menu" aria-labelledby="moreDD">
-            <button class="dropdown-item curs-ptr" (click)="downloadFile()"><i class="fas fa-download"></i>Download</button>
+            <button *ngIf="cntnt.contentPath" class="dropdown-item curs-ptr" (click)="downloadFile()"><i class="fas fa-download"></i>Download</button>
             <button class="dropdown-item curs-ptr"><i class="fas fa-thumbs-up"></i>Like</button>
           </div>
         </div>
@@ -25,20 +27,44 @@
       </div>
     </div>
     <div class="pdf-view d-flex mx-0">
-      <div class="left-body bg-white text-center" *ngIf="leftSide">
+      <div class="left-body bg-white text-center" *ngIf="cntnt.contentType==1 && leftSide">
         <div class="bg-hi-grey rounded px-3 py-1 my-3 w-fit mx-auto">{{cntnt.name}}</div>
-        <div class="d-flex my-3 pl-3" *ngFor="let cPImg of cntnt!.pdfImages"> <!-- class active -->
+        <div class="d-flex my-3 pl-3" *ngFor="let cPImg of cntnt.pdfImages"> <!-- class active -->
           <mat-checkbox class="align-self-center mb-4"></mat-checkbox>
           <div class="curs-ptr" (click)="goToPage(cPImg)">
             <div class="thumbnail">
-              <img [src]="cPImg.imagePath?cPImg.imagePath:defIcon" class="w-50">
+              <img [src]="cPImg.imagePath?cPImg.imagePath:defIcon" class="w-50" alt="Thumbnail" />
             </div>
             <div class="num py-1 px-2 mx-auto mt-1 rounded w-fit">{{cPImg.pageNo}}</div>
           </div>
         </div>
+        <div *ngIf="cntnt.pdfImages.length<=0">
+          No thumbnail available
+        </div>
       </div>
       <div class="main-body overflow-auto w-100 p-2">
-        <div id='pdf-div' class='pdf-view'></div>
+        <span [ngSwitch]="cntnt.contentType">
+          <span *ngSwitchCase="1">
+            <span *ngIf="cntnt.pdfContentPath">
+              <div id='pdf-div' class='pdf-view'></div>
+            </span>
+            <span *ngIf="!cntnt.pdfContentPath">No pdf found</span>
+          </span>
+          <span *ngSwitchCase="2">
+            <img [src]="cntnt.contentPath?cntnt.contentPath:defIcon" alt="Image"/>
+          </span>
+          <span *ngSwitchCase="3">
+            <span>Url : {{cntnt.url||'N/A'}}</span>
+            <img [src]="cntnt.urlIconPath?cntnt.urlIconPath:defIcon" alt="Url Icon"/>
+          </span>
+          <span *ngSwitchCase="4">
+            <video *ngIf="cntnt.contentPath" controls controlsList="nodownload">
+              <source [src]="cntnt.contentPath">
+              Your browser does not support the video player.
+            </video>
+          </span>
+          <span *ngSwitchDefault>Not a valid content</span>
+        </span>
       </div>
       <div class="right-body bg-white pt-1 pb-3" *ngIf="rightSide">
         <mat-tab-group>
