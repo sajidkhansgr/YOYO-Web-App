@@ -3,10 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { DEF_ICON } from '../../shared/constants';
 import { ContentWorkspaceService } from '../../hub/content-workspace/content-workspace.service';
 import { ViewSDKClient } from '../../shared/services/view-sdk.service';
+import { FileService } from '../../shared/services/file.service';
 import { Content } from '../../shared/models/content';
-import { DEF_ICON } from '../../shared/constants';
 
 @Component({
   selector: 'app-view',
@@ -28,7 +29,8 @@ export class ViewComponent implements OnInit {
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private cwServ: ContentWorkspaceService,
-    private viewSDKClient: ViewSDKClient
+    private viewSDKClient: ViewSDKClient,
+    private fileServ: FileService
   ) { }
 
   ngOnInit(): void {
@@ -55,21 +57,29 @@ export class ViewComponent implements OnInit {
         // console.log(data, "")
         if (data && data.result && data.result.id) {
           this.cntnt = data.result;
-          if(Array.isArray(this.cntnt!.pdfImages)){
-            this.cntnt!.pdfImages.sort((a:any, b:any) => a.pageNo - b.pageNo);
-          }else{
-            this.cntnt!.pdfImages = [];
+          switch(this.cntnt!.contentType){
+            case 1:
+              if(Array.isArray(this.cntnt!.pdfImages)){
+                this.cntnt!.pdfImages.sort((a:any, b:any) => a.pageNo - b.pageNo);
+              }else{
+                this.cntnt!.pdfImages = [];
+              }
+              this.loading = false;
+              // pdfImages
+              setTimeout(()=>{
+                this.renderPDf();
+              },1000)
+              break;
+            case 2:break;
+            case 3:break;
+            case 4:break;
+
           }
           // console.log(this.cntnt!.pdfImages,'this.cntnt.pdfImages');
-          this.loading = false;
-          // pdfImages
-          setTimeout(()=>{
-            this.renderPDf();
-          },1000)
         } else {
           this.cntnt = null;
-          this.loading = false;
         }
+        this.loading = false;
       }, (err: any) => {
         this.cntnt = null;
         this.loading = false;
@@ -77,23 +87,25 @@ export class ViewComponent implements OnInit {
   }
 
   renderPDf(){
-    this.viewSDKClient.ready().then(() => {
-      /* By default the embed mode will be Full Window */
-      let data ={
-        defConfg: {
-          enableAnnotationAPIs: false,
-          showLeftHandPanel:false,showPrintPDF: false,
-          // includePDFAnnotations:true, // for the save button
-          showAnnotationTools: false,
-          // defaultViewMode: "FIT_WIDTH",showPageControls:true,
-        },
-        name: this.cntnt!.name,
-        id: this.id,
-        divId: 'pdf-div',
-        url: this.cntnt!.pdfContentPath
-      }
-      this.viewSDKClient.previewFile(data);
-    })
+    if(this.cntnt!.pdfContentPath){
+      this.viewSDKClient.ready().then(() => {
+        /* By default the embed mode will be Full Window */
+        let data ={
+          defConfg: {
+            enableAnnotationAPIs: false,
+            showLeftHandPanel:false,showPrintPDF: false,
+            // includePDFAnnotations:true, // for the save button
+            showAnnotationTools: false,
+            // defaultViewMode: "FIT_WIDTH",showPageControls:true,
+          },
+          name: this.cntnt!.name,
+          id: this.id,
+          divId: 'pdf-div',
+          url: this.cntnt!.pdfContentPath
+        }
+        this.viewSDKClient.previewFile(data);
+      })
+    }
   }
 
   goToPage(cPimg: any){
@@ -126,10 +138,10 @@ export class ViewComponent implements OnInit {
     */
   }
 
-  downloadFile(){
-
+  downloadFile() {
+    this.fileServ.downloadFile(this.cntnt!.contentPath,this.cntnt!.name);
   }
-  
+
   @HostListener('document:fullscreenchange', ['$event'])
 	@HostListener('document:webkitfullscreenchange', ['$event'])
 	@HostListener('document:mozfullscreenchange', ['$event'])

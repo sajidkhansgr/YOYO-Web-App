@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("dsaasdasd");
     this.redirectUrl = this.route.snapshot.queryParamMap.get('redirect_uri');
   }
 
@@ -45,15 +46,23 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authSer.login(this.loginForm.value)
         .subscribe((data: any) => {
+          console.log("dsa");
           if (data && data.result && data.result.token && data.result.id) {
             this.tokenDataServ.setTokenAndUser(data.result);
             this.toastr.success('Login successfully', 'Success');
             this.dataServ.passDataSend('login');
-            let nav= HttpHelper.redirectToUrl(this.redirectUrl);
-            if(nav==='/dashboard' && data.result.roleId==3)
-              this.router.navigate(['/web-app/resource/experiences']);
-            else
+            if(data.result.roleId==1 || data.result.roleId==2){
+              let nav= HttpHelper.redirectToUrl(this.redirectUrl);
               this.router.navigate([nav]);
+            }
+            else{
+              if(this.redirectUrl && this.redirectUrl.includes('/web-app')){
+                let nav= HttpHelper.redirectToUrl(this.redirectUrl);
+                this.router.navigate([nav]);
+              }
+              else
+                this.router.navigate(['/web-app/resource/experiences']);
+            }
           } else {
             this.toastr.error(data.message || 'Please check email or password!', 'Error!');
             this.disabled = false;

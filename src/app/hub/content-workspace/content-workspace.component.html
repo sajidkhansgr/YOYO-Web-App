@@ -74,7 +74,7 @@
               <div class="dropdown-menu" aria-labelledby="optDD">
                 <a class="dropdown-item curs-ptr" (click)="openModal(uplNewVer)"><i
                     class="fas fa-upload mr-1"></i>Upload new version</a>
-                <a class="dropdown-item curs-ptr" (click)="downloadFile()"><i
+                <a class="dropdown-item curs-ptr" *ngIf="rowInfo.contentPath" (click)="downloadFile()"><i
                     class="fas fa-download mr-1"></i>Download</a>
                 <a class="dropdown-item curs-ptr" (click)="tashCntnt();"><i class="fas fa-trash mr-1"></i>Move to
                   trash</a>

@@ -1428,21 +1428,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   downloadFile() {
-    let statUrl = 'https://pbs.twimg.com/media/EnjjNh-XYAAJiHo?format=png&name=small';
-    this.fileServ.downloadFile(statUrl).subscribe((data: any) => {
-      if (data) {
-        // this.blob = new Blob([data], {type: 'application/pdf'});
-        var downloadURL = window.URL.createObjectURL(data);
-        var link = document.createElement('a');
-        link.href = downloadURL;
-        link.download = "example twitter file.png";
-        link.click();
-      } else {
-        this.toastr.error(`Unable to download file`, 'Error!');
-      }
-    }, (err: any) => {
-
-    });
+    this.fileServ.downloadFile(this.rowInfo!.contentPath,this.rowInfo!.name);
   }
 
   dismissModal() {
