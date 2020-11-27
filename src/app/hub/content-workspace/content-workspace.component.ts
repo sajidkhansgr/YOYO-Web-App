@@ -338,7 +338,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.cwServ.smartFolderAct(folder.id).subscribe((data: any) => {
           if (data) {
             this.toastr.success('Smart folder activated successfully', 'Success!');
-            this.listFolders()
+            this.listFolders();
           } else {
             this.toastr.error('Unable to activate smart folder', 'Error!');
           }
@@ -362,7 +362,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.cwServ.smartFolderDeact(folder.id).subscribe((data: any) => {
           if (data) {
             this.toastr.success('Smart folder deactivated successfully', 'Success!');
-            this.listFolders()
+            this.listFolders();
           } else {
             this.toastr.error('Unable to deactivate smart folder', 'Error!');
           }
@@ -399,9 +399,15 @@ export class ContentWorkspaceComponent implements OnInit {
           }
           this.disabled = false;
           this.dismissModal();
+          this.smartFolderForm.reset();
+          this.iconUrl = undefined;
+          this.addURLIcon = '';
         }, (err: any) => {
           this.disabled = false;
           this.dismissModal();
+          this.smartFolderForm.reset();
+          this.iconUrl = undefined;
+          this.addURLIcon = '';
         });
     }
   }
@@ -440,9 +446,15 @@ export class ContentWorkspaceComponent implements OnInit {
           }
           this.disabled = false;
           this.dismissModal();
+          this.smartFolderForm.reset();
+          this.iconUrl = undefined;
+          this.addURLIcon = '';
         }, (err: any) => {
           this.disabled = false;
           this.dismissModal();
+          this.smartFolderForm.reset();
+          this.iconUrl = undefined;
+          this.addURLIcon = '';
         });
     }
   }
@@ -493,7 +505,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.cwServ.folderAct(folder.id).subscribe((data: any) => {
           if (data) {
             this.toastr.success('Folder activated successfully', 'Success!');
-            this.listFolders()
+            this.listFolders();
           } else {
             this.toastr.error('Unable to activate folder', 'Error!');
           }
@@ -518,7 +530,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.cwServ.folderDeact(folder.id).subscribe((data: any) => {
           if (data) {
             this.toastr.success('Folder deactivated successfully', 'Success!');
-            this.listFolders()
+            this.listFolders();
           } else {
             this.toastr.error('Unable to deactivate folder', 'Error!');
           }
@@ -553,9 +565,15 @@ export class ContentWorkspaceComponent implements OnInit {
         }
         this.disabled = false;
         this.dismissModal();
+        this.folderForm.reset();
+        this.iconUrl = undefined;
+        this.addURLIcon = '';
       }, (err: any) => {
         this.disabled = false;
         this.dismissModal();
+        this.folderForm.reset();
+        this.iconUrl = undefined;
+        this.addURLIcon = '';
       });
     }
   }
@@ -584,9 +602,15 @@ export class ContentWorkspaceComponent implements OnInit {
           }
           this.disabled = false;
           this.dismissModal();
+          this.folderForm.reset();
+          this.iconUrl = undefined;
+          this.addURLIcon = '';
         }, (err: any) => {
           this.disabled = false;
           this.dismissModal();
+          this.folderForm.reset();
+          this.iconUrl = undefined;
+          this.addURLIcon = '';
         });
     }
   }
@@ -632,7 +656,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.cwServ.wrkspcAct(wrkspc.id).subscribe((data: any) => {
           if (data) {
             this.toastr.success('Workspace activated successfully', 'Success!');
-            // this.getWrkspcList();
+            this.getWrkspcList();
           } else {
             this.toastr.error('Unable to activate workspace', 'Error!');
           }
@@ -657,7 +681,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.cwServ.wrkspcDeact(wrkspc.id).subscribe((data: any) => {
           if (data) {
             this.toastr.success('Workspace deactivated successfully', 'Success!');
-            // this.getWrkspcList();
+            this.getWrkspcList();
           } else {
             this.toastr.error('Unable to deactivate workspace', 'Error!');
           }
@@ -677,7 +701,7 @@ export class ContentWorkspaceComponent implements OnInit {
       let wrkspcData: any = {
         id: this.selWrkspc!.id,
         ...this.updWrkspcForm.value,
-        hubId: this.selWrkspc!.hubId
+        hubId: this.selWrkspc!.hub.id
       };
       this.cwServ.updWrkspc(wrkspcData).subscribe((data: any) => {
         // console.log(data);
@@ -690,9 +714,11 @@ export class ContentWorkspaceComponent implements OnInit {
         }
         this.dismissModal();
         this.disabled = false;
+        this.updWrkspcForm.reset();
       }, (err: any) => {
         this.dismissModal();
         this.disabled = false;
+        this.updWrkspcForm.reset();
       });
     }
   }
@@ -711,20 +737,20 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // add workspace
   addWorkSpc() {
-    if (this.addWrkspcForm.valid || this.updWrkspcForm.valid && !this.edit) {
+    if (this.addWrkspcForm.valid && !this.edit) {
       this.disabled = true;
       let wrkspcData: any;
-      if (this.addWrkspcForm.valid) {
-        wrkspcData = {
-          ...this.addWrkspcForm.value,
-          hubId: parseInt(this.hubid)
-        };
-      } else if (this.updWrkspcForm.valid) {
-        wrkspcData = {
-          ...this.updWrkspcForm.value,
-          hubId: this.selWrkspc!.hubId
-        };
-      }
+      // if (this.addWrkspcForm.valid) {
+      wrkspcData = {
+        ...this.addWrkspcForm.value,
+        hubId: parseInt(this.hubid)
+      };
+      // } else if (this.updWrkspcForm.valid) {
+      //   wrkspcData = {
+      //     ...this.updWrkspcForm.value,
+      //     hubId: this.selWrkspc!.hubId
+      //   };
+      // }
       this.cwServ.addWrkspc(wrkspcData)
         .subscribe((data: any) => {
           if (data) {
@@ -735,9 +761,11 @@ export class ContentWorkspaceComponent implements OnInit {
           }
           this.dismissModal();
           this.disabled = false;
+          this.addWrkspcForm.reset();
         }, (err: any) => {
           this.dismissModal();
           this.disabled = false;
+          this.addWrkspcForm.reset();
         });
     }
   }
