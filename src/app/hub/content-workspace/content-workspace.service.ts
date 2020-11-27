@@ -27,6 +27,24 @@ export class ContentWorkspaceService {
     return formData;
   }
 
+  // get all from workspace
+  getAllObjWrkspc(params: any): Observable<any[]> {
+    let queryParams = new HttpParams();
+    for (let key in params) {
+      if (params[key]) {
+        queryParams = queryParams.set(key, params[key]);
+      }
+    }
+    return this.http.get(`${AppSettings.GET_OBJ_WRKSPC}`, {
+      params: queryParams
+    }
+    ).pipe(
+      map((res: any) =>
+        res
+      )
+    );
+  }
+
   // ---- smart folder ---- //
   // activate workspace
   smartFolderAct(id: any) {

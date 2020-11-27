@@ -197,13 +197,41 @@ export class ContentWorkspaceComponent implements OnInit {
   listFolders() {
     this.folderLoading = true;
     this.folderArr = [];
-    this.getFolderList();
-    this.getSmartFolderList();
     this.contentArr = [];
-    this.dispFolder ? this.dispFolder.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr() : undefined;
-    // setTimeout(() => {
-    //   console.log(this.folderArr)
-    // }, 1000)
+    this.dispFolder ? this.dispFolder.key == 'fldr' ? this.getAllObjWrkspc() : this.getContentSmtFldr() : this.getAllObjWrkspc();
+  }
+
+  // get folder and smart folder from wrkspace and content from workpspace and folder
+  getAllObjWrkspc() {
+    let params = {
+      workspaceId: this.selWrkspc!.id,
+      isActive: this.isActiveFldrs,
+      folderId: this.dispFolder ? this.dispFolder!.id : undefined,
+    };
+    // console.log(params)
+    this.cwServ.getAllObjWrkspc(params).subscribe((data: any) => {
+      console.log(data);
+      if (data && data.result) {
+        if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0) {
+          this.contentArr.push(...data.result[0].contents);
+        }
+        if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0) {
+          for (let i = 0; i < data.result[0].folders.length; i++) {
+            this.folderArr.push({ ...data.result[0].folders[i], key: 'fldr' });
+          }
+          // console.log(data.result.folders);
+        }
+        if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0) {
+          for (let i = 0; i < data.result[0].smartFolders.length; i++) {
+            this.folderArr.push({ ...data.result[0].smartFolders[i], key: 'fldr' });
+          }
+        }
+      }
+      // console.log(this.folderArr);
+      this.folderLoading = false;
+    }, (err: any) => {
+      this.folderLoading = false;
+    });
   }
 
   // activate folder/smart folder
@@ -459,32 +487,32 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  // get list of smart folders
-  getSmartFolderList() {
-    // this.folderLoading = true;
-    let query = {
-      workspaceId: this.selWrkspc!.id,
-      folderId: this.dispFolder ? this.dispFolder!.id : null,
-      isActive: this.isActiveFldrs
-    };
-    // console.log(query);
-    this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-        for (let i = 0; i < data.result.results.length; i++) {
-          this.folderArr.push({ ...data.result.results[i], key: 'smtFldr' });
-        }
-        // console.log(this.folderArr);
-      } else {
-        // this.folderArr = [];
-        // this.toastr.error('No smart folders found', 'Error!');
-      }
-      this.dispFolder = undefined;
-      this.folderLoading = false;
-    }, (err: any) => {
-      this.dispFolder = undefined;
-      this.folderLoading = false;
-    });
-  }
+  // // get list of smart folders
+  // getSmartFolderList() {
+  //   // this.folderLoading = true;
+  //   let query = {
+  //     workspaceId: this.selWrkspc!.id,
+  //     folderId: this.dispFolder ? this.dispFolder!.id : null,
+  //     isActive: this.isActiveFldrs
+  //   };
+  //   // console.log(query);
+  //   this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
+  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+  //       for (let i = 0; i < data.result.results.length; i++) {
+  //         this.folderArr.push({ ...data.result.results[i], key: 'smtFldr' });
+  //       }
+  //       // console.log(this.folderArr);
+  //     } else {
+  //       // this.folderArr = [];
+  //       // this.toastr.error('No smart folders found', 'Error!');
+  //     }
+  //     this.dispFolder = undefined;
+  //     this.folderLoading = false;
+  //   }, (err: any) => {
+  //     this.dispFolder = undefined;
+  //     this.folderLoading = false;
+  //   });
+  // }
 
   // ---- folder ---- //
   // folder submit functions (add/update)
@@ -616,31 +644,31 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // get list of folders
-  getFolderList() {
-    // this.folderLoading = true;
-    let query = {
-      workspaceId: this.selWrkspc!.id,
-      folderId: this.dispFolder ? this.dispFolder!.id : null,
-      isActive: this.isActiveFldrs
-    };
-    // console.log(query);
-    this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-        for (let i = 0; i < data.result.results.length; i++) {
-          this.folderArr.push({ ...data.result.results[i], key: 'fldr' });
-        }
-        // console.log(this.folderArr);
-      } else {
-        // this.folderArr = [];
-        // this.toastr.error('No folders found', 'Error!');
-      }
-      // this.dispFolder = undefined;
-      // this.folderLoading = false;
-    }, (err: any) => {
-      // this.dispFolder = undefined;
-      // this.folderLoading = false;
-    });
-  }
+  // getFolderList() {
+  //   // this.folderLoading = true;
+  //   let query = {
+  //     workspaceId: this.selWrkspc!.id,
+  //     folderId: this.dispFolder ? this.dispFolder!.id : null,
+  //     isActive: this.isActiveFldrs
+  //   };
+  //   // console.log(query);
+  //   this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
+  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+  //       for (let i = 0; i < data.result.results.length; i++) {
+  //         this.folderArr.push({ ...data.result.results[i], key: 'fldr' });
+  //       }
+  //       // console.log(this.folderArr);
+  //     } else {
+  //       // this.folderArr = [];
+  //       // this.toastr.error('No folders found', 'Error!');
+  //     }
+  //     // this.dispFolder = undefined;
+  //     // this.folderLoading = false;
+  //   }, (err: any) => {
+  //     // this.dispFolder = undefined;
+  //     // this.folderLoading = false;
+  //   });
+  // }
 
   // ---- workspace ---- //
   // activate workspace
@@ -991,7 +1019,7 @@ export class ContentWorkspaceComponent implements OnInit {
     // (event.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'block';
   }
 
-  // get content by smart folder ---- bug at backend
+  // // get content by smart folder ----
   getContentSmtFldr() {
     // this.contentLoading = true;
     let query: any = {
@@ -1008,24 +1036,24 @@ export class ContentWorkspaceComponent implements OnInit {
     });
   }
 
-  // get content by folder
-  getContentFldr() {
-    // this.contentLoading = true;
-    let query: any = {
-      workspaceId: this.selWrkspc!.id,
-      folderId: this.dispFolder ? this.dispFolder!.id : undefined
-    };
-    this.cwServ.contentByFolder(query).subscribe((data: any) => {
-      // console.log(data);
-      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.contentArr.push(...data.result);
-        // console.log(this.mdlCntntArr);
-      }
-      // this.contentLoading = false;
-    }, (err: any) => {
-      // this.contentLoading = false;
-    });
-  }
+  // // get content by folder
+  // getContentFldr() {
+  //   // this.contentLoading = true;
+  //   let query: any = {
+  //     workspaceId: this.selWrkspc!.id,
+  //     folderId: this.dispFolder ? this.dispFolder!.id : undefined
+  //   };
+  //   this.cwServ.contentByFolder(query).subscribe((data: any) => {
+  //     // console.log(data);
+  //     if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+  //       this.contentArr.push(...data.result);
+  //       // console.log(this.mdlCntntArr);
+  //     }
+  //     // this.contentLoading = false;
+  //   }, (err: any) => {
+  //     // this.contentLoading = false;
+  //   });
+  // }
 
   closeEdit(type: string, isUpd: boolean = true) {
     if (type && isUpd) {

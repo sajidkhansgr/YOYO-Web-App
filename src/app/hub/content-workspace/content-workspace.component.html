@@ -671,7 +671,7 @@
                 <!-- folders and smart folders -->
                 <div class="col-3 curs-ptr my-2" *ngFor="let folder of folderArr">
                   <div class="image">
-                    <img src="{{folder.folderIconPath ? folder.folderIconPath : 'assets/images/folderIcon.png'}}"
+                    <img src="{{folder.folderIconPath ? + folder.folderIconPath : 'assets/images/folderIcon.png'}}"
                       (click)="changeFolder(folder)">
                     <div class="dropdown" style="z-index:1;">
                       <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
@@ -706,8 +706,7 @@
                 <!-- content -->
                 <div class="col-3 curs-ptr my-2" *ngFor="let content of contentArr">
                   <div class="image">
-                    <img
-                      src="{{content.pdfImages[0] ? content.pdfImages[0].imagePath : 'assets/images/folderIcon.png'}}">
+                    <img src="{{content.pdfImages[0] ? content.pdfImages[0].imagePath : content.urlIconPath}}">
                   </div>
                   <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate">
                     {{content.name}}
