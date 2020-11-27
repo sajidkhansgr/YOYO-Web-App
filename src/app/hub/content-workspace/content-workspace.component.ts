@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 // import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { Subscription, Subject, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap, map } from 'rxjs/operators';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -62,10 +62,12 @@ export class ContentWorkspaceComponent implements OnInit {
 
   usrInfo: any | null;
 
-  fileTypes: any = FILE_TYPES; fileTypeArr: any = []; propsArr: any = [];
+  fileTypes: any = FILE_TYPES; fileTypeArr: any = [];
   selUsrGrpWrkspc!: any[]; selUsrGrpLoad!: boolean; isUrGrpLoad!: boolean; selUsrGrpTxt!: '';
   unSelUsrGrpWrkspc!: any[]; unSelUsrGrpLoad!: boolean; unSelUsrGrpTxt!: ''; selUsrGrps: any[] = [];
   cntntTag!: any; urlTag!: any; cntntInfoTag!: any; cntntLng!: any; usrGrpWrkSpcDisb: boolean = false;
+
+  allTags!: any[]; anyTags!: any[]; noneTags!: any[];
 
   constructor(
     // private route: ActivatedRoute,
@@ -157,6 +159,8 @@ export class ContentWorkspaceComponent implements OnInit {
         })
       )
       .subscribe();
+
+    this.allTags = []; this.anyTags = []; this.noneTags = [];
   }
 
   // ---- folder and smart folder ---- //
@@ -249,6 +253,29 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- smart folder ---- //
+  // for add and edit modal in smart folder (autocomplete and chips)
+  selTag(tag: Tag, type: string) {
+    let temp: any;
+    type == 'all' ? temp = this.allTags : type == 'any' ? temp = this.anyTags : temp = this.noneTags;
+    const index = temp.findIndex((ele: any) => ele.id == tag.id);
+    if (index >= 0) {
+      this.toastr.clear();
+      this.toastr.info("This tag is already selected", "Selected");
+    } else {
+      temp.push(tag);
+      type == 'all' ? this.allTags = temp : type == 'any' ? this.anyTags = temp : this.noneTags = temp;
+    }
+  }
+  removeTag(tag: Tag, type: string): void {
+    let temp: any;
+    type == 'all' ? temp = this.allTags : type == 'any' ? temp = this.anyTags : temp = this.noneTags;
+    const index = temp.findIndex((ele: any) => ele.id == tag.id);
+    if (index >= 0) {
+      temp.splice(index, 1);
+      type == 'all' ? this.allTags = temp : type == 'any' ? this.anyTags = temp : this.noneTags = temp;
+    }
+  }
+
   // add file type filter for smart folder
   addFileType(val: boolean, id: number) {
     if (val) {
@@ -256,7 +283,7 @@ export class ContentWorkspaceComponent implements OnInit {
     } else {
       this.fileTypeArr = this.fileTypeArr.filter((data: any) => data != id);
     }
-    console.log(this.fileTypeArr);
+    // console.log(this.fileTypeArr);
   }
 
   // addProps(val: boolean, id: number) {
@@ -382,7 +409,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // add smart folder
   addSmartFolder() {
     if (this.smartFolderForm.valid) {
-      this.disabled = true;
+      // this.disabled = true;
       let folderData: any = {
         ...this.smartFolderForm.value,
         smartFolderIcon: this.custIcon,
@@ -392,7 +419,16 @@ export class ContentWorkspaceComponent implements OnInit {
         // propertyIds: this.propsArr.length > 0 ? (this.propsArr).toString() : undefined,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
-      // console.log(folderData);
+      let tagIds = [];
+      if (this.allTags.length > 0) {
+        for (let i = 0; i < this.allTags.length; i++) {
+          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 1 }));
+        }
+      }
+      folderData.tagIds = '[' + tagIds.toString() + ']';
+
+      // console.log()
+      console.log(folderData);
       this.cwServ.addSmartFolder(folderData)
         .subscribe((data: any) => {
           // console.log(data);
@@ -1015,11 +1051,20 @@ export class ContentWorkspaceComponent implements OnInit {
       this.iconUrl = '';
       this.getTags();
     }
+
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
 
       }, (reason) => {
-
+        // console.log(reason);
+        if (reason || reason === 0) {
+          this.addWrkspcForm.reset();
+          this.updWrkspcForm.reset();
+          this.folderForm.reset();
+          this.smartFolderForm.reset();
+          this.iconUrl = undefined;
+          this.addURLIcon = '';
+        }
       });
   }
 

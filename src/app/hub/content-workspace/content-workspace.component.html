@@ -565,7 +565,8 @@
             <div class="dropdown rounded">
               <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown"
                 (click)="getUsrGrpsFormWrkspc();" [disabled]="!selWrkspc">
-                Users <span class="badge badge-light" *ngIf="!selUsrGrpLoad && selUsrGrpWrkspc">{{selUsrGrpWrkspc.length}}</span>
+                Users <span class="badge badge-light"
+                  *ngIf="!selUsrGrpLoad && selUsrGrpWrkspc">{{selUsrGrpWrkspc.length}}</span>
               </button>
               <div class="dropdown-menu large-dropdown-menu py-0 overflow-hidden" aria-labelledby="btnUsersDD"
                 (click)="$event.stopPropagation();">
@@ -584,14 +585,19 @@
                           placeholder="Add User or Group" [matAutocomplete]="auto3">
                       </mat-chip-list>
                       <mat-autocomplete #auto3="matAutocomplete"
-                        (optionSelected)="selFromAutoComp($event.option.value,'selUsrGrps',unSelGrpInp);" [displayWith]="displayFn">
-                        <mat-option (click)="$event.stopPropagation();" *ngFor="let unUsrGpW of unSelUsrGrpWrkspc|filterName: unSelUsrGrpTxt: 'name'" [value]="unUsrGpW">
+                        (optionSelected)="selFromAutoComp($event.option.value,'selUsrGrps',unSelGrpInp);"
+                        [displayWith]="displayFn">
+                        <mat-option (click)="$event.stopPropagation();"
+                          *ngFor="let unUsrGpW of unSelUsrGrpWrkspc|filterName: unSelUsrGrpTxt: 'name'"
+                          [value]="unUsrGpW">
                           {{unUsrGpW.name}}
                         </mat-option>
                       </mat-autocomplete>
                     </mat-form-field>
                     <div class="form-group text-right">
-                      <button class="btn btn-success text-white btn-sm" [disabled]="selUsrGrps.length<=0 || usrGrpWrkSpcDisb" (click)="addUsrGrpInWrkspce();">Submit</button>
+                      <button class="btn btn-success text-white btn-sm"
+                        [disabled]="selUsrGrps.length<=0 || usrGrpWrkSpcDisb"
+                        (click)="addUsrGrpInWrkspce();">Submit</button>
                     </div>
                   </form>
                   <div class="border">
@@ -1365,18 +1371,52 @@
                 aria-haspopup="true" aria-expanded="false">
                 Tags
               </button>
-              <div class="dropdown-menu" aria-labelledby="tagsDD" style="width:18rem;">
-                <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                  <mat-label>Match ALL of these tags</mat-label>
-                  <input matInput placeholder="Match ALL of these tags">
+              <div class="dropdown-menu overflow-auto px-2" aria-labelledby="tagsDD"
+                style="width:20rem; max-height: 65vh;" (click)="$event.stopPropagation();">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-chip-list>
+                    <mat-chip *ngFor="let tag of allTags" selectable removable (removed)="removeTag(tag, 'all')">
+                      {{tag.name}}
+                      <i matChipRemove class="fas fa-times-circle"></i>
+                    </mat-chip>
+                    <input matInput placeholder="Match ALL of these tags" [matAutocomplete]="autoAll">
+                  </mat-chip-list>
+                  <mat-autocomplete #autoAll="matAutocomplete" (optionSelected)="selTag($event.option.value, 'all')"
+                    [displayWith]="displayFn">
+                    <mat-option *ngFor="let tag of tags" [value]="tag" (click)="$event.stopPropagation();">
+                      {{tag.name}}
+                    </mat-option>
+                  </mat-autocomplete>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                  <mat-label>Match ANY of these tags</mat-label>
-                  <input matInput placeholder="Match ANY of these tags">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-chip-list>
+                    <mat-chip *ngFor="let tag of anyTags" selectable removable (removed)="removeTag(tag, 'any')">
+                      {{tag.name}}
+                      <i matChipRemove class="fas fa-times-circle"></i>
+                    </mat-chip>
+                    <input matInput placeholder="Match ANY of these tags" [matAutocomplete]="autoAny">
+                  </mat-chip-list>
+                  <mat-autocomplete #autoAny="matAutocomplete" (optionSelected)="selTag($event.option.value, 'any')"
+                    [displayWith]="displayFn">
+                    <mat-option *ngFor="let tag of tags" [value]="tag" (click)="$event.stopPropagation();">
+                      {{tag.name}}
+                    </mat-option>
+                  </mat-autocomplete>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-                  <mat-label>Match NONE of these tags</mat-label>
-                  <input matInput placeholder="Match NONE of these tags">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-chip-list>
+                    <mat-chip *ngFor="let tag of noneTags" selectable removable (removed)="removeTag(tag, 'none')">
+                      {{tag.name}}
+                      <i matChipRemove class="fas fa-times-circle"></i>
+                    </mat-chip>
+                    <input matInput placeholder="Match NONE of these tags" [matAutocomplete]="autoNone">
+                  </mat-chip-list>
+                  <mat-autocomplete #autoNone="matAutocomplete" (optionSelected)="selTag($event.option.value, 'none')"
+                    [displayWith]="displayFn">
+                    <mat-option *ngFor="let tag of tags" [value]="tag" (click)="$event.stopPropagation();">
+                      {{tag.name}}
+                    </mat-option>
+                  </mat-autocomplete>
                 </mat-form-field>
               </div>
             </div>

@@ -10,7 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapseModule, NgbDropdownModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -35,9 +35,9 @@ import { CustomPipeModule } from '../../shared/pipes/custom-pipe.module';
     MatTooltipModule,
     MatCheckboxModule,
     MatRadioModule, MatChipsModule, MatAutocompleteModule,
-    FileProgessModule, LoaderModule,PaginationModule,
+    FileProgessModule, LoaderModule, PaginationModule,
     FormsModule, ReactiveFormsModule,
-    NgbCollapseModule, NgbDropdownModule, NgbNavModule,
+    NgbCollapseModule, NgbDropdownModule, NgbNavModule, NgbTypeaheadModule,
     DragDropModule,
     CustomPipeModule
   ],

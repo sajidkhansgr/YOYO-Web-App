@@ -103,9 +103,15 @@ body {
 .modal-dialog {
   .modal-content {
     .modal-body {
-      max-height: 65vh;
+      max-height: 70vh;
       overflow-y: auto;
     }
+  }
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    margin: 1rem auto;
   }
 }
 
@@ -120,6 +126,14 @@ body {
 button[aria-label="Close"]:focus {
   outline: none;
 }
+
+// angular bootstrap typeahead
+// ngb-typeahead-window {
+//   .active {
+//     background-color: $hi-dark-grey !important;
+//     color: darken($color: $hi-dark, $amount: 15) !important;
+//   }
+// }
 
 // before pseudo element
 .no-before::before {
