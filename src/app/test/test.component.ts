@@ -95,14 +95,19 @@ export class TestComponent implements OnInit {
       //
       //
       // ];
-      let defConfg = {
-        enableAnnotationAPIs: true,
-        showLeftHandPanel:false,showPrintPDF: false,
-        // includePDFAnnotations:true // for the save button
-        // ,showAnnotationTools: true,
-        // defaultViewMode: "FIT_WIDTH",showPageControls:true,
-      }
-      this.viewSDKClient.previewFile('pdf-div',defConfg,this.pdfURL,this.annotData);
+      let data = {
+        defConfg: {
+          enableAnnotationAPIs: true,
+          showLeftHandPanel:false,showPrintPDF: false,
+          // includePDFAnnotations:true // for the save button
+          // ,showAnnotationTools: true,
+          // defaultViewMode: "FIT_WIDTH",showPageControls:true,
+        },
+        name: 'my file',
+        divId: 'pdf-div',
+        url: this.pdfURL
+      }      
+      this.viewSDKClient.previewFile(data,this.annotData);
     });
   }
 
