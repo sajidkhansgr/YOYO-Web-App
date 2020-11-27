@@ -37,7 +37,7 @@ export class ViewSDKClient {
     return this.readyPromise;
   }
 
-  previewFile(divId: string, viewerConfig: any, fileName: string, list_of_annotations?: any) {
+  previewFile(data: any, list_of_annotations?: any) {
     const eventOptions = {
       // Pass the events to receive.
       // If no event is passed in listenOn, then all the annotation events will be received.
@@ -56,9 +56,9 @@ export class ViewSDKClient {
       /* Pass your registered client id */
       clientId: environment.CLNT_ID, //'8c0cd670273d451cbc9b351b11d22318',
     };
-    if (divId) { /* Optional only for Light Box embed mode */
+    if (data.divId) { /* Optional only for Light Box embed mode */
       /* Pass the div id in which PDF should be rendered */
-      config.divId = divId;
+      config.divId = data.divId;
     }
     /* Initialize the AdobeDC View object */
     this.adobeDCView = new window.AdobeDC.View(config);
@@ -69,7 +69,7 @@ export class ViewSDKClient {
       content: {
         /* Location of file where it is hosted */
         location: {
-          url: fileName, //'https://documentcloud.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf',
+          url: data.url, //'https://documentcloud.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf',
           /*
           If the file URL requires some additional headers, then it can be passed as follows:-
           headers: [
@@ -84,11 +84,11 @@ export class ViewSDKClient {
       /* Pass meta data of file */
       metaData: {
         /* file name */
-        fileName: 'my file.pdf',
+        fileName: data.name,
         /* file ID */
-        id: 'abc'
+        id: 'file'+data.id
       }
-    }, viewerConfig);
+    }, data.defConfg);
     this.registerSaveApiHandler();
     this.registerEventsHandler();
 

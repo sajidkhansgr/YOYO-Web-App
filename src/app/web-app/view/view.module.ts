@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,10 +21,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    FormsModule, ReactiveFormsModule,
     LoaderModule,
-    MatCheckboxModule,
-    NgbTooltipModule,
-    MatTabsModule,
+    MatCheckboxModule, NgbTooltipModule, MatTabsModule,
     MatFormFieldModule, MatInputModule
   ],
   providers: [ContentWorkspaceService]
