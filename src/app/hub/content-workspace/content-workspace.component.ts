@@ -1272,7 +1272,7 @@ export class ContentWorkspaceComponent implements OnInit {
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success('Content added successfully', 'Success!');
-            this.files = [];
+            this.files = [];this.pageNo = 1;
             this.cntntList();
             this.dismissModal();
           } else {
@@ -1304,7 +1304,7 @@ export class ContentWorkspaceComponent implements OnInit {
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success('Content added successfully', 'Success!');
-            this.files = [];
+            this.files = [];this.pageNo = 1;
             this.cntntList();
             this.dismissModal();
           } else {

@@ -29,6 +29,7 @@ export class TagsComponent implements OnInit {
           debounceTime(1000),
           distinctUntilChanged(),
           tap(() => {
+            this.pageNo = 1;
             this.getTags();
           })
         )
@@ -109,7 +110,7 @@ export class TagsComponent implements OnInit {
   // change displayed tags (isActive)
   chngDispTags() {
     this.activeTags == 1 ? this.isActiveTag = true : this.isActiveTag = false;
-    this.getTags();
+    this.pageNo = 1;this.getTags();
   }
 
   // when changing page size
@@ -138,7 +139,7 @@ export class TagsComponent implements OnInit {
         this.tagServ.actDeactGrp(this.rowInfo.id.toString(),this.rowInfo.isActive?false:true).subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Tag ${actDeac}d successfully`, 'Success!');
-            this.getTags();
+            this.pageNo = 1;this.getTags();
           } else {
             this.toastr.error(`Unable to ${actDeac} tag`, 'Error!');
           }
@@ -167,7 +168,7 @@ export class TagsComponent implements OnInit {
             // console.log(data);
             this.toastr.success(data.message || 'Tag updated successfully', 'Success!');
             this.closeDoc();
-            this.getTags();
+            this.pageNo = 1;this.getTags();
           } else {
             this.toastr.error('Unable to update Tag', 'Error!');
           }
@@ -203,7 +204,7 @@ export class TagsComponent implements OnInit {
         SortColumn: col.k,
         ascending: colData.asc,
       }
-      this.getTags()
+      this.getTags();
   }
 
   // change tags listing - table
@@ -219,7 +220,7 @@ export class TagsComponent implements OnInit {
       this.categoryId = type;
       this.unCategorized = true;
     }
-    this.getTags();
+    this.pageNo = 1;this.getTags();
   }
 
   // list of tags
@@ -304,7 +305,7 @@ export class TagsComponent implements OnInit {
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || 'Tags added successfully', 'Success!');
-            this.getTags();
+            this.pageNo = 1;this.getTags();
             // this.initForms();
           } else {
             this.toastr.error('Unable to add Tag', 'Error!');

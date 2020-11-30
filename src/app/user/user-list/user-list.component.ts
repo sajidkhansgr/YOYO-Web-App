@@ -303,6 +303,7 @@ export class UserListComponent implements OnInit {
         if (data) {
           this.toastr.success(data.message || 'User added successfully', 'Success!');
           this.dismissModal();
+          this.pageNo = 1;
           this.userList();
         }
         this.usrLoading = false;
@@ -321,6 +322,7 @@ export class UserListComponent implements OnInit {
           this.toastr.success(data.message || 'User updated successfully', 'Success!');
           this.dismissModal();
           this.isEdit = false;
+          this.pageNo = 1;
           this.userList();
         }
         this.usrLoading = false;

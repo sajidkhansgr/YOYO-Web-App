@@ -177,7 +177,7 @@ export class GroupComponent implements OnInit {
       if (data) {
         this.toastr.success(data.message || 'Group added successfully', 'Success!');
         this.dismissModal();
-        this.grpsList();
+        this.pageNo = 1;this.grpsList();
       } else {
         this.toastr.error(data.result.data || 'Unable to add Group', 'Error!');
       }
@@ -193,7 +193,7 @@ export class GroupComponent implements OnInit {
       if (data) {
         this.toastr.success(data.message || 'Group updated successfully', 'Success!');
         this.dismissModal();
-        this.grpsList();
+        this.pageNo = 1;this.grpsList();
       } else {
         this.toastr.error(data.result.data || 'Unable to update Group', 'Error!');
       }
@@ -217,7 +217,7 @@ export class GroupComponent implements OnInit {
         this.grpServ.actDeactGrp(this.rowInfo.id.toString(), this.rowInfo.isActive ? false : true).subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Group ${actDeac}d successfully`, 'Success!');
-            this.grpsList();
+            this.pageNo = 1;this.grpsList();
           } else {
             this.toastr.error(`Unable to ${actDeac} group`, 'Error!');
           }
