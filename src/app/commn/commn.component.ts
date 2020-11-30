@@ -250,7 +250,7 @@ export class CommnComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Annoucement added successfully', 'Success!');
-          this.getAncmnts();
+          this.pageNo = 1;this.getAncmnts();
           this.dismissModal();
           //get all annoucem
         } else {
@@ -268,8 +268,7 @@ export class CommnComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Annoucement updated successfully', 'Success!');
-          this.rowInfo = {};
-          this.getAncmnts();
+          this.pageNo = 1;this.getAncmnts();
           this.dismissModal();
           //get all annoucem
         } else {
@@ -406,7 +405,7 @@ export class CommnComponent implements OnInit {
         // console.log(tag);
         this.commnServ.archAncmnt(ancmnt!.id.toString()).subscribe((data: any) => {
           if (data) {
-            this.getAncmnts();
+            this.pageNo = 1;this.getAncmnts();
             this.toastr.success(data.message || 'Announcement archived successfully', 'Success!');
           } else {
             this.toastr.error('Unable to arhive announcement', 'Error!');
