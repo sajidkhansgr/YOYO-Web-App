@@ -66,23 +66,23 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.ADD_SMT_FLDR}`, this.freezeFolderObj(data));
   }
 
-  // get smart folder list
-  smartFolderListWrkspc(params: any): Observable<any[]> {
-    let queryParams = new HttpParams();
-    for (let key in params) {
-      if (params[key]) {
-        queryParams = queryParams.set(key, params[key]);
-      }
-    }
-    return this.http.get(`${AppSettings.LIST_SMT_FLDR_WRKSPC}`, {
-      params: queryParams
-    }
-    ).pipe(
-      map((res: any) =>
-        res
-      )
-    );
-  }
+  // // get smart folder list
+  // smartFolderListWrkspc(params: any): Observable<any[]> {
+  //   let queryParams = new HttpParams();
+  //   for (let key in params) {
+  //     if (params[key]) {
+  //       queryParams = queryParams.set(key, params[key]);
+  //     }
+  //   }
+  //   return this.http.get(`${AppSettings.LIST_SMT_FLDR_WRKSPC}`, {
+  //     params: queryParams
+  //   }
+  //   ).pipe(
+  //     map((res: any) =>
+  //       res
+  //     )
+  //   );
+  // }
 
   // get smart folder by id
   getSmtFolder(id: any) {
@@ -110,23 +110,23 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.ADD_FLDR}`, this.freezeFolderObj(data));
   }
 
-  // get folder list
-  folderListWrkspc(params: any): Observable<any[]> {
-    let queryParams = new HttpParams();
-    for (let key in params) {
-      if (params[key]) {
-        queryParams = queryParams.set(key, params[key]);
-      }
-    }
-    return this.http.get(`${AppSettings.LIST_FLDR_WRKSPC}`, {
-      params: queryParams
-    }
-    ).pipe(
-      map((res: any) =>
-        res
-      )
-    );
-  }
+  // // get folder list
+  // folderListWrkspc(params: any): Observable<any[]> {
+  //   let queryParams = new HttpParams();
+  //   for (let key in params) {
+  //     if (params[key]) {
+  //       queryParams = queryParams.set(key, params[key]);
+  //     }
+  //   }
+  //   return this.http.get(`${AppSettings.LIST_FLDR_WRKSPC}`, {
+  //     params: queryParams
+  //   }
+  //   ).pipe(
+  //     map((res: any) =>
+  //       res
+  //     )
+  //   );
+  // }
 
   // get folder by id
   getFolder(id: any) {

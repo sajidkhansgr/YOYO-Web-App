@@ -260,11 +260,14 @@
         </div>
       </div>
       <div *ngIf="!showAll">
-        <ng-container *ngIf="fldrArr.length>0 || mdlCntntArr.length>0; else noDATA">
+        <ng-container *ngIf="fldrArr.length > 0 || mdlCntntArr.length > 0; else noDATA">
+          <!-- sub folders -->
           <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr"
-            (click)="showWorkspcFldrs(undefined, fldr)">
+            (click)="showAll === false ? showWorkspcFldrs(undefined, fldr) : showMyFiles(fldr);">
             <div class="icon align-self-center mr-2">
-              <img src="{{fldr.folderIconPath}}" style="max-height:50px; width: 40px;">
+              <img
+                src="{{fldr.folderIconPath ? 'http://hiforceapi.imobisoft.eu/' + fldr.folderIconPath : 'assets/images/folderIcon.png'}}"
+                style="max-height:50px; width: 40px;">
             </div>
             <div class="name align-self-center">
               {{fldr.name}}
@@ -273,11 +276,13 @@
               <i class="fa fa-angle-right"></i>
             </div>
           </div>
+          <!-- content -->
           <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let content of mdlCntntArr">
             <mat-checkbox class="align-self-center mr-2" (change)="selectContent(content, $event.checked)">
             </mat-checkbox>
             <div class="icon align-self-center mr-2">
-              <img src="{{content.pdfImages[0] ? content.pdfImages[0].imagePath : ''}}"
+              <img
+                src="{{content.pdfImages && content.pdfImages.length > 0 ? 'http://hiforceapi.imobisoft.eu/' + content.pdfImages[0].imagePath : 'http://hiforceapi.imobisoft.eu/' + content.urlIconPath}}"
                 style="max-height:50px; width: 40px;">
             </div>
             <div class="name align-self-center">

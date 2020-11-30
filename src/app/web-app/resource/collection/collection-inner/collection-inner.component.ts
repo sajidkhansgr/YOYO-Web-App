@@ -31,7 +31,7 @@ export class CollectionInnerComponent implements OnInit {
   contentArr!: Content[]; selContentArr!: Content[];
   showBotDiv!: boolean;
   workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined; mdlCntntArr!: Content[]; addContentArr!: Content[];
-  showAll!: boolean; contentNav!: any[];
+  showAll!: boolean | undefined; contentNav!: any[];
 
   constructor(
     private modalService: NgbModal,
@@ -79,9 +79,16 @@ export class CollectionInnerComponent implements OnInit {
   }
 
   // show my files
-  showMyFiles() {
+  showMyFiles(fldr?: any, val?: string) {
+    // console.log(fldr);
     this.fldrLoading = true; this.contentLoading = true;
-    this.fileServ.myFiles({}).subscribe((data: any) => {
+    val !== 'back' ? fldr ? this.contentNav.push(fldr) : this.contentNav = [{ name: "My Files" }] : undefined;
+    let query = {
+      folderId: fldr ? fldr.id : undefined
+    };
+    // console.log(query);
+    this.fileServ.myFiles(query).subscribe((data: any) => {
+      // console.log(data);
       if (data && data.result) {
         if (Array.isArray(data.result.contents) && data.result.contents.length > 0) {
           this.mdlCntntArr = data.result.contents;
@@ -94,7 +101,7 @@ export class CollectionInnerComponent implements OnInit {
           this.fldrArr = [];
         }
       }
-      this.showAll = false;
+      this.showAll = undefined;
       this.fldrLoading = false; this.contentLoading = false;
     }, (err: any) => {
       this.showAll = false;
@@ -126,20 +133,21 @@ export class CollectionInnerComponent implements OnInit {
     };
     // console.log(params)
     this.expServ.getAllObjWrkspc(params).subscribe((data: any) => {
-      console.log(data);
-      if (data && data.result) {
-        if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0) {
-          this.contentArr.push(...data.result[0].contents);
+      // console.log(data);
+      if (data && data.result && data.result.result) {
+        if (Array.isArray(data.result.result[0].contents) && data.result.result[0].contents.length > 0) {
+          this.mdlCntntArr.push(...data.result.result[0].contents);
+          // console.log(data.result.result[0].contents)
         }
-        if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0) {
-          for (let i = 0; i < data.result[0].folders.length; i++) {
-            this.fldrArr.push({ ...data.result[0].folders[i], key: 'fldr' });
+        if (Array.isArray(data.result.result[0].folders) && data.result.result[0].folders.length > 0) {
+          for (let i = 0; i < data.result.result[0].folders.length; i++) {
+            this.fldrArr.push({ ...data.result.result[0].folders[i], key: 'fldr' });
           }
           // console.log(data.result.folders);
         }
-        if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0) {
-          for (let i = 0; i < data.result[0].smartFolders.length; i++) {
-            this.fldrArr.push({ ...data.result[0].smartFolders[i], key: 'smtFldr' });
+        if (Array.isArray(data.result.result[0].smartFolders) && data.result.result[0].smartFolders.length > 0) {
+          for (let i = 0; i < data.result.result[0].smartFolders.length; i++) {
+            this.fldrArr.push({ ...data.result.result[0].smartFolders[i], key: 'smtFldr' });
           }
         }
       }
@@ -150,55 +158,55 @@ export class CollectionInnerComponent implements OnInit {
     });
   }
 
-  // get list of folders
-  getFolderList() {
-    this.fldrLoading = true;
-    let query = {
-      workspaceId: this.selWrkspc!.id,
-      folderId: this.selFldr ? this.selFldr!.id : undefined,
-      isActive: true
-    };
-    // console.log(query);
-    this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
-      // console.log(data);
-      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-        for (let i = 0; i < data.result.results.length; i++) {
-          this.fldrArr.push({ ...data.result.results[i], key: 'fldr' });
-        }
-      } else {
-      }
-      this.fldrLoading = false;
-    }, (err: any) => {
-      this.fldrLoading = false;
-    });
-  }
+  // // get list of folders
+  // getFolderList() {
+  //   this.fldrLoading = true;
+  //   let query = {
+  //     workspaceId: this.selWrkspc!.id,
+  //     folderId: this.selFldr ? this.selFldr!.id : undefined,
+  //     isActive: true
+  //   };
+  //   // console.log(query);
+  //   this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
+  //     // console.log(data);
+  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+  //       for (let i = 0; i < data.result.results.length; i++) {
+  //         this.fldrArr.push({ ...data.result.results[i], key: 'fldr' });
+  //       }
+  //     } else {
+  //     }
+  //     this.fldrLoading = false;
+  //   }, (err: any) => {
+  //     this.fldrLoading = false;
+  //   });
+  // }
 
-  // get list of smart folders
-  getSmartFolderList() {
-    this.sFldrLoading = true;
-    let query = {
-      workspaceId: this.selWrkspc!.id,
-      folderId: this.selFldr ? this.selFldr!.id : undefined,
-      isActive: true
-    };
-    this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-        for (let i = 0; i < data.result.results.length; i++) {
-          this.fldrArr.push({ ...data.result.results[i], key: 'smtFldr' });
-        }
-      } else {
-      }
-      this.sFldrLoading = false;
-    }, (err: any) => {
-      this.sFldrLoading = false;
-    });
-  }
+  // // get list of smart folders
+  // getSmartFolderList() {
+  //   this.sFldrLoading = true;
+  //   let query = {
+  //     workspaceId: this.selWrkspc!.id,
+  //     folderId: this.selFldr ? this.selFldr!.id : undefined,
+  //     isActive: true
+  //   };
+  //   this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
+  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+  //       for (let i = 0; i < data.result.results.length; i++) {
+  //         this.fldrArr.push({ ...data.result.results[i], key: 'smtFldr' });
+  //       }
+  //     } else {
+  //     }
+  //     this.sFldrLoading = false;
+  //   }, (err: any) => {
+  //     this.sFldrLoading = false;
+  //   });
+  // }
 
   // get collection list
   listColctn() {
     this.colctnLoading = true;
     this.colctnSrv.colctnList({ pageNo: 0 }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         this.colctnArr = data.result.results;
       } else {
@@ -217,15 +225,15 @@ export class CollectionInnerComponent implements OnInit {
       this.contentNav.push(fldr);
       this.selFldr = fldr;
       this.mdlCntntArr = [];
-      this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr();
+      // this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr();
     } else {
       this.selWrkspc = wrkspc;
       this.contentNav = [wrkspc];
     }
     this.fldrArr = [];
     this.getAllObjWrkspc();
-    this.getFolderList();
-    this.getSmartFolderList();
+    // this.getFolderList();
+    // this.getSmartFolderList();
     this.showAll = false;
   }
 
@@ -236,11 +244,13 @@ export class CollectionInnerComponent implements OnInit {
     this.fldrArr = [];
     this.mdlCntntArr = [];
     if (this.contentNav.length == 0) {
+      this.selFldr = undefined;
       this.showAll = true;
     } else {
-      this.getFolderList();
-      this.getSmartFolderList();
-      this.selFldr ? this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr() : undefined;
+      this.showAll === false ? this.getAllObjWrkspc() : this.showMyFiles(this.selFldr, 'back');
+      // this.getFolderList();
+      // this.getSmartFolderList();
+      // this.selFldr ? this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr() : undefined;
     }
     // console.log(this.contentNav);
     // console.log(this.selFldr);
@@ -332,23 +342,23 @@ export class CollectionInnerComponent implements OnInit {
     });
   }
 
-  // get content by folder
-  getContentFldr() {
-    this.contentLoading = true;
-    let query: any = {
-      workspaceId: this.selWrkspc!.id,
-      folderId: this.selFldr ? this.selFldr!.id : undefined
-    };
-    this.cwServ.contentByFolder(query).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.mdlCntntArr.push(...data.result);
-        // console.log(this.mdlCntntArr);
-      }
-      this.contentLoading = false;
-    }, (err: any) => {
-      this.contentLoading = false;
-    });
-  }
+  // // get content by folder
+  // getContentFldr() {
+  //   this.contentLoading = true;
+  //   let query: any = {
+  //     workspaceId: this.selWrkspc!.id,
+  //     folderId: this.selFldr ? this.selFldr!.id : undefined
+  //   };
+  //   this.cwServ.contentByFolder(query).subscribe((data: any) => {
+  //     if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+  //       this.mdlCntntArr.push(...data.result);
+  //       // console.log(this.mdlCntntArr);
+  //     }
+  //     this.contentLoading = false;
+  //   }, (err: any) => {
+  //     this.contentLoading = false;
+  //   });
+  // }
 
   // get content by collection
   getContentColctn(colctn?: Colctn) {
