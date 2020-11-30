@@ -84,6 +84,11 @@ export class ContentWorkspaceService {
     );
   }
 
+  // get smart folder by id
+  getSmtFolder(id: any) {
+    return this.http.get(`${AppSettings.GET_SMT_FLDR}?id=${id}`);
+  }
+
   // ---- folder ---- //
   // activate workspace
   folderAct(id: any) {
@@ -121,6 +126,11 @@ export class ContentWorkspaceService {
         res
       )
     );
+  }
+
+  // get folder by id
+  getFolder(id: any) {
+    return this.http.get(`${AppSettings.GET_FLDR}?id=${id}`);
   }
 
   // ---- workspace ---- //

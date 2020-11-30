@@ -671,7 +671,8 @@
                 <!-- folders and smart folders -->
                 <div class="col-3 curs-ptr my-2" *ngFor="let folder of folderArr">
                   <div class="image">
-                    <img src="{{folder.folderIconPath ? + folder.folderIconPath : 'assets/images/folderIcon.png'}}"
+                    <img
+                      src="{{folder.folderIconPath ? 'http://hiforceapi.imobisoft.eu/' + folder.folderIconPath : 'assets/images/folderIcon.png'}}"
                       (click)="changeFolder(folder)">
                     <div class="dropdown" style="z-index:1;">
                       <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
@@ -1181,7 +1182,7 @@
           </div>
         </div> -->
         <div class="image border mt-2 mb-4">
-          <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon">
+          <img [src]="iconUrl && addURLIcon == 'cust-icon' ? 'http://hiforceapi.imobisoft.eu/' + iconUrl : defIcon">
           <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(ip)"><i
               class="fas fa-trash-alt"></i>
           </div>
@@ -1310,7 +1311,7 @@
         </div>
       </div> -->
       <div class="image border mt-2 mb-4">
-        <img [src]="iconUrl && addURLIcon=='cust-icon'?iconUrl:defIcon">
+        <img [src]="iconUrl && addURLIcon == 'cust-icon' ? 'http://hiforceapi.imobisoft.eu/' + iconUrl : defIcon">
         <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg(inp)"><i
             class="fas fa-trash-alt"></i>
         </div>

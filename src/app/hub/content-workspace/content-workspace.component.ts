@@ -210,7 +210,7 @@ export class ContentWorkspaceComponent implements OnInit {
     };
     // console.log(params)
     this.cwServ.getAllObjWrkspc(params).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data && data.result) {
         if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0) {
           this.contentArr.push(...data.result[0].contents);
@@ -223,7 +223,7 @@ export class ContentWorkspaceComponent implements OnInit {
         }
         if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0) {
           for (let i = 0; i < data.result[0].smartFolders.length; i++) {
-            this.folderArr.push({ ...data.result[0].smartFolders[i], key: 'fldr' });
+            this.folderArr.push({ ...data.result[0].smartFolders[i], key: 'smtFldr' });
           }
         }
       }
@@ -254,13 +254,16 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // edit folder/smart folder modal
   editFolder(modal: any, folder: any) {
-    this.selFolder = folder;
-    this.addURLIcon = 'cust-icon';
-    this.iconUrl = folder.folderIconPath;
+    // call get by id
+    // this.selFolder = folder;
+    if (folder.folderIconPath) {
+      this.addURLIcon = 'cust-icon';
+      this.iconUrl = folder.folderIconPath;
+    }
     if (folder.key == 'fldr') {
-      this.folderForm.patchValue({ ...this.selFolder });
+      this.getFolder(folder.id);
     } else if (folder.key == 'smtFldr') {
-      this.smartFolderForm.patchValue({ ...this.selFolder });
+      this.getSmartFolder(folder.id);
     }
     // console.log(folder);
     this.openModal(modal);
@@ -409,13 +412,31 @@ export class ContentWorkspaceComponent implements OnInit {
         ...this.smartFolderForm.value,
         id: this.selFolder!.id,
         smartFolderIcon: this.custIcon,
-        workspaceId: this.selWrkspc!.id,
+        workspaceId: this.selFolder!.workspaceId,
         folderId: this.selFolder!.folderId,
         isActive: this.selFolder!.isActive,
         // propertyIds: this.propsArr.length > 0 ? (this.propsArr).toString() : undefined,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
-      // console.log(folderData);
+      let tagIds = [];
+      if (this.allTags.length > 0) {
+        for (let i = 0; i < this.allTags.length; i++) {
+          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 1 }));
+        }
+      }
+
+      if (this.anyTags.length > 0) {
+        for (let i = 0; i < this.allTags.length; i++) {
+          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 2 }));
+        }
+      }
+      if (this.noneTags.length > 0) {
+        for (let i = 0; i < this.allTags.length; i++) {
+          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 3 }));
+        }
+      }
+      folderData.tagIds = '[' + tagIds.toString() + ']';
+      // console.log(folderData.tagIds);
       this.cwServ.updSmartFolder(folderData)
         .subscribe((data: any) => {
           // console.log(data);
@@ -459,6 +480,16 @@ export class ContentWorkspaceComponent implements OnInit {
           tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 1 }));
         }
       }
+      if (this.anyTags.length > 0) {
+        for (let i = 0; i < this.allTags.length; i++) {
+          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 2 }));
+        }
+      }
+      if (this.noneTags.length > 0) {
+        for (let i = 0; i < this.allTags.length; i++) {
+          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 3 }));
+        }
+      }
       folderData.tagIds = '[' + tagIds.toString() + ']';
 
       // console.log()
@@ -487,32 +518,38 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  // // get list of smart folders
-  // getSmartFolderList() {
-  //   // this.folderLoading = true;
-  //   let query = {
-  //     workspaceId: this.selWrkspc!.id,
-  //     folderId: this.dispFolder ? this.dispFolder!.id : null,
-  //     isActive: this.isActiveFldrs
-  //   };
-  //   // console.log(query);
-  //   this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
-  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-  //       for (let i = 0; i < data.result.results.length; i++) {
-  //         this.folderArr.push({ ...data.result.results[i], key: 'smtFldr' });
-  //       }
-  //       // console.log(this.folderArr);
-  //     } else {
-  //       // this.folderArr = [];
-  //       // this.toastr.error('No smart folders found', 'Error!');
-  //     }
-  //     this.dispFolder = undefined;
-  //     this.folderLoading = false;
-  //   }, (err: any) => {
-  //     this.dispFolder = undefined;
-  //     this.folderLoading = false;
-  //   });
-  // }
+  // get smart folder by id
+  getSmartFolder(id: number) {
+    this.cwServ.getSmtFolder(id).subscribe((data: any) => {
+      // console.log(data);
+      if (data && data.result) {
+        this.selFolder = data.result;
+        this.smartFolderForm.patchValue({ ...this.selFolder });
+        if (data.result.smartFolderTags.length > 0) {
+          let temp = this.tags;
+          this.allTags = []; this.anyTags = []; this.noneTags = [];
+          for (let i = 0; i < data.result.smartFolderTags.length; i++) {
+            if (data.result.smartFolderTags[i].tagId === 1) {
+              this.allTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
+              // console.log(data.result.smartFolderTags[i].id);
+            } else if (data.result.smartFolderTags[i].tagId === 2) {
+              this.anyTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
+              // console.log(data.result.smartFolderTags[i].id);
+            } else if (data.result.smartFolderTags[i].tagId === 3) {
+              this.noneTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
+              // console.log(data.result.smartFolderTags[i].id);
+            }
+          }
+          // console.log(temp);
+        }
+        console.log(data.result.smartFolderTags);
+      } else {
+        this.selFolder = undefined;
+      }
+    }, (err: any) => {
+      this.selFolder = undefined;
+    });
+  }
 
   // ---- folder ---- //
   // folder submit functions (add/update)
@@ -572,17 +609,17 @@ export class ContentWorkspaceComponent implements OnInit {
   // edit folder
   updFolder() {
     if (this.folderForm.valid) {
-      // this.disabled = true;
+      this.disabled = true;
       let folderData: any = {
         ...this.folderForm.value,
         id: this.selFolder!.id,
         folderIcon: this.custIcon,
         workspaceId: this.selFolder!.workspaceId,
-        folderId: 0,
+        folderId: this.selFolder!.folderId,
         isActive: this.selFolder!.isActive
       };
       // console.log(this.selFolder);
-      // console.log(folderData.folderIcon);
+      // console.log(folderData);
       this.cwServ.updFolder(folderData).subscribe((data: any) => {
         // console.log(data);
         if (data) {
@@ -643,32 +680,23 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  // get list of folders
-  // getFolderList() {
-  //   // this.folderLoading = true;
-  //   let query = {
-  //     workspaceId: this.selWrkspc!.id,
-  //     folderId: this.dispFolder ? this.dispFolder!.id : null,
-  //     isActive: this.isActiveFldrs
-  //   };
-  //   // console.log(query);
-  //   this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
-  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-  //       for (let i = 0; i < data.result.results.length; i++) {
-  //         this.folderArr.push({ ...data.result.results[i], key: 'fldr' });
-  //       }
-  //       // console.log(this.folderArr);
-  //     } else {
-  //       // this.folderArr = [];
-  //       // this.toastr.error('No folders found', 'Error!');
-  //     }
-  //     // this.dispFolder = undefined;
-  //     // this.folderLoading = false;
-  //   }, (err: any) => {
-  //     // this.dispFolder = undefined;
-  //     // this.folderLoading = false;
-  //   });
-  // }
+  // get folder by id
+  getFolder(id: number) {
+    this.cwServ.getFolder(id).subscribe((data: any) => {
+      // console.log(data);
+      if (data && data.result) {
+        this.selFolder = data.result;
+        this.folderForm.patchValue({ ...this.selFolder });
+        // console.log(this.iconUrl);
+        // console.log(this.custIcon);
+      } else {
+        this.selFolder = undefined;
+      }
+    }, (err: any) => {
+      this.selFolder = undefined;
+    });
+  }
+
 
   // ---- workspace ---- //
   // activate workspace
@@ -1021,7 +1049,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // // get content by smart folder ----
   getContentSmtFldr() {
-    // this.contentLoading = true;
+    this.folderLoading = true;
     let query: any = {
       // workspaceId: this.selWrkspc!.id,
       smartFolderId: this.dispFolder ? this.dispFolder!.id : undefined
@@ -1030,30 +1058,11 @@ export class ContentWorkspaceComponent implements OnInit {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.contentArr.push(...data.result);
       }
-      // this.contentLoading = false;
+      this.folderLoading = false;
     }, (err: any) => {
-      // this.contentLoading = false;
+      this.folderLoading = false;
     });
   }
-
-  // // get content by folder
-  // getContentFldr() {
-  //   // this.contentLoading = true;
-  //   let query: any = {
-  //     workspaceId: this.selWrkspc!.id,
-  //     folderId: this.dispFolder ? this.dispFolder!.id : undefined
-  //   };
-  //   this.cwServ.contentByFolder(query).subscribe((data: any) => {
-  //     // console.log(data);
-  //     if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-  //       this.contentArr.push(...data.result);
-  //       // console.log(this.mdlCntntArr);
-  //     }
-  //     // this.contentLoading = false;
-  //   }, (err: any) => {
-  //     // this.contentLoading = false;
-  //   });
-  // }
 
   closeEdit(type: string, isUpd: boolean = true) {
     if (type && isUpd) {
@@ -1428,7 +1437,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   downloadFile() {
-    this.fileServ.downloadFile(this.rowInfo!.contentPath,this.rowInfo!.name);
+    this.fileServ.downloadFile(this.rowInfo!.contentPath, this.rowInfo!.name);
   }
 
   dismissModal() {
