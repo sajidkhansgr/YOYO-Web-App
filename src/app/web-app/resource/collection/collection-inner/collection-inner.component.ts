@@ -117,6 +117,39 @@ export class CollectionInnerComponent implements OnInit {
       });
   }
 
+  // get folder and smart folder from wrkspace and content from workpspace and folder
+  getAllObjWrkspc() {
+    let params = {
+      workspaceId: this.selWrkspc!.id,
+      isActive: true,
+      folderId: this.selFldr ? this.selFldr!.id : undefined,
+    };
+    // console.log(params)
+    this.expServ.getAllObjWrkspc(params).subscribe((data: any) => {
+      console.log(data);
+      if (data && data.result) {
+        if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0) {
+          this.contentArr.push(...data.result[0].contents);
+        }
+        if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0) {
+          for (let i = 0; i < data.result[0].folders.length; i++) {
+            this.fldrArr.push({ ...data.result[0].folders[i], key: 'fldr' });
+          }
+          // console.log(data.result.folders);
+        }
+        if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0) {
+          for (let i = 0; i < data.result[0].smartFolders.length; i++) {
+            this.fldrArr.push({ ...data.result[0].smartFolders[i], key: 'smtFldr' });
+          }
+        }
+      }
+      // console.log(this.folderArr);
+      this.fldrLoading = false;
+    }, (err: any) => {
+      this.fldrLoading = false;
+    });
+  }
+
   // get list of folders
   getFolderList() {
     this.fldrLoading = true;
@@ -190,6 +223,7 @@ export class CollectionInnerComponent implements OnInit {
       this.contentNav = [wrkspc];
     }
     this.fldrArr = [];
+    this.getAllObjWrkspc();
     this.getFolderList();
     this.getSmartFolderList();
     this.showAll = false;
