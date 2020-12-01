@@ -4,7 +4,8 @@
     <div class="heading bg-white w-100 row mx-0" *ngIf="!isSelPage">
       <div class="col-4 align-self-center">{{cntnt.name}}</div>
       <div class="col-4 align-self-center d-flex justify-content-center">
-        <div class="btn" placement="bottom" *ngIf="cntnt.contentType==1" ngbTooltip="{{leftSide?'Hide Pages':'Show Pages'}}" (click)="leftSide = !leftSide">
+        <div class="btn" placement="bottom" *ngIf="cntnt.contentType==1"
+          ngbTooltip="{{leftSide?'Hide Pages':'Show Pages'}}" (click)="leftSide = !leftSide">
           <i class="fas fa-th-large"></i>
         </div>
         <div class="dropdown">
@@ -12,7 +13,8 @@
             <i class="fas fa-ellipsis-h"></i>
           </button>
           <div class="dropdown-menu" aria-labelledby="moreDD">
-            <button *ngIf="cntnt.contentPath" class="dropdown-item curs-ptr" (click)="downloadFile()"><i class="fas fa-download"></i>Download</button>
+            <button *ngIf="cntnt.contentPath" class="dropdown-item curs-ptr" (click)="downloadFile()"><i
+                class="fas fa-download"></i>Download</button>
             <button class="dropdown-item curs-ptr"><i class="fas fa-thumbs-up"></i>Like</button>
           </div>
         </div>
@@ -27,11 +29,14 @@
         </div>
       </div>
       <div class="col-4 text-right align-self-center">
-        <div class="btn" *ngIf="!isFullScreen" (click)="openFullscreen()" ngbTooltip="View in Full Screen"><i class="fas fa-expand-alt"></i></div>
-        <div class="btn" *ngIf="isFullScreen" (click)="closeFullscreen()" ngbTooltip="Exit from Full Screen"><i class="fas fa-compress-arrows-alt"></i></div>
+        <div class="btn" *ngIf="!isFullScreen" (click)="openFullscreen()" ngbTooltip="View in Full Screen"><i
+            class="fas fa-expand-alt"></i></div>
+        <div class="btn" *ngIf="isFullScreen" (click)="closeFullscreen()" ngbTooltip="Exit from Full Screen"><i
+            class="fas fa-compress-arrows-alt"></i></div>
         <div class="btn"><i class="fas fa-times"></i></div>
       </div>
-      <div class="btn btn-light right-side-toggle" ngbTooltip="{{rightSide?'Hide Detailed Section':'Show Detailed Section'}}" (click)="rightSide = !rightSide">
+      <div class="btn btn-light right-side-toggle" placement="left"
+        ngbTooltip="{{rightSide?'Hide Detailed Section':'Show Detailed Section'}}" (click)="rightSide = !rightSide">
         <i class="fas fa-angle-double-{{rightSide?'right':'left'}}"></i>
       </div>
     </div>
@@ -41,14 +46,17 @@
       </div>
       <div class="col-4 align-self-center d-flex justify-content-center">{{cntnt.name}}</div>
       <div class="col-4 align-self-center text-right">
-        <button class="btn btn-primary text-white btn-sm" (click)="openModal(addColl,'pages')" [disabled]="!selPages || (selPages && selPages.length<=0)">Add</button>
+        <button class="btn btn-primary text-white btn-sm" (click)="openModal(addColl,'pages')"
+          [disabled]="!selPages || (selPages && selPages.length<=0)">Add</button>
       </div>
     </div>
     <div class="pdf-view d-flex mx-0">
       <div class="left-body bg-white text-center" *ngIf="cntnt.contentType==1 && leftSide">
-        <div class="bg-hi-grey rounded px-3 py-1 my-3 w-fit mx-auto">{{cntnt.name}}</div>
-        <div class="d-flex my-3 pl-3" *ngFor="let cPImg of cntnt.pdfImages" [ngClass]="{'active': actPage ==cPImg.pageNo}">
-          <mat-checkbox *ngIf="isSelPage" class="align-self-center mb-4" (change)="addRemPages($event,cPImg)"></mat-checkbox>
+        <div class="bg-hi-grey rounded px-3 py-1 my-3 w-75 text-truncate w-fit mx-auto">{{cntnt.name}}</div>
+        <div class="d-flex my-3 pl-3" *ngFor="let cPImg of cntnt.pdfImages"
+          [ngClass]="{'active': actPage ==cPImg.pageNo}">
+          <mat-checkbox *ngIf="isSelPage" class="align-self-center mb-4" (change)="addRemPages($event,cPImg)">
+          </mat-checkbox>
           <div class="curs-ptr" (click)="goToPage(cPImg)">
             <div class="thumbnail">
               <img [src]="cPImg.imagePath?cPImg.imagePath:defIcon" class="w-50" alt="Thumbnail" />
@@ -60,29 +68,29 @@
           No thumbnail available
         </div>
       </div>
-      <div class="main-body overflow-auto w-100 p-2">
-        <span [ngSwitch]="cntnt.contentType">
-          <span *ngSwitchCase="1">
-            <span *ngIf="cntnt.pdfContentPath">
+      <div class="main-body overflow-auto w-100">
+        <div class="h-100" [ngSwitch]="cntnt.contentType">
+          <div class="h-100" *ngSwitchCase="1">
+            <div class="h-100" *ngIf="cntnt.pdfContentPath">
               <div id='pdf-div' class='pdf-view'></div>
-            </span>
-            <span *ngIf="!cntnt.pdfContentPath">No pdf found</span>
-          </span>
-          <span *ngSwitchCase="2">
-            <img [src]="cntnt.contentPath?cntnt.contentPath:defIcon" alt="Image"/>
-          </span>
-          <span *ngSwitchCase="3">
-            <span>Url : {{cntnt.url||'N/A'}}</span>
-            <img [src]="cntnt.urlIconPath?cntnt.urlIconPath:defIcon" alt="Url Icon"/>
-          </span>
-          <span *ngSwitchCase="4">
-            <video *ngIf="cntnt.contentPath" controls controlsList="nodownload">
+            </div>
+            <div *ngIf="!cntnt.pdfContentPath">No pdf found</div>
+          </div>
+          <div class="text-center my-2" *ngSwitchCase="2">
+            <img [src]="cntnt.contentPath?cntnt.contentPath:defIcon" alt="Image" />
+          </div>
+          <div class="text-center my-2" *ngSwitchCase="3">
+            <div>Url : {{cntnt.url||'N/A'}}</div>
+            <img [src]="cntnt.urlIconPath?cntnt.urlIconPath:defIcon" alt="Url Icon" />
+          </div>
+          <div class="text-center my-2" *ngSwitchCase="4">
+            <video *ngIf="cntnt.contentPath" controls controlsList="nodownload" width="720">
               <source [src]="cntnt.contentPath">
               Your browser does not support the video player.
             </video>
-          </span>
-          <span *ngSwitchDefault>Not a valid content</span>
-        </span>
+          </div>
+          <div *ngSwitchDefault>Not a valid content</div>
+        </div>
       </div>
       <div class="right-body bg-white pt-1 pb-3" *ngIf="rightSide">
         <mat-tab-group>
@@ -138,12 +146,16 @@
                 <i class="fa fa-chevron-{{tagsToggle?'up':'down'}} float-right mt-1"></i>
               </div>
               <div *ngIf="tagsToggle" class="pl-3 row mx-0 mt-2">
-                <div *ngIf="cntnt.contentTags && cntnt.contentTags.length>0 else noCntntTg">
-                  <span class="rounded-pill px-3 py-1 bg-hi-grey text-primary mr-2" *ngFor="let cT of cntnt.contentTags">
+                <div class="d-inline-flex flex-wrap"
+                  *ngIf="cntnt.contentTags && cntnt.contentTags.length>0 else noCntntTg">
+                  <div class="rounded-pill px-3 py-1 bg-hi-grey text-primary mr-2 my-1"
+                    *ngFor="let cT of cntnt.contentTags">
                     {{cT.tagName}}
-                  </span>
+                  </div>
                 </div>
-                <ng-template #noCntntTg><div>No Tags</div></ng-template>
+                <ng-template #noCntntTg>
+                  <div>No Tags</div>
+                </ng-template>
               </div>
             </div>
           </mat-tab>
@@ -153,7 +165,7 @@
                 <div class="align-self-center mr-2">
                   <span class="rounded-circle p-2 bg-warning">TU</span>
                 </div>
-                <div class="border-bottom pb-2">
+                <div class="border-bottom pb-2 w-100">
                   <div class="user-name">
                     {{cmnt.createdByFullName}}
                     <span class="date ml-3 text-hi-grey">{{(cmnt.createdDate|date:'dd MMM, yyyy')||'N/A'}}</span>
@@ -173,7 +185,8 @@
                 </mat-form-field>
               </div>
               <div class="form-group text-right">
-                <button (click)="addCmnt('cmnt')" [disabled]="cmntDisb || !cmnt" class="btn btn-primary text-white btn-sm">
+                <button (click)="addCmnt('cmnt')" [disabled]="cmntDisb || !cmnt"
+                  class="btn btn-primary text-white btn-sm">
                   <app-loader [type]="'btn'" *ngIf="cmntDisb"></app-loader>
                   Submit
                 </button>
