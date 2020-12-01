@@ -35,8 +35,9 @@
             class="fas fa-compress-arrows-alt"></i></div>
         <div class="btn"><i class="fas fa-times"></i></div>
       </div>
-      <div class="btn btn-light right-side-toggle" placement="left"
-        ngbTooltip="{{rightSide?'Hide Detailed Section':'Show Detailed Section'}}" (click)="rightSide = !rightSide">
+      <div class="btn btn-outline-secondary right-side-toggle" [ngClass]="{'pdfView': cntnt.contentType == 1}"
+        placement="left" ngbTooltip="{{rightSide?'Hide Detailed Section':'Show Detailed Section'}}"
+        (click)="rightSide = !rightSide">
         <i class="fas fa-angle-double-{{rightSide?'right':'left'}}"></i>
       </div>
     </div>
@@ -76,14 +77,14 @@
             </div>
             <div *ngIf="!cntnt.pdfContentPath">No pdf found</div>
           </div>
-          <div class="text-center my-2" *ngSwitchCase="2">
+          <div class="text-center mt-5 mx-3" *ngSwitchCase="2">
             <img [src]="cntnt.contentPath?cntnt.contentPath:defIcon" alt="Image" />
           </div>
-          <div class="text-center my-2" *ngSwitchCase="3">
+          <div class="text-center mt-5 mx-3" *ngSwitchCase="3">
             <div>Url : {{cntnt.url||'N/A'}}</div>
             <img [src]="cntnt.urlIconPath?cntnt.urlIconPath:defIcon" alt="Url Icon" />
           </div>
-          <div class="text-center my-2" *ngSwitchCase="4">
+          <div class="text-center mt-5" *ngSwitchCase="4">
             <video *ngIf="cntnt.contentPath" controls controlsList="nodownload" width="720">
               <source [src]="cntnt.contentPath">
               Your browser does not support the video player.

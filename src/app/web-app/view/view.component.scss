@@ -8,6 +8,12 @@
   .right-side-toggle {
     position: absolute;
     right: 21px;
+    bottom: -47px;
+  }
+
+  .right-side-toggle.pdfView {
+    position: absolute;
+    right: 21px;
     bottom: -88px;
   }
 }
