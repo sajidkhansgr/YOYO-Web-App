@@ -38,11 +38,11 @@ export class TagsComponent implements OnInit {
     }
   }
   selTag!: any;
-  catgLoading!: boolean; tagLoading!: boolean;docLoading!: boolean;
+  catgLoading!: boolean; tagLoading!: boolean;
   rowInfo: any;
   showRowInfo!: boolean;
   showCatgIn!: boolean;
-  catgForm!: FormGroup; tagForm!: FormGroup; updTagForm!: FormGroup; updCatgForm!: FormGroup;
+  catgForm!: FormGroup; tagForm!: FormGroup; updCatgForm!: FormGroup;
   updDisabled!: boolean; catgAddDisabled!: boolean; tagAddDisabled!: boolean;
   catgData!: Catg | undefined;
   catgs!: Catg[]; tags!: Tag[]; allTags!: Tag[];
@@ -51,7 +51,7 @@ export class TagsComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames!: string[];
   searchTxt!: string;
-  cols!: any[];sort: any = {};
+  cols!: any[]; sort: any = {};
   activeTags!: number; activeCatgs!: number;
   categoryId!: number | undefined; unCategorized!: boolean | undefined;
   @Input() lmtPage: any;
@@ -87,9 +87,6 @@ export class TagsComponent implements OnInit {
     this.tagForm = this.fb.group({
       name: ['', [Validators.required]]
     });
-    this.updTagForm = this.fb.group({
-      name: ['', [Validators.required]]
-    });
     this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
     this.catgData = undefined;
     this.catgs = []; this.tags = []; this.allTags = [];
@@ -97,54 +94,55 @@ export class TagsComponent implements OnInit {
     this.totalCount = 0;
     this.tagNames = [];
     this.searchTxt = '';
-    this.cols = [{ n: "Name", asc: false, k:"name" }, { n: "Status", asc: false, k:"status" }, { n: "Date Modified", asc: false, k:"updatedDate" }];
+    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Status", asc: false, k: "status" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
     this.activeTags = 1; this.activeCatgs = 1;
     this.categoryId = undefined; this.unCategorized = undefined;
+    this.sort = {
+      sortColumn: 'updatedDate',
+      isAscending: false,
+    }
   }
-
-  // resetCh() {
-  //   this.tagForm.reset()
-  // }
 
   // -------- tags -------- //
   // change displayed tags (isActive)
   chngDispTags() {
     this.activeTags == 1 ? this.isActiveTag = true : this.isActiveTag = false;
-    this.pageNo = 1;this.getTags();
+    this.pageNo = 1;
+    this.getTags();
   }
 
-  // when changing page size
+  // change page size
   pageSizeChange(pageSize: number) {
     this.pageSize = pageSize;
     this.getTags();
   }
 
-  // numbers to be displayed for Pagination
+  // change page number
   changePageNo(num: number) {
     this.pageNo = num;
     this.getTags();
   }
 
+  // activate/deactivate tag
   actDeactTag() {
-    let actDeac: string = `${this.rowInfo.isActive?'deactivate':'activate'}`;
+    let actDeac: string = `${this.rowInfo.isActive ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
         msg: `Are you sure you want to ${actDeac} this tag?`,
-        title: `${this.rowInfo.isActive?'Deactivate':'Activate'} tag`
+        title: `${this.rowInfo.isActive ? 'Deactivate' : 'Activate'} tag`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
-        this.tagServ.actDeactGrp(this.rowInfo.id.toString(),this.rowInfo.isActive?false:true).subscribe((data: any) => {
+        this.tagServ.actDeactTag(this.rowInfo.id.toString(), this.rowInfo.isActive ? false : true).subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Tag ${actDeac}d successfully`, 'Success!');
-            this.pageNo = 1;this.getTags();
+            this.pageNo = 1;
+            this.getTags();
           } else {
             this.toastr.error(`Unable to ${actDeac} tag`, 'Error!');
           }
         }, (err: any) => {
-
         });
       }
     })
@@ -152,31 +150,29 @@ export class TagsComponent implements OnInit {
 
   // update tag
   updTag() {
-    if (this.updTagForm.valid) {
+    if (this.tagForm.valid) {
       this.updDisabled = true;
       let tagData: any = {
         id: this.rowInfo.id,
-        ...this.updTagForm.value,
+        ...this.tagForm.value,
         categories: this.rowInfo.categoryIDs.map(Number),
         hubId: parseInt(this.hubid)
       };
-      console.log(tagData);
-      // console.log(this.rowInfo);
       this.tagServ.updTag(tagData)
         .subscribe((data: any) => {
           if (data) {
-            // console.log(data);
             this.toastr.success(data.message || 'Tag updated successfully', 'Success!');
             this.closeDoc();
-            this.pageNo = 1;this.getTags();
+            this.pageNo = 1;
+            this.getTags();
           } else {
             this.toastr.error('Unable to update Tag', 'Error!');
           }
-          this.updTagForm.reset();
+          this.tagForm.reset();
           this.dismissModal();
           this.updDisabled = false;
         }, (err: any) => {
-          this.updTagForm.reset();
+          this.tagForm.reset();
           this.dismissModal();
           this.updDisabled = false;
         });
@@ -185,26 +181,24 @@ export class TagsComponent implements OnInit {
 
   // update tag modal
   updTagModal(content: any) {
-    // console.log(this.catgs);
-    this.updTagForm.patchValue({ ...this.rowInfo }); // set form value
-    // console.log(this.rowInfo);
+    this.tagForm.patchValue({ ...this.rowInfo });
     this.openModal(content);
   }
 
   // tags sorting
-    sortChange(col: any, index: number) {
-      this.pageNo = 1;
-      let colData = { ...col };
-      for (let k = 0; k < this.cols.length; k++) {
-        this.cols[k].asc = false;
-      }
-      colData.asc = !colData.asc;
-      this.cols[index].asc = colData.asc;
-      this.sort = {
-        SortColumn: col.k,
-        ascending: colData.asc,
-      }
-      this.getTags();
+  sortChange(col: any, index: number) {
+    this.pageNo = 1;
+    let colData = { ...col };
+    for (let k = 0; k < this.cols.length; k++) {
+      this.cols[k].asc = false;
+    }
+    colData.asc = !colData.asc;
+    this.cols[index].asc = colData.asc;
+    this.sort = {
+      sortColumn: col.k,
+      isAscending: colData.asc,
+    }
+    this.getTags();
   }
 
   // change tags listing - table
@@ -220,7 +214,8 @@ export class TagsComponent implements OnInit {
       this.categoryId = type;
       this.unCategorized = true;
     }
-    this.pageNo = 1;this.getTags();
+    this.pageNo = 1;
+    this.getTags();
   }
 
   // list of tags
@@ -237,10 +232,8 @@ export class TagsComponent implements OnInit {
       unCategorized: this.unCategorized,
       ...this.sort
     }
-    // console.log(query.isActive);
     this.tagServ.tagList(query)
       .subscribe((data: any) => {
-        // console.log(data.result.results);
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.tags = data.result.results;
           this.totalCount = data.result.totalCount;
@@ -259,13 +252,9 @@ export class TagsComponent implements OnInit {
   addChips(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
-
     if ((value || '').trim()) {
       this.tagNames.push(value.trim());
-    } else {
-      // this.tagForm.reset();
     }
-
     if (input) {
       input.value = '';
     }
@@ -274,15 +263,10 @@ export class TagsComponent implements OnInit {
   // remove chip - tag
   removeChip(tag: any): void {
     const index = this.tagNames.indexOf(tag);
-
     if (index >= 0) {
       this.tagNames.splice(index, 1);
       if (this.tagNames.length == 0) {
-        // console.log(this.tagForm);
         this.tagForm.reset();
-        // this.tagForm.markAsDirty();
-        // this.tagForm.markAsTouched();
-        // console.log(this.tagForm);
       }
     }
   }
@@ -299,14 +283,12 @@ export class TagsComponent implements OnInit {
           isActive: true
         });
       }
-      // console.log(tagDataArr);
-
       this.tagServ.addTag({ lstTagDTO: tagDataArr, hubId: parseInt(this.hubid) })
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || 'Tags added successfully', 'Success!');
-            this.pageNo = 1;this.getTags();
-            // this.initForms();
+            this.pageNo = 1;
+            this.getTags();
           } else {
             this.toastr.error('Unable to add Tag', 'Error!');
           }
@@ -328,51 +310,26 @@ export class TagsComponent implements OnInit {
     this.getCatgs();
   }
 
-  // activate category
-  actCatg(catg: any) {
+  // activate/deactivate tag
+  actDeactCatg(catg: Catg) {
+    let actDeac: string = `${catg.isActive ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to activate this category?`,
-        title: `Activate category`
+        msg: `Are you sure you want to ${actDeac} this category?`,
+        title: `${catg.isActive ? 'Deactivate' : 'Activate'} category`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        // console.log(catg);
-        this.tagServ.catgAct(catg.id).subscribe((data: any) => {
+        this.tagServ.actDeactCatg(catg.id.toString(), catg.isActive ? false : true).subscribe((data: any) => {
           if (data) {
-            this.toastr.success('Category activated successfully', 'Success!');
+            this.toastr.success(`Category ${actDeac}d successfully`, 'Success!');
+            this.pageNo = 1;
             this.getCatgs();
           } else {
-            this.toastr.error('Unable to activate category', 'Error!');
+            this.toastr.error(`Unable to ${actDeac} category`, 'Error!');
           }
         }, (err: any) => {
-
-        });
-      }
-    })
-  }
-
-  // deactivate category
-  deactCatg(catg: any) {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to deactivate this category?`,
-        title: `Deactivate category`
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        // console.log(catg);
-        this.tagServ.catgDeact(catg.id).subscribe((data: any) => {
-          if (data) {
-            this.toastr.success('Category deactivated successfully', 'Success!');
-            this.getCatgs();
-          } else {
-            this.toastr.error('Unable to deactivate category', 'Error!');
-          }
-        }, (err: any) => {
-
         });
       }
     })
@@ -426,35 +383,16 @@ export class TagsComponent implements OnInit {
 
   // update category modal
   updCatgModal(content: any, catg: Catg) {
-    // this.getCatg(catg.id);
     this.catgData = catg;
     this.updCatgForm.patchValue({ ...this.catgData });
     this.openModal(content);
-    // console.log(catg);
   }
 
-  cancelCatg(){
+  // hide add catg form
+  cancelCatg() {
     this.showCatgIn = !this.showCatgIn;
     this.catgForm.reset();
   }
-
-  // get category
-  // getCatg(id: number) {
-  //   this.modalLoading = true;
-  //   this.tagServ.getCatg(id.toString())
-  //     .subscribe((data: any) => {
-  //       if (data && data.result && data.result.id) {
-  //         this.catgData = data.result;
-  //         this.setCatgData();
-  //       } else {
-  //         this.toastr.error("Invalid Category");
-  //       }
-  //       this.modalLoading = false;
-  //     }, (err: any) => {
-  //       this.modalLoading = false;
-  //       // this.toastr.error("Unable to fetch Category, so please try after some time");
-  //     });
-  // }
 
   // update category
   updCatg() {
@@ -466,7 +404,6 @@ export class TagsComponent implements OnInit {
         hubId: parseInt(this.hubid),
         isActive: this.catgData!.isActive
       };
-      // console.log(catgData);
       this.tagServ.updCatg(catgData)
         .subscribe((data: any) => {
           if (data) {
@@ -494,19 +431,10 @@ export class TagsComponent implements OnInit {
       });
   }
 
+  // close all modals
   dismissModal() {
     if (this.modalService)
       this.modalService.dismissAll();
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   // toggle tags
@@ -515,29 +443,21 @@ export class TagsComponent implements OnInit {
       this.closeDoc();
     } else {
       this.showRowInfo = true;
-      this.docLoading = true;
-      setTimeout(() => {
-        this.rowInfo = row;
-        this.rowInfo.categoryIDs = [];
-        for (let i = 0; i < row.categories.length; i++) {
-          this.rowInfo.categoryIDs.push((row.categories[i].id).toString());
-        }
-        this.docLoading = false;
-      }, 900);
-      // console.log(this.rowInfo.categoryIDs);
-      // console.log(this.rowInfo.categories);
+      this.rowInfo = row;
+      this.rowInfo.categoryIDs = [];
+      for (let i = 0; i < row.categories.length; i++) {
+        this.rowInfo.categoryIDs.push((row.categories[i].id).toString());
+      }
     }
   }
 
+  // close doc view
   closeDoc = () => {
     this.showRowInfo = false
     this.rowInfo = {};
-    this.docLoading = false;
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     this.dismissModal();
   }
-
 }

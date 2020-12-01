@@ -11,9 +11,9 @@ export class TagsService {
     private http: HttpClient
   ) { }
   // -------- Tag --------
-
-  actDeactGrp(id: any, isAct: boolean) {
-    let url= isAct?AppSettings.ACT_TAG:AppSettings.DEACT_TAG;
+  // activate/deactivate tag
+  actDeactTag(id: any, isAct: boolean) {
+    let url = isAct ? AppSettings.ACT_TAG : AppSettings.DEACT_TAG;
     return this.http.patch(`${url}?id=${id}`, {});
   }
 
@@ -46,14 +46,10 @@ export class TagsService {
   }
 
   // ---------- Category ----------
-  // deactivate category
-  catgAct(id: any) {
-    return this.http.patch(`${AppSettings.ACT_CATG}?id=${id}`, {});
-  }
-
-  // deactivate category
-  catgDeact(id: any) {
-    return this.http.patch(`${AppSettings.DEACT_CATG}?id=${id}`, {});
+  // activate/deactivate category
+  actDeactCatg(id: any, isAct: boolean) {
+    let url = isAct ? AppSettings.ACT_CATG : AppSettings.DEACT_CATG;
+    return this.http.patch(`${url}?id=${id}`, {});
   }
 
   // list of categories
