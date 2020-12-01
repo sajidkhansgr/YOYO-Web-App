@@ -7,7 +7,7 @@
   <div class="mt-2">
     <div>
       <mat-tab-group [selectedIndex]="activeIndex" (selectedTabChange)="onTabChange($event)">
-        <mat-tab label="Content & Workspace" [disabled]="disabled">
+        <mat-tab label="New Resource" [disabled]="disabled">
           <div *ngIf="activeIndex==0">
             <app-content-workspace [hubid]="id" [lmtPage]="lmtPage"></app-content-workspace>
           </div>

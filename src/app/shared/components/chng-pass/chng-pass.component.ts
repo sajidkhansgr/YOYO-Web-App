@@ -38,8 +38,8 @@ export class ChngPassComponent implements OnInit {
 
   initForm(){
     this.chngPassForm = this.fb.group({
-      currPswd: ['', Validators.required],
-      pswd: ['', Validators.required],
+      currPswd: ['', [Validators.required, Validators.minLength(6)]],
+      pswd: ['', [Validators.required, Validators.minLength(6)]],
       confirmPswd: ['', [Validators.required, CommonValidations.MatchPassword]]
     });
     this.chngPassForm.get('pswd')!.valueChanges

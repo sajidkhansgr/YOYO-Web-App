@@ -37,12 +37,7 @@ export class ContentWorkspaceService {
     }
     return this.http.get(`${AppSettings.GET_OBJ_WRKSPC}`, {
       params: queryParams
-    }
-    ).pipe(
-      map((res: any) =>
-        res
-      )
-    );
+    }).pipe(map((res: any) => res));
   }
 
   // ---- smart folder ---- //
@@ -154,12 +149,7 @@ export class ContentWorkspaceService {
     }
     return this.http.get(`${AppSettings.LIST_WRKSPC}`, {
       params: queryParams
-    }
-    ).pipe(
-      map((res: any) =>
-        res
-      )
-    );
+    }).pipe(map((res: any) => res));
   }
 
   // add workspace
@@ -203,30 +193,20 @@ export class ContentWorkspaceService {
   contentList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
-      if(key==='fltrL' && params[key] && params[key].length>0){
-        // let fileTypes:any=[];
-        for(let k=0;k<params[key].length;k++){
-            if(params[key][k].type==='fileType')
+      if (key === 'fltrL') {
+        if (params[key] && params[key].length > 0) {
+          for (let k = 0; k < params[key].length; k++) {
+            if (params[key][k].type === 'fileType')
               queryParams = queryParams.append('fileTypes', params[key][k].v);
-              // fileTypes.push(params[key][k].v);
+          }
         }
-        // console.log(fileTypes, 'fileTypes');
-        // if(fileTypes.length>0){
-        //
-        //   queryParams = queryParams.append('fileTypes', fileTypes);
-        // }
-      }else if (params[key] || key == 'IsAscending') {
+      } else if (params[key] || key == 'IsAscending') {
         queryParams = queryParams.set(key, params[key]);
       }
     }
     return this.http.get(`${AppSettings.LIST_CNTNT}`, {
       params: queryParams
-    }
-    ).pipe(
-      map((res: any) =>
-        res
-      )
-    );
+    }).pipe(map((res: any) => res));
   }
 
   // add content
@@ -252,8 +232,8 @@ export class ContentWorkspaceService {
   }
 
   // delete content
-  trashCntnt(id: any) {
-    return this.http.post(`${AppSettings.TRASH_CNTNT}?id=${id}`, {});
+  delCntnt(id: any) {
+    return this.http.post(`${AppSettings.DEL_CNTNT}?id=${id}`, {});
   }
 
   // get all users and groupd in workspace
@@ -266,12 +246,7 @@ export class ContentWorkspaceService {
     }
     return this.http.get(`${AppSettings.LIST_USR_GRP_WRKSPC}`, {
       params: queryParams
-    }
-    ).pipe(
-      map((res: any) =>
-        res
-      )
-    );
+    }).pipe(map((res: any) => res));
   }
   //  add usr/grp to workspace
   addUsrGrpWrkspc(data: any) {
@@ -281,14 +256,5 @@ export class ContentWorkspaceService {
   remUsrGrpWrkspc(data: any) {
     return this.http.post(`${AppSettings.REM_USR_GRP_WRKSPC}`, data);
   }
-
-
-
-
-
-
-
-
-
 
 }

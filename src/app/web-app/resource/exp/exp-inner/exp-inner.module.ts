@@ -7,6 +7,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 import { ExpInnerComponent } from './exp-inner.component';
+import { ExpService } from '../../exp/exp.service';
 
 const routes: Routes = [
   { path: '', component: ExpInnerComponent }
@@ -21,6 +22,7 @@ const routes: Routes = [
     MatInputModule,
     MatCheckboxModule,
     MatExpansionModule
-  ]
+  ],
+  providers: [ ExpService ]
 })
 export class ExpInnerModule { }

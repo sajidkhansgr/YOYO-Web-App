@@ -39,7 +39,7 @@ export class CreatePasswordComponent implements OnInit {
     this.token = this.route.snapshot.queryParamMap.get('token');
     this.email = this.route.snapshot.queryParamMap.get('email');
     this.createPassForm = this.fb.group({
-      pswd: ['', Validators.required],
+      pswd: ['', [Validators.required, Validators.minLength(6)]],
       confirmPswd: ['', [Validators.required, CommonValidations.MatchPassword]]
     });
     this.createPassForm.get('pswd')!.valueChanges
