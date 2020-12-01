@@ -279,6 +279,7 @@
       </mat-form-field>
     </div>
     <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
       <button type="submit" class="btn btn-primary" [disabled]="groupForm!.invalid || disabled">
         <app-loader [type]="'btn'" *ngIf="disabled"></app-loader> <!-- loader -->
         {{isEdit?"Update":"Save"}}

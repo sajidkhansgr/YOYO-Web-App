@@ -1421,7 +1421,7 @@ export class ContentWorkspaceComponent implements OnInit {
       });
   }
 
-  tashCntnt() {
+  delCntnt() {
     this.dialog.open(ConfirmDialogComponent, {
       data: {
         msg: `Are you sure you want to move ${this.rowInfo.name} to the trash?`,
@@ -1430,7 +1430,7 @@ export class ContentWorkspaceComponent implements OnInit {
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.cwServ.trashCntnt(this.rowInfo.id.toString()).subscribe((data: any) => {
+        this.cwServ.delCntnt(this.rowInfo.id.toString()).subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Content successfully moved to trash`, 'Success!');
             this.cntntList();
@@ -1448,8 +1448,14 @@ export class ContentWorkspaceComponent implements OnInit {
     this.fileServ.downloadFile(this.rowInfo!.contentPath, this.rowInfo!.name);
   }
 
-  clearFilter(){
+  clearAllFilter(){
     this.filteredList = [];
+    this.cntntList();
+  }
+
+  clearSingleFlter = (i:number)=>{
+    this.filteredList.splice(i, 1);
+    this.cntntList();
   }
 
   dismissModal() {

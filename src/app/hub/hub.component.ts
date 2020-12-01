@@ -69,5 +69,4 @@ export class HubComponent implements OnInit {
       this.routerSubs.unsubscribe();
   }
 
-
 }

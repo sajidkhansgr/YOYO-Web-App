@@ -166,7 +166,7 @@ export class AppSettings {
 
   public static ADD_CMNT_CNTNT = `api/Content/AddCommentToContent`;
 
-  public static TRASH_CNTNT = `api/Content/MoveToTrash`;
+  public static DEL_CNTNT = `api/Content/Delete`;
 
   public static MY_FILES = `api/Content/GetMyContent`;
 
