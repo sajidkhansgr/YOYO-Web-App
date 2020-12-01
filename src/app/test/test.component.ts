@@ -97,7 +97,7 @@ export class TestComponent implements OnInit {
       // ];
       let data = {
         defConfg: {
-          enableAnnotationAPIs: true,
+          enableAnnotationAPIs: true,showDownloadPDF: false,
           showLeftHandPanel:false,showPrintPDF: false,
           // includePDFAnnotations:true // for the save button
           // ,showAnnotationTools: true,
@@ -106,7 +106,7 @@ export class TestComponent implements OnInit {
         name: 'my file',
         divId: 'pdf-div',
         url: this.pdfURL
-      }      
+      }
       this.viewSDKClient.previewFile(data,this.annotData);
     });
   }

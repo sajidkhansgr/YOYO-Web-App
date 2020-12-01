@@ -3,11 +3,15 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DEF_ICON } from '../../shared/constants';
 import { ContentWorkspaceService } from '../../hub/content-workspace/content-workspace.service';
 import { ViewSDKClient } from '../../shared/services/view-sdk.service';
 import { FileService } from '../../shared/services/file.service';
+import { CollectionService } from '../resource/collection/collection.service';
+import { TokenDataService } from '../../shared/services/token-data.service';
 import { Content } from '../../shared/models/content';
+import { Collection } from '../../shared/models/collection';
 
 @Component({
   selector: 'app-view',
@@ -21,19 +25,25 @@ export class ViewComponent implements OnInit {
   leftSide!: boolean; rightSide!: boolean;
   infoToggle!: boolean; enggToggle!: boolean; tagsToggle!: boolean;
   testArr = [1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-  cmnt!: string;defIcon: any = DEF_ICON;
-  elem: any; isFullScreen!: boolean;
+  cmnt!: string;defIcon: any = DEF_ICON;cmntDisb!: boolean;
+  elem: any; isFullScreen!: boolean;isSelPage!:boolean;selPages!:any;actPage!:number
+  colls!: Collection[];collLoad!:boolean;
+  usrInfo: any | null;
 
   constructor(
     @Inject(DOCUMENT) private document: any,
     private route: ActivatedRoute,
     private toastr: ToastrService,
+    private modalServ: NgbModal,
     private cwServ: ContentWorkspaceService,
     private viewSDKClient: ViewSDKClient,
-    private fileServ: FileService
+    private fileServ: FileService,
+    private colctnSrv: CollectionService,
+    private tokenDataServ: TokenDataService,
   ) { }
 
   ngOnInit(): void {
+    this.usrInfo = this.tokenDataServ.getUser();
     this.routerSubs = this.route.params.subscribe(params => {
       this.chkScreenMode();
       this.elem = document.documentElement;
@@ -44,9 +54,10 @@ export class ViewComponent implements OnInit {
 
   initialiseState() {
     if (this.id != '0') {
-      this.loading = true;
+      this.loading = true;this.isSelPage=false;this.selPages=[];this.actPage = 1;
       this.leftSide = false; this.rightSide = false;this.isFullScreen = false;
       this.infoToggle = true; this.enggToggle = true; this.tagsToggle = true;
+      this.colls=[];this.collLoad= false;this.cmntDisb = false;
       this.getCntnt();
     }
   }
@@ -54,7 +65,6 @@ export class ViewComponent implements OnInit {
   getCntnt() {
     this.cwServ.viewContent(this.id)
       .subscribe((data: any) => {
-        // console.log(data, "")
         if (data && data.result && data.result.id) {
           this.cntnt = data.result;
           switch(this.cntnt!.contentType){
@@ -73,9 +83,7 @@ export class ViewComponent implements OnInit {
             case 2:break;
             case 3:break;
             case 4:break;
-
           }
-          // console.log(this.cntnt!.pdfImages,'this.cntnt.pdfImages');
         } else {
           this.cntnt = null;
         }
@@ -92,7 +100,7 @@ export class ViewComponent implements OnInit {
         /* By default the embed mode will be Full Window */
         let data ={
           defConfg: {
-            enableAnnotationAPIs: false,
+            enableAnnotationAPIs: false,showDownloadPDF: false,
             showLeftHandPanel:false,showPrintPDF: false,
             // includePDFAnnotations:true, // for the save button
             showAnnotationTools: false,
@@ -109,33 +117,33 @@ export class ViewComponent implements OnInit {
   }
 
   goToPage(cPimg: any){
+    this.actPage = cPimg.pageNo;
     this.viewSDKClient.goToPage(parseInt(cPimg.pageNo))
   }
 
   addCmnt(type: string) {
-    /* let cmntData = {
+    let cmntData = {
       commentText: this.cmnt,
-      contentId: this.id,
+      contentId: parseInt(this.id),
     }
-    // this.disb[type] = true;
+    this.cmntDisb = true;
     this.cwServ.addCmntToContent(cmntData)
       .subscribe((data: any) => {
         if (data) {
-          // this.rowInfo.comments.push({
-          //   createdByFullName: this.usrInfo && this.usrInfo.fN ? this.usrInfo.fN : 'User',
-          //   createdDate: new Date(),
-          //   commentText: this.cmnt
-          // })
+          this.toastr.success(data.message ||`Comment added successfully`, 'Success!');
+          this.cntnt!.comments!.push({
+            createdByFullName: this.usrInfo && this.usrInfo.fN ? this.usrInfo.fN : 'User',
+            createdDate: new Date(),
+            commentText: this.cmnt
+          })
           this.cmnt = '';
-          this.toastr.success(`Comment saved successfully`, 'Success!');
         } else {
           this.toastr.error(`Unable to add comment`, 'Error!');
         }
-        // this.disb[type] = false;
+        this.cmntDisb = false;
       }, (err: any) => {
-        // this.disb[type] = false;
+        this.cmntDisb = false;
       });
-    */
   }
 
   downloadFile() {
@@ -192,9 +200,87 @@ export class ViewComponent implements OnInit {
     }
   }
 
+  addRemPages(event:any, cPimg:any){
+    if(event.checked){
+      this.selPages.push(cPimg.pageNo);
+    }else{
+      const index = this.selPages.findIndex((ele: any) => ele == cPimg.pageNo);
+      if (index >= 0) {
+        this.selPages.splice(index, 1);
+      }
+    }
+  }
+
+  addCntntToColl(coll: Collection){
+    let data:any = {
+      id: coll.id,
+      contents: [],
+      pages: {
+        pageNumbers: []
+      }
+    }
+    if(this.isSelPage){
+      this.selPages.sort((a:any, b:any) => a - b);
+      data.pages = {
+        pageNumbers: this.selPages,
+        contentId: parseInt(this.id)
+      }
+    }else{
+      data.contents.push(parseInt(this.id))
+    }
+    this.collLoad = true;
+    this.closeLeftSel();
+    this.colctnSrv.addContentColctn(data).subscribe((data: any) => {
+      if (data) {
+        this.toastr.success(data.message || 'Content added successfully to collection', 'Success!');
+      }
+      this.dismissModal();
+      this.collLoad = false;
+    }, (err: any) => {
+      this.dismissModal();
+      this.collLoad = false;
+    });
+  }
+
+  closeLeftSel(){
+    this.selPages = [];this.actPage=1;
+    this.leftSide=false;this.isSelPage=false;
+  }
+
+  // get collection list
+  listColct() {
+    this.collLoad = true;
+    this.colctnSrv.colctnList({ pageNo: 0 }).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        this.colls = data.result.results;
+      } else {
+        this.colls = [];
+      }
+      this.collLoad = false;
+    }, (err: any) => {
+      this.colls = [];
+      this.collLoad = false;
+    });
+  }
+
+  openModal(content: any, type: string) {
+    this.listColct();
+    this.modalServ.open(content, { size: 'lg' }).result.then((result) => {
+
+    }, (reason) => {
+
+    });
+  }
+
+  dismissModal() {
+    if (this.modalServ)
+      this.modalServ.dismissAll();
+  }
+
   ngOnDestroy(): void {
     if (!!this.routerSubs)
       this.routerSubs.unsubscribe();
+    this.dismissModal();
   }
 
 }

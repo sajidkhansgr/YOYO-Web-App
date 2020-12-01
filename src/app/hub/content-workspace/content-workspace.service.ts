@@ -203,7 +203,19 @@ export class ContentWorkspaceService {
   contentList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
-      if (params[key] || key == 'IsAscending') {
+      if(key==='fltrL' && params[key] && params[key].length>0){
+        // let fileTypes:any=[];
+        for(let k=0;k<params[key].length;k++){
+            if(params[key][k].type==='fileType')
+              queryParams = queryParams.append('fileTypes', params[key][k].v);
+              // fileTypes.push(params[key][k].v);
+        }
+        // console.log(fileTypes, 'fileTypes');
+        // if(fileTypes.length>0){
+        //
+        //   queryParams = queryParams.append('fileTypes', fileTypes);
+        // }
+      }else if (params[key] || key == 'IsAscending') {
         queryParams = queryParams.set(key, params[key]);
       }
     }

@@ -11,6 +11,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ViewComponent } from './view.component';
 import { ContentWorkspaceService } from '../../hub/content-workspace/content-workspace.service';
 import { FileService } from '../../shared/services/file.service';
+import { CollectionService } from '../resource/collection/collection.service';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 
 const routes: Routes = [
@@ -27,6 +28,6 @@ const routes: Routes = [
     MatCheckboxModule, NgbTooltipModule, MatTabsModule,
     MatFormFieldModule, MatInputModule
   ],
-  providers: [ContentWorkspaceService, FileService]
+  providers: [ContentWorkspaceService, FileService, CollectionService]
 })
 export class ViewModule { }

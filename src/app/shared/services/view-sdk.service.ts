@@ -100,29 +100,29 @@ export class ViewSDKClient {
       //     .catch((error: any) => console.log(error));
       // });
 
-      adobeViewer.getAnnotationManager().then((annotationManager: any) => {
-        // console.log(annotationManager);
-        annotationManager.addAnnotations(list_of_annotations)
-          .then(() => console.log("Success"))
-          .catch((error: any) => console.log(error));
-
-        // annotationManager.setConfig(customFlags)
-        //   .then(() => console.log("Success"))
-        //   .catch((error: any) => console.log(error));
-
-        annotationManager.registerEventListener((event: any) => {
-          console.log(event.type, event.data);
-          switch (event.type) {
-            case "ANNOTATION_ADDED": this.annotList.push(event.data); break;
-            case "ANNOTATION_UPDATED": this.updRemAnnot(event.data, 'upd'); break;
-            case "ANNOTATION_DELETED": this.updRemAnnot(event.data, 'del'); break;
-            default:
-          }
-        },
-          eventOptions
-        );
-        // All annotation APIs can be invoked here
-      });
+      // adobeViewer.getAnnotationManager().then((annotationManager: any) => {
+      //   // console.log(annotationManager);
+      //   annotationManager.addAnnotations(list_of_annotations)
+      //     .then(() => console.log("Success"))
+      //     .catch((error: any) => console.log(error));
+      //
+      //   // annotationManager.setConfig(customFlags)
+      //   //   .then(() => console.log("Success"))
+      //   //   .catch((error: any) => console.log(error));
+      //
+      //   annotationManager.registerEventListener((event: any) => {
+      //     console.log(event.type, event.data);
+      //     switch (event.type) {
+      //       case "ANNOTATION_ADDED": this.annotList.push(event.data); break;
+      //       case "ANNOTATION_UPDATED": this.updRemAnnot(event.data, 'upd'); break;
+      //       case "ANNOTATION_DELETED": this.updRemAnnot(event.data, 'del'); break;
+      //       default:
+      //     }
+      //   },
+      //     eventOptions
+      //   );
+      //   // All annotation APIs can be invoked here
+      // });
     });
     return previewFilePromise;
   }

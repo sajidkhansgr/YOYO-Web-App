@@ -31,9 +31,9 @@ export interface Content {
 }
 
 export interface Comment {
-  id: number;
+  id?: number;
   commentText: string;
   createdByFullName: string;
-  createdDate: string;
-  contentId: number;
+  createdDate: Date;
+  contentId?: number;
 }

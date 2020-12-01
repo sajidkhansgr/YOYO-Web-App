@@ -788,7 +788,8 @@
             File Type
           </button>
           <div class="dropdown-menu" style="width:12rem;" aria-labelledby="fileDD" (click)="$event.stopPropagation();">
-            <mat-checkbox class="dropdown-item" *ngFor="let ft of fileTypes" [attr.id]="ft.id">{{ft.name}}
+            <mat-checkbox class="dropdown-item" *ngFor="let ft of fileTypesArr" (change)="addFileType($event.checked, ft,true)">
+              {{ft.n}}
             </mat-checkbox>
           </div>
         </div>
@@ -876,14 +877,14 @@
         </div>
       </div>
       <!-- filters -->
-      <div class="card-title pl-2">
+      <div class="card-title pl-2" *ngIf="filteredList.length>0">
         <span class="mr-2">Filtered by:</span>
-        <div class="btn btn-outline-primary btn-sm rounded-pill filter-btn">
-          Audio
-          <i class="fas fa-times"></i></div>
+        <div class="btn btn-outline-primary btn-sm rounded-pill filter-btn" *ngFor="let fltr of filteredList">
+          {{fltr.n}}<i class="fas fa-times"></i>
+        </div>
         <div class="float-right">
           <!-- <div class="btn btn-primary btn-sm mr-2">Save Filter</div> -->
-          <div class="btn btn-primary btn-sm">Clear</div>
+          <div class="btn btn-primary btn-sm curs-ptr" (click)="clearFilter()">Clear</div>
         </div>
       </div>
       <div class="search">
@@ -937,7 +938,7 @@
                 <span *ngSwitchCase="'name'">
                   {{cntnt.name}}<br />
                   <span *ngFor="let tg of cntnt.contentTags"
-                    class="badge badge-light p-2 mt-2 mt-sm-0">{{tg.tagName}}</span>
+                    class="badge badge-light p-2 mt-2 mt-sm-0">{{tg.name}}</span>
                 </span>
                 <span *ngSwitchCase="'createdDate'">
                   {{(cntnt.createdDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}
@@ -1350,8 +1351,8 @@
                 File Type
               </button>
               <div class="dropdown-menu" aria-labelledby="fileTypeDD" (click)="$event.stopPropagation();">
-                <mat-checkbox class="dropdown-item" *ngFor="let ft of fileTypes"
-                  (change)="addFileType($event.checked, ft.id)">{{ft.name}}
+                <mat-checkbox class="dropdown-item" *ngFor="let ft of fileTypesArr"
+                  (change)="addFileType($event.checked, ft)">{{ft.n}}
                 </mat-checkbox>
               </div>
             </div>

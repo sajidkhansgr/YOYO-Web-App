@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 import { DEF_ICON, DEF_IMG, FILE_TYPES } from '../../shared/constants';
+import { EnumHelper } from '../../shared/enum-helper';
 import { FileHelper } from '../../shared/file-helper';
 import { Workspace } from '../../shared/models/workspace';
 import { Folder } from '../../shared/models/folder';
@@ -42,14 +43,12 @@ export class ContentWorkspaceComponent implements OnInit {
   folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; contentArr!: Content[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
-  // props: any;
-  view!: boolean;
-  edit!: boolean | undefined;
+  view!: boolean;edit!: boolean | undefined;
   activeFldrs!: number; isActiveFldrs!: boolean;
 
   tags!: Tag[]; selTags: Tag[] = []; selTags2: Tag[] = [];//using in selTags add and selTags2 form
   cntnts!: any[]; totalCount!: number; sort: any = {}; searchTxt!: string;
-  searchTxtChng: Subject<string> = new Subject<string>();
+  searchTxtChng: Subject<string> = new Subject<string>();filteredList:any=[];
   private subscription!: Subscription;
   selectable = true; removable: boolean = true;
   urlDisb!: boolean;
@@ -61,8 +60,7 @@ export class ContentWorkspaceComponent implements OnInit {
   edits: any; disb: any; //disb and edits used in single edits
 
   usrInfo: any | null;
-
-  fileTypes: any = FILE_TYPES; fileTypeArr: any = [];
+  fileTypes: any = FILE_TYPES; fileTypesArr:any=[];fileTypeArr: any = [];
   selUsrGrpWrkspc!: any[]; selUsrGrpLoad!: boolean; isUrGrpLoad!: boolean; selUsrGrpTxt!: '';
   unSelUsrGrpWrkspc!: any[]; unSelUsrGrpLoad!: boolean; unSelUsrGrpTxt!: ''; selUsrGrps: any[] = [];
   cntntTag!: any; urlTag!: any; cntntInfoTag!: any; cntntLng!: any; usrGrpWrkSpcDisb: boolean = false;
@@ -83,6 +81,8 @@ export class ContentWorkspaceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.usrInfo = this.tokenDataServ.getUser();
+    this.fileTypesArr = EnumHelper.enumToArray(this.fileTypes);
     this.initialiseState(); // reset and set based on new parameter this time
     this.getTags();
     this.getLangs();
@@ -90,7 +90,6 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   initialiseState() {
-    this.usrInfo = this.tokenDataServ.getUser();
     this.files = []; this.addURLIcon = ''; this.iconUrl = '';
     this.dispGnrl = true; this.dispSettings = true; this.dispSmart = false;
     this.dispPropsSec = true; this.dispSmFolderSec = true;
@@ -130,7 +129,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.edit = false;
     this.activeFldrs = 1; this.isActiveFldrs = true;
     this.showRowInfo = false; this.rowInfo = {}; this.docLoading = false;
-    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;this.filteredList = [];
     this.cntntDisb = false;
     this.totalCount = 0;
     this.cntntLoading = true; //use in cntnt listing
@@ -307,14 +306,22 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  // add file type filter for smart folder
-  addFileType(val: boolean, id: number) {
+  // add file type filter for smart folder and main list
+  addFileType(val: boolean, fT:any, isList:boolean=false) {
     if (val) {
-      this.fileTypeArr.push(id);
-    } else {
-      this.fileTypeArr = this.fileTypeArr.filter((data: any) => data != id);
-    }
-    // console.log(this.fileTypeArr);
+      if(isList){
+        this.filteredList.push({...fT,type:'fileType'});
+        this.cntntList();
+      }
+      else
+        this.fileTypeArr.push(fT.v);
+    } else
+      if(isList){
+        this.filteredList = this.filteredList.filter((d: any) => d.v != fT.v);
+        this.cntntList();
+      }
+      else
+        this.fileTypeArr = this.fileTypeArr.filter((d: any) => d != fT.v);
   }
 
   // addProps(val: boolean, id: number) {
@@ -1164,7 +1171,8 @@ export class ContentWorkspaceComponent implements OnInit {
       pageNo: this.pageNo, pageSize: this.pageSize,
       searchText: this.searchTxt,
       ...this.sort,
-      hubId: parseInt(this.hubid)
+      hubId: parseInt(this.hubid),
+      fltrL: this.filteredList
     };
     // if (this.activeIndex == 1)
     //   params.isActive = true;
@@ -1403,7 +1411,7 @@ export class ContentWorkspaceComponent implements OnInit {
             commentText: this.cmnt
           })
           this.cmnt = '';
-          this.toastr.success(`Comment saved successfully`, 'Success!');
+          this.toastr.success(data.message ||`Comment added successfully`, 'Success!');
         } else {
           this.toastr.error(`Unable to add comment`, 'Error!');
         }
@@ -1438,6 +1446,10 @@ export class ContentWorkspaceComponent implements OnInit {
 
   downloadFile() {
     this.fileServ.downloadFile(this.rowInfo!.contentPath, this.rowInfo!.name);
+  }
+
+  clearFilter(){
+    this.filteredList = [];
   }
 
   dismissModal() {

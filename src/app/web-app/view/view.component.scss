@@ -101,3 +101,13 @@
     color: #fff;
   }
 }
+
+.hover-coll {
+  opacity: 0;
+}
+
+#coll-div:hover {
+  .hover-coll {
+    opacity: 1;
+  }
+}

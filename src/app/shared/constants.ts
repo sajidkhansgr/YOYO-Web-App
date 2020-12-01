@@ -29,6 +29,10 @@ enum ANCMT_STATUS {
   "Sent" = 1, "Scheduled", "Archived"
 }
 
-const FILE_TYPES = [{ id: 1, name: "Document" }, { id: 2, name: "Photo" }, { id: 3, name: "URL" }, { id: 4, name: "Video" }]
+enum FILE_TYPES {
+  "Document" = 1, "Photo", "URL", "Video"
+}
+
+// const  FILE_TYPES = [{ id: 1, name: "Document" }, { id: 2, name: "Photo" }, { id: 3, name: "URL" }, { id: 4, name: "Video" }]
 
 export { LMT_PAGE, DEF_IMG, DEF_ICON, TIME, GRP_TYPE, ROLES, EMP_STATUS, ANCMT_STATUS, LNGS, FILE_TYPES };
