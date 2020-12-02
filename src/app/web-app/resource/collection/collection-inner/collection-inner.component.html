@@ -32,60 +32,60 @@
           </a>
         </div>
       </div>
-      <i class="fa mr-4 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
-        (click)="view = !view;"></i>
+      <i class="fa mr-4 curs-ptr align-self-center" *ngIf="cntntArr.length>0"
+        [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}" (click)="view = !view;"></i>
       <button class="btn btn-primary" (click)="addResourceModal(addResource)">Add Resource</button>
     </div>
   </h3>
-  <div class="mt-2 row my-files" *ngIf="view && contentArr.length > 0">
-    <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let content of contentArr">
-      <div class="card curs-ptr">
-        <div class="card-body">
-          <div class="imagePreview text-center">
-            <img src="assets/images/discription.png">
-          </div>
-          <div class="options rounded">
-            <div class="dropleft">
-              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                <i class="fas fa-share-square"></i>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="shareDD">
-                <h6 class="ml-2 text-white-50">External Sharing</h6>
-                <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
-                <!-- <div class="dropdown-divider"></div>
-                <h6 class="ml-2 text-white-50">Internal Sharing</h6>
-                <a class="dropdown-item" (click)="openModal(shareColl)"><i class="fa fa-user-friends mr-1"></i>Share
-                  with
-                  colleagues</a> -->
+  <ng-container *ngIf="view">
+    <div class="mt-2 row my-files" *ngIf="cntntArr.length>0">
+      <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let cntnt of cntntArr">
+        <div class="card curs-ptr">
+          <div class="card-body">
+            <div class="imagePreview text-center" (click)="navgToCntnt(cntnt)">
+              <img [src]="cntnt.pdfImage?cntnt.pdfImage:defImg">
+            </div>
+            <div class="options rounded">
+              <div class="dropleft">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-share-square"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="shareDD">
+                  <h6 class="ml-2 text-white-50">External Sharing</h6>
+                  <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+                  <!-- <div class="dropdown-divider"></div>
+                  <h6 class="ml-2 text-white-50">Internal Sharing</h6>
+                  <a class="dropdown-item" (click)="openModal(shareColl)"><i class="fa fa-user-friends mr-1"></i>Share
+                    with
+                    colleagues</a> -->
+                </div>
+              </div>
+              <div class="btn my-1" (click)="openModal(addtoCollection)">
+                <i class="fas fa-folder-plus"></i>
+              </div>
+              <div class="btn" (click)="delContent(cntnt.id)">
+                <i class="fas fa-trash-alt"></i>
               </div>
             </div>
-            <div class="btn my-1" (click)="openModal(addtoCollection)">
-              <i class="fas fa-folder-plus"></i>
-            </div>
-            <div class="btn" (click)="delContent(content.id)">
-              <i class="fas fa-trash-alt"></i>
-            </div>
           </div>
-        </div>
-        <div class="card-footer">
-          <div class="name">{{content.name}}</div>
-          <div class="float-left text-secondary d-flex">
-            <div class="date">{{(content.updatedDate|date:'dd MMM, yyyy')||'N/A'}}</div>
-            <div class="mx-2">l</div>
-            <div class="items">0 Items</div>
-          </div>
-          <div class="float-right">
-            <mat-checkbox (change)="selMe($event.checked, content)"></mat-checkbox>
+          <div class="card-footer">
+            <div class="name">{{cntnt.name}}</div>
+            <div class="float-left text-secondary d-flex">
+              <div class="items" *ngIf="cntnt.pageNo">Page&nbsp;{{cntnt.pageNo}}</div>
+            </div>
+            <div class="float-right">
+              <mat-checkbox (change)="selMe($event.checked, cntnt)"></mat-checkbox>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="text-center mt-5 text-secondary" style="font-size: 20px;" *ngIf="view && contentArr.length == 0">
-    No Content Found
-  </div>
+    <div class="text-center mt-5 text-secondary" style="font-size: 20px;" *ngIf="cntntArr.length == 0">
+      No Content Found
+    </div>
+  </ng-container>
+
   <div class="mt-2 row my-files" *ngIf="!view">
     <table class="table table-hover">
       <thead>
@@ -98,31 +98,29 @@
           <th></th>
         </tr>
       </thead>
-      <tbody *ngIf="contentArr.length > 0">
-        <tr *ngFor="let content of contentArr">
+      <tbody *ngIf="cntntArr.length > 0">
+        <tr *ngFor="let cntnt of cntntArr">
           <td class="align-middle">
-            <mat-checkbox (change)="selMe($event.checked, content)"></mat-checkbox>
+            <mat-checkbox (change)="selMe($event.checked, cntnt)"></mat-checkbox>
           </td>
           <td class="align-middle">
-            <div class="d-flex">
+            <div class="d-flex" (click)="navgToCntnt(cntnt)">
               <div class="imagePreview border mr-2">
-                <img src="assets/images/discription.png">
+                <img [src]="cntnt.pdfImage?cntnt.pdfImage:defImg">
               </div>
-              <div class="name align-self-center">{{content.name}}</div>
+              <div class="name align-self-center">{{cntnt.name}}</div>
             </div>
           </td>
-          <td class="align-middle">{{(content.updatedDate|date:'dd MMM, yyyy')||'N/A'}}</td>
+          <td class="align-middle">{{(cntnt.updatedDate|date:'dd MMM, yyyy')||'N/A'}}</td>
           <td class="align-middle options">
             <div class="d-flex">
               <div class="dropleft">
-                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
                   <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a
-                    link</a>
+                  <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
                 </div>
               </div>
               <div class="btn" (click)="openModal(addtoCollection)">
@@ -136,7 +134,7 @@
         </tr>
       </tbody>
     </table>
-    <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;" *ngIf="contentArr.length == 0">
+    <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;" *ngIf="cntntArr.length == 0">
       No Content Found
     </div>
   </div>
@@ -147,13 +145,11 @@
   <div class="selected-items text-secondary align-self-center">1 item selected</div>
   <div class="mr-1 ml-3 align-self-center">|</div>
   <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
-  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openModal(email)"><i
-      class="fa fa-envelope mr-1"></i>Email</div>
+  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</div>
   <div class="btn btn-light align-self-center bg-white" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get
     a
     link</div>
-  <div class="btn btn-light align-self-center bg-white" (click)="openModal(addtoCollection)"><i
-      class="fa fa-folder-plus mr-1"></i>Add to collection</div>
+  <div class="btn btn-light align-self-center bg-white" (click)="openModal(addtoCollection)"><i class="fa fa-folder-plus mr-1"></i>Add to collection</div>
   <div class="btn btn-primary align-self-center"><i class="fas fa-trash-alt mr-1"></i>Delete</div>
 </div>
 
@@ -211,16 +207,14 @@
       </ol>
       <hr class="mt-1">
     </nav>
-    <ng-container
-      *ngIf="(wrkspcLoading && colctnLoading) || (fldrLoading && sFldrLoading) || contentLoading; else loaded">
+    <ng-container *ngIf="(wrkspcLoading && colctnLoading) || (fldrLoading && sFldrLoading) || cntntLoading; else loaded">
       <app-loader [type]="'div'"></app-loader>
     </ng-container>
     <ng-template #loaded>
       <div *ngIf="showAll">
         <!-- experiences -->
         <div class="text-secondary font-weight-bold my-2">Workspaces</div>
-        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let workspc of workspcArr"
-          (click)="showWorkspcFldrs(workspc)">
+        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let workspc of workspcArr" (click)="showWorkspcFldrs(workspc)">
           <div class="icon align-self-center mr-2">
             <img src="assets/images/discription.png" style="max-height:50px; width: 40px;">
           </div>
@@ -246,14 +240,11 @@
         </div>
         <!-- collections -->
         <div class="text-secondary font-weight-bold my-2">Collections</div>
-        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr"
-          (click)="getContentColctn(colctn)">
+        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr" (click)="getCntntColl(colctn)">
           <div class="icon align-self-center mr-2">
             <img src="assets/images/discription.png" style="max-height:50px; width: 40px;">
           </div>
-          <div class="name align-self-center">
-            {{colctn.name}}
-          </div>
+          <div class="name align-self-center">{{colctn.name}}</div>
           <div class="arrow align-self-center ml-auto mr-3">
             <i class="fa fa-angle-right"></i>
           </div>
@@ -262,11 +253,9 @@
       <div *ngIf="!showAll">
         <ng-container *ngIf="fldrArr.length > 0 || mdlCntntArr.length > 0; else noDATA">
           <!-- sub folders -->
-          <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr"
-            (click)="showAll === false ? showWorkspcFldrs(undefined, fldr) : showMyFiles(fldr);">
+          <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr" (click)="showAll === false ? showWorkspcFldrs(undefined, fldr) : showMyFiles(fldr);">
             <div class="icon align-self-center mr-2">
-              <img src="{{fldr.folderIconPath ? fldr.folderIconPath : 'assets/images/folderIcon.png'}}"
-                style="max-height:50px; width: 40px;">
+              <img src="{{fldr.folderIconPath ? fldr.folderIconPath : 'assets/images/folderIcon.png'}}" style="max-height:50px; width: 40px;">
             </div>
             <div class="name align-self-center">
               {{fldr.name}}
@@ -280,9 +269,7 @@
             <mat-checkbox class="align-self-center mr-2" (change)="selectContent(content, $event.checked)">
             </mat-checkbox>
             <div class="icon align-self-center mr-2">
-              <img
-                src="{{content.pdfImages && content.pdfImages.length > 0 ? content.pdfImages[0].imagePath : content.urlIconPath}}"
-                style="max-height:50px; width: 40px;">
+              <img src="{{content.pdfImages && content.pdfImages.length > 0 ? content.pdfImages[0].imagePath : content.urlIconPath}}" style="max-height:50px; width: 40px;">
             </div>
             <div class="name align-self-center">
               {{content.name}}
@@ -298,8 +285,7 @@
     </ng-template>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="addContent()"
-      [disabled]="addContentArr.length == 0 || disabled">
+    <button type="button" class="btn btn-primary" (click)="addContent()" [disabled]="addContentArr.length == 0 || disabled">
       <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
       {{addContentArr.length == 0 ? '0 Items Selected' : 'Insert ' + addContentArr.length + ' item(s)'}}
     </button>
@@ -432,8 +418,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')"
-      [disabled]="!sharingValue.checked">Share</button>
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')" [disabled]="!sharingValue.checked">Share</button>
   </div>
 </ng-template>
 

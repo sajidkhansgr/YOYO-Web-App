@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,12 +10,12 @@ import { CollectionService } from '../collection.service';
 import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
 import { ExpService } from '../../exp/exp.service';
 import { FileService } from '../../file/file.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Collection as Colctn } from '../../../../shared/models/collection';
-import { Workspace as Wrkspc, Workspace } from '../../../../shared/models/workspace';
+import { Workspace as Wrkspc } from '../../../../shared/models/workspace';
 import { Folder } from '../../../../shared/models/folder';
 import { Content } from '../../../../shared/models/content';
+import { DEF_ICON } from '../../../../shared/constants';
 
 @Component({
   selector: 'app-collection-inner',
@@ -24,14 +25,15 @@ import { Content } from '../../../../shared/models/content';
 export class CollectionInnerComponent implements OnInit {
   view: boolean = true; id!: number; routerSubs!: Subscription;
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
-  disabled!: boolean; loading!: boolean; wrkspcLoading!: boolean; colctnLoading!: boolean; fldrLoading!: boolean; sFldrLoading!: boolean; contentLoading!: boolean;
+  disabled!: boolean; loading!: boolean; wrkspcLoading!: boolean; colctnLoading!: boolean; fldrLoading!: boolean; sFldrLoading!: boolean; cntntLoading!: boolean;
   selColctn!: Colctn | undefined;
   colctnForm!: FormGroup;
   multiForm!: number;
-  contentArr!: Content[]; selContentArr!: Content[];
+  cntntArr!: Content[]; selContentArr!: Content[];
   showBotDiv!: boolean;
   workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined; mdlCntntArr!: Content[]; addContentArr!: Content[];
   showAll!: boolean | undefined; contentNav!: any[];
+  defImg:string = DEF_ICON;
 
   constructor(
     private modalService: NgbModal,
@@ -56,13 +58,13 @@ export class CollectionInnerComponent implements OnInit {
 
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
-    this.wrkspcLoading = true; this.colctnLoading = true; this.fldrLoading = false; this.sFldrLoading = false; this.contentLoading = false;
+    this.wrkspcLoading = true; this.colctnLoading = true; this.fldrLoading = false; this.sFldrLoading = false; this.cntntLoading = false;
     this.selColctn = undefined; this.selContentArr = [];
     this.colctnForm = this.fb.group({
       name: ['', [Validators.required]]
     });
     this.multiForm = 0;
-    this.contentArr = [];
+    this.cntntArr = [];
     this.showBotDiv = false;
     this.workspcArr = []; this.colctnArr = []; this.fldrArr = []; this.selWrkspc = undefined; this.selFldr = undefined; this.mdlCntntArr = []; this.addContentArr = [];
     this.showAll = true; this.contentNav = [];
@@ -81,7 +83,7 @@ export class CollectionInnerComponent implements OnInit {
   // show my files
   showMyFiles(fldr?: any, val?: string) {
     // console.log(fldr);
-    this.fldrLoading = true; this.contentLoading = true;
+    this.fldrLoading = true; this.cntntLoading = true;
     val !== 'back' ? fldr ? this.contentNav.push(fldr) : this.contentNav = [{ name: "My Files" }] : undefined;
     let query = {
       folderId: fldr ? fldr.id : undefined
@@ -102,10 +104,10 @@ export class CollectionInnerComponent implements OnInit {
         }
       }
       this.showAll = undefined;
-      this.fldrLoading = false; this.contentLoading = false;
+      this.fldrLoading = false; this.cntntLoading = false;
     }, (err: any) => {
       this.showAll = false;
-      this.fldrLoading = false; this.contentLoading = false;
+      this.fldrLoading = false; this.cntntLoading = false;
     });
   }
 
@@ -270,7 +272,7 @@ export class CollectionInnerComponent implements OnInit {
     this.colctnSrv.addContentColctn(data).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Content added successfully', 'Success!');
-        this.getContentColctn();
+        this.getCntntColl();
       }
       this.dismissModal();
       this.disabled = false;
@@ -304,7 +306,7 @@ export class CollectionInnerComponent implements OnInit {
         this.colctnSrv.delContentColctn(data).subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || 'Content removed successfully', 'Success!');
-            this.getContentColctn();
+            this.getCntntColl();
           }
         });
       }
@@ -327,7 +329,7 @@ export class CollectionInnerComponent implements OnInit {
 
   // get content by smart folder
   getContentSmtFldr() {
-    this.contentLoading = true;
+    this.cntntLoading = true;
     let query: any = {
       workspaceId: this.selWrkspc!.id,
       folderId: this.selFldr ? this.selFldr!.id : undefined
@@ -336,15 +338,15 @@ export class CollectionInnerComponent implements OnInit {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.mdlCntntArr.push(...data.result);
       }
-      this.contentLoading = false;
+      this.cntntLoading = false;
     }, (err: any) => {
-      this.contentLoading = false;
+      this.cntntLoading = false;
     });
   }
 
   // // get content by folder
   // getContentFldr() {
-  //   this.contentLoading = true;
+  //   this.cntntLoading = true;
   //   let query: any = {
   //     workspaceId: this.selWrkspc!.id,
   //     folderId: this.selFldr ? this.selFldr!.id : undefined
@@ -354,19 +356,19 @@ export class CollectionInnerComponent implements OnInit {
   //       this.mdlCntntArr.push(...data.result);
   //       // console.log(this.mdlCntntArr);
   //     }
-  //     this.contentLoading = false;
+  //     this.cntntLoading = false;
   //   }, (err: any) => {
-  //     this.contentLoading = false;
+  //     this.cntntLoading = false;
   //   });
   // }
 
   // get content by collection
-  getContentColctn(colctn?: Colctn) {
+  getCntntColl(colctn?: Colctn) {
     let id: number;
     if (colctn) {
       id = colctn.id;
       this.contentNav = [colctn];
-      this.contentLoading = true;
+      this.cntntLoading = true;
     } else {
       this.loading = true;
       id = this.id;
@@ -374,20 +376,20 @@ export class CollectionInnerComponent implements OnInit {
     this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
       // console.log(data);
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        colctn ? this.mdlCntntArr = data.result : this.contentArr = data.result;
+        colctn ? this.mdlCntntArr = data.result : this.cntntArr = data.result;
       } else if (data && data.result && Array.isArray(data.result) && data.result.length == 0) {
-        colctn ? this.mdlCntntArr = [] : this.contentArr = [];
+        colctn ? this.mdlCntntArr = [] : this.cntntArr = [];
       }
       if (colctn) {
         this.showAll = false;
-        this.contentLoading = false;
+        this.cntntLoading = false;
       } else {
         this.loading = false;
       }
     }, (err: any) => {
       if (colctn) {
         this.showAll = false;
-        this.contentLoading = false;
+        this.cntntLoading = false;
       } else {
         this.loading = false;
       }
@@ -500,7 +502,7 @@ export class CollectionInnerComponent implements OnInit {
     this.colctnSrv.getColctn(this.id).subscribe((data: any) => {
       if (data && data.result) {
         this.selColctn = data.result;
-        this.getContentColctn();
+        this.getCntntColl();
       } else {
         this.router.navigate(['/web-app/resource/collections']);
       }
@@ -514,6 +516,10 @@ export class CollectionInnerComponent implements OnInit {
     link.select();
     link.setSelectionRange(0, 99999);
     document.execCommand("copy");
+  }
+
+  navgToCntnt(cntnt:Content){
+    this.router.navigate(['/web-app/view/' + cntnt.contentId]);
   }
 
   openModal(content: any) {

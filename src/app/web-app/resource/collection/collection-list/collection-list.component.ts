@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -6,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { CollectionService } from '../collection.service';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { Router } from '@angular/router';
+import { DEF_ICON } from '../../../../shared/constants';
 
 @Component({
   selector: 'app-collection-list',
@@ -20,6 +21,7 @@ export class CollectionListComponent implements OnInit {
   colctnForm!: FormGroup;
   multiForm!: number;
   showBotDiv!: boolean;
+  defImg:string = DEF_ICON;
 
   constructor(
     private modalService: NgbModal,

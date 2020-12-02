@@ -3,149 +3,144 @@
   <h3 class="mb-4 clearfix heading align-self-center">
     Collections
     <div class="float-right">
-      <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
-        (click)="view = !view;" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
+      <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}" (click)="view = !view;" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
       <button class="btn btn-primary mb-2" (click)="colctnModal(collection, 'add')">New Collection</button>
     </div>
   </h3>
-  <div class="text-right" *ngIf="view">
-    Sort by:
-    <span class="text-primary mr-2 curs-ptr">Name<i class="fa fa-sort-down align-top ml-1"></i></span>
-    <span class="text-primary curs-ptr">Date Modified<i class="fa fa-sort-down align-top ml-1"></i></span>
-  </div>
   <app-loader [type]="'page'" *ngIf="loading"></app-loader>
-  <div class="mt-2 row collections" *ngIf="view && !loading">
-    <ng-container *ngIf="colctnArr.length > 0; else noColctn">
-      <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let colctn of colctnArr">
-        <div class="card">
-          <div class="card-body curs-ptr" (click)="showContent(colctn.id)">
-            <div class="imagePreview text-center">
-              <img src="assets/images/discription.png">
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="name">{{colctn.name}}</div>
-            <div class="float-left text-secondary d-flex">
-              <div class="date">{{(colctn.updatedDate|date:'dd MMM, yyyy')||'N/A'}}</div>
-              <div class="mx-2">l</div>
-              <div class="items">0 Item(s)</div>
-            </div>
-            <div class="float-right">
-              <mat-checkbox (change)="selMe($event.checked, colctn.id)"></mat-checkbox>
-            </div>
-          </div>
-          <div class="options rounded">
-            <div class="dropleft">
-              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                <i class="fas fa-share-square"></i>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="shareDD">
-                <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+  <ng-container *ngIf="!loading">
+    <ng-container *ngIf="view">
+      <ng-container *ngIf="colctnArr && colctnArr.length>0 else noColctn">
+        <div class="text-right">
+          Sort by:
+          <span class="text-primary mr-2 curs-ptr">Name<i class="fa fa-sort-down align-top ml-1"></i></span>
+          <span class="text-primary curs-ptr">Date Modified<i class="fa fa-sort-down align-top ml-1"></i></span>
+        </div>
+        <div class="mt-2 row collections">
+          <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let colctn of colctnArr">
+            <div class="card">
+              <div class="card-body curs-ptr" (click)="showContent(colctn.id)">
+                <div class="imagePreview text-center">
+                  <img [src]="colctn.pdfImage?colctn.pdfImage:defImg">
+                </div>
               </div>
-            </div>
-            <div class="btn my-1" (click)="delColctn(colctn.id)">
-              <i class="fas fa-trash-alt"></i>
-            </div>
-            <div class="dropleft">
-              <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                <i class="fas fa-ellipsis-h"></i>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="optionsDD">
-                <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i
-                    class="fas fa-copy mr-1"></i>Duplicate</a>
-                <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i
-                    class="fas fa-edit mr-1"></i>Rename</a>
-                <a class="dropdown-item dd">
-                  <i class="fa fa-download mr-1"></i>Download
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item"><i class="fas fa-file-pdf mr-1"></i>As a single PDF</a>
-                    <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
+              <div class="card-footer">
+                <div class="name">{{colctn.name}}</div>
+                <div class="float-left text-secondary d-flex">
+                  <div class="date">{{(colctn.updatedDate|date:'dd MMM, yyyy')||'N/A'}}</div>
+                  <div class="mx-2">l</div>
+                  <div class="items">{{colctn.contentCount||0}} Item(s)</div>
+                </div>
+                <div class="float-right">
+                  <mat-checkbox (change)="selMe($event.checked, colctn.id)"></mat-checkbox>
+                </div>
+              </div>
+              <div class="options rounded">
+                <div class="dropleft">
+                  <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-share-square"></i>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="shareDD">
+                    <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                    <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
                   </div>
-                </a>
+                </div>
+                <div class="btn my-1" (click)="delColctn(colctn.id)">
+                  <i class="fas fa-trash-alt"></i>
+                </div>
+                <div class="dropleft">
+                  <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-h"></i>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="optionsDD">
+                    <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i class="fas fa-copy mr-1"></i>Duplicate</a>
+                    <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i class="fas fa-edit mr-1"></i>Rename</a>
+                    <a class="dropdown-item dd">
+                      <i class="fa fa-download mr-1"></i>Download
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item"><i class="fas fa-file-pdf mr-1"></i>As a single PDF</a>
+                        <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
+                      </div>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </ng-container>
+      <ng-template #noColctn>
+        <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;">
+          No Collections Found
+        </div>
+      </ng-template>
     </ng-container>
-    <ng-template #noColctn>
-      <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;">
+    <div class="mt-2 row collections" *ngIf="!view">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              <mat-checkbox></mat-checkbox>
+            </th>
+            <th>Name<i class="fas fa-sort-down ml-1 align-top"></i></th>
+            <th>Date Modified<i class="fas fa-sort-down ml-1 align-top"></i></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody *ngIf="colctnArr.length > 0">
+          <tr *ngFor="let colctn of colctnArr">
+            <td class="align-middle">
+              <mat-checkbox (change)="selMe($event.checked, colctn.id)"></mat-checkbox>
+            </td>
+            <td class="align-middle curs-ptr" (click)="showContent(colctn.id)">
+              <div class="d-flex">
+                <div class="imagePreview border mr-2">
+                  <img [src]="colctn.pdfImage?colctn.pdfImage:defImg">
+                </div>
+                <div class="name align-self-center">{{colctn.name}}</div>
+              </div>
+            </td>
+            <td class="align-middle">{{(colctn.updatedDate|date:'dd MMM, yyyy')||'N/A'}}</td>
+            <td class="align-middle options">
+              <div class="d-flex">
+                <div class="dropleft">
+                  <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-share-square"></i>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="shareDD">
+                    <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                    <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+                  </div>
+                </div>
+                <div class="btn" (click)="delColctn(colctn.id)">
+                  <i class="fas fa-trash-alt"></i>
+                </div>
+                <div class="dropleft">
+                  <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-h"></i>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="optionsDD">
+                    <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i class="fas fa-copy mr-1"></i>Duplicate</a>
+                    <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i class="fas fa-edit mr-1"></i>Rename</a>
+                    <a class="dropdown-item dd">
+                      <i class="fa fa-download mr-1"></i>Download
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item"><i class="fas fa-file-pdf mr-1"></i>As a single PDF</a>
+                        <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;" *ngIf="colctnArr.length == 0">
         No Collections Found
       </div>
-    </ng-template>
-  </div>
-  <div class="mt-2 row collections" *ngIf="!view && !loading">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>
-            <mat-checkbox></mat-checkbox>
-          </th>
-          <th>Name<i class="fas fa-sort-down ml-1 align-top"></i></th>
-          <th>Date Modified<i class="fas fa-sort-down ml-1 align-top"></i></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody *ngIf="colctnArr.length > 0">
-        <tr *ngFor="let colctn of colctnArr">
-          <td class="align-middle">
-            <mat-checkbox (change)="selMe($event.checked, colctn.id)"></mat-checkbox>
-          </td>
-          <td class="align-middle curs-ptr" (click)="showContent(colctn.id)">
-            <div class="d-flex">
-              <div class="imagePreview border mr-2">
-                <img src="assets/images/discription.png">
-              </div>
-              <div class="name align-self-center">{{colctn.name}}</div>
-            </div>
-          </td>
-          <td class="align-middle">{{(colctn.updatedDate|date:'dd MMM, yyyy')||'N/A'}}</td>
-          <td class="align-middle options">
-            <div class="d-flex">
-              <div class="dropleft">
-                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
-                  <i class="fas fa-share-square"></i>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
-                </div>
-              </div>
-              <div class="btn" (click)="delColctn(colctn.id)">
-                <i class="fas fa-trash-alt"></i>
-              </div>
-              <div class="dropleft">
-                <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
-                  <i class="fas fa-ellipsis-h"></i>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="optionsDD">
-                  <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i
-                      class="fas fa-copy mr-1"></i>Duplicate</a>
-                  <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i
-                      class="fas fa-edit mr-1"></i>Rename</a>
-                  <a class="dropdown-item dd">
-                    <i class="fa fa-download mr-1"></i>Download
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item"><i class="fas fa-file-pdf mr-1"></i>As a single PDF</a>
-                      <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;" *ngIf="colctnArr.length == 0">
-      No Collections Found
     </div>
-  </div>
+  </ng-container>
 </div>
 
 <!-- fixed div on selecting a collection -->
@@ -153,8 +148,7 @@
   <div class="selected-items text-secondary align-self-center">{{selColctnArr.length}} item(s) selected</div>
   <div class="mr-1 ml-3 align-self-center">|</div>
   <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
-  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openModal(email)"><i
-      class="fa fa-envelope mr-1"></i>Email</div>
+  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</div>
   <div class="btn btn-light align-self-center bg-white" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i> a
     link</div>
   <div class="btn btn-primary align-self-center"><i class="fas fa-trash-alt mr-1"></i>Delete</div>

@@ -28,6 +28,8 @@ export interface Content {
   createdBy: number;
   updatedBy: number;
   contentId?: number;
+  pdfImage?: string;
+  pageNo?: string;//Array
 }
 
 export interface Comment {
