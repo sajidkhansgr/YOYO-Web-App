@@ -41,43 +41,22 @@ export class ContentWorkspaceService {
   }
 
   // ---- smart folder ---- //
-  // activate workspace
-  smartFolderAct(id: any) {
-    return this.http.patch(`${AppSettings.ACT_SMT_FLDR}?id=${id}`, {});
+  // activate/deactivate smart folder
+  actDeactSmtFldr(id: any, isAct: boolean) {
+    let url = isAct ? AppSettings.ACT_SMT_FLDR : AppSettings.DEACT_SMT_FLDR;
+    return this.http.patch(`${url}?id=${id}`, {});
   }
 
-  // deactivate workspace
-  smartFolderDeact(id: any) {
-    return this.http.patch(`${AppSettings.DEACT_SMT_FLDR}?id=${id}`, {});
-  }
-
-  // update folder
+  // update smart folder
   updSmartFolder(data: any) {
     return this.http.put(`${AppSettings.UPD_SMT_FLDR}`, this.freezeFolderObj(data));
   }
 
-  // add folder
+  // add smart folder
   addSmartFolder(data: any) {
     return this.http.post(`${AppSettings.ADD_SMT_FLDR}`, this.freezeFolderObj(data));
   }
 
-  // // get smart folder list
-  // smartFolderListWrkspc(params: any): Observable<any[]> {
-  //   let queryParams = new HttpParams();
-  //   for (let key in params) {
-  //     if (params[key]) {
-  //       queryParams = queryParams.set(key, params[key]);
-  //     }
-  //   }
-  //   return this.http.get(`${AppSettings.LIST_SMT_FLDR_WRKSPC}`, {
-  //     params: queryParams
-  //   }
-  //   ).pipe(
-  //     map((res: any) =>
-  //       res
-  //     )
-  //   );
-  // }
 
   // get smart folder by id
   getSmtFolder(id: any) {
@@ -85,14 +64,10 @@ export class ContentWorkspaceService {
   }
 
   // ---- folder ---- //
-  // activate workspace
-  folderAct(id: any) {
-    return this.http.patch(`${AppSettings.ACT_FLDR}?id=${id}`, {});
-  }
-
-  // deactivate workspace
-  folderDeact(id: any) {
-    return this.http.patch(`${AppSettings.DEACT_FLDR}?id=${id}`, {});
+  // activate/deactivate folder
+  actDeactFldr(id: any, isAct: boolean) {
+    let url = isAct ? AppSettings.ACT_FLDR : AppSettings.DEACT_FLDR;
+    return this.http.patch(`${url}?id=${id}`, {});
   }
 
   // update folder
@@ -105,45 +80,23 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.ADD_FLDR}`, this.freezeFolderObj(data));
   }
 
-  // // get folder list
-  // folderListWrkspc(params: any): Observable<any[]> {
-  //   let queryParams = new HttpParams();
-  //   for (let key in params) {
-  //     if (params[key]) {
-  //       queryParams = queryParams.set(key, params[key]);
-  //     }
-  //   }
-  //   return this.http.get(`${AppSettings.LIST_FLDR_WRKSPC}`, {
-  //     params: queryParams
-  //   }
-  //   ).pipe(
-  //     map((res: any) =>
-  //       res
-  //     )
-  //   );
-  // }
-
   // get folder by id
   getFolder(id: any) {
     return this.http.get(`${AppSettings.GET_FLDR}?id=${id}`);
   }
 
   // ---- workspace ---- //
-  // activate workspace
-  wrkspcAct(id: any) {
-    return this.http.patch(`${AppSettings.ACT_WRKSPC}?id=${id}`, {});
-  }
-
-  // deactivate workspace
-  wrkspcDeact(id: any) {
-    return this.http.patch(`${AppSettings.DEACT_WRKSPC}?id=${id}`, {});
+  // activate/deactivate folder
+  actDeactWrkspc(id: any, isAct: boolean) {
+    let url = isAct ? AppSettings.ACT_WRKSPC : AppSettings.DEACT_WRKSPC;
+    return this.http.patch(`${url}?id=${id}`, {});
   }
 
   // get workspace list
   wrkspcList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
-      if (params[key]) {
+      if (params[key] || key == 'isActive') {
         queryParams = queryParams.set(key, params[key]);
       }
     }

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-// import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, Subject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, map } from 'rxjs/operators';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -8,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
-import { DEF_ICON, DEF_IMG, FILE_TYPES } from '../../shared/constants';
+import { DEF_ICON, DEF_IMG, FILE_TYPES, FLDR_ICON } from '../../shared/constants';
 import { EnumHelper } from '../../shared/enum-helper';
 import { FileHelper } from '../../shared/file-helper';
 import { Workspace } from '../../shared/models/workspace';
@@ -32,7 +31,7 @@ export class ContentWorkspaceComponent implements OnInit {
   showWork!: boolean;
   @Input() hubid: any; routerSubs!: Subscription;
   addURLIcon!: string; iconUrl!: any;
-  defIcon: any = DEF_ICON; custIcon: any; files!: any[]; defImg: any = DEF_IMG;
+  defIcon: any = DEF_ICON; custIcon: any; files!: any[]; defImg: any = DEF_IMG; fldrIcon: any = FLDR_ICON;
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: Workspace[]; selWrkspc: Workspace | undefined;
@@ -44,7 +43,7 @@ export class ContentWorkspaceComponent implements OnInit {
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
   view!: boolean; edit!: boolean | undefined;
-  activeFldrs!: number; isActiveFldrs!: boolean;
+  activeFldrs!: number; isActiveFldrs!: boolean; activeWrkspc!: number; isActiveWrkspc!: boolean;
 
   tags!: Tag[]; selTags: Tag[] = []; selTags2: Tag[] = [];//using in selTags add and selTags2 form
   cntnts!: any[]; totalCount!: number; sort: any = {}; searchTxt!: string;
@@ -68,7 +67,6 @@ export class ContentWorkspaceComponent implements OnInit {
   allTags!: any[]; anyTags!: any[]; noneTags!: any[];
 
   constructor(
-    // private route: ActivatedRoute,
     private modalService: NgbModal,
     private cwServ: ContentWorkspaceService,
     private fb: FormBuilder,
@@ -83,7 +81,7 @@ export class ContentWorkspaceComponent implements OnInit {
   ngOnInit(): void {
     this.usrInfo = this.tokenDataServ.getUser();
     this.fileTypesArr = EnumHelper.enumToArray(this.fileTypes);
-    this.initialiseState(); // reset and set based on new parameter this time
+    this.initialiseState();
     this.getTags();
     this.getLangs();
     this.cntntList();
@@ -124,10 +122,9 @@ export class ContentWorkspaceComponent implements OnInit {
     this.visbCols = [...cmnCols];
     this.hidCols = [{ n: "Likes", k: "likes", asc: false }];
     this.cols = [{ n: "Name", asc: false, k: "name" }, ...cmnCols];
-    // this.props = PRPS;
     this.view = true;
     this.edit = false;
-    this.activeFldrs = 1; this.isActiveFldrs = true;
+    this.activeFldrs = 1; this.isActiveFldrs = true; this.activeWrkspc = 1; this.isActiveWrkspc = true;
     this.showRowInfo = false; this.rowInfo = {}; this.docLoading = false;
     this.pageSize = this.lmtPage[0]; this.pageNo = 1; this.filteredList = [];
     this.cntntDisb = false;
@@ -164,10 +161,9 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // ---- folder and smart folder ---- //
   // remove image in Modals
-  remImg(abc: any) {
+  remImg() {
     this.iconUrl = '';
     this.custIcon = undefined;
-    abc.value = '';
   }
 
   // change displayed folders and smart foldera (isActive)
@@ -188,7 +184,6 @@ export class ContentWorkspaceComponent implements OnInit {
   changeFolder(folder: any) {
     this.dispFolder = folder;
     this.folderNav.push(folder);
-    // console.log(this.dispFolder);
     this.listFolders()
   }
 
@@ -225,28 +220,17 @@ export class ContentWorkspaceComponent implements OnInit {
     });
   }
 
-  // activate folder/smart folder
-  activateFldr(folder: any) {
+  // activate/deactivate folder/smart folder
+  actDeactFolder(folder: any) {
     if (folder.key == 'fldr') {
-      this.actFolder(folder);
+      this.actDeactFldr(folder);
     } else if (folder.key == 'smtFldr') {
-      this.actSmartFolder(folder);
-    }
-  }
-
-  // deactivate folder/smart folder
-  deActivateFldr(folder: any) {
-    if (folder.key == 'fldr') {
-      this.deactFolder(folder);
-    } else if (folder.key == 'smtFldr') {
-      this.deactSmartFolder(folder);
+      this.actDeactSmtFldr(folder);
     }
   }
 
   // edit folder/smart folder modal
   editFolder(modal: any, folder: any) {
-    // call get by id
-    // this.selFolder = folder;
     if (folder.folderIconPath) {
       this.addURLIcon = 'cust-icon';
       this.iconUrl = folder.folderIconPath;
@@ -256,7 +240,6 @@ export class ContentWorkspaceComponent implements OnInit {
     } else if (folder.key == 'smtFldr') {
       this.getSmartFolder(folder.id);
     }
-    // console.log(folder);
     this.openModal(modal);
   }
 
@@ -316,88 +299,30 @@ export class ContentWorkspaceComponent implements OnInit {
         this.fileTypeArr = this.fileTypeArr.filter((d: any) => d != fT.v);
   }
 
-  // addProps(val: boolean, id: number) {
-  //   if (val) {
-  //     this.propsArr.push(id);
-  //   } else {
-  //     this.propsArr = this.propsArr.filter((data: any) => data != id);
-  //   }
-  //   console.log((this.propsArr).toString());
-  // }
-
   // smart folder submit functions (add/update)
   smartFolderSubmit() {
     this.edit ? this.updSmartFolder() : this.addSmartFolder();
   }
 
-
-  // actDeactTag() {
-  //   let actDeac: string = `${this.rowInfo.isActive?'deactivate':'activate'}`;
-  //   this.dialog.open(ConfirmDialogComponent, {
-  //     data: {
-  //       msg: `Are you sure you want to ${actDeac} this tag?`,
-  //       title: `${this.rowInfo.isActive?'Deactivate':'Activate'} tag`
-  //     },
-  //     autoFocus: false
-  //   }).afterClosed().subscribe(result => {
-  //     if (result) {
-  //       console.log(result);
-  //       this.tagServ.actDeactGrp(this.rowInfo.id.toString(),this.rowInfo.isActive?false:true).subscribe((data: any) => {
-  //         if (data) {
-  //           this.toastr.success(`Tag ${actDeac}d successfully`, 'Success!');
-  //           this.getTags();
-  //         } else {
-  //           this.toastr.error(`Unable to ${actDeac} tag`, 'Error!');
-  //         }
-  //       }, (err: any) => {
-  //
-  //       });
-  //     }
-  //   })
-  // }
-  // activate smart folder
-  actSmartFolder(folder: any) {
+  // activate/deactivate smart folder
+  actDeactSmtFldr(fldr: Folder) {
+    let actDeac: string = `${fldr.isActive ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to activate this smart folder?`,
-        title: `Activate smart folder`
+        msg: `Are you sure you want to ${actDeac} this smart folder?`,
+        title: `${fldr.isActive ? 'Deactivate' : 'Activate'} smart folder`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.cwServ.smartFolderAct(folder.id).subscribe((data: any) => {
+        this.cwServ.actDeactSmtFldr(fldr.id.toString(), fldr.isActive ? false : true).subscribe((data: any) => {
           if (data) {
-            this.toastr.success('Smart folder activated successfully', 'Success!');
+            this.toastr.success(`Smart folder ${actDeac}d successfully`, 'Success!');
             this.listFolders();
           } else {
-            this.toastr.error('Unable to activate smart folder', 'Error!');
+            this.toastr.error(`Unable to ${actDeac} smart folder`, 'Error!');
           }
         }, (err: any) => {
-
-        });
-      }
-    })
-  }
-
-  // deactivate smart folder
-  deactSmartFolder(folder: any) {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to deactivate this smart folder?`,
-        title: `Dectivate smart folder`
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        this.cwServ.smartFolderDeact(folder.id).subscribe((data: any) => {
-          if (data) {
-            this.toastr.success('Smart folder deactivated successfully', 'Success!');
-            this.listFolders();
-          } else {
-            this.toastr.error('Unable to deactivate smart folder', 'Error!');
-          }
-        }, (err: any) => {
-
         });
       }
     })
@@ -414,7 +339,6 @@ export class ContentWorkspaceComponent implements OnInit {
         workspaceId: this.selFolder!.workspaceId,
         folderId: this.selFolder!.folderId,
         isActive: this.selFolder!.isActive,
-        // propertyIds: this.propsArr.length > 0 ? (this.propsArr).toString() : undefined,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
       let tagIds = [];
@@ -423,7 +347,6 @@ export class ContentWorkspaceComponent implements OnInit {
           tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 1 }));
         }
       }
-
       if (this.anyTags.length > 0) {
         for (let i = 0; i < this.allTags.length; i++) {
           tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 2 }));
@@ -435,10 +358,8 @@ export class ContentWorkspaceComponent implements OnInit {
         }
       }
       folderData.tagIds = '[' + tagIds.toString() + ']';
-      // console.log(folderData.tagIds);
       this.cwServ.updSmartFolder(folderData)
         .subscribe((data: any) => {
-          // console.log(data);
           if (data) {
             this.toastr.success(data.message || 'Smart Folder updated successfully', 'Success!');
             this.listFolders();
@@ -463,14 +384,13 @@ export class ContentWorkspaceComponent implements OnInit {
   // add smart folder
   addSmartFolder() {
     if (this.smartFolderForm.valid) {
-      // this.disabled = true;
+      this.disabled = true;
       let folderData: any = {
         ...this.smartFolderForm.value,
         smartFolderIcon: this.custIcon,
         workspaceId: this.selWrkspc!.id,
         folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].id : 0,
         isActive: true,
-        // propertyIds: this.propsArr.length > 0 ? (this.propsArr).toString() : undefined,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
       let tagIds = [];
@@ -490,12 +410,8 @@ export class ContentWorkspaceComponent implements OnInit {
         }
       }
       folderData.tagIds = '[' + tagIds.toString() + ']';
-
-      // console.log()
-      console.log(folderData);
       this.cwServ.addSmartFolder(folderData)
         .subscribe((data: any) => {
-          // console.log(data);
           if (data) {
             this.toastr.success(data.message || 'Smart Folder added successfully', 'Success!');
             this.listFolders();
@@ -520,7 +436,6 @@ export class ContentWorkspaceComponent implements OnInit {
   // get smart folder by id
   getSmartFolder(id: number) {
     this.cwServ.getSmtFolder(id).subscribe((data: any) => {
-      // console.log(data);
       if (data && data.result) {
         this.selFolder = data.result;
         this.smartFolderForm.patchValue({ ...this.selFolder });
@@ -530,18 +445,13 @@ export class ContentWorkspaceComponent implements OnInit {
           for (let i = 0; i < data.result.smartFolderTags.length; i++) {
             if (data.result.smartFolderTags[i].tagId === 1) {
               this.allTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-              // console.log(data.result.smartFolderTags[i].id);
             } else if (data.result.smartFolderTags[i].tagId === 2) {
               this.anyTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-              // console.log(data.result.smartFolderTags[i].id);
             } else if (data.result.smartFolderTags[i].tagId === 3) {
               this.noneTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-              // console.log(data.result.smartFolderTags[i].id);
             }
           }
-          // console.log(temp);
         }
-        console.log(data.result.smartFolderTags);
       } else {
         this.selFolder = undefined;
       }
@@ -556,50 +466,25 @@ export class ContentWorkspaceComponent implements OnInit {
     this.edit ? this.updFolder() : this.addFolder();
   }
 
-  // activate folder
-  actFolder(folder: any) {
+  // activate/deactivate folder
+  actDeactFldr(fldr: Folder) {
+    let actDeac: string = `${fldr.isActive ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to activate this folder?`,
-        title: `Activate folder`
+        msg: `Are you sure you want to ${actDeac} this folder?`,
+        title: `${fldr.isActive ? 'Deactivate' : 'Activate'} folder`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.cwServ.folderAct(folder.id).subscribe((data: any) => {
+        this.cwServ.actDeactFldr(fldr.id.toString(), fldr.isActive ? false : true).subscribe((data: any) => {
           if (data) {
-            this.toastr.success('Folder activated successfully', 'Success!');
+            this.toastr.success(`Folder ${actDeac}d successfully`, 'Success!');
             this.listFolders();
           } else {
-            this.toastr.error('Unable to activate folder', 'Error!');
+            this.toastr.error(`Unable to ${actDeac} folder`, 'Error!');
           }
         }, (err: any) => {
-
-        });
-      }
-    })
-  }
-
-  // deactivate folder
-  deactFolder(folder: any) {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to deactivate this folder?`,
-        title: `Deactivate folder`
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        // console.log(tag);
-        this.cwServ.folderDeact(folder.id).subscribe((data: any) => {
-          if (data) {
-            this.toastr.success('Folder deactivated successfully', 'Success!');
-            this.listFolders();
-          } else {
-            this.toastr.error('Unable to deactivate folder', 'Error!');
-          }
-        }, (err: any) => {
-
         });
       }
     })
@@ -617,10 +502,7 @@ export class ContentWorkspaceComponent implements OnInit {
         folderId: this.selFolder!.folderId,
         isActive: this.selFolder!.isActive
       };
-      // console.log(this.selFolder);
-      // console.log(folderData);
       this.cwServ.updFolder(folderData).subscribe((data: any) => {
-        // console.log(data);
         if (data) {
           this.toastr.success(data.message || 'Folder added successfully', 'Success!');
           this.listFolders()
@@ -653,9 +535,6 @@ export class ContentWorkspaceComponent implements OnInit {
         folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].id : 0,
         isActive: true
       };
-      // console.log(this.folderNav[this.folderNav.length - 1]);
-      // console.log(this.folderNav[this.folderNav.length - 1].id);
-      // console.log(folderData);
       this.cwServ.addFolder(folderData)
         .subscribe((data: any) => {
           if (data) {
@@ -682,12 +561,9 @@ export class ContentWorkspaceComponent implements OnInit {
   // get folder by id
   getFolder(id: number) {
     this.cwServ.getFolder(id).subscribe((data: any) => {
-      // console.log(data);
       if (data && data.result) {
         this.selFolder = data.result;
         this.folderForm.patchValue({ ...this.selFolder });
-        // console.log(this.iconUrl);
-        // console.log(this.custIcon);
       } else {
         this.selFolder = undefined;
       }
@@ -698,50 +574,31 @@ export class ContentWorkspaceComponent implements OnInit {
 
 
   // ---- workspace ---- //
-  // activate workspace
-  actWrkspc(wrkspc: any) {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to activate this workspace?`,
-        title: `Activate workspace`
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        this.cwServ.wrkspcAct(wrkspc.id).subscribe((data: any) => {
-          if (data) {
-            this.toastr.success('Workspace activated successfully', 'Success!');
-            this.getWrkspcList();
-          } else {
-            this.toastr.error('Unable to activate workspace', 'Error!');
-          }
-        }, (err: any) => {
-
-        });
-      }
-    })
+  // change displayed workspace (isActive)
+  changeDispWrkspc() {
+    this.activeWrkspc == 1 ? this.isActiveWrkspc = true : this.isActiveWrkspc = false;
+    this.getWrkspcList();
   }
 
-  // deactivate workspace
-  deactWrkspc(wrkspc: any) {
+  // activate/deactivate workspace
+  actDeactWrkspc(wrkspc: Workspace) {
+    let actDeac: string = `${wrkspc.isActive ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to deactivate this workspace?`,
-        title: `Deactivate workspace`
+        msg: `Are you sure you want to ${actDeac} this workspace?`,
+        title: `${wrkspc.isActive ? 'Deactivate' : 'Activate'} workspace`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        // console.log(tag);
-        this.cwServ.wrkspcDeact(wrkspc.id).subscribe((data: any) => {
+        this.cwServ.actDeactWrkspc(wrkspc.id.toString(), wrkspc.isActive ? false : true).subscribe((data: any) => {
           if (data) {
-            this.toastr.success('Workspace deactivated successfully', 'Success!');
+            this.toastr.success(`Workspace ${actDeac}d successfully`, 'Success!');
             this.getWrkspcList();
           } else {
-            this.toastr.error('Unable to deactivate workspace', 'Error!');
+            this.toastr.error(`Unable to ${actDeac} workspace`, 'Error!');
           }
         }, (err: any) => {
-
         });
       }
     })
@@ -759,7 +616,6 @@ export class ContentWorkspaceComponent implements OnInit {
         hubId: this.selWrkspc!.hub.id
       };
       this.cwServ.updWrkspc(wrkspcData).subscribe((data: any) => {
-        // console.log(data);
         if (data) {
           this.toastr.success(data.message || 'Workspace updated successfully', 'Success!');
           this.selWrkspc = wrkspcData;
@@ -795,17 +651,10 @@ export class ContentWorkspaceComponent implements OnInit {
     if (this.addWrkspcForm.valid && !this.edit) {
       this.disabled = true;
       let wrkspcData: any;
-      // if (this.addWrkspcForm.valid) {
       wrkspcData = {
         ...this.addWrkspcForm.value,
         hubId: parseInt(this.hubid)
       };
-      // } else if (this.updWrkspcForm.valid) {
-      //   wrkspcData = {
-      //     ...this.updWrkspcForm.value,
-      //     hubId: this.selWrkspc!.hubId
-      //   };
-      // }
       this.cwServ.addWrkspc(wrkspcData)
         .subscribe((data: any) => {
           if (data) {
@@ -842,14 +691,21 @@ export class ContentWorkspaceComponent implements OnInit {
   // list of workspaces
   getWrkspcList() {
     this.wrkspcLoading = true;
-    this.cwServ.wrkspcList({ hubid: this.hubid })
+    this.wrkspcs = [];
+    let query = {
+      hubid: this.hubid,
+      isActive: this.isActiveWrkspc
+    }
+    this.cwServ.wrkspcList(query)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          // console.log(data);
           this.wrkspcs = data.result.results;
+        } else if (data && data.result && Array.isArray(data.result.results) && data.result.results.length == 0) {
+          this.wrkspcs = [];
         }
         this.wrkspcLoading = false;
       }, (err: any) => {
+        this.wrkspcs = [];
         this.wrkspcLoading = false;
       });
   }
@@ -964,15 +820,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.closeDropdown(event);
   }
 
-  // toggle dropdown
-  // toggleDropdown = (event: any) => {
-  //   if (event.target!.classList.contains('fas')) {
-  //     event.target.parentNode.nextSibling!.classList.toggle('show');
-  //   } else {
-  //     event.target.nextSibling!.classList.toggle('show');
-  //   }
-  // }
-
+  // close dropdown manually
   closeDropdown = (event: any) => {
     event.target.parentNode.parentNode!.classList.remove('show');
   }
@@ -1041,16 +889,12 @@ export class ContentWorkspaceComponent implements OnInit {
   // edit options in documents (workspace)
   openEdit = (type: any) => {
     this.edits[type] = true;
-    // event = event.target;
-    // (event.parentNode.parentNode.parentNode.childNodes[1] as HTMLElement).style.display = 'none';
-    // (event.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'block';
   }
 
-  // // get content by smart folder ----
+  // get content by smart folder
   getContentSmtFldr() {
     this.folderLoading = true;
     let query: any = {
-      // workspaceId: this.selWrkspc!.id,
       smartFolderId: this.dispFolder ? this.dispFolder!.id : undefined
     };
     this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
@@ -1073,20 +917,6 @@ export class ContentWorkspaceComponent implements OnInit {
       }
     }
     this.edits[type] = false;
-    // event = event.target;
-    // (event.parentNode.parentNode.parentNode.parentNode.childNodes[1] as HTMLElement).style.display = 'block';
-    // (event.parentNode.parentNode.parentNode.parentNode.childNodes[2] as HTMLElement).style.display = 'none';
-  }
-
-  showGeneral = () => {
-    this.dispGnrl = !this.dispGnrl;
-  }
-
-  showSettings = () => {
-    this.dispSettings = !this.dispSettings;
-  }
-  showSmart = () => {
-    this.dispSmart = !this.dispSmart;
   }
 
   iconURLHandler = ($event: any) => {
@@ -1100,14 +930,6 @@ export class ContentWorkspaceComponent implements OnInit {
     this.urlForm.updateValueAndValidity();
   }
 
-  showPropsSection = () => {
-    this.dispPropsSec = !this.dispPropsSec;
-  }
-
-  showSmartFolderSection = () => {
-    this.dispSmFolderSec = !this.dispSmFolderSec;
-  }
-
   openModal(content: any, isTagReq: boolean = false) {
     if (isTagReq) {
       this.urlForm.reset();
@@ -1115,12 +937,9 @@ export class ContentWorkspaceComponent implements OnInit {
       this.iconUrl = '';
       this.getTags();
     }
-
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
-
       }, (reason) => {
-        // console.log(reason);
         if (reason || reason === 0) {
           this.addWrkspcForm.reset();
           this.updWrkspcForm.reset();
@@ -1137,7 +956,6 @@ export class ContentWorkspaceComponent implements OnInit {
     this.initialiseState();
     this.cntntList();
   }
-
 
   sortChange(col: any, index: number) {
     this.cntntLoading = true;
@@ -1199,7 +1017,6 @@ export class ContentWorkspaceComponent implements OnInit {
       hubId: parseInt(this.hubid),
       pageNo: 1, pageSize: 1000
     }
-    // console.log(query.isActive);
     this.tagServ.tagList(query)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
@@ -1228,13 +1045,13 @@ export class ContentWorkspaceComponent implements OnInit {
       });
   }
 
-  // when changing page size
+  // changing page size
   pageSizeChange(pageSize: number) {
     this.pageSize = pageSize;
     this.cntntList();
   }
 
-  // numbers to be displayed for Pagination
+  // change pagination number
   changePageNo(num: number) {
     this.pageNo = num;
     this.cntntList();
@@ -1380,12 +1197,13 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   getImg(data: any): string {
+    console.log(data);
     if (data.urlIconPath)
       return data.urlIconPath;
     // if (data.contentPath)
     //   return data.contentPath;
-    else if (Array.isArray(data.pdfImages) && data.pdfImages.length > 0)
-      return data.pdfImages[0].imagePath;
+    else if (data.pdfImage)
+      return data.pdfImage;
     else
       return this.defImg;
   }
@@ -1457,19 +1275,7 @@ export class ContentWorkspaceComponent implements OnInit {
       this.modalService.dismissAll();
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
-  // /**
-  // * on file drop handler
-  // */
+  // on file drop handler
   onFileDropped($event: any, isIcon: boolean = false, type: string = '') {
     console.log("das, file drop")
     if (!isIcon)
@@ -1479,14 +1285,11 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  /**
-   * handle file from browsing
-   */
+  // handle file from browsing
   fileBrowseHandler($event: any, isIcon: boolean = false, type: string = '') {
     console.log("das, file browser")
     if ($event.target && $event.target.files)
       this.prepareFilesList($event.target.files, isIcon);
-    // preview image
     let input = $event.target;
     if (input.files && input.files && isIcon) {
       this.renderImg(input.files[0], type);
@@ -1515,9 +1318,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.files.splice(index, 1);
   }
 
-  /**
-   * Simulate the upload process
-   */
+  // Simulate the upload process
   uploadFilesSimulator(index: number) {
     setTimeout(() => {
       if (index === this.files.length) {
@@ -1559,5 +1360,4 @@ export class ContentWorkspaceComponent implements OnInit {
     if (!!this.subscription)
       this.subscription.unsubscribe();
   }
-
 }

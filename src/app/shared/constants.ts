@@ -4,6 +4,8 @@ const DEF_IMG: string = "assets/images/def-img.png";
 
 const DEF_ICON: string = "assets/images/def-icon.png";
 
+const FLDR_ICON: string = "assets/images/folderIcon.png";
+
 // const PRPS: Array<any> = [{ id: 1, name: "Can't be shared" }, { id: 2, name: "Has Likes" }, { id: 3, name: "Has Comments" }];
 
 const TIME: Array<any> = ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00",
@@ -35,4 +37,4 @@ enum FILE_TYPES {
 
 // const  FILE_TYPES = [{ id: 1, name: "Document" }, { id: 2, name: "Photo" }, { id: 3, name: "URL" }, { id: 4, name: "Video" }]
 
-export { LMT_PAGE, DEF_IMG, DEF_ICON, TIME, GRP_TYPE, ROLES, EMP_STATUS, ANCMT_STATUS, LNGS, FILE_TYPES };
+export { LMT_PAGE, DEF_IMG, DEF_ICON, TIME, GRP_TYPE, ROLES, EMP_STATUS, ANCMT_STATUS, LNGS, FILE_TYPES, FLDR_ICON };

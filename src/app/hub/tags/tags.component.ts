@@ -310,7 +310,7 @@ export class TagsComponent implements OnInit {
     this.getCatgs();
   }
 
-  // activate/deactivate tag
+  // activate/deactivate category
   actDeactCatg(catg: Catg) {
     let actDeac: string = `${catg.isActive ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
