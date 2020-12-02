@@ -621,7 +621,7 @@
               </ul>
               <hr class="mt-0">
               <app-loader [type]="'page'" *ngIf="folderLoading"></app-loader>
-              <div class="main row py-4" *ngIf="(folderArr.length > 0 || contentArr.length > 0) && !folderLoading">
+              <div class="main row py-4" *ngIf="(folderArr.length > 0 || cntntArr.length > 0) && !folderLoading">
                 <!-- folders and smart folders -->
                 <div class="col-3 curs-ptr my-2" *ngFor="let folder of folderArr">
                   <div class="image">
@@ -652,16 +652,16 @@
                   </div>
                 </div>
                 <!-- content -->
-                <div class="col-3 curs-ptr my-2" *ngFor="let content of contentArr">
+                <div class="col-3 curs-ptr my-2" *ngFor="let ct of cntntArr">
                   <div class="image">
-                    <img src="{{content.pdfImages[0] ? content.pdfImages[0].imagePath : content.urlIconPath}}">
+                    <img src="{{getImg(ct)}}">
                   </div>
                   <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate">
-                    {{content.name}}
+                    {{ct.name}}
                   </div>
                 </div>
               </div>
-              <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;" *ngIf="folderArr.length == 0 && contentArr.length == 0 && !folderLoading">
+              <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;" *ngIf="folderArr.length == 0 && cntntArr.length == 0 && !folderLoading">
                 No data found
               </div>
             </div>

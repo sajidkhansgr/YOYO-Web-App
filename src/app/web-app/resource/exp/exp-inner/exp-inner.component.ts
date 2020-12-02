@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { ExpService } from '../../exp/exp.service';
+import { DEF_ICON } from '../../../../shared/constants';
 
 @Component({
   selector: 'app-exp-inner',
@@ -15,6 +16,7 @@ export class ExpInnerComponent implements OnInit {
   testArr = [1, 2, 3, 4, 5]; // test array
   view: boolean = true;loading!: boolean;
   wrkspcCntnts!:any[];
+  defImg:string = DEF_ICON;
 
   constructor(
     private modalService: NgbModal,
@@ -42,22 +44,21 @@ export class ExpInnerComponent implements OnInit {
       isActive: true,
       // folderId: this.selFldr ? this.selFldr!.id : undefined
     };
+    this.wrkspcCntnts = [];
     this.expServ.getAllObjWrkspc(params)
       .subscribe((data: any) => {
-        if (data && data.result && data.result.result) {
-          if (Array.isArray(data.result.result[0].contents) && data.result.result[0].contents.length > 0) {
-            // console.log(data.result.result[0].contents)
-          }
-          if (Array.isArray(data.result.result[0].folders) && data.result.result[0].folders.length > 0) {
-            // console.log(data.result.folders);
-          }
-          if (Array.isArray(data.result.result[0].smartFolders) && data.result.result[0].smartFolders.length > 0) {
-          }
+        if (data && Array.isArray(data.result) && data.result.length>0) {
+          if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0)
+              this.wrkspcCntnts = data.result[0].contents;
+          if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0)
+              this.wrkspcCntnts.push(...data.result[0].folders.map((fldr: any) => ({ ...fldr, key:'fldr'})));
+          if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0)
+              this.wrkspcCntnts.push(...data.result[0].smartFolders.map((fldr: any) => ({ ...fldr, key:'smtFldr'})));
         }else {
+          //no data found
         }
         this.loading = false;
       }, (err: any) => {
-        this.wrkspcCntnts = [];
         this.loading = false;
       })
   }
@@ -83,7 +84,7 @@ export class ExpInnerComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-  
+
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     if (!!this.routerSubs)

@@ -1,6 +1,5 @@
 import { Component, OnChanges, Input, Output, EventEmitter } from '@angular/core';
-
-import { LMT_PAGE } from '../../constants'
+import { LMT_PAGE } from '../../constants';
 
 @Component({
   selector: 'app-pagination',

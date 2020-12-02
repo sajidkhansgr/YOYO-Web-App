@@ -40,15 +40,15 @@ export class ContentWorkspaceComponent implements OnInit {
   addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; smartFolderForm!: FormGroup;;
   cntntForm!: FormGroup; urlForm!: FormGroup;
   disabled!: boolean;
-  folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; contentArr!: Content[];
+  folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; cntntArr!: Content[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
-  view!: boolean;edit!: boolean | undefined;
+  view!: boolean; edit!: boolean | undefined;
   activeFldrs!: number; isActiveFldrs!: boolean;
 
   tags!: Tag[]; selTags: Tag[] = []; selTags2: Tag[] = [];//using in selTags add and selTags2 form
   cntnts!: any[]; totalCount!: number; sort: any = {}; searchTxt!: string;
-  searchTxtChng: Subject<string> = new Subject<string>();filteredList:any=[];
+  searchTxtChng: Subject<string> = new Subject<string>(); filteredList: any = [];
   private subscription!: Subscription;
   selectable = true; removable: boolean = true;
   urlDisb!: boolean;
@@ -60,7 +60,7 @@ export class ContentWorkspaceComponent implements OnInit {
   edits: any; disb: any; //disb and edits used in single edits
 
   usrInfo: any | null;
-  fileTypes: any = FILE_TYPES; fileTypesArr:any=[];fileTypeArr: any = [];
+  fileTypes: any = FILE_TYPES; fileTypesArr: any = []; fileTypeArr: any = [];
   selUsrGrpWrkspc!: any[]; selUsrGrpLoad!: boolean; isUrGrpLoad!: boolean; selUsrGrpTxt!: '';
   unSelUsrGrpWrkspc!: any[]; unSelUsrGrpLoad!: boolean; unSelUsrGrpTxt!: ''; selUsrGrps: any[] = [];
   cntntTag!: any; urlTag!: any; cntntInfoTag!: any; cntntLng!: any; usrGrpWrkSpcDisb: boolean = false;
@@ -117,7 +117,7 @@ export class ContentWorkspaceComponent implements OnInit {
       // more fields need to be added
     });
     this.disabled = false;
-    this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = []; this.contentArr = [];
+    this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = []; this.cntntArr = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
     let cmnCols = [{ n: "Added", k: "createdDate", asc: false }, { n: "Size", k: "size", asc: false },
     { n: "Last Updated", k: "updatedDate", asc: false }];
@@ -129,7 +129,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.edit = false;
     this.activeFldrs = 1; this.isActiveFldrs = true;
     this.showRowInfo = false; this.rowInfo = {}; this.docLoading = false;
-    this.pageSize = this.lmtPage[0]; this.pageNo = 1;this.filteredList = [];
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1; this.filteredList = [];
     this.cntntDisb = false;
     this.totalCount = 0;
     this.cntntLoading = true; //use in cntnt listing
@@ -196,7 +196,7 @@ export class ContentWorkspaceComponent implements OnInit {
   listFolders() {
     this.folderLoading = true;
     this.folderArr = [];
-    this.contentArr = [];
+    this.cntntArr = [];
     this.dispFolder ? this.dispFolder.key == 'fldr' ? this.getAllObjWrkspc() : this.getContentSmtFldr() : this.getAllObjWrkspc();
   }
 
@@ -207,26 +207,18 @@ export class ContentWorkspaceComponent implements OnInit {
       isActive: this.isActiveFldrs,
       folderId: this.dispFolder ? this.dispFolder!.id : undefined,
     };
-    // console.log(params)
     this.cwServ.getAllObjWrkspc(params).subscribe((data: any) => {
-      // console.log(data);
       if (data && data.result) {
         if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0) {
-          this.contentArr.push(...data.result[0].contents);
+          this.cntntArr.push(...data.result[0].contents);
         }
         if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0) {
-          for (let i = 0; i < data.result[0].folders.length; i++) {
-            this.folderArr.push({ ...data.result[0].folders[i], key: 'fldr' });
-          }
-          // console.log(data.result.folders);
+          this.folderArr.push(...data.result[0].folders.map((fldr: any) => ({ ...fldr, key: 'fldr' })));
         }
         if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0) {
-          for (let i = 0; i < data.result[0].smartFolders.length; i++) {
-            this.folderArr.push({ ...data.result[0].smartFolders[i], key: 'smtFldr' });
-          }
+          this.folderArr.push(...data.result[0].smartFolders.map((fldr: any) => ({ ...fldr, key: 'smtFldr' })));
         }
       }
-      // console.log(this.folderArr);
       this.folderLoading = false;
     }, (err: any) => {
       this.folderLoading = false;
@@ -307,16 +299,16 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // add file type filter for smart folder and main list
-  addFileType(val: boolean, fT:any, isList:boolean=false) {
+  addFileType(val: boolean, fT: any, isList: boolean = false) {
     if (val) {
-      if(isList){
-        this.filteredList.push({...fT,type:'fileType'});
+      if (isList) {
+        this.filteredList.push({ ...fT, type: 'fileType' });
         this.cntntList();
       }
       else
         this.fileTypeArr.push(fT.v);
     } else
-      if(isList){
+      if (isList) {
         this.filteredList = this.filteredList.filter((d: any) => d.v != fT.v);
         this.cntntList();
       }
@@ -1063,7 +1055,7 @@ export class ContentWorkspaceComponent implements OnInit {
     };
     this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.contentArr.push(...data.result);
+        this.cntntArr.push(...data.result);
       }
       this.folderLoading = false;
     }, (err: any) => {
@@ -1188,10 +1180,12 @@ export class ContentWorkspaceComponent implements OnInit {
           this.totalCount = data.result.totalCount;
         } else {
           this.cntnts = [];
+          this.totalCount = 0
         }
         this.cntntLoading = false;
       }, (err: any) => {
         this.cntnts = [];
+        this.totalCount = 0
         this.cntntLoading = false;
       });
   }
@@ -1289,7 +1283,7 @@ export class ContentWorkspaceComponent implements OnInit {
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success('Content added successfully', 'Success!');
-            this.files = [];this.pageNo = 1;
+            this.files = []; this.pageNo = 1;
             this.cntntList();
             this.dismissModal();
           } else {
@@ -1321,7 +1315,7 @@ export class ContentWorkspaceComponent implements OnInit {
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success('Content added successfully', 'Success!');
-            this.files = [];this.pageNo = 1;
+            this.files = []; this.pageNo = 1;
             this.cntntList();
             this.dismissModal();
           } else {
@@ -1411,7 +1405,7 @@ export class ContentWorkspaceComponent implements OnInit {
             commentText: this.cmnt
           })
           this.cmnt = '';
-          this.toastr.success(data.message ||`Comment added successfully`, 'Success!');
+          this.toastr.success(data.message || `Comment added successfully`, 'Success!');
         } else {
           this.toastr.error(`Unable to add comment`, 'Error!');
         }
@@ -1448,12 +1442,12 @@ export class ContentWorkspaceComponent implements OnInit {
     this.fileServ.downloadFile(this.rowInfo!.contentPath, this.rowInfo!.name);
   }
 
-  clearAllFilter(){
+  clearAllFilter() {
     this.filteredList = [];
     this.cntntList();
   }
 
-  clearSingleFlter = (i:number)=>{
+  clearSingleFlter = (i: number) => {
     this.filteredList.splice(i, 1);
     this.cntntList();
   }
