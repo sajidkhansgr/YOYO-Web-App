@@ -71,12 +71,15 @@
                 <i class="fas fa-ellipsis-h"></i>
               </button>
               <div class="dropdown-menu" aria-labelledby="optDD">
-                <a class="dropdown-item curs-ptr" (click)="openModal(uplNewVer)"><i
-                    class="fas fa-upload mr-1"></i>Upload new version</a>
+                <a class="dropdown-item curs-ptr" (click)="openModal(uplNewVer)">
+                  <i class="fas fa-upload mr-1"></i>Upload new version
+                </a>
                 <a class="dropdown-item curs-ptr" *ngIf="rowInfo.contentPath" (click)="downloadFile()">
-                  <i class="fas fa-download mr-1"></i>Download</a>
-                <a class="dropdown-item curs-ptr" (click)="delCntnt();"><i class="fas fa-trash mr-1"></i>Move to
-                  trash</a>
+                  <i class="fas fa-download mr-1"></i>Download
+                </a>
+                <a class="dropdown-item curs-ptr" (click)="delCntnt();">
+                  <i class="fas fa-trash mr-1"></i>Move to trash
+                </a>
               </div>
             </div>
           </div>
@@ -800,7 +803,7 @@
             File Type
           </button>
           <div class="dropdown-menu" style="width:12rem;" aria-labelledby="fileDD" (click)="$event.stopPropagation();">
-            <mat-checkbox class="dropdown-item" *ngFor="let ft of fileTypesArr"
+            <mat-checkbox class="dropdown-item" [checked]="ft.chk" *ngFor="let ft of cntntTypeFltr"
               (change)="addFileType($event.checked, ft,true)">
               {{ft.n}}
             </mat-checkbox>
@@ -812,17 +815,53 @@
           </button>
           <div class="dropdown-menu" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD"
             (click)="$event.stopPropagation();">
-            <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-              <mat-label>Match ALL of these tags</mat-label>
-              <input matInput placeholder="Match ALL of these tags">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-chip-list>
+                <mat-chip *ngFor="let tg of allTags1" selectable removable (removed)="remove(tg,'allTags1')">
+                  {{tg.name}}
+                  <i matChipRemove class="fas fa-times-circle"></i>
+                </mat-chip>
+                <input matInput #alTg1 placeholder="Match ALL of these tags" [(ngModel)]="alTgTxt1" name="alTgTxt1"
+                  [matAutocomplete]="autoAll1">
+              </mat-chip-list>
+              <mat-autocomplete #autoAll1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'allTags1',alTg1)"
+                [displayWith]="displayFn">
+                <mat-option *ngFor="let tg of tags|filterName: alTgTxt1: 'name'" [value]="tg" (click)="$event.stopPropagation();">
+                  {{tg.name}}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-              <mat-label>Match ANY of these tags</mat-label>
-              <input matInput placeholder="Match ANY of these tags">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-chip-list>
+                <mat-chip *ngFor="let tg of anyTags1" selectable removable (removed)="remove(tg, 'anyTags1')">
+                  {{tg.name}}
+                  <i matChipRemove class="fas fa-times-circle"></i>
+                </mat-chip>
+                <input matInput #anTg1 placeholder="Match ANY of these tags" [(ngModel)]="anTgTxt1" name="anTgTxt1"
+                  [matAutocomplete]="autoAny1">
+              </mat-chip-list>
+              <mat-autocomplete #autoAny1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'anyTags1',anTg1)"
+                [displayWith]="displayFn">
+                <mat-option *ngFor="let tg of tags|filterName: anTgTxt1: 'name'" [value]="tg" (click)="$event.stopPropagation();">
+                  {{tg.name}}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="dropdown-item" class="bg-white w-100 px-3">
-              <mat-label>Match NONE of these tags</mat-label>
-              <input matInput placeholder="Match NONE of these tags">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-chip-list>
+                <mat-chip *ngFor="let tg of noneTags1" selectable removable (removed)="remove(tg, 'noneTags1')">
+                  {{tg.name}}
+                  <i matChipRemove class="fas fa-times-circle"></i>
+                </mat-chip>
+                <input matInput #noTg1 placeholder="Match NONE of these tags" [(ngModel)]="noTgTxt1" name="noTgTxt1"
+                  [matAutocomplete]="autoNone1">
+              </mat-chip-list>
+              <mat-autocomplete #autoNone1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'noneTags1',noTg1)"
+                [displayWith]="displayFn">
+                <mat-option *ngFor="let tg of tags|filterName: noTgTxt1: 'name'" [value]="tg" (click)="$event.stopPropagation();">
+                  {{tg.name}}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
           </div>
         </div>
@@ -863,7 +902,7 @@
         <span class="mr-2">Filtered by:</span>
         <div class="btn btn-outline-primary btn-sm rounded-pill filter-btn"
           *ngFor="let fltr of filteredList; let i=index">
-          {{fltr.n}}<i class="fas fa-times" (click)="clearSingleFlter(i)"></i>
+          {{fltr.n}}<i class="fas fa-times" (click)="clearSingleFlter(fltr,i)"></i>
         </div>
         <div class="float-right">
           <!-- <div class="btn btn-primary btn-sm mr-2">Save Filter</div> -->
@@ -1298,45 +1337,48 @@
                 style="width:20rem; max-height: 65vh;" (click)="$event.stopPropagation();">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-chip-list>
-                    <mat-chip *ngFor="let tag of allTags" selectable removable (removed)="removeTag(tag, 'all')">
-                      {{tag.name}}
+                    <mat-chip *ngFor="let tg of allTags" selectable removable (removed)="remove(tg,'allTags')">
+                      {{tg.name}}
                       <i matChipRemove class="fas fa-times-circle"></i>
                     </mat-chip>
-                    <input matInput placeholder="Match ALL of these tags" [matAutocomplete]="autoAll">
+                    <input matInput #alTg placeholder="Match ALL of these tags" [(ngModel)]="alTgTxt" name="alTgTxt" [ngModelOptions]="{standalone: true}"
+                      [matAutocomplete]="autoAll">
                   </mat-chip-list>
-                  <mat-autocomplete #autoAll="matAutocomplete" (optionSelected)="selTag($event.option.value, 'all')"
+                  <mat-autocomplete #autoAll="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'allTags',alTg)"
                     [displayWith]="displayFn">
-                    <mat-option *ngFor="let tag of tags" [value]="tag" (click)="$event.stopPropagation();">
-                      {{tag.name}}
+                    <mat-option *ngFor="let tg of tags|filterName: alTgTxt: 'name'" [value]="tg" (click)="$event.stopPropagation();">
+                      {{tg.name}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-chip-list>
-                    <mat-chip *ngFor="let tag of anyTags" selectable removable (removed)="removeTag(tag, 'any')">
-                      {{tag.name}}
+                    <mat-chip *ngFor="let tg of anyTags" selectable removable (removed)="remove(tg,'anyTags')">
+                      {{tg.name}}
                       <i matChipRemove class="fas fa-times-circle"></i>
                     </mat-chip>
-                    <input matInput placeholder="Match ANY of these tags" [matAutocomplete]="autoAny">
+                    <input matInput #anTg placeholder="Match ANY of these tags" [(ngModel)]="anTgTxt" name="anTgTxt" [ngModelOptions]="{standalone: true}"
+                      [matAutocomplete]="autoAny">
                   </mat-chip-list>
-                  <mat-autocomplete #autoAny="matAutocomplete" (optionSelected)="selTag($event.option.value, 'any')"
+                  <mat-autocomplete #autoAny="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'anyTags',anTg)"
                     [displayWith]="displayFn">
-                    <mat-option *ngFor="let tag of tags" [value]="tag" (click)="$event.stopPropagation();">
-                      {{tag.name}}
+                    <mat-option *ngFor="let tg of tags|filterName: anTgTxt: 'name'" [value]="tg" (click)="$event.stopPropagation();">
+                      {{tg.name}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-chip-list>
-                    <mat-chip *ngFor="let tag of noneTags" selectable removable (removed)="removeTag(tag, 'none')">
-                      {{tag.name}}
+                    <mat-chip *ngFor="let tg of noneTags" selectable removable (removed)="remove(tg,'noneTags')">
+                      {{tg.name}}
                       <i matChipRemove class="fas fa-times-circle"></i>
                     </mat-chip>
-                    <input matInput placeholder="Match NONE of these tags" [matAutocomplete]="autoNone">
+                    <input matInput #noTg placeholder="Match NONE of these tags" [(ngModel)]="noTgTxt" name="noTgTxt" [ngModelOptions]="{standalone: true}"
+                      [matAutocomplete]="autoNone">
                   </mat-chip-list>
-                  <mat-autocomplete #autoNone="matAutocomplete" (optionSelected)="selTag($event.option.value, 'none')"
+                  <mat-autocomplete #autoNone="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'noneTags',noTg)"
                     [displayWith]="displayFn">
-                    <mat-option *ngFor="let tag of tags" [value]="tag" (click)="$event.stopPropagation();">
+                    <mat-option *ngFor="let tag of tags|filterName: noTgTxt: 'name'" [value]="tag" (click)="$event.stopPropagation();">
                       {{tag.name}}
                     </mat-option>
                   </mat-autocomplete>

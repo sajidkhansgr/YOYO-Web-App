@@ -23,7 +23,7 @@ export class SidebarComponent implements OnInit {
     this.navigation = navigation
     this.routerSubs = this.dataServ.currentInfo
       .subscribe((msg: any) => {
-        if(msg==='hub-add' || msg==='hub-upd' || this.isMain)
+        if(msg==='hub-add' || msg==='hub-upd' && this.isMain)
           this.getHubs();
       })
   }

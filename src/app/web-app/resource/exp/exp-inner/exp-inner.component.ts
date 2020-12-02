@@ -29,7 +29,6 @@ export class ExpInnerComponent implements OnInit {
 
   ngOnInit(): void {
     this.routerSubs = this.route.params.subscribe(params => {
-      console.log("paras")
       this.id = params['expid'] || '0';
       this.fldrid = params['fldrid'] || '';
       this.initialiseState(); // reset and set based on new parameter this time
@@ -44,11 +43,6 @@ export class ExpInnerComponent implements OnInit {
       this.toastr.error("Not a valid Workspace", "Error");
       this.router.navigate(['/web-app/experiences']);
     }
-  }
-
-  // routing function
-  changePage(fid: number) {
-    this.router.navigate(['/web-app/resource/experiences/' + this.id + '/' + fid]);
   }
 
   // view content
@@ -83,6 +77,10 @@ export class ExpInnerComponent implements OnInit {
 
   toggleView = () => {
     this.view = !this.view;
+  }
+
+  navgToCntnt(id: number) {
+    this.router.navigate(['/web-app/resource/experiences/' + this.id + '/' + id]);
   }
 
   openModal(content: any) {
