@@ -75,7 +75,7 @@
             <div class="h-100" *ngIf="cntnt.pdfContentPath">
               <div id='pdf-div' class='pdf-view'></div>
             </div>
-            <div *ngIf="!cntnt.pdfContentPath">No pdf found</div>
+            <div *ngIf="!cntnt.pdfContentPath" class="text-center pt-5">No pdf found</div>
           </div>
           <div class="text-center mt-5 mx-3" *ngSwitchCase="2">
             <img [src]="cntnt.contentPath?cntnt.contentPath:defIcon" alt="Image" />

@@ -21,22 +21,25 @@
         <ng-container *ngSwitchCase="'smtFldr'">
           <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
         </ng-container>
-        <div class="col-md-3 text-center file curs-ptr" *ngSwitchDefault>
-          <div class="icon" [routerLink]="'/web-app/view/'+wSC.id">
-            <img [src]="wSC.pdfImage?wSC.pdfImage:defImg" style="max-width:100%; max-height: 200px;">
+        <div class="col-md-3 text-center file curs-ptr my-2" *ngSwitchDefault>
+          <div class="icon" (click)="viewContent(wSC.id)">
+            <img [src]="wSC.pdfImage?wSC.pdfImage:defImg">
           </div>
           <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
-            <i class="fa fa-file ml-3 align-self-center"></i>
-            <div class="mx-auto">{{wSC.name}}</div>
+            <i class="fa fa-file ml-3 align-self-center mr-1"></i>
+            <div class="mx-auto text-truncate pr-1">{{wSC.name}}</div>
           </div>
           <div class="options rounded">
             <div class="dropleft">
-              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
                 <i class="fas fa-share-square"></i>
               </button>
               <div class="dropdown-menu" aria-labelledby="shareDD">
-                <a class="dropdown-item curs-ptr" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+                <a class="dropdown-item curs-ptr" (click)="openModal(email)"><i
+                    class="fa fa-envelope mr-1"></i>Email</a>
+                <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a
+                  link</a>
               </div>
             </div>
             <div class="btn my-1" (click)="openModal(addtoCollection)">
@@ -45,12 +48,12 @@
           </div>
         </div>
         <ng-template #cntntFldr>
-          <div class="col-md-3 text-center folder curs-ptr">
-            <div class="icon" [routerLink]="'/web-app/resource/experiences/'+id+'/'+wSC.id">
-              <img [src]="wSC.folderIconPath?wSC.folderIconPath:defImg" style="max-width:100%; max-height: 200px;">
+          <div class="col-md-3 text-center folder curs-ptr my-2">
+            <div class="icon" (click)="changePage(wSC.id)">
+              <img [src]="wSC.folderIconPath?wSC.folderIconPath : fldrIcon">
             </div>
             <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
-              <div class="mx-auto">{{wSC.name}}</div>
+              <div class="mx-auto text-truncate pr-1">{{wSC.name}}</div>
             </div>
           </div>
         </ng-template>
@@ -124,22 +127,25 @@
           </ng-container>
           <div class="file d-flex bg-white rounded p-3 curs-ptr my-2" *ngSwitchDefault>
             <mat-checkbox class="align-self-center"></mat-checkbox>
-            <div class="icon align-self-center mx-4" [routerLink]="'/web-app/view/'+wSC.id">
+            <div class="icon align-self-center mx-4" (click)="viewContent(wSC.id)">
               <img [src]="wSC.pdfImage?wSC.pdfImage:defImg" style="max-width: 72px;">
             </div>
             <div class="info align-self-center">
-              <h5 class="mb-0" [routerLink]="'/web-app/view/'+wSC.id">{{wSC.name}}</h5>
+              <h5 class="mb-0" (click)="viewContent(wSC.id)">{{wSC.name}}</h5>
               <!-- <i class="fa fa-file mr-2"></i>Document in English -->
               <div class="text-secondary" style="font-size: 12px;">Updated Jan 26,2020</div>
             </div>
             <div class="options d-flex align-self-center ml-auto mr-3">
               <div class="dropleft mr-2">
-                <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item curs-ptr" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+                  <a class="dropdown-item curs-ptr" (click)="openModal(email)"><i
+                      class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a
+                    link</a>
                 </div>
               </div>
               <div class="btn btn-light" (click)="openModal(addtoCollection)">
@@ -151,11 +157,11 @@
         <ng-template #cntntFldr1>
           <div class="folder d-flex bg-white rounded p-3 curs-ptr my-2">
             <mat-checkbox class="align-self-center"></mat-checkbox>
-            <div class="icon align-self-center mx-4" [routerLink]="'/web-app/resource/experiences/'+id+'/'+wSC.id">
-              <img [src]="wSC.folderIconPath?wSC.folderIconPath:defImg" style="max-width: 72px;">
+            <div class="icon align-self-center mx-4" (click)="changePage(wSC.id)">
+              <img [src]="wSC.folderIconPath?wSC.folderIconPath:fldrIcon" style="max-width: 72px;">
             </div>
             <div class="info align-self-center">
-              <h5 class="mb-0" [routerLink]="'/web-app/resource/experiences/'+id+'/'+wSC.id">{{wSC.name}}</h5>
+              <h5 class="mb-0" (click)="changePage(wSC.id)">{{wSC.name}}</h5>
               <!-- <i class="fa fa-folder mr-2"></i>Folder in English -->
             </div>
           </div>

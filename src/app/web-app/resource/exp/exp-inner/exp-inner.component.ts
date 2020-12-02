@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ExpService } from '../../exp/exp.service';
-import { DEF_ICON } from '../../../../shared/constants';
+import { DEF_ICON, FLDR_ICON } from '../../../../shared/constants';
 
 @Component({
   selector: 'app-exp-inner',
@@ -13,11 +13,11 @@ import { DEF_ICON } from '../../../../shared/constants';
 })
 export class ExpInnerComponent implements OnInit {
   routerSubs!: Subscription;
-  id!: string;fldrid!:string;
-  testArr = [1, 2, 3, 4, 5]; // test array
-  view: boolean = true;loading!: boolean;
-  wrkspcCntnts:any[]=[];
-  defImg:string = DEF_ICON;
+  id!: string; fldrid!: string;
+  view: boolean = true; loading!: boolean;
+  wrkspcCntnts: any[] = [];
+  defImg: string = DEF_ICON; fldrIcon: string = FLDR_ICON;
+  testArr = [1, 2, 3] // for static
 
   constructor(
     private modalService: NgbModal,
@@ -30,8 +30,8 @@ export class ExpInnerComponent implements OnInit {
   ngOnInit(): void {
     this.routerSubs = this.route.params.subscribe(params => {
       console.log("paras")
-      this.id = params['expid']||'0';
-      this.fldrid = params['fldrid']||'';
+      this.id = params['expid'] || '0';
+      this.fldrid = params['fldrid'] || '';
       this.initialiseState(); // reset and set based on new parameter this time
     });
   }
@@ -40,10 +40,20 @@ export class ExpInnerComponent implements OnInit {
     if (this.id != '0') {
       this.loading = true;
       this.getAllFromWrkspc();
-    }else{
+    } else {
       this.toastr.error("Not a valid Workspace", "Error");
       this.router.navigate(['/web-app/experiences']);
     }
+  }
+
+  // routing function
+  changePage(fid: number) {
+    this.router.navigate(['/web-app/resource/experiences/' + this.id + '/' + fid]);
+  }
+
+  // view content
+  viewContent(id: number) {
+    this.router.navigate(['/web-app/view/' + this.id]);
   }
 
   getAllFromWrkspc() {
@@ -55,14 +65,14 @@ export class ExpInnerComponent implements OnInit {
     this.wrkspcCntnts = [];
     this.expServ.getAllObjWrkspc(params)
       .subscribe((data: any) => {
-        if (data && Array.isArray(data.result) && data.result.length>0) {
+        if (data && Array.isArray(data.result) && data.result.length > 0) {
           if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0)
-              this.wrkspcCntnts = data.result[0].contents;
+            this.wrkspcCntnts = data.result[0].contents;
           if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0)
-              this.wrkspcCntnts.push(...data.result[0].folders.map((fldr: any) => ({ ...fldr, key:'fldr'})));
+            this.wrkspcCntnts.push(...data.result[0].folders.map((fldr: any) => ({ ...fldr, key: 'fldr' })));
           if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0)
-              this.wrkspcCntnts.push(...data.result[0].smartFolders.map((fldr: any) => ({ ...fldr, key:'smtFldr'})));
-        }else {
+            this.wrkspcCntnts.push(...data.result[0].smartFolders.map((fldr: any) => ({ ...fldr, key: 'smtFldr' })));
+        } else {
           //no data found
         }
         this.loading = false;
@@ -81,16 +91,6 @@ export class ExpInnerComponent implements OnInit {
     }, (reason) => {
 
     });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   ngOnDestroy(): void {
