@@ -2,157 +2,171 @@
   <ol class="breadcrumb rounded-0">
     <li class="breadcrumb-item active align-self-center" aria-current="page">English</li>
     <span class="ml-auto">
-      <div class="curs-ptr" (click)="toggleView()">
+      <div class="curs-ptr" (click)="toggleView()" *ngIf="wrkspcCntnts.length>0">
         <i class="fa" [ngClass]="{'fa-list-ul' : view, 'fa-th-large': !view}" style="font-size:1.75rem;"></i>
       </div>
     </span>
   </ol>
 </nav>
 
+<app-loader [type]="'page'" *ngIf="loading"></app-loader>
 <!-- grid view -->
 <div class="row mx-0 expid-grid" *ngIf="view">
-  <ng-container *ngFor="let wSC of wrkspcCntnts">
-    <ng-container [ngSwitch]="wSC.key">
-      <div class="col-md-3 text-center folder curs-ptr" *ngSwitchCase="'fldr'">
-        <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
-      </div>
-      <div class="col-md-3 text-center folder curs-ptr" *ngSwitchCase="'smtFldr'">
-        <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
-      </div>
-      <div class="col-md-3 text-center file curs-ptr" *ngSwitchDefault>
-        <div class="icon"><img [src]="wSC.folderIconPath?wSC.folderIconPath:defImg" style="max-width:100%; max-height: 200px;"></div>
-        <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
-          <i class="fa fa-file ml-3 align-self-center"></i>
-          <div class="mx-auto">{{wSC.name}}</div>
-        </div>
-        <div class="options rounded">
-          <div class="dropleft">
-            <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-share-square"></i>
-            </button>
-            <div class="dropdown-menu" aria-labelledby="shareDD">
-              <a class="dropdown-item curs-ptr" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-              <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+  <ng-container *ngIf="!loading">
+    <ng-container *ngFor="let wSC of wrkspcCntnts">
+      <ng-container [ngSwitch]="wSC.key">
+        <ng-container *ngSwitchCase="'fldr'">
+          <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'smtFldr'">
+          <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
+        </ng-container>
+        <div class="col-md-3 text-center file curs-ptr" *ngSwitchDefault>
+          <div class="icon" [routerLink]="'/web-app/view/'+wSC.id">
+            <img [src]="wSC.pdfImage?wSC.pdfImage:defImg" style="max-width:100%; max-height: 200px;">
+          </div>
+          <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
+            <i class="fa fa-file ml-3 align-self-center"></i>
+            <div class="mx-auto">{{wSC.name}}</div>
+          </div>
+          <div class="options rounded">
+            <div class="dropleft">
+              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-share-square"></i>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="shareDD">
+                <a class="dropdown-item curs-ptr" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+              </div>
+            </div>
+            <div class="btn my-1" (click)="openModal(addtoCollection)">
+              <i class="fas fa-folder-plus"></i>
             </div>
           </div>
-          <div class="btn my-1" (click)="openModal(addtoCollection)">
-            <i class="fas fa-folder-plus"></i>
+        </div>
+        <ng-template #cntntFldr>
+          <div class="col-md-3 text-center folder curs-ptr">
+            <div class="icon" [routerLink]="'/web-app/resource/experiences/'+id+'/'+wSC.id">
+              <img [src]="wSC.folderIconPath?wSC.folderIconPath:defImg" style="max-width:100%; max-height: 200px;">
+            </div>
+            <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
+              <div class="mx-auto">{{wSC.name}}</div>
+            </div>
           </div>
-        </div>
-      </div>
-      <ng-template #cntntFldr>
-        <div class="icon"><img [src]="wSC.folderIconPath?wSC.folderIconPath:defImg" style="max-width:100%; max-height: 200px;"></div>
-        <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
-          <div class="mx-auto">{{wSC.name}}</div>
-        </div>
-      </ng-template>
+        </ng-template>
+      </ng-container>
     </ng-container>
+    <div class="text-center" *ngIf="wrkspcCntnts.length<=0">
+      No data found
+    </div>
   </ng-container>
 </div>
 
 <!-- list view -->
 <div class="row mx-0 expid-list" *ngIf="!view">
-  <div class="col-md-3">
-    <mat-accordion>
-      <mat-expansion-panel class="my-2">
-        <mat-expansion-panel-header>
-          <mat-panel-title class="align-self-center">
-            Type (0)
-          </mat-panel-title>
-          <mat-panel-description>
-            <div class="btn btn-light">Clear</div>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <div>
-          <ul class="list-unstyled mb-0">
-            <li class="dark-bg-hover pt-2 px-2" *ngFor="let t of testArr">
-              <mat-checkbox>Document</mat-checkbox>
-              <span class="float-right text-secondary">92</span>
-            </li>
-          </ul>
-        </div>
-      </mat-expansion-panel>
-      <mat-expansion-panel class="my-2">
-        <mat-expansion-panel-header>
-          <mat-panel-title class="align-self-center">
-            Tags (0)
-          </mat-panel-title>
-          <mat-panel-description>
-            <div class="btn btn-light">Clear</div>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <div>
-          <div class="search">
-            <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white" [floatLabel]="'never'">
-              <i matPrefix class="fas fa-search"></i>
-              <input matInput placeholder="Search for tags">
-            </mat-form-field>
+  <!-- <app-loader [type]="'page'" *ngIf="loading"></app-loader> -->
+  <ng-container *ngIf="!loading">
+    <div class="col-md-3">
+      <mat-accordion>
+        <mat-expansion-panel class="my-2">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="align-self-center">
+              Type (0)
+            </mat-panel-title>
+            <mat-panel-description>
+              <div class="btn btn-light">Clear</div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div>
+            <ul class="list-unstyled mb-0">
+              <li class="dark-bg-hover pt-2 px-2" *ngFor="let t of testArr">
+                <mat-checkbox>Document</mat-checkbox>
+                <span class="float-right text-secondary">92</span>
+              </li>
+            </ul>
           </div>
-          <hr>
-          <ul class="list-unstyled mb-0">
-            <li class="dark-bg-hover pt-2 px-2" *ngFor="let t of testArr">
-              <mat-checkbox>Document</mat-checkbox>
-              <span class="float-right text-secondary">92</span>
-            </li>
-          </ul>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </div>
-  <div class="col-md-9">
-    <div class="folder d-flex bg-white rounded p-3 curs-ptr my-2">
-      <mat-checkbox class="align-self-center"></mat-checkbox>
-      <div class="icon align-self-center mx-4">
-        <div class="rounded-circle p-3 bg-hi-grey">
-          <i class="fa fa-folder text-primary" style="font-size: 40px;"></i>
-        </div>
-      </div>
-      <div class="info align-self-center">
-        <h5 class="mb-0">Company Information</h5>
-        <i class="fa fa-folder mr-2"></i>Folder in English
-      </div>
-    </div>
-    <div class="file d-flex bg-white rounded p-3 curs-ptr my-2">
-      <mat-checkbox class="align-self-center"></mat-checkbox>
-      <div class="icon align-self-center mx-4">
-        <img src="assets/images/discription.png" style="max-width: 72px;">
-      </div>
-      <div class="info align-self-center">
-        <h5 class="mb-0">ABC.pdf</h5>
-        <i class="fa fa-file mr-2"></i>Document in English
-        <div class="text-secondary" style="font-size: 12px;">Updated Jan 26,2020</div>
-      </div>
-      <div class="options d-flex align-self-center ml-auto mr-3">
-        <div class="dropleft mr-2">
-          <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-share-square"></i>
-          </button>
-          <div class="dropdown-menu" aria-labelledby="shareDD">
-            <a class="dropdown-item curs-ptr" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
-            <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="my-2">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="align-self-center">
+              Tags (0)
+            </mat-panel-title>
+            <mat-panel-description>
+              <div class="btn btn-light">Clear</div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div>
+            <div class="search">
+              <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white" [floatLabel]="'never'">
+                <i matPrefix class="fas fa-search"></i>
+                <input matInput placeholder="Search for tags">
+              </mat-form-field>
+            </div>
+            <hr>
+            <ul class="list-unstyled mb-0">
+              <li class="dark-bg-hover pt-2 px-2" *ngFor="let t of testArr">
+                <mat-checkbox>Document</mat-checkbox>
+                <span class="float-right text-secondary">92</span>
+              </li>
+            </ul>
           </div>
-        </div>
-        <div class="btn btn-light" (click)="openModal(addtoCollection)">
-          <i class="fas fa-folder-plus"></i>
-        </div>
-      </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
-    <hr>
-    <ul class="pagination justify-content-end mr-3">
-      <li class="page-item disabled">
-        <a class="page-link bg-hi-grey" href="javascript:void(0)" tabindex="-1" aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
-      </li>
-      <li class="page-item active"><a class="page-link bg-hi-grey" href="javascript:void(0)">1</a>
-      </li>
-      <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">2</a>
-      </li>
-      <li class="page-item"><a class="page-link bg-hi-grey" href="javascript:void(0)">3</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link bg-hi-grey" href="javascript:void(0)"><i class="fas fa-chevron-right"></i></a>
-      </li>
-    </ul>
-  </div>
+    <div class="col-md-9">
+      <ng-container *ngFor="let wSC of wrkspcCntnts">
+        <ng-container [ngSwitch]="wSC.key">
+          <ng-container *ngSwitchCase="'fldr'">
+            <ng-container *ngTemplateOutlet="cntntFldr1"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'smtFldr'">
+            <ng-container *ngTemplateOutlet="cntntFldr1"></ng-container>
+          </ng-container>
+          <div class="file d-flex bg-white rounded p-3 curs-ptr my-2" *ngSwitchDefault>
+            <mat-checkbox class="align-self-center"></mat-checkbox>
+            <div class="icon align-self-center mx-4" [routerLink]="'/web-app/view/'+wSC.id">
+              <img [src]="wSC.pdfImage?wSC.pdfImage:defImg" style="max-width: 72px;">
+            </div>
+            <div class="info align-self-center">
+              <h5 class="mb-0" [routerLink]="'/web-app/view/'+wSC.id">{{wSC.name}}</h5>
+              <!-- <i class="fa fa-file mr-2"></i>Document in English -->
+              <div class="text-secondary" style="font-size: 12px;">Updated Jan 26,2020</div>
+            </div>
+            <div class="options d-flex align-self-center ml-auto mr-3">
+              <div class="dropleft mr-2">
+                <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-share-square"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="shareDD">
+                  <a class="dropdown-item curs-ptr" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a link</a>
+                </div>
+              </div>
+              <div class="btn btn-light" (click)="openModal(addtoCollection)">
+                <i class="fas fa-folder-plus"></i>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #cntntFldr1>
+          <div class="folder d-flex bg-white rounded p-3 curs-ptr my-2">
+            <mat-checkbox class="align-self-center"></mat-checkbox>
+            <div class="icon align-self-center mx-4" [routerLink]="'/web-app/resource/experiences/'+id+'/'+wSC.id">
+              <img [src]="wSC.folderIconPath?wSC.folderIconPath:defImg" style="max-width: 72px;">
+            </div>
+            <div class="info align-self-center">
+              <h5 class="mb-0" [routerLink]="'/web-app/resource/experiences/'+id+'/'+wSC.id">{{wSC.name}}</h5>
+              <!-- <i class="fa fa-folder mr-2"></i>Folder in English -->
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+      <div *ngIf="wrkspcCntnts.length<=0">
+        No data found
+      </div>
+      <hr>
+    </div>
+  </ng-container>
 </div>
 
 <!-- add to collection -->

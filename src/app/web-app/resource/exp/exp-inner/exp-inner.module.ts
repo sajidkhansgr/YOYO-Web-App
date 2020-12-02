@@ -8,6 +8,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
 import { ExpInnerComponent } from './exp-inner.component';
 import { ExpService } from '../../exp/exp.service';
+import { LoaderModule } from '../../../../shared/components/loader/loader.module';
 
 const routes: Routes = [
   { path: '', component: ExpInnerComponent }
@@ -21,7 +22,8 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     MatCheckboxModule,
-    MatExpansionModule
+    MatExpansionModule,
+    LoaderModule
   ],
   providers: [ ExpService ]
 })

@@ -3,23 +3,23 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 // import { ExpComponent } from './exp.component';
 
-// const routes: Routes = [
-//   { path: '', component: ExpComponent }
-// ];
-
 const routes: Routes = [
   {
-      path        : '',
-      children    : [
-        {
-            path        : '',
-            loadChildren: () => import('./exp-list/exp-list.module').then(m => m.ExpListModule)
-        },
-        {
-            path        : ':expid',
-            loadChildren: () => import('./exp-inner/exp-inner.module').then(m => m.ExpInnerModule)
-        }
-      ]
+    path: '',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./exp-list/exp-list.module').then(m => m.ExpListModule)
+      },
+      {
+        path: ':expid',
+        loadChildren: () => import('./exp-inner/exp-inner.module').then(m => m.ExpInnerModule)
+      },
+      {
+        path: ':expid/:fldrid',
+        loadChildren: () => import('./exp-inner/exp-inner.module').then(m => m.ExpInnerModule)
+      }
+    ]
   }
 ];
 

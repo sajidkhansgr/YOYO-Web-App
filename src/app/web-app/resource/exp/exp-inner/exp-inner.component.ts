@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import { ExpService } from '../../exp/exp.service';
 import { DEF_ICON } from '../../../../shared/constants';
 
@@ -12,21 +13,25 @@ import { DEF_ICON } from '../../../../shared/constants';
 })
 export class ExpInnerComponent implements OnInit {
   routerSubs!: Subscription;
-  id!: string;
+  id!: string;fldrid!:string;
   testArr = [1, 2, 3, 4, 5]; // test array
   view: boolean = true;loading!: boolean;
-  wrkspcCntnts!:any[];
+  wrkspcCntnts:any[]=[];
   defImg:string = DEF_ICON;
 
   constructor(
     private modalService: NgbModal,
     private route: ActivatedRoute,
-    private expServ: ExpService
+    private router: Router,
+    private expServ: ExpService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
     this.routerSubs = this.route.params.subscribe(params => {
-      this.id = params['expid'];
+      console.log("paras")
+      this.id = params['expid']||'0';
+      this.fldrid = params['fldrid']||'';
       this.initialiseState(); // reset and set based on new parameter this time
     });
   }
@@ -35,6 +40,9 @@ export class ExpInnerComponent implements OnInit {
     if (this.id != '0') {
       this.loading = true;
       this.getAllFromWrkspc();
+    }else{
+      this.toastr.error("Not a valid Workspace", "Error");
+      this.router.navigate(['/web-app/experiences']);
     }
   }
 
@@ -42,7 +50,7 @@ export class ExpInnerComponent implements OnInit {
     let params = {
       workspaceId: this.id,
       isActive: true,
-      // folderId: this.selFldr ? this.selFldr!.id : undefined
+      folderId: this.fldrid || null
     };
     this.wrkspcCntnts = [];
     this.expServ.getAllObjWrkspc(params)
