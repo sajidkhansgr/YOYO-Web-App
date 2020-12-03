@@ -190,6 +190,8 @@ export class AppSettings {
 
   public static DEL_COLCT = `api/Collection/Delete`;
 
+  public static BULK_DEL_COLCT = `api/Collection/DeleteCollections`;
+
   public static GET_COLCT = `api/Collection/GetById`;
 
   public static ADD_CONTENT_COLCT = `api/Collection/AddContent`;

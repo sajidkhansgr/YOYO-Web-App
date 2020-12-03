@@ -60,6 +60,11 @@ export class CollectionService {
     return this.http.patch(`${AppSettings.DEL_COLCT}?id=${id}`, {});
   }
 
+  // bulk delete collection
+  bulkDelColctn(data: any) {
+    return this.http.patch(`${AppSettings.BULK_DEL_COLCT}`, data);
+  }
+
   //  collection
   getColctn(id: any) {
     return this.http.get(`${AppSettings.GET_COLCT}?id=${id}`);
