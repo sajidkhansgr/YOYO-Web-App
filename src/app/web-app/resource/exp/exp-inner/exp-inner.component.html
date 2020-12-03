@@ -31,15 +31,16 @@
           </div>
           <div class="options rounded">
             <div class="dropleft">
-              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
+              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-share-square"></i>
               </button>
               <div class="dropdown-menu" aria-labelledby="shareDD">
-                <a class="dropdown-item curs-ptr" (click)="openModal(email)"><i
-                    class="fa fa-envelope mr-1"></i>Email</a>
-                <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a
-                  link</a>
+                <a class="dropdown-item curs-ptr" (click)="openModal(email)">
+                  <i class="fa fa-envelope mr-1"></i>Email
+                </a>
+                <a class="dropdown-item curs-ptr" (click)="openModal(getLink)">
+                  <i class="fa fa-link mr-1"></i>Get a link
+                </a>
               </div>
             </div>
             <div class="btn my-1" (click)="openModal(addtoCollection)">
@@ -49,10 +50,10 @@
         </div>
         <ng-template #cntntFldr>
           <div class="col-md-3 text-center folder curs-ptr my-2">
-            <div class="icon" (click)="changePage(wSC.id)">
+            <div class="icon" (click)="navgToCntnt(wSC.id)">
               <img [src]="wSC.folderIconPath?wSC.folderIconPath : fldrIcon">
             </div>
-            <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
+            <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto" *ngIf="!wSC.hideLabelInWorkspace">
               <div class="mx-auto text-truncate pr-1">{{wSC.name}}</div>
             </div>
           </div>
@@ -157,11 +158,11 @@
         <ng-template #cntntFldr1>
           <div class="folder d-flex bg-white rounded p-3 curs-ptr my-2">
             <mat-checkbox class="align-self-center"></mat-checkbox>
-            <div class="icon align-self-center mx-4" (click)="changePage(wSC.id)">
+            <div class="icon align-self-center mx-4" (click)="navgToCntnt(wSC.id)">
               <img [src]="wSC.folderIconPath?wSC.folderIconPath:fldrIcon" style="max-width: 72px;">
             </div>
-            <div class="info align-self-center">
-              <h5 class="mb-0" (click)="changePage(wSC.id)">{{wSC.name}}</h5>
+            <div class="info align-self-center" *ngIf="!wSC.hideLabelInWorkspace">
+              <h5 class="mb-0" (click)="navgToCntnt(wSC.id)">{{wSC.name}}</h5>
               <!-- <i class="fa fa-folder mr-2"></i>Folder in English -->
             </div>
           </div>

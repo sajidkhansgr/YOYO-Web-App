@@ -43,11 +43,13 @@ export class ContentWorkspaceComponent implements OnInit {
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
   view!: boolean; edit!: boolean | undefined;
-  activeFldrs!: number; isActiveFldrs!: boolean; activeWrkspc!: number; isActiveWrkspc!: boolean;
+  activeFldrs!: number; isActiveFldrs!: boolean; activeWrkspc!: number;
+  // isActiveWrkspc!: boolean;
 
   tags!: Tag[]; selTags: Tag[] = []; selTags2: Tag[] = [];//using in selTags add and selTags2 form
   cntnts!: any[]; totalCount!: number; sort: any = {}; searchTxt!: string;
   searchTxtChng: Subject<string> = new Subject<string>(); filteredList: any = [];
+  cntntTypeFltr:any=[];
   private subscription!: Subscription;
   selectable = true; removable: boolean = true;
   urlDisb!: boolean;
@@ -65,6 +67,9 @@ export class ContentWorkspaceComponent implements OnInit {
   cntntTag!: any; urlTag!: any; cntntInfoTag!: any; cntntLng!: any; usrGrpWrkSpcDisb: boolean = false;
 
   allTags!: any[]; anyTags!: any[]; noneTags!: any[];
+  alTgTxt!:string;anTgTxt!:string;noTgTxt!:string;
+  allTags1!: any[]; anyTags1!: any[]; noneTags1!: any[];
+  alTgTxt1!:string;anTgTxt1!:string;noTgTxt1!:string;
 
   constructor(
     private modalService: NgbModal,
@@ -120,13 +125,15 @@ export class ContentWorkspaceComponent implements OnInit {
     let cmnCols = [{ n: "Added", k: "createdDate", asc: false }, { n: "Size", k: "size", asc: false },
     { n: "Last Updated", k: "updatedDate", asc: false }];
     this.visbCols = [...cmnCols];
-    this.hidCols = [{ n: "Likes", k: "likes", asc: false }];
+    this.hidCols = [{ n: "Likes", k: "likes", asc: false },{ n: "Languages", k: "contentLanguages", asc: false }];
     this.cols = [{ n: "Name", asc: false, k: "name" }, ...cmnCols];
     this.view = true;
     this.edit = false;
-    this.activeFldrs = 1; this.isActiveFldrs = true; this.activeWrkspc = 1; this.isActiveWrkspc = true;
+    this.activeFldrs = 1; this.isActiveFldrs = true; this.activeWrkspc = 1;
+    // this.isActiveWrkspc = true;
     this.showRowInfo = false; this.rowInfo = {}; this.docLoading = false;
-    this.pageSize = this.lmtPage[0]; this.pageNo = 1; this.filteredList = [];
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
+    this.cntntTypeFltr = this.fileTypesArr;
     this.cntntDisb = false;
     this.totalCount = 0;
     this.cntntLoading = true; //use in cntnt listing
@@ -155,8 +162,8 @@ export class ContentWorkspaceComponent implements OnInit {
         })
       )
       .subscribe();
-
     this.allTags = []; this.anyTags = []; this.noneTags = [];
+    this.setFltrEmpty();
   }
 
   // ---- folder and smart folder ---- //
@@ -246,6 +253,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // folder/smart folder open modal (add/update)
   openFolderModal(modal: any, type: string, folder?: any) {
     if (type == 'add') {
+      this.allTags = []; this.anyTags = []; this.noneTags = [];
       this.edit = false;
       this.openModal(modal);
     } else if (type == 'edit') {
@@ -259,39 +267,21 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // ---- smart folder ---- //
   // for add and edit modal in smart folder (autocomplete and chips)
-  selTag(tag: Tag, type: string) {
-    let temp: any;
-    type == 'all' ? temp = this.allTags : type == 'any' ? temp = this.anyTags : temp = this.noneTags;
-    const index = temp.findIndex((ele: any) => ele.id == tag.id);
-    if (index >= 0) {
-      this.toastr.clear();
-      this.toastr.info("This tag is already selected", "Selected");
-    } else {
-      temp.push(tag);
-      type == 'all' ? this.allTags = temp : type == 'any' ? this.anyTags = temp : this.noneTags = temp;
-    }
-  }
-  removeTag(tag: Tag, type: string): void {
-    let temp: any;
-    type == 'all' ? temp = this.allTags : type == 'any' ? temp = this.anyTags : temp = this.noneTags;
-    const index = temp.findIndex((ele: any) => ele.id == tag.id);
-    if (index >= 0) {
-      temp.splice(index, 1);
-      type == 'all' ? this.allTags = temp : type == 'any' ? this.anyTags = temp : this.noneTags = temp;
-    }
-  }
+
 
   // add file type filter for smart folder and main list
   addFileType(val: boolean, fT: any, isList: boolean = false) {
     if (val) {
       if (isList) {
-        this.filteredList.push({ ...fT, type: 'fileType' });
+        fT.chk = val;
+        this.filteredList.push({ ...fT, type: 'fT' });
         this.cntntList();
       }
       else
         this.fileTypeArr.push(fT.v);
     } else
       if (isList) {
+        fT.chk = val;
         this.filteredList = this.filteredList.filter((d: any) => d.v != fT.v);
         this.cntntList();
       }
@@ -572,11 +562,10 @@ export class ContentWorkspaceComponent implements OnInit {
     });
   }
 
-
   // ---- workspace ---- //
   // change displayed workspace (isActive)
   changeDispWrkspc() {
-    this.activeWrkspc == 1 ? this.isActiveWrkspc = true : this.isActiveWrkspc = false;
+    // this.activeWrkspc == 1 ? this.isActiveWrkspc = true : this.isActiveWrkspc = false;
     this.getWrkspcList();
   }
 
@@ -694,7 +683,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.wrkspcs = [];
     let query = {
       hubid: this.hubid,
-      isActive: this.isActiveWrkspc
+      isActive: this.activeWrkspc==1?true:false
     }
     this.cwServ.wrkspcList(query)
       .subscribe((data: any) => {
@@ -828,6 +817,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // toggle workspace
   workspaceToggle = () => {
     this.showRowInfo = false;
+    this.rowInfo = {};
     this.showWork = !this.showWork;
   }
 
@@ -836,9 +826,9 @@ export class ContentWorkspaceComponent implements OnInit {
     if (this.showRowInfo && this.rowInfo.id == row.id) {
       this.closeDoc();
     } else {
-      this.showRowInfo = true;
       this.showWork = false;
       this.rowInfo = {};
+      this.showRowInfo = true;
       this.edits = {};
       this.disb = {};
       this.desc = '';
@@ -849,9 +839,10 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  closeDoc = () => {
+  closeDoc = (isAll:boolean=false) => {
     this.showRowInfo = false;
-    this.showWork = false;
+    if(isAll)
+      this.showWork = false;
     this.docLoading = false;
     this.rowInfo = {};
   }
@@ -953,6 +944,8 @@ export class ContentWorkspaceComponent implements OnInit {
 
   onTabChange = (event: any) => {
     this.activeIndex = event.index;
+    this.unsubSubs();
+    this.searchTxt = "";
     this.initialiseState();
     this.cntntList();
   }
@@ -1061,7 +1054,8 @@ export class ContentWorkspaceComponent implements OnInit {
     return (tag && tag.id) ? tag.name : '';
   }
 
-  selFromAutoComp(data: any, type: 'selTags' | 'selTags2' | 'selLngs' | 'selUsrGrps', autoSel: any) {
+  selFromAutoComp(data: any, type: 'selTags' | 'selTags2' | 'selLngs' | 'selUsrGrps'
+  | 'allTags' | 'anyTags' | 'noneTags' |'allTags1' | 'anyTags1' | 'noneTags1', autoSel: any) {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this.toastr.clear();
@@ -1071,18 +1065,55 @@ export class ContentWorkspaceComponent implements OnInit {
         this[type].push({ ...data });
       else if (type === 'selLngs')
         this[type].push({ ...data, lid: data.id });
+      else if(type =='allTags1' || type == 'anyTags1' || type == 'noneTags1'){
+        let necData = {name: data.name,id: data.id};
+        this[type].push({ ...necData});
+        let n = (type =='allTags1'?'All':type =='anyTags1'?'Any':'None')+": "+necData.name;
+        this.filteredList.push({ ...necData,type,n });
+        this.cntntList();
+      }
       else
         this[type].push({ ...data, tid: data.id });
       autoSel.value = '';
     }
   }
 
-  remove(data: any, type: 'selTags' | 'selTags2' | 'selLngs' | 'selUsrGrps'): void {
+  remove(data: any, type: 'selTags' | 'selTags2' | 'selLngs' | 'selUsrGrps' |
+  'allTags' | 'anyTags' | 'noneTags' |'allTags1' | 'anyTags1' | 'noneTags1' ): void {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
+      if(type =='allTags1' || type == 'anyTags1' || type == 'noneTags1'){
+        const index2 = this.filteredList.findIndex((ele: any) => ele.id == data.id);
+        if (index2 >= 0) {
+          this.filteredList.splice(index2, 1);
+        }
+        this.cntntList();
+      }
       this[type].splice(index, 1);
     }
   }
+
+  // selTag(tag: Tag, type: string) {
+  //   let temp: any;
+  //   type == 'all' ? temp = this.allTags : type == 'any' ? temp = this.anyTags : temp = this.noneTags;
+  //   const index = temp.findIndex((ele: any) => ele.id == tag.id);
+  //   if (index >= 0) {
+  //     this.toastr.clear();
+  //     this.toastr.info("This tag is already selected", "Selected");
+  //   } else {
+  //     temp.push(tag);
+  //     type == 'all' ? this.allTags = temp : type == 'any' ? this.anyTags = temp : this.noneTags = temp;
+  //   }
+  // }
+  // removeTag(tag: Tag, type: string): void {
+  //   let temp: any;
+  //   type == 'all' ? temp = this.allTags : type == 'any' ? temp = this.anyTags : temp = this.noneTags;
+  //   const index = temp.findIndex((ele: any) => ele.id == tag.id);
+  //   if (index >= 0) {
+  //     temp.splice(index, 1);
+  //     type == 'all' ? this.allTags = temp : type == 'any' ? this.anyTags = temp : this.noneTags = temp;
+  //   }
+  // }
 
   onCntntSubmit() {
     if (this.cntntForm.valid) {
@@ -1197,7 +1228,6 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   getImg(data: any): string {
-    console.log(data);
     if (data.urlIconPath)
       return data.urlIconPath;
     // if (data.contentPath)
@@ -1260,13 +1290,32 @@ export class ContentWorkspaceComponent implements OnInit {
     this.fileServ.downloadFile(this.rowInfo!.contentPath, this.rowInfo!.name);
   }
 
-  clearAllFilter() {
+  setFltrEmpty(){
     this.filteredList = [];
+    this.allTags1 = []; this.anyTags1 = []; this.noneTags1 = [];
+    this.cntntTypeFltr = this.cntntTypeFltr.map((f: any) => ({ ...f, chk:false }));
+  }
+
+  clearAllFilter() {
+    this.setFltrEmpty();
     this.cntntList();
   }
 
-  clearSingleFlter = (i: number) => {
+  clearSingleFlter = (fltr:any,i: number) => {
     this.filteredList.splice(i, 1);
+    if(fltr.type==='fT'){
+      const index = this.cntntTypeFltr.findIndex((flt: any) => flt.v == fltr.v);
+      if (index >= 0){
+        this.cntntTypeFltr[index].chk = false;
+      }
+    }
+    else if(fltr.type =='allTags1' || fltr.type == 'anyTags1' || fltr.type == 'noneTags1'){
+      let t:'allTags1'|'anyTags1'|'noneTags1' = fltr.type;
+      const index = this[t].findIndex((flt: any) => flt.id == fltr.id);
+      if (index >= 0){
+        this[t].splice(index, 1);
+      }
+    }
     this.cntntList();
   }
 
@@ -1277,7 +1326,6 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // on file drop handler
   onFileDropped($event: any, isIcon: boolean = false, type: string = '') {
-    console.log("das, file drop")
     if (!isIcon)
       this.prepareFilesList($event, isIcon);
     else {
@@ -1287,7 +1335,6 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // handle file from browsing
   fileBrowseHandler($event: any, isIcon: boolean = false, type: string = '') {
-    console.log("das, file browser")
     if ($event.target && $event.target.files)
       this.prepareFilesList($event.target.files, isIcon);
     let input = $event.target;
@@ -1354,10 +1401,14 @@ export class ContentWorkspaceComponent implements OnInit {
     return FileHelper.formatBytes(bytes, 2);
   }
 
+  unsubSubs(){
+    if (!!this.subscription)
+      this.subscription.unsubscribe();
+  }
+
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this.dismissModal();
-    if (!!this.subscription)
-      this.subscription.unsubscribe();
+    this.unsubSubs();
   }
 }
