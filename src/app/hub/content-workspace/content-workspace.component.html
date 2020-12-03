@@ -813,7 +813,7 @@
           <button class="btn btn-light dropdown-toggle" id="tagsDD" data-toggle="dropdown">
             Tags
           </button>
-          <div class="dropdown-menu" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD"
+          <div class="dropdown-menu px-2" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD"
             (click)="$event.stopPropagation();">
             <mat-form-field appearance="outline" class="w-100">
               <mat-chip-list>
@@ -824,9 +824,10 @@
                 <input matInput #alTg1 placeholder="Match ALL of these tags" [(ngModel)]="alTgTxt1" name="alTgTxt1"
                   [matAutocomplete]="autoAll1">
               </mat-chip-list>
-              <mat-autocomplete #autoAll1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'allTags1',alTg1)"
-                [displayWith]="displayFn">
-                <mat-option *ngFor="let tg of tags|filterName: alTgTxt1: 'name'" [value]="tg" (click)="$event.stopPropagation();">
+              <mat-autocomplete #autoAll1="matAutocomplete"
+                (optionSelected)="selFromAutoComp($event.option.value,'allTags1',alTg1)" [displayWith]="displayFn">
+                <mat-option *ngFor="let tg of tags|filterName: alTgTxt1: 'name'" [value]="tg"
+                  (click)="$event.stopPropagation();">
                   {{tg.name}}
                 </mat-option>
               </mat-autocomplete>
@@ -840,9 +841,10 @@
                 <input matInput #anTg1 placeholder="Match ANY of these tags" [(ngModel)]="anTgTxt1" name="anTgTxt1"
                   [matAutocomplete]="autoAny1">
               </mat-chip-list>
-              <mat-autocomplete #autoAny1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'anyTags1',anTg1)"
-                [displayWith]="displayFn">
-                <mat-option *ngFor="let tg of tags|filterName: anTgTxt1: 'name'" [value]="tg" (click)="$event.stopPropagation();">
+              <mat-autocomplete #autoAny1="matAutocomplete"
+                (optionSelected)="selFromAutoComp($event.option.value,'anyTags1',anTg1)" [displayWith]="displayFn">
+                <mat-option *ngFor="let tg of tags|filterName: anTgTxt1: 'name'" [value]="tg"
+                  (click)="$event.stopPropagation();">
                   {{tg.name}}
                 </mat-option>
               </mat-autocomplete>
@@ -856,9 +858,10 @@
                 <input matInput #noTg1 placeholder="Match NONE of these tags" [(ngModel)]="noTgTxt1" name="noTgTxt1"
                   [matAutocomplete]="autoNone1">
               </mat-chip-list>
-              <mat-autocomplete #autoNone1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'noneTags1',noTg1)"
-                [displayWith]="displayFn">
-                <mat-option *ngFor="let tg of tags|filterName: noTgTxt1: 'name'" [value]="tg" (click)="$event.stopPropagation();">
+              <mat-autocomplete #autoNone1="matAutocomplete"
+                (optionSelected)="selFromAutoComp($event.option.value,'noneTags1',noTg1)" [displayWith]="displayFn">
+                <mat-option *ngFor="let tg of tags|filterName: noTgTxt1: 'name'" [value]="tg"
+                  (click)="$event.stopPropagation();">
                   {{tg.name}}
                 </mat-option>
               </mat-autocomplete>
@@ -900,7 +903,7 @@
       </div>
       <div class="card-title pl-2" *ngIf="filteredList.length>0">
         <span class="mr-2">Filtered by:</span>
-        <div class="btn btn-outline-primary btn-sm rounded-pill filter-btn mr-2"
+        <div class="btn btn-outline-primary btn-sm rounded-pill filter-btn mr-2 my-1"
           *ngFor="let fltr of filteredList; let i=index">
           {{fltr.n}}<i class="ml-1 fas fa-times" (click)="clearSingleFlter(fltr,i)"></i>
         </div>
@@ -922,7 +925,7 @@
 
 <ng-template #cntntTable>
   <div *ngIf="!cntntLoading">
-    <div class="card-text px-3">
+    <div class="card-text px-3 min-height">
       <table class="table table-hover text-dark w-100" [class.hide-rows]="showRowInfo || showWork" *ngIf="view">
         <thead>
           <tr>
@@ -952,7 +955,8 @@
                   {{getSize(cntnt.size)}}
                 </span>
                 <span *ngSwitchCase="'contentLanguages'">
-                  <span *ngFor="let cL of cntnt.contentLanguages" class="badge badge-light p-2 mt-2 mr-1 mt-sm-0">{{cL.name}}
+                  <span *ngFor="let cL of cntnt.contentLanguages"
+                    class="badge badge-light p-2 mt-2 mr-1 mt-sm-0">{{cL.name}}
                   </span>
                 </span>
                 <span *ngSwitchDefault>{{cntnt[col.k]}}</span>
@@ -961,7 +965,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="text-center text-secondary" *ngIf="cntnts.length<= 0">
+      <div class="text-center text-secondary pt-5 mt-4" *ngIf="cntnts.length<= 0">
         No Content found
       </div>
       <div class="row justify-content-between" *ngIf="!view">
@@ -1345,12 +1349,13 @@
                       {{tg.name}}
                       <i matChipRemove class="fas fa-times-circle"></i>
                     </mat-chip>
-                    <input matInput #alTg placeholder="Match ALL of these tags" [(ngModel)]="alTgTxt" name="alTgTxt" [ngModelOptions]="{standalone: true}"
-                      [matAutocomplete]="autoAll">
+                    <input matInput #alTg placeholder="Match ALL of these tags" [(ngModel)]="alTgTxt" name="alTgTxt"
+                      [ngModelOptions]="{standalone: true}" [matAutocomplete]="autoAll">
                   </mat-chip-list>
-                  <mat-autocomplete #autoAll="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'allTags',alTg)"
-                    [displayWith]="displayFn">
-                    <mat-option *ngFor="let tg of tags|filterName: alTgTxt: 'name'" [value]="tg" (click)="$event.stopPropagation();">
+                  <mat-autocomplete #autoAll="matAutocomplete"
+                    (optionSelected)="selFromAutoComp($event.option.value,'allTags',alTg)" [displayWith]="displayFn">
+                    <mat-option *ngFor="let tg of tags|filterName: alTgTxt: 'name'" [value]="tg"
+                      (click)="$event.stopPropagation();">
                       {{tg.name}}
                     </mat-option>
                   </mat-autocomplete>
@@ -1361,12 +1366,13 @@
                       {{tg.name}}
                       <i matChipRemove class="fas fa-times-circle"></i>
                     </mat-chip>
-                    <input matInput #anTg placeholder="Match ANY of these tags" [(ngModel)]="anTgTxt" name="anTgTxt" [ngModelOptions]="{standalone: true}"
-                      [matAutocomplete]="autoAny">
+                    <input matInput #anTg placeholder="Match ANY of these tags" [(ngModel)]="anTgTxt" name="anTgTxt"
+                      [ngModelOptions]="{standalone: true}" [matAutocomplete]="autoAny">
                   </mat-chip-list>
-                  <mat-autocomplete #autoAny="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'anyTags',anTg)"
-                    [displayWith]="displayFn">
-                    <mat-option *ngFor="let tg of tags|filterName: anTgTxt: 'name'" [value]="tg" (click)="$event.stopPropagation();">
+                  <mat-autocomplete #autoAny="matAutocomplete"
+                    (optionSelected)="selFromAutoComp($event.option.value,'anyTags',anTg)" [displayWith]="displayFn">
+                    <mat-option *ngFor="let tg of tags|filterName: anTgTxt: 'name'" [value]="tg"
+                      (click)="$event.stopPropagation();">
                       {{tg.name}}
                     </mat-option>
                   </mat-autocomplete>
@@ -1377,12 +1383,13 @@
                       {{tg.name}}
                       <i matChipRemove class="fas fa-times-circle"></i>
                     </mat-chip>
-                    <input matInput #noTg placeholder="Match NONE of these tags" [(ngModel)]="noTgTxt" name="noTgTxt" [ngModelOptions]="{standalone: true}"
-                      [matAutocomplete]="autoNone">
+                    <input matInput #noTg placeholder="Match NONE of these tags" [(ngModel)]="noTgTxt" name="noTgTxt"
+                      [ngModelOptions]="{standalone: true}" [matAutocomplete]="autoNone">
                   </mat-chip-list>
-                  <mat-autocomplete #autoNone="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'noneTags',noTg)"
-                    [displayWith]="displayFn">
-                    <mat-option *ngFor="let tag of tags|filterName: noTgTxt: 'name'" [value]="tag" (click)="$event.stopPropagation();">
+                  <mat-autocomplete #autoNone="matAutocomplete"
+                    (optionSelected)="selFromAutoComp($event.option.value,'noneTags',noTg)" [displayWith]="displayFn">
+                    <mat-option *ngFor="let tag of tags|filterName: noTgTxt: 'name'" [value]="tag"
+                      (click)="$event.stopPropagation();">
                       {{tag.name}}
                     </mat-option>
                   </mat-autocomplete>
