@@ -1025,6 +1025,7 @@ header {
 
           .imagePreview {
             max-height: 200px;
+            min-height: 200px;
 
             img {
               max-height: 200px;
@@ -1044,26 +1045,26 @@ header {
           position: absolute;
           top: 50px;
           right: 10px;
-          background-color: rgba($primary, 0.7);
+          background-color: rgba($hi-dark-grey, 0.5);
           width: 50px;
           padding: 10px 5px;
 
           .btn {
             width: 40px;
             height: 40px;
-            color: #fff;
+            color: #000;
           }
 
           .btn:hover {
-            background-color: rgba($primary, 0.5);
+            background-color: rgba($hi-dark-grey, 1);
           }
 
           .dropdown-menu {
-            background-color: rgba($primary, 0.7);
+            background-color: rgba($hi-dark-grey, 0.5);
             margin-right: 5px;
 
             .dropdown-item {
-              color: #fff;
+              color: #000;
             }
 
             .dd {
@@ -1082,7 +1083,7 @@ header {
             }
 
             .dropdown-item:hover {
-              background-color: rgba($primary, 0.5);
+              background-color: rgba($hi-dark-grey, 1);
             }
           }
         }
@@ -1200,30 +1201,30 @@ header {
       position: absolute;
       top: 50px;
       right: 110px;
-      background-color: rgba($primary, 0.7);
+      background-color: rgba($hi-dark-grey, 0.5);
       width: 50px;
       padding: 10px 5px;
 
       .btn {
         width: 40px;
         height: 40px;
-        color: #fff;
+        color: #000;
       }
 
       .btn:hover {
-        background-color: rgba($primary, 0.5);
+        background-color: rgba($hi-dark-grey, 1);
       }
 
       .dropdown-menu {
-        background-color: rgba($primary, 0.7);
+        background-color: rgba($hi-dark-grey, 0.5);
         margin-right: 5px;
 
         .dropdown-item {
-          color: #fff;
+          color: #000;
         }
 
         .dropdown-item:hover {
-          background-color: rgba($primary, 0.5);
+          background-color: rgba($hi-dark-grey, 1);
         }
       }
     }

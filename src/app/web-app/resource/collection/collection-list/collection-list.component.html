@@ -31,7 +31,8 @@
           <div class="card">
             <div class="card-body curs-ptr" (click)="showContent(colctn.id)">
               <div class="imagePreview text-center">
-                <img [src]="colctn.pdfImage?colctn.pdfImage:fldrIcon">
+                <img
+                  [src]="colctn.collectionContents.length > 0 ? colctn.collectionContents[0].pdfImage ? colctn.collectionContents[0].pdfImage : colctn.collectionContents[0].urlIconPath :fldrIcon">
               </div>
             </div>
             <div class="card-footer">
@@ -57,7 +58,7 @@
                 </div>
               </div>
               <div class="btn my-1" (click)="actDeactColctn(colctn.id)">
-                <i class="mr-1 fas fa-toggle-{{isActiveColctn ? 'off' : 'on'}}"></i>
+                <i class="mr-1 fas fa-toggle-{{isActiveColctn ? 'off text-primary' : 'on text-success'}}"></i>
               </div>
               <div class="dropleft">
                 <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"

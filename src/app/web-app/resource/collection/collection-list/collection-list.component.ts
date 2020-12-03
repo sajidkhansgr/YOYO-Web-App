@@ -204,6 +204,7 @@ export class CollectionListComponent implements OnInit {
       isActive: this.isActiveColctn
     }
     this.colctnSrv.colctnList(query).subscribe((data: any) => {
+      console.log(data);
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         this.colctnArr = data.result.results;
       } else {
