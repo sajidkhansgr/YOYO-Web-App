@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SelItmFxdBtnComponent } from './sel-itm-fxd-btn.component';
+import { CollComponent } from './coll.component';
 
-describe('SelItmFxdBtnComponent', () => {
-  let component: SelItmFxdBtnComponent;
-  let fixture: ComponentFixture<SelItmFxdBtnComponent>;
+describe('CollComponent', () => {
+  let component: CollComponent;
+  let fixture: ComponentFixture<CollComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelItmFxdBtnComponent ]
+      declarations: [ CollComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SelItmFxdBtnComponent);
+    fixture = TestBed.createComponent(CollComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

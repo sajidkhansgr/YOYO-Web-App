@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddCollectionComponent } from './add-collection.component';
+import { SelItmFxdDivComponent } from './sel-itm-fxd-div.component';
 
-describe('AddCollectionComponent', () => {
-  let component: AddCollectionComponent;
-  let fixture: ComponentFixture<AddCollectionComponent>;
+describe('SelItmFxdDivComponent', () => {
+  let component: SelItmFxdDivComponent;
+  let fixture: ComponentFixture<SelItmFxdDivComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddCollectionComponent ]
+      declarations: [ SelItmFxdDivComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddCollectionComponent);
+    fixture = TestBed.createComponent(SelItmFxdDivComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
