@@ -3,7 +3,8 @@
   <h3 class="mb-4 clearfix heading align-self-center">
     Collections
     <div class="float-right">
-      <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}" (click)="view = !view;" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
+      <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
+        (click)="view = !view;" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
       <button class="btn btn-primary mb-2" (click)="colctnModal(collection, 'add')">New Collection</button>
     </div>
   </h3>
@@ -21,7 +22,7 @@
             <div class="card">
               <div class="card-body curs-ptr" (click)="showContent(colctn.id)">
                 <div class="imagePreview text-center">
-                  <img [src]="colctn.pdfImage?colctn.pdfImage:defImg">
+                  <img [src]="colctn.pdfImage?colctn.pdfImage:fldrIcon">
                 </div>
               </div>
               <div class="card-footer">
@@ -37,7 +38,8 @@
               </div>
               <div class="options rounded">
                 <div class="dropleft">
-                  <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
                     <i class="fas fa-share-square"></i>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="shareDD">
@@ -49,12 +51,15 @@
                   <i class="fas fa-trash-alt"></i>
                 </div>
                 <div class="dropleft">
-                  <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
                     <i class="fas fa-ellipsis-h"></i>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="optionsDD">
-                    <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i class="fas fa-copy mr-1"></i>Duplicate</a>
-                    <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i class="fas fa-edit mr-1"></i>Rename</a>
+                    <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i
+                        class="fas fa-copy mr-1"></i>Duplicate</a>
+                    <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i
+                        class="fas fa-edit mr-1"></i>Rename</a>
                     <a class="dropdown-item dd">
                       <i class="fa fa-download mr-1"></i>Download
                       <div class="dropdown-menu">
@@ -95,7 +100,7 @@
             <td class="align-middle curs-ptr" (click)="showContent(colctn.id)">
               <div class="d-flex">
                 <div class="imagePreview border mr-2">
-                  <img [src]="colctn.pdfImage?colctn.pdfImage:defImg">
+                  <img [src]="colctn.pdfImage?colctn.pdfImage:fldrIcon">
                 </div>
                 <div class="name align-self-center">{{colctn.name}}</div>
               </div>
@@ -104,7 +109,8 @@
             <td class="align-middle options">
               <div class="d-flex">
                 <div class="dropleft">
-                  <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
                     <i class="fas fa-share-square"></i>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="shareDD">
@@ -116,12 +122,15 @@
                   <i class="fas fa-trash-alt"></i>
                 </div>
                 <div class="dropleft">
-                  <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
                     <i class="fas fa-ellipsis-h"></i>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="optionsDD">
-                    <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i class="fas fa-copy mr-1"></i>Duplicate</a>
-                    <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i class="fas fa-edit mr-1"></i>Rename</a>
+                    <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i
+                        class="fas fa-copy mr-1"></i>Duplicate</a>
+                    <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i
+                        class="fas fa-edit mr-1"></i>Rename</a>
                     <a class="dropdown-item dd">
                       <i class="fa fa-download mr-1"></i>Download
                       <div class="dropdown-menu">
@@ -148,10 +157,12 @@
   <div class="selected-items text-secondary align-self-center">{{selColctnArr.length}} item(s) selected</div>
   <div class="mr-1 ml-3 align-self-center">|</div>
   <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
-  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</div>
+  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openModal(email)"><i
+      class="fa fa-envelope mr-1"></i>Email</div>
   <div class="btn btn-light align-self-center bg-white" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i> a
     link</div>
-  <div class="btn btn-primary align-self-center"><i class="fas fa-trash-alt mr-1"></i>Delete</div>
+  <div class="btn btn-primary align-self-center" (click)="bulkDelColctn()"><i class="fas fa-trash-alt mr-1"></i>Delete
+  </div>
 </div>
 
 <!-- new/rename/duplicate collection modal -->

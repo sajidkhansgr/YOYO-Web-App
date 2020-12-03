@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { CollectionService } from '../collection.service';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { DEF_ICON } from '../../../../shared/constants';
+import { FLDR_ICON } from '../../../../shared/constants';
 
 @Component({
   selector: 'app-collection-list',
@@ -21,7 +21,8 @@ export class CollectionListComponent implements OnInit {
   colctnForm!: FormGroup;
   multiForm!: number;
   showBotDiv!: boolean;
-  defImg:string = DEF_ICON;
+  fldrIcon: string = FLDR_ICON;
+  isAsc!: boolean; sortCol: any;
 
   constructor(
     private modalService: NgbModal,
@@ -45,6 +46,7 @@ export class CollectionListComponent implements OnInit {
     });
     this.multiForm = 0;
     this.showBotDiv = false;
+    this.isAsc = true; this.sortCol = 'name';
   }
 
   // show content
@@ -85,6 +87,27 @@ export class CollectionListComponent implements OnInit {
           }
         }, (err: any) => {
 
+        });
+      }
+    })
+  }
+
+  // bulk delete collection
+  bulkDelColctn() {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to delete these collections?`,
+        title: `Delete Collections`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.colctnSrv.bulkDelColctn(this.selColctnArr).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(data.message || 'All collections deleted successfully', 'Success!');
+            this.listColct();
+          }
+        }, (err: any) => {
         });
       }
     })
@@ -175,7 +198,12 @@ export class CollectionListComponent implements OnInit {
   // get collection list
   listColct() {
     this.loading = true;
-    this.colctnSrv.colctnList({ pageNo: 0 }).subscribe((data: any) => {
+    let query = {
+      pageNo: 0,
+      isAscending: this.isAsc,
+      sortColumn: this.sortCol
+    }
+    this.colctnSrv.colctnList(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         this.colctnArr = data.result.results;
       } else {
