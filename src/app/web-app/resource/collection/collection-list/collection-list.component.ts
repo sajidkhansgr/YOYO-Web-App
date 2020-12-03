@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CollectionService } from '../collection.service';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { FLDR_ICON } from '../../../../shared/constants';
+import { Collection } from 'src/app/shared/models/collection';
 
 @Component({
   selector: 'app-collection-list',
@@ -16,13 +17,12 @@ import { FLDR_ICON } from '../../../../shared/constants';
 })
 export class CollectionListComponent implements OnInit {
   view!: boolean; disabled!: boolean; loading!: boolean;
-  testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
   colctnArr!: any[]; selColctn: any; selColctnArr!: any[];
   colctnForm!: FormGroup;
   multiForm!: number;
-  showBotDiv!: boolean;
   fldrIcon: string = FLDR_ICON;
-  isAsc!: boolean; sortCol: any;
+  cols!: any[]; sort: any;
+  activeColctn!: number; isActiveColctn!: boolean;
 
   constructor(
     private modalService: NgbModal,
@@ -35,7 +35,7 @@ export class CollectionListComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialiseState();
-    this.listColct();
+    this.listColctn();
   }
 
   initialiseState() {
@@ -45,8 +45,9 @@ export class CollectionListComponent implements OnInit {
       name: ['', [Validators.required]]
     });
     this.multiForm = 0;
-    this.showBotDiv = false;
-    this.isAsc = true; this.sortCol = 'name';
+    this.sort = { sortColumn: 'updatedDate', isAscending: false }
+    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
+    this.activeColctn = 1; this.isActiveColctn = true;
   }
 
   // show content
@@ -55,6 +56,27 @@ export class CollectionListComponent implements OnInit {
   }
 
   // ***** collection *****
+  // sort
+  sortChange(col: any, index: number) {
+    let colData = { ...col };
+    for (let i = 0; i < this.cols.length; i++) {
+      this.cols[i].asc = false;
+    }
+    colData.asc = !colData.asc;
+    this.cols[index].asc = colData.asc;
+    this.sort = {
+      sortColumn: col.k,
+      isAscending: colData.asc,
+    }
+    this.listColctn();
+  }
+
+  // change displayed collections (isActive)
+  changeDispColctn() {
+    this.activeColctn == 1 ? this.isActiveColctn = true : this.isActiveColctn = false;
+    this.listColctn();
+  }
+
   // on selecting a collection
   selMe(val: any, id: number) {
     if (val) {
@@ -62,50 +84,27 @@ export class CollectionListComponent implements OnInit {
     } else {
       this.selColctnArr = this.selColctnArr.filter((data: any) => data != id);
     }
-    if (this.selColctnArr.length > 0) {
-      this.showBotDiv = true;
-    } else {
-      this.showBotDiv = false;
-    }
   }
 
-  // delete collection
-  delColctn(id: any) {
+  // activate/deactivate collection
+  actDeactColctn(colctn?: number) {
+    let data = colctn ? [colctn] : this.selColctnArr;
+    let s = data.length == 1 ? '' : 's';
+    let actDeac: string = `${this.isActiveColctn ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to delete this collection?`,
-        title: `Delete Collection`
+        msg: `Are you sure you want to ${actDeac} ${data.length == 1 ? 'this' : 'these'} collection${s}?`,
+        title: `${this.isActiveColctn ? 'Deactivate' : 'Activate'} collection${s}`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.colctnSrv.delColctn(id).subscribe((data: any) => {
-          // console.log(data);
+        this.colctnSrv.actDeactColctn(data, this.isActiveColctn ? false : true).subscribe((data: any) => {
           if (data) {
-            this.toastr.success(data.message || 'Collection deleted successfully', 'Success!');
-            this.listColct();
-          }
-        }, (err: any) => {
-
-        });
-      }
-    })
-  }
-
-  // bulk delete collection
-  bulkDelColctn() {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to delete these collections?`,
-        title: `Delete Collections`
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        this.colctnSrv.bulkDelColctn(this.selColctnArr).subscribe((data: any) => {
-          if (data) {
-            this.toastr.success(data.message || 'All collections deleted successfully', 'Success!');
-            this.listColct();
+            this.toastr.success(`Collection${s} ${actDeac}d successfully`, 'Success!');
+            this.listColctn();
+          } else {
+            this.toastr.error(`Unable to ${actDeac} collection${s}`, 'Error!');
           }
         }, (err: any) => {
         });
@@ -155,7 +154,7 @@ export class CollectionListComponent implements OnInit {
       console.log(data);
       if (data) {
         this.toastr.success(data.message || 'Collection duplicated successfully', 'Success!');
-        this.listColct();
+        this.listColctn();
       }
       this.dismissModal();
       this.disabled = false;
@@ -170,7 +169,7 @@ export class CollectionListComponent implements OnInit {
     this.colctnSrv.renColctn(colctnData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Collection renamed successfully', 'Success!');
-        this.listColct();
+        this.listColctn();
       }
       this.dismissModal();
       this.disabled = false;
@@ -185,7 +184,7 @@ export class CollectionListComponent implements OnInit {
     this.colctnSrv.addColctn(colctnData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Collection added successfully', 'Success!');
-        this.listColct();
+        this.listColctn();
       }
       this.dismissModal();
       this.disabled = false;
@@ -196,12 +195,13 @@ export class CollectionListComponent implements OnInit {
   }
 
   // get collection list
-  listColct() {
+  listColctn() {
     this.loading = true;
+    this.selColctnArr = [];
     let query = {
       pageNo: 0,
-      isAscending: this.isAsc,
-      sortColumn: this.sortCol
+      ...this.sort,
+      isActive: this.isActiveColctn
     }
     this.colctnSrv.colctnList(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
@@ -218,9 +218,7 @@ export class CollectionListComponent implements OnInit {
 
   openModal(content: any) {
     this.modalService.open(content, { size: 'lg' }).result.then((result) => {
-
     }, (reason) => {
-
     });
   }
 
@@ -232,5 +230,4 @@ export class CollectionListComponent implements OnInit {
   ngOnDestroy(): void {
     this.dismissModal();
   }
-
 }

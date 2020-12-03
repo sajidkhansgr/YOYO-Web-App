@@ -33,7 +33,7 @@ export class CollectionInnerComponent implements OnInit {
   showBotDiv!: boolean;
   workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined; mdlCntntArr!: Content[]; addContentArr!: Content[];
   showAll!: boolean | undefined; contentNav!: any[];
-  defImg:string = DEF_ICON;
+  defImg: string = DEF_ICON;
 
   constructor(
     private modalService: NgbModal,
@@ -133,19 +133,15 @@ export class CollectionInnerComponent implements OnInit {
       isActive: true,
       folderId: this.selFldr ? this.selFldr!.id : undefined,
     };
-    // console.log(params)
     this.expServ.getAllObjWrkspc(params).subscribe((data: any) => {
-      // console.log(data);
       if (data && data.result && data.result.result) {
         if (Array.isArray(data.result.result[0].contents) && data.result.result[0].contents.length > 0) {
           this.mdlCntntArr.push(...data.result.result[0].contents);
-          // console.log(data.result.result[0].contents)
         }
         if (Array.isArray(data.result.result[0].folders) && data.result.result[0].folders.length > 0) {
           for (let i = 0; i < data.result.result[0].folders.length; i++) {
             this.fldrArr.push({ ...data.result.result[0].folders[i], key: 'fldr' });
           }
-          // console.log(data.result.folders);
         }
         if (Array.isArray(data.result.result[0].smartFolders) && data.result.result[0].smartFolders.length > 0) {
           for (let i = 0; i < data.result.result[0].smartFolders.length; i++) {
@@ -153,56 +149,11 @@ export class CollectionInnerComponent implements OnInit {
           }
         }
       }
-      // console.log(this.folderArr);
       this.fldrLoading = false;
     }, (err: any) => {
       this.fldrLoading = false;
     });
   }
-
-  // // get list of folders
-  // getFolderList() {
-  //   this.fldrLoading = true;
-  //   let query = {
-  //     workspaceId: this.selWrkspc!.id,
-  //     folderId: this.selFldr ? this.selFldr!.id : undefined,
-  //     isActive: true
-  //   };
-  //   // console.log(query);
-  //   this.cwServ.folderListWrkspc(query).subscribe((data: any) => {
-  //     // console.log(data);
-  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-  //       for (let i = 0; i < data.result.results.length; i++) {
-  //         this.fldrArr.push({ ...data.result.results[i], key: 'fldr' });
-  //       }
-  //     } else {
-  //     }
-  //     this.fldrLoading = false;
-  //   }, (err: any) => {
-  //     this.fldrLoading = false;
-  //   });
-  // }
-
-  // // get list of smart folders
-  // getSmartFolderList() {
-  //   this.sFldrLoading = true;
-  //   let query = {
-  //     workspaceId: this.selWrkspc!.id,
-  //     folderId: this.selFldr ? this.selFldr!.id : undefined,
-  //     isActive: true
-  //   };
-  //   this.cwServ.smartFolderListWrkspc(query).subscribe((data: any) => {
-  //     if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-  //       for (let i = 0; i < data.result.results.length; i++) {
-  //         this.fldrArr.push({ ...data.result.results[i], key: 'smtFldr' });
-  //       }
-  //     } else {
-  //     }
-  //     this.sFldrLoading = false;
-  //   }, (err: any) => {
-  //     this.sFldrLoading = false;
-  //   });
-  // }
 
   // get collection list
   listColctn() {
@@ -227,15 +178,13 @@ export class CollectionInnerComponent implements OnInit {
       this.contentNav.push(fldr);
       this.selFldr = fldr;
       this.mdlCntntArr = [];
-      // this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr();
+      // this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr(); ---- pending
     } else {
       this.selWrkspc = wrkspc;
       this.contentNav = [wrkspc];
     }
     this.fldrArr = [];
     this.getAllObjWrkspc();
-    // this.getFolderList();
-    // this.getSmartFolderList();
     this.showAll = false;
   }
 
@@ -254,8 +203,6 @@ export class CollectionInnerComponent implements OnInit {
       // this.getSmartFolderList();
       // this.selFldr ? this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr() : undefined;
     }
-    // console.log(this.contentNav);
-    // console.log(this.selFldr);
   }
 
   // ----- resource/content -----
@@ -344,24 +291,6 @@ export class CollectionInnerComponent implements OnInit {
     });
   }
 
-  // // get content by folder
-  // getContentFldr() {
-  //   this.cntntLoading = true;
-  //   let query: any = {
-  //     workspaceId: this.selWrkspc!.id,
-  //     folderId: this.selFldr ? this.selFldr!.id : undefined
-  //   };
-  //   this.cwServ.contentByFolder(query).subscribe((data: any) => {
-  //     if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-  //       this.mdlCntntArr.push(...data.result);
-  //       // console.log(this.mdlCntntArr);
-  //     }
-  //     this.cntntLoading = false;
-  //   }, (err: any) => {
-  //     this.cntntLoading = false;
-  //   });
-  // }
-
   // get content by collection
   getCntntColl(colctn?: Colctn) {
     let id: number;
@@ -374,7 +303,6 @@ export class CollectionInnerComponent implements OnInit {
       id = this.id;
     }
     this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
-      // console.log(data);
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         colctn ? this.mdlCntntArr = data.result : this.cntntArr = data.result;
       } else if (data && data.result && Array.isArray(data.result) && data.result.length == 0) {
@@ -396,23 +324,25 @@ export class CollectionInnerComponent implements OnInit {
     });
   }
 
-  // delete collection
-  delColctn() {
+  // activate/deactivate collection
+  actDeactColctn() {
+    let actDeac: string = `${this.selColctn!.isActive ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to delete this collection?`,
-        title: `Delete Collection`
+        msg: `Are you sure you want to ${actDeac} this collection?`,
+        title: `${this.selColctn!.isActive ? 'Deactivate' : 'Activate'} collection`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.colctnSrv.delColctn(this.id).subscribe((data: any) => {
+        this.colctnSrv.actDeactColctn([this.id], this.selColctn!.isActive ? false : true).subscribe((data: any) => {
           if (data) {
-            this.toastr.success(data.message || 'Collection deleted successfully', 'Success!');
-            this.router.navigate(['/web-app/resource/collections']);
+            this.toastr.success(`Collection ${actDeac}d successfully`, 'Success!');
+            this.getColctn();
+          } else {
+            this.toastr.error(`Unable to ${actDeac} collection`, 'Error!');
           }
         }, (err: any) => {
-
         });
       }
     })
@@ -518,7 +448,7 @@ export class CollectionInnerComponent implements OnInit {
     document.execCommand("copy");
   }
 
-  navgToCntnt(cntnt:Content){
+  navgToCntnt(cntnt: Content) {
     this.router.navigate(['/web-app/view/' + cntnt.contentId]);
   }
 

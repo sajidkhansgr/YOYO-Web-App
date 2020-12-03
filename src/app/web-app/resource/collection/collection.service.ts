@@ -31,7 +31,7 @@ export class CollectionService {
   colctnList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
-      if (params[key] || key == 'pageNo' || key == 'pageSize') {
+      if (params[key] || key == 'pageNo' || key == 'isActive') {
         queryParams = queryParams.set(key, params[key]);
       }
     }
@@ -55,14 +55,10 @@ export class CollectionService {
     return this.http.patch(`${AppSettings.DUPL_COLCT}`, data);
   }
 
-  // delete collection
-  delColctn(id: any) {
-    return this.http.patch(`${AppSettings.DEL_COLCT}?id=${id}`, {});
-  }
-
-  // bulk delete collection
-  bulkDelColctn(data: any) {
-    return this.http.patch(`${AppSettings.BULK_DEL_COLCT}`, data);
+  // activate/deactivate collection
+  actDeactColctn(data: any, isAct: boolean) {
+    let url = isAct ? AppSettings.ACT_COLCT : AppSettings.DEACT_COLCT;
+    return this.http.post(`${url}`, data);
   }
 
   //  collection

@@ -194,6 +194,10 @@ export class AppSettings {
 
   public static GET_COLCT = `api/Collection/GetById`;
 
+  public static ACT_COLCT = `api/Collection/Activate`;
+
+  public static DEACT_COLCT = `api/Collection/Deactivate`;
+
   public static ADD_CONTENT_COLCT = `api/Collection/AddContent`;
 
   public static GET_CONTENT_COLCT = `api/Collection/GetContentByCollection`;

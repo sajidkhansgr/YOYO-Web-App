@@ -5,4 +5,5 @@ export interface Collection {
   updatedBy: string;
   updatedDate: string;
   createdDate: string;
+  isActive: boolean;
 }

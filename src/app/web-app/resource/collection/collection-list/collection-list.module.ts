@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { CollectionListComponent } from './collection-list.component';
 import { CollectionService } from '../collection.service'
@@ -28,7 +29,8 @@ const routes: Routes = [
     MatTooltipModule,
     LoaderModule,
     FormsModule, ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    NgbNavModule
   ],
   providers: [CollectionService],
 })

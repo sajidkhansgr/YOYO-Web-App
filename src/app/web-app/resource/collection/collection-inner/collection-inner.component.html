@@ -27,8 +27,10 @@
               <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
             </div>
           </a>
-          <a class="dropdown-item curs-ptr" (click)="delColctn()">
-            <i class="fas fa-trash-alt mr-1"></i>Delete
+          <a class="dropdown-item curs-ptr {{selColctn!.isActive ? 'text-primary' : 'text-success'}}"
+            (click)="actDeactColctn()">
+            <i class="mr-1 fas fa-toggle-{{selColctn!.isActive ? 'off' : 'on'}}"></i>
+            {{selColctn!.isActive ? 'Deactivate' : 'Activate'}}
           </a>
         </div>
       </div>
@@ -47,7 +49,8 @@
             </div>
             <div class="options rounded">
               <div class="dropleft">
-                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
@@ -115,7 +118,8 @@
           <td class="align-middle options">
             <div class="d-flex">
               <div class="dropleft">
-                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
@@ -145,11 +149,13 @@
   <div class="selected-items text-secondary align-self-center">1 item selected</div>
   <div class="mr-1 ml-3 align-self-center">|</div>
   <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
-  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openModal(email)"><i class="fa fa-envelope mr-1"></i>Email</div>
+  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="openModal(email)"><i
+      class="fa fa-envelope mr-1"></i>Email</div>
   <div class="btn btn-light align-self-center bg-white" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get
     a
     link</div>
-  <div class="btn btn-light align-self-center bg-white" (click)="openModal(addtoCollection)"><i class="fa fa-folder-plus mr-1"></i>Add to collection</div>
+  <div class="btn btn-light align-self-center bg-white" (click)="openModal(addtoCollection)"><i
+      class="fa fa-folder-plus mr-1"></i>Add to collection</div>
   <div class="btn btn-primary align-self-center"><i class="fas fa-trash-alt mr-1"></i>Delete</div>
 </div>
 
@@ -207,14 +213,16 @@
       </ol>
       <hr class="mt-1">
     </nav>
-    <ng-container *ngIf="(wrkspcLoading && colctnLoading) || (fldrLoading && sFldrLoading) || cntntLoading; else loaded">
+    <ng-container
+      *ngIf="(wrkspcLoading && colctnLoading) || (fldrLoading && sFldrLoading) || cntntLoading; else loaded">
       <app-loader [type]="'div'"></app-loader>
     </ng-container>
     <ng-template #loaded>
       <div *ngIf="showAll">
         <!-- experiences -->
         <div class="text-secondary font-weight-bold my-2">Workspaces</div>
-        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let workspc of workspcArr" (click)="showWorkspcFldrs(workspc)">
+        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let workspc of workspcArr"
+          (click)="showWorkspcFldrs(workspc)">
           <div class="icon align-self-center mr-2">
             <img src="assets/images/discription.png" style="max-height:50px; width: 40px;">
           </div>
@@ -240,7 +248,8 @@
         </div>
         <!-- collections -->
         <div class="text-secondary font-weight-bold my-2">Collections</div>
-        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr" (click)="getCntntColl(colctn)">
+        <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr"
+          (click)="getCntntColl(colctn)">
           <div class="icon align-self-center mr-2">
             <img src="assets/images/discription.png" style="max-height:50px; width: 40px;">
           </div>
@@ -253,9 +262,11 @@
       <div *ngIf="!showAll">
         <ng-container *ngIf="fldrArr.length > 0 || mdlCntntArr.length > 0; else noDATA">
           <!-- sub folders -->
-          <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr" (click)="showAll === false ? showWorkspcFldrs(undefined, fldr) : showMyFiles(fldr);">
+          <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr"
+            (click)="showAll === false ? showWorkspcFldrs(undefined, fldr) : showMyFiles(fldr);">
             <div class="icon align-self-center mr-2">
-              <img src="{{fldr.folderIconPath ? fldr.folderIconPath : 'assets/images/folderIcon.png'}}" style="max-height:50px; width: 40px;">
+              <img src="{{fldr.folderIconPath ? fldr.folderIconPath : 'assets/images/folderIcon.png'}}"
+                style="max-height:50px; width: 40px;">
             </div>
             <div class="name align-self-center">
               {{fldr.name}}
@@ -269,7 +280,9 @@
             <mat-checkbox class="align-self-center mr-2" (change)="selectContent(content, $event.checked)">
             </mat-checkbox>
             <div class="icon align-self-center mr-2">
-              <img src="{{content.pdfImages && content.pdfImages.length > 0 ? content.pdfImages[0].imagePath : content.urlIconPath}}" style="max-height:50px; width: 40px;">
+              <img
+                src="{{content.pdfImages && content.pdfImages.length > 0 ? content.pdfImages[0].imagePath : content.urlIconPath}}"
+                style="max-height:50px; width: 40px;">
             </div>
             <div class="name align-self-center">
               {{content.name}}
@@ -285,7 +298,8 @@
     </ng-template>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="addContent()" [disabled]="addContentArr.length == 0 || disabled">
+    <button type="button" class="btn btn-primary" (click)="addContent()"
+      [disabled]="addContentArr.length == 0 || disabled">
       <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
       {{addContentArr.length == 0 ? '0 Items Selected' : 'Insert ' + addContentArr.length + ' item(s)'}}
     </button>
@@ -418,7 +432,8 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')" [disabled]="!sharingValue.checked">Share</button>
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')"
+      [disabled]="!sharingValue.checked">Share</button>
   </div>
 </ng-template>
 
