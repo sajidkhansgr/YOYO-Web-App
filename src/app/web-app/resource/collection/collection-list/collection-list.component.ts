@@ -10,6 +10,9 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 import { FLDR_ICON } from '../../../../shared/constants';
 import { Collection } from 'src/app/shared/models/collection';
 
+import { ShareMailComponent } from '../../../../shared/components/share-mail/share-mail.component';
+import { GetLinkComponent } from '../../../../shared/components/get-link/get-link.component';
+
 @Component({
   selector: 'app-collection-list',
   templateUrl: './collection-list.component.html',
@@ -221,6 +224,13 @@ export class CollectionListComponent implements OnInit {
     this.modalService.open(content, { size: 'lg' }).result.then((result) => {
     }, (reason) => {
     });
+  }
+
+  cmnModal(type: string){
+    if(type=='email')
+      this.openModal(ShareMailComponent);
+    else if(type=='getLink')
+      this.openModal(GetLinkComponent);
   }
 
   dismissModal() {

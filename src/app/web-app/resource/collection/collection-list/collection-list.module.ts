@@ -12,11 +12,12 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { CollectionListComponent } from './collection-list.component';
 import { CollectionService } from '../collection.service'
 import { LoaderModule } from '../../../../shared/components/loader/loader.module';
+import { ShareMailModule } from '../../../../shared/components/share-mail/share-mail.module';
+import { GetLinkModule } from '../../../../shared/components/get-link/get-link.module';
 
 const routes: Routes = [
   { path: '', component: CollectionListComponent }
 ];
-
 
 @NgModule({
   declarations: [CollectionListComponent],
@@ -30,7 +31,8 @@ const routes: Routes = [
     LoaderModule,
     FormsModule, ReactiveFormsModule,
     MatDialogModule,
-    NgbNavModule
+    NgbNavModule,
+    ShareMailModule, GetLinkModule
   ],
   providers: [CollectionService],
 })
