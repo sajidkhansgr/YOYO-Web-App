@@ -125,14 +125,14 @@ export class ContentWorkspaceComponent implements OnInit {
     let cmnCols = [{ n: "Added", k: "createdDate", asc: false }, { n: "Size", k: "size", asc: false },
     { n: "Last Updated", k: "updatedDate", asc: false }];
     this.visbCols = [...cmnCols];
-    this.hidCols = [{ n: "Likes", k: "likes", asc: false }];
+    this.hidCols = [{ n: "Likes", k: "likes", asc: false },{ n: "Languages", k: "contentLanguages", asc: false }];
     this.cols = [{ n: "Name", asc: false, k: "name" }, ...cmnCols];
     this.view = true;
     this.edit = false;
     this.activeFldrs = 1; this.isActiveFldrs = true; this.activeWrkspc = 1;
     // this.isActiveWrkspc = true;
     this.showRowInfo = false; this.rowInfo = {}; this.docLoading = false;
-    this.pageSize = this.lmtPage[0]; this.pageNo = 1; this.filteredList = [];
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
     this.cntntTypeFltr = this.fileTypesArr;
     this.cntntDisb = false;
     this.totalCount = 0;
@@ -163,7 +163,7 @@ export class ContentWorkspaceComponent implements OnInit {
       )
       .subscribe();
     this.allTags = []; this.anyTags = []; this.noneTags = [];
-    this.allTags1 = []; this.anyTags1 = []; this.noneTags1 = [];
+    this.setFltrEmpty();
   }
 
   // ---- folder and smart folder ---- //
@@ -817,6 +817,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // toggle workspace
   workspaceToggle = () => {
     this.showRowInfo = false;
+    this.rowInfo = {};
     this.showWork = !this.showWork;
   }
 
@@ -825,9 +826,9 @@ export class ContentWorkspaceComponent implements OnInit {
     if (this.showRowInfo && this.rowInfo.id == row.id) {
       this.closeDoc();
     } else {
-      this.showRowInfo = true;
       this.showWork = false;
       this.rowInfo = {};
+      this.showRowInfo = true;
       this.edits = {};
       this.disb = {};
       this.desc = '';
@@ -838,9 +839,10 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  closeDoc = () => {
+  closeDoc = (isAll:boolean=false) => {
     this.showRowInfo = false;
-    this.showWork = false;
+    if(isAll)
+      this.showWork = false;
     this.docLoading = false;
     this.rowInfo = {};
   }
@@ -1063,6 +1065,13 @@ export class ContentWorkspaceComponent implements OnInit {
         this[type].push({ ...data });
       else if (type === 'selLngs')
         this[type].push({ ...data, lid: data.id });
+      else if(type =='allTags1' || type == 'anyTags1' || type == 'noneTags1'){
+        let necData = {name: data.name,id: data.id};
+        this[type].push({ ...necData});
+        let n = (type =='allTags1'?'All':type =='anyTags1'?'Any':'None')+": "+necData.name;
+        this.filteredList.push({ ...necData,type,n });
+        this.cntntList();
+      }
       else
         this[type].push({ ...data, tid: data.id });
       autoSel.value = '';
@@ -1073,6 +1082,13 @@ export class ContentWorkspaceComponent implements OnInit {
   'allTags' | 'anyTags' | 'noneTags' |'allTags1' | 'anyTags1' | 'noneTags1' ): void {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
+      if(type =='allTags1' || type == 'anyTags1' || type == 'noneTags1'){
+        const index2 = this.filteredList.findIndex((ele: any) => ele.id == data.id);
+        if (index2 >= 0) {
+          this.filteredList.splice(index2, 1);
+        }
+        this.cntntList();
+      }
       this[type].splice(index, 1);
     }
   }
@@ -1274,22 +1290,30 @@ export class ContentWorkspaceComponent implements OnInit {
     this.fileServ.downloadFile(this.rowInfo!.contentPath, this.rowInfo!.name);
   }
 
-  clearAllFilter() {
+  setFltrEmpty(){
     this.filteredList = [];
-    this.cntntTypeFltr = this.cntntTypeFltr.map((f: any) => ({ ...f, chk:false }))
+    this.allTags1 = []; this.anyTags1 = []; this.noneTags1 = [];
+    this.cntntTypeFltr = this.cntntTypeFltr.map((f: any) => ({ ...f, chk:false }));
+  }
+
+  clearAllFilter() {
+    this.setFltrEmpty();
     this.cntntList();
   }
 
   clearSingleFlter = (fltr:any,i: number) => {
     this.filteredList.splice(i, 1);
     if(fltr.type==='fT'){
-      const ind = this.cntntTypeFltr.findIndex((flt: any) => flt.v == fltr.v);
-      if (ind >= 0){
-        this.cntntTypeFltr[ind].chk = false;
-        const ind2 = this.filteredList.findIndex((flt: any) => flt.v == fltr.v);
-        if (ind2 >= 0) {
-          this.filteredList.splice(ind2, 1);
-        }
+      const index = this.cntntTypeFltr.findIndex((flt: any) => flt.v == fltr.v);
+      if (index >= 0){
+        this.cntntTypeFltr[index].chk = false;
+      }
+    }
+    else if(fltr.type =='allTags1' || fltr.type == 'anyTags1' || fltr.type == 'noneTags1'){
+      let t:'allTags1'|'anyTags1'|'noneTags1' = fltr.type;
+      const index = this[t].findIndex((flt: any) => flt.id == fltr.id);
+      if (index >= 0){
+        this[t].splice(index, 1);
       }
     }
     this.cntntList();

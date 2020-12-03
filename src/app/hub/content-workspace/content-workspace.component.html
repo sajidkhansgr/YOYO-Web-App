@@ -558,7 +558,7 @@
               </div>
             </div>
             <div class="ml-auto mr-2">
-              <div class="btn btn-light" (click)="closeDoc()">
+              <div class="btn btn-light" (click)="closeDoc(true)">
                 <i class="fas fa-times"></i>
               </div>
             </div>
@@ -900,9 +900,9 @@
       </div>
       <div class="card-title pl-2" *ngIf="filteredList.length>0">
         <span class="mr-2">Filtered by:</span>
-        <div class="btn btn-outline-primary btn-sm rounded-pill filter-btn"
+        <div class="btn btn-outline-primary btn-sm rounded-pill filter-btn mr-2"
           *ngFor="let fltr of filteredList; let i=index">
-          {{fltr.n}}<i class="fas fa-times" (click)="clearSingleFlter(fltr,i)"></i>
+          {{fltr.n}}<i class="ml-1 fas fa-times" (click)="clearSingleFlter(fltr,i)"></i>
         </div>
         <div class="float-right">
           <!-- <div class="btn btn-primary btn-sm mr-2">Save Filter</div> -->
@@ -939,8 +939,8 @@
               <span [ngSwitch]="col.k">
                 <span *ngSwitchCase="'name'">
                   {{cntnt.name}}<br />
-                  <span *ngFor="let tg of cntnt.contentTags"
-                    class="badge badge-light p-2 mt-2 mt-sm-0">{{tg.name}}</span>
+                  <span *ngFor="let tg of cntnt.contentTags" class="badge badge-light p-2 mt-2 mr-1 mt-sm-0">{{tg.name}}
+                  </span>
                 </span>
                 <span *ngSwitchCase="'createdDate'">
                   {{(cntnt.createdDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}
@@ -950,6 +950,10 @@
                 </span>
                 <span *ngSwitchCase="'size'">
                   {{getSize(cntnt.size)}}
+                </span>
+                <span *ngSwitchCase="'contentLanguages'">
+                  <span *ngFor="let cL of cntnt.contentLanguages" class="badge badge-light p-2 mt-2 mr-1 mt-sm-0">{{cL.name}}
+                  </span>
                 </span>
                 <span *ngSwitchDefault>{{cntnt[col.k]}}</span>
               </span>

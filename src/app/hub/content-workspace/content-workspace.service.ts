@@ -151,6 +151,12 @@ export class ContentWorkspaceService {
           for (let k = 0; k < params[key].length; k++) {
             if (params[key][k].type === 'fT')
               queryParams = queryParams.append('fileTypes', params[key][k].v);
+            else if (params[key][k].type === 'allTags1')
+              queryParams = queryParams.append('tags.MatchAllTagIds', params[key][k].id);
+            else if (params[key][k].type === 'anyTags1')
+              queryParams = queryParams.append('tags.MatchAnyTagIds', params[key][k].id);
+            else if (params[key][k].type === 'noneTags1')
+              queryParams = queryParams.append('tags.MatchNoneTagIds', params[key][k].id);
           }
         }
       } else if (params[key] || key == 'IsAscending') {
