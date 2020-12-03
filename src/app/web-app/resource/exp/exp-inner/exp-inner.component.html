@@ -31,14 +31,15 @@
           </div>
           <div class="options rounded">
             <div class="dropleft">
-              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
                 <i class="fas fa-share-square"></i>
               </button>
               <div class="dropdown-menu" aria-labelledby="shareDD">
-                <a class="dropdown-item curs-ptr" (click)="openModal(email)">
+                <a class="dropdown-item curs-ptr" (click)="cmnModal('email')">
                   <i class="fa fa-envelope mr-1"></i>Email
                 </a>
-                <a class="dropdown-item curs-ptr" (click)="openModal(getLink)">
+                <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink')">
                   <i class="fa fa-link mr-1"></i>Get a link
                 </a>
               </div>
@@ -143,9 +144,9 @@
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item curs-ptr" (click)="openModal(email)"><i
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email')"><i
                       class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item curs-ptr" (click)="openModal(getLink)"><i class="fa fa-link mr-1"></i>Get a
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a
                     link</a>
                 </div>
               </div>
@@ -207,85 +208,6 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Share</button>
-  </div>
-</ng-template>
-
-<!-- email modal -->
-<ng-template #email let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Email</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body" ngbAutofocus>
-    <div class="row">
-      <div class="col-9 border-right">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>To</mat-label>
-          <input matInput type="text" placeholder="Recipients">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Subject</mat-label>
-          <input matInput type="text" placeholder="Subject">
-        </mat-form-field>
-        <div class="row">
-          <mat-form-field appearance="outline" class="col-8">
-            <mat-label>Message</mat-label>
-            <input matInput type="text" placeholder="Search Content">
-          </mat-form-field>
-          <div class="col-4 mt-3">
-            <div class="btn btn-primary" (click)="openModal(addResource)">
-              <i class="fas fa-file-medical mr-1"></i>Add resource
-            </div>
-          </div>
-        </div>
-        <mat-form-field appearance="outline" class="w-100">
-          <textarea matInput type="text" placeholder=""></textarea>
-        </mat-form-field>
-      </div>
-      <div class="col-3">
-        <h5>Sharing Settings</h5>
-        <mat-checkbox class="ml-2">Allow downloads</mat-checkbox>
-        <mat-checkbox class="ml-2">Send me a copy</mat-checkbox>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
-  </div>
-</ng-template>
-
-<!-- get a link modal -->
-<ng-template #getLink let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Get a Link</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body" ngbAutofocus>
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Name</mat-label>
-      <input type="text" matInput placeholder="Name">
-    </mat-form-field>
-    <mat-checkbox>Allow downloads</mat-checkbox>
-    <mat-label class="d-block mt-3">Content</mat-label>
-    <div class="row">
-      <div class="col-9">
-        <mat-form-field appearance="outline" class="w-100 search">
-          <mat-label class="ml-2">Search for content</mat-label>
-          <input class="ml-2" type="text" matInput placeholder="Search for content">
-          <i class="fa fa-search text-secondary" matPrefix style="font-size: 18px;"></i>
-        </mat-form-field>
-      </div>
-      <div class="col-3 mt-3">
-        <div class="btn btn-primary">Browse</div>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
   </div>
 </ng-template>
 

@@ -9,7 +9,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class GetLinkComponent implements OnInit {
 
   constructor(
-    private modalRef: NgbActiveModal
+    public modalRef: NgbActiveModal
   ) { }
 
   ngOnInit(): void {

@@ -16,6 +16,8 @@ import { Workspace as Wrkspc } from '../../../../shared/models/workspace';
 import { Folder } from '../../../../shared/models/folder';
 import { Content } from '../../../../shared/models/content';
 import { DEF_ICON } from '../../../../shared/constants';
+import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-mail.component';
+import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
 
 @Component({
   selector: 'app-collection-inner',
@@ -68,6 +70,14 @@ export class CollectionInnerComponent implements OnInit {
     this.showBotDiv = false;
     this.workspcArr = []; this.colctnArr = []; this.fldrArr = []; this.selWrkspc = undefined; this.selFldr = undefined; this.mdlCntntArr = []; this.addContentArr = [];
     this.showAll = true; this.contentNav = [];
+  }
+
+  // open modals
+  cmnModal(type: string) {
+    if (type == 'email')
+      this.openModal(ShareMailComponent);
+    else if (type == 'getLink')
+      this.openModal(GetLinkComponent);
   }
 
   // ----- for 'add resource' modal -----

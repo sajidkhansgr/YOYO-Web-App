@@ -9,10 +9,14 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class ShareMailComponent implements OnInit {
 
   constructor(
-    private modalRef: NgbActiveModal
+    public modalRef: NgbActiveModal
   ) { }
 
   ngOnInit(): void {
+  }
+
+  openModal() {
+
   }
 
 }

@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ExpService } from '../../exp/exp.service';
 import { DEF_ICON, FLDR_ICON } from '../../../../shared/constants';
+import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-mail.component';
+import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
 
 @Component({
   selector: 'app-exp-inner',
@@ -43,6 +45,14 @@ export class ExpInnerComponent implements OnInit {
       this.toastr.error("Not a valid Workspace", "Error");
       this.router.navigate(['/web-app/experiences']);
     }
+  }
+
+  // open modals
+  cmnModal(type: string) {
+    if (type == 'email')
+      this.openModal(ShareMailComponent);
+    else if (type == 'getLink')
+      this.openModal(GetLinkComponent);
   }
 
   // view content

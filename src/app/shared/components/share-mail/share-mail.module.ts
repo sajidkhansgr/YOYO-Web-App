@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 import { ShareMailComponent } from './share-mail.component';
-import { LoaderModule } from '../../components/loader/loader.module';
 
 @NgModule({
   declarations: [ShareMailComponent],
   imports: [
     CommonModule,
-    LoaderModule
+    MatFormFieldModule, MatInputModule, MatCheckboxModule
   ],
   entryComponents: [
     ShareMailComponent

@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 import { GetLinkComponent } from './get-link.component';
-import { LoaderModule } from '../../components/loader/loader.module';
 
 @NgModule({
   declarations: [GetLinkComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    MatFormFieldModule, MatInputModule, MatCheckboxModule
   ],
   entryComponents: [
     GetLinkComponent
