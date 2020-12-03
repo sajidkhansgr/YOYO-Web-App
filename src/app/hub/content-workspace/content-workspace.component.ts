@@ -273,6 +273,7 @@ export class ContentWorkspaceComponent implements OnInit {
   addFileType(val: boolean, fT: any, isList: boolean = false) {
     if (val) {
       if (isList) {
+        fT.chk = val;
         this.filteredList.push({ ...fT, type: 'fT' });
         this.cntntList();
       }
@@ -280,6 +281,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.fileTypeArr.push(fT.v);
     } else
       if (isList) {
+        fT.chk = val;
         this.filteredList = this.filteredList.filter((d: any) => d.v != fT.v);
         this.cntntList();
       }
@@ -1280,13 +1282,15 @@ export class ContentWorkspaceComponent implements OnInit {
 
   clearSingleFlter = (fltr:any,i: number) => {
     this.filteredList.splice(i, 1);
-    type: "fT"
-v: 3
-
     if(fltr.type==='fT'){
       const ind = this.cntntTypeFltr.findIndex((flt: any) => flt.v == fltr.v);
-      if (ind >= 0)
+      if (ind >= 0){
         this.cntntTypeFltr[ind].chk = false;
+        const ind2 = this.filteredList.findIndex((flt: any) => flt.v == fltr.v);
+        if (ind2 >= 0) {
+          this.filteredList.splice(ind2, 1);
+        }
+      }
     }
     this.cntntList();
   }

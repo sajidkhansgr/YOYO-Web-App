@@ -149,7 +149,7 @@ export class ContentWorkspaceService {
       if (key === 'fltrL') {
         if (params[key] && params[key].length > 0) {
           for (let k = 0; k < params[key].length; k++) {
-            if (params[key][k].type === 'fileType')
+            if (params[key][k].type === 'fT')
               queryParams = queryParams.append('fileTypes', params[key][k].v);
           }
         }
