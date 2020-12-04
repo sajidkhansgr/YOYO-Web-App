@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 import { AppSettings } from '../../shared/services/app-settings';
 
 @Injectable({
@@ -23,4 +24,21 @@ export class CollService {
   duplColctn(data: any) {
     return this.http.patch(`${AppSettings.DUPL_COLCT}`, data);
   }
+
+  colctnList(params: any) {
+    let queryParams = new HttpParams();
+    for (let key in params) {
+      if (params[key] || key == 'pageNo') {
+        queryParams = queryParams.set(key, params[key]);
+      }
+    }
+    return this.http.get(`${AppSettings.LIST_COLCT}`, {
+      params: queryParams
+    }).pipe(map((res: any) => res));
+  }
+
+  addContentColctn(data: any) {
+    return this.http.post(`${AppSettings.ADD_CONTENT_COLCT}`, data);
+  }
+
 }

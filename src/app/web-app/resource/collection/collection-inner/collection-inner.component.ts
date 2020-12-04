@@ -70,21 +70,26 @@ export class CollectionInnerComponent implements OnInit {
   }
 
   // open modals
-  cmnModal(type: string, t?: string) {
+  cmnModal(type: string, t?: string,cntnt?:any) {
     if (type == 'email')
       this.openModal(ShareMailComponent);
     else if (type == 'getLink')
       this.openModal(GetLinkComponent);
-    else if (type == 'addToCollection')
-      this.openModal(AddToCollComponent);
+    else if (type == 'addToCollection'){
+      console.log("sdsdsd")
+      const modalRef:any = this.modalService.open(AddToCollComponent);
+      modalRef.componentInstance.data = {...cntnt,type:'coll-inr'};
+      modalRef.result.then((result:any) => {
+        if(result && result.id == this.id){
+          this.getCntntColl();
+        }
+      })
+    }
     else if (type == 'coll') {
       const modalRef = this.modalService.open(CollComponent);
       modalRef.componentInstance.colctn = this.selColctn;
       modalRef.componentInstance.type = t;
       modalRef.result.then((result) => {
-        if (result) {
-          this.getColctn();
-        }
       })
     }
   }
@@ -176,17 +181,15 @@ export class CollectionInnerComponent implements OnInit {
 
   // get collection list
   listColctn() {
+    this.colctnArr = [];
     this.colctnLoading = true;
     this.colctnSrv.colctnList({ pageNo: 0 }).subscribe((data: any) => {
       // console.log(data);
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         this.colctnArr = data.result.results;
-      } else {
-        this.colctnArr = [];
       }
       this.colctnLoading = false;
     }, (err: any) => {
-      this.colctnArr = [];
       this.colctnLoading = false;
     });
   }

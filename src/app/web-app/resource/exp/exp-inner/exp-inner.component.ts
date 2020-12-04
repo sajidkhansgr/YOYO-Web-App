@@ -53,13 +53,17 @@ export class ExpInnerComponent implements OnInit {
   }
 
   // open modals
-  cmnModal(type: string) {
+  cmnModal(wSC:any, type: string) {
     if (type == 'email')
       this.openModal(ShareMailComponent);
     else if (type == 'getLink')
       this.openModal(GetLinkComponent);
-    else if (type == 'addToCollection')
-      this.openModal(AddToCollComponent);
+    else if (type == 'addToColl'){
+      const modalRef:any = this.modalService.open(AddToCollComponent);
+      modalRef.componentInstance.data = {...wSC,type:'wrkspc'};
+      modalRef.result.then((result:any) => {
+      })
+    }
   }
 
   // view content

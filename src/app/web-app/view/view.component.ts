@@ -4,14 +4,14 @@ import { DOCUMENT } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DEF_ICON } from '../../shared/constants';
 import { ContentWorkspaceService } from '../../hub/content-workspace/content-workspace.service';
+import { CollectionService } from '../resource/collection/collection.service';
 import { ViewSDKClient } from '../../shared/services/view-sdk.service';
 import { FileService } from '../../shared/services/file.service';
-import { CollectionService } from '../resource/collection/collection.service';
 import { TokenDataService } from '../../shared/services/token-data.service';
 import { Content } from '../../shared/models/content';
 import { Collection } from '../../shared/models/collection';
+import { DEF_ICON,FLDR_ICON } from '../../shared/constants';
 
 @Component({
   selector: 'app-view',
@@ -29,6 +29,7 @@ export class ViewComponent implements OnInit {
   elem: any; isFullScreen!: boolean;isSelPage!:boolean;selPages!:any;actPage!:number
   colls!: Collection[];collLoad!:boolean;
   usrInfo: any | null;
+  fldrIcon: string = FLDR_ICON;
 
   constructor(
     @Inject(DOCUMENT) private document: any,
@@ -213,11 +214,8 @@ export class ViewComponent implements OnInit {
 
   addCntntToColl(coll: Collection){
     let data:any = {
-      id: coll.id,
-      contents: [],
-      pages: {
-        pageNumbers: []
-      }
+      id: coll.id, contents: [],
+      pages: { pageNumbers: [] }
     }
     if(this.isSelPage){
       this.selPages.sort((a:any, b:any) => a - b);
