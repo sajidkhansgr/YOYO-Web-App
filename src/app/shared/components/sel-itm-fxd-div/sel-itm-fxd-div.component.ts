@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-sel-itm-fxd-div',
@@ -6,10 +6,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sel-itm-fxd-div.component.scss']
 })
 export class SelItmFxdDivComponent implements OnInit {
+  @Input() public selColctnArr: any;
+  @Input() public isActiveColctn!: any;
+  @Output() public actDeact = new EventEmitter();
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  cmnModal(type: string) {
+
+  }
+
+  actDeactFunc() {
+    this.actDeact.emit();
   }
 
 }

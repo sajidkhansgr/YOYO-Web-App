@@ -1,1 +1,12 @@
-<p>sel-itm-fxd-div works!</p>
+<div class="row mx-auto fixed-bottom px-3" style="width: 90%; background-color: #fff; height: 50px;">
+  <div class="selected-items text-secondary align-self-center">{{selColctnArr.length}} item(s) selected</div>
+  <div class="mr-1 ml-3 align-self-center">|</div>
+  <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
+  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="cmnModal('email')"><i
+      class="fa fa-envelope mr-1"></i>Email</div>
+  <div class="btn btn-light align-self-center bg-white" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i> a
+    link</div>
+  <div class="btn btn-outline-{{isActiveColctn ? 'primary' : 'success'}} align-self-center" (click)="actDeactFunc()">
+    <i class="mr-1 fas fa-toggle-{{isActiveColctn ? 'off' : 'on'}}"></i> {{isActiveColctn ? 'Deactivate' : 'Activate'}}
+  </div>
+</div>

@@ -15,6 +15,8 @@ import { LoaderModule } from '../../../../shared/components/loader/loader.module
 import { ShareMailModule } from '../../../../shared/components/share-mail/share-mail.module';
 import { GetLinkModule } from '../../../../shared/components/get-link/get-link.module';
 import { CollModule } from '../../../../shared/components/coll/coll.module';
+import { SelItmFxdDivModule } from '../../../../shared/components/sel-itm-fxd-div/sel-itm-fxd-div.module';
+
 
 const routes: Routes = [
   { path: '', component: CollectionListComponent }
@@ -33,7 +35,7 @@ const routes: Routes = [
     FormsModule, ReactiveFormsModule,
     MatDialogModule,
     NgbNavModule,
-    ShareMailModule, GetLinkModule, CollModule
+    ShareMailModule, GetLinkModule, CollModule, SelItmFxdDivModule
   ],
   providers: [CollectionService],
 })

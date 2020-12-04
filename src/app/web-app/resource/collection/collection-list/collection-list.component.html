@@ -165,45 +165,5 @@
 </div>
 
 <!-- fixed div on selecting a collection -->
-<div class="row mx-auto fixed-bottom px-3" style="width: 90%; background-color: #fff; height: 50px;"
-  *ngIf="selColctnArr.length > 0">
-  <div class="selected-items text-secondary align-self-center">{{selColctnArr.length}} item(s) selected</div>
-  <div class="mr-1 ml-3 align-self-center">|</div>
-  <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
-  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="cmnModal('email')"><i
-      class="fa fa-envelope mr-1"></i>Email</div>
-  <div class="btn btn-light align-self-center bg-white" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i> a
-    link</div>
-  <div class="btn btn-outline-{{isActiveColctn ? 'primary' : 'success'}} align-self-center"
-    (click)="actDeactColctn(undefined)">
-    <i class="mr-1 fas fa-toggle-{{isActiveColctn ? 'off' : 'on'}}"></i> {{isActiveColctn ? 'Deactivate' : 'Activate'}}
-  </div>
-</div>
-
-<!-- new/rename/duplicate collection modal -->
-<!-- <ng-template #collection let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{multiForm == 1 ? 'Add' : multiForm == 2 ? 'Rename' : 'Duplicate'}}
-      Collection</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <form name="colctnForm" (ngSubmit)="submitColctn()" [formGroup]="colctnForm">
-    <div class="modal-body" ngbAutofocus>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Name</mat-label>
-        <input matInput type="text" placeholder="New Collection Name" required formControlName="name">
-        <mat-error *ngIf="colctnForm.get('name')!.hasError('required')">
-          Name is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" [disabled]="colctnForm!.invalid || disabled">
-        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
-        Save
-      </button>
-    </div>
-  </form>
-</ng-template> -->
+<app-sel-itm-fxd-div [selColctnArr]="selColctnArr" [isActiveColctn]="isActiveColctn"
+  (actDeact)="actDeactColctn(undefined)" *ngIf="selColctnArr.length > 0"></app-sel-itm-fxd-div>

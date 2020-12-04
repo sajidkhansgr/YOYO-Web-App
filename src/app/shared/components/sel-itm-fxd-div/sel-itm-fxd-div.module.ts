@@ -8,6 +8,7 @@ import { SelItmFxdDivComponent } from './sel-itm-fxd-div.component';
   declarations: [SelItmFxdDivComponent],
   imports: [
     CommonModule
-  ]
+  ],
+  exports: [SelItmFxdDivComponent]
 })
 export class SelItmFxdDivModule { }

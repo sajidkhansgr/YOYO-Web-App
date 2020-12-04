@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { CollService } from '../../services/coll.service'
+import { CollService } from '../../services/coll.service';
 
 @Component({
   selector: 'app-coll',
@@ -67,7 +67,6 @@ export class CollComponent implements OnInit {
   // duplicate collection
   duplColct(colctnData: any) {
     this.collServ.duplColctn(colctnData).subscribe((data: any) => {
-      console.log(data);
       if (data) {
         this.toastr.success(data.message || 'Collection duplicated successfully', 'Success!');
         this.modalRef.close(true);
