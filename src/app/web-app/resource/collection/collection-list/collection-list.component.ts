@@ -8,7 +8,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { CollectionService } from '../collection.service';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { FLDR_ICON } from '../../../../shared/constants';
-import { Collection } from 'src/app/shared/models/collection';
 
 import { ShareMailComponent } from '../../../../shared/components/share-mail/share-mail.component';
 import { GetLinkComponent } from '../../../../shared/components/get-link/get-link.component';
@@ -226,10 +225,10 @@ export class CollectionListComponent implements OnInit {
     });
   }
 
-  cmnModal(type: string){
-    if(type=='email')
+  cmnModal(type: string) {
+    if (type == 'email')
       this.openModal(ShareMailComponent);
-    else if(type=='getLink')
+    else if (type == 'getLink')
       this.openModal(GetLinkComponent);
   }
 

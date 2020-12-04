@@ -15,6 +15,10 @@ import { CollectionService } from '../collection.service';
 import { FileService } from '../../file/file.service';
 import { ExpService } from '../../exp/exp.service';
 import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
+import { AddToCollModule } from '../../../../shared/components/add-to-coll/add-to-coll.module';
+import { ShareMailModule } from '../../../../shared/components/share-mail/share-mail.module';
+import { GetLinkModule } from '../../../../shared/components/get-link/get-link.module';
+
 
 const routes: Routes = [
   { path: '', component: CollectionInnerComponent }
@@ -32,7 +36,8 @@ const routes: Routes = [
     MatRadioModule,
     LoaderModule,
     FormsModule, ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    AddToCollModule, ShareMailModule, GetLinkModule
   ],
   providers: [CollectionService, ExpService, FileService, ContentWorkspaceService]
 })
