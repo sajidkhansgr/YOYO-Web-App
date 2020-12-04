@@ -3,8 +3,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { ExpService } from '../../exp/exp.service';
 import { DEF_ICON, FLDR_ICON } from '../../../../shared/constants';
+import { ExpService } from '../../exp/exp.service';
+import { BreadcrumbService } from '../../../../shared/services/breadcrumb.service';
 import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-mail.component';
 import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
 import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to-coll.component';
@@ -21,13 +22,15 @@ export class ExpInnerComponent implements OnInit {
   wrkspcCntnts: any[] = [];
   defImg: string = DEF_ICON; fldrIcon: string = FLDR_ICON;
   testArr = [1, 2, 3] // for static
+  // entityId!:number;
 
   constructor(
     private modalService: NgbModal,
     private route: ActivatedRoute,
     private router: Router,
     private expServ: ExpService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private brdcrmServ: BreadcrumbService
   ) { }
 
   ngOnInit(): void {
@@ -41,6 +44,7 @@ export class ExpInnerComponent implements OnInit {
   initialiseState() {
     if (this.id != '0') {
       this.loading = true;
+      // this.brdcrmList();
       this.getAllFromWrkspc();
     } else {
       this.toastr.error("Not a valid Workspace", "Error");
@@ -94,6 +98,29 @@ export class ExpInnerComponent implements OnInit {
 
   navgToCntnt(id: number) {
     this.router.navigate(['/web-app/resource/experiences/' + this.id + '/' + id]);
+  }
+
+  brdcrmList(){
+    // {
+    //       Workspace = 1,
+    //       Folder = 2,
+    //       SmartFolder=3
+    //   }
+    let params = {
+      entityWorkspaceID: this.id,
+      entityType: 1,//this.entityId,
+      entityId: this.fldrid || null
+    }
+    this.brdcrmServ.getList(params)
+      .subscribe((data: any) => {
+        console.log(data,'data')
+        if (data && Array.isArray(data.result) && data.result.length > 0) {
+
+        } else {
+          //no data found
+        }
+      }, (err: any) => {
+      })
   }
 
   openModal(content: any) {

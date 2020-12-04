@@ -1,26 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 import { CollComponent } from './coll.component';
 import { LoaderModule } from '../loader/loader.module';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { CollectionService } from '../../../web-app/resource/collection/collection.service';
-
-
+import { CollService } from '../../services/coll.service'
 
 @NgModule({
   declarations: [CollComponent],
   imports: [
     CommonModule,
-    LoaderModule,
+    FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatInputModule,
-    FormsModule, ReactiveFormsModule
+    LoaderModule
   ],
   entryComponents: [
     CollComponent
   ],
-  providers: [CollectionService]
+  providers: [CollService]
 })
 export class CollModule { }

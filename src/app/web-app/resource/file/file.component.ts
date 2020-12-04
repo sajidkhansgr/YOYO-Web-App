@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { FileService } from './file.service';
 import { ContentWorkspaceService } from '../../../hub/content-workspace/content-workspace.service';
@@ -15,17 +16,21 @@ import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to
   styleUrls: ['./file.component.scss']
 })
 export class FileComponent implements OnInit {
+  routerSubs!: Subscription;
   view: boolean = true; fldrLoad!: boolean;
   files!: any[]; loading!: boolean; folders!: any[];
   folderNav!: any[];
-  selFolder: any = {};
-  allFiles: any[] = []; selFiles: any[] = []; selFolders: any[] = [];
+  // selFolder: any = {};
+  allFiles: any[] = [];
+  // selFiles: any[] = []; selFolders: any[] = [];
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   folderForm!: FormGroup;
   frmType!: string; selFldrData!: any;
+  fldrid!:string;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private modalService: NgbModal,
     private toastr: ToastrService,
@@ -34,9 +39,19 @@ export class FileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.routerSubs = this.route.params.subscribe(params => {
+      this.fldrid = params['fldrid'] || '';
+      this.initialiseState(); // reset and set based on new parameter this time
+      this.getFiles();
+    });
+
+  }
+
+  initialiseState(){
     this.loading = true;
     this.folderNav = [];
-    this.getFiles();
+    this.files = [];
+    this.folders = [];
     this.initForm();
   }
 
@@ -57,70 +72,71 @@ export class FileComponent implements OnInit {
   }
 
   getFiles() {
-    this.fileServ.myFiles({})
+    let params = {
+      folderId: this.fldrid || null
+    };
+    this.fileServ.myFiles(params)
       .subscribe((data: any) => {
         if (data && data.result) {
           if (Array.isArray(data.result.folders)) {
             this.folders = data.result.folders;
-          } else {
-            this.folders = [];
           }
           if (Array.isArray(data.result.contents)) {
             this.files = data.result.contents;
-          } else {
-            this.files = [];
           }
-        } else {
-          this.files = [];
-          this.folders = [];
         }
-        this.setSelFoldFiles();
-        console.log(data);
+        this.allFiles = [...this.folders, ...this.files];
+        // this.setSelFoldFiles();
+        // console.log(data);
         this.loading = false;
       }, (err: any) => {
-        this.files = [];
-        this.folders = [];
-        this.setSelFoldFiles();
+        // this.setSelFoldFiles();
         this.loading = false;
       })
   }
 
-  setSelFoldFiles(fl: any = { id: null }) {
-    this.loading = true;
-    this.selFolders = [];
-    this.selFiles = [];
-    this.allFiles = [];
-    for (let k = 0; k < this.folders.length; k++) {
-      if (this.folders[k].folderId === fl.id)
-        this.selFolders.push({ ...this.folders[k], isFldr: true });
-    }
-    for (let k = 0; k < this.files.length; k++) {
-      if (this.files[k].folderId === fl.id)
-        this.selFiles.push({ ...this.files[k] });
-    }
-    this.allFiles = [...this.selFolders, ...this.selFiles];
-    this.selFolder = fl;
-    if (fl.id) {
-      const index = this.folderNav.findIndex((ele: any) => ele.id == fl.id);
-      if (index >= 0) {
-        this.folderNav.splice(index + 1);
-      } else {
-        this.folderNav.push(fl);
-      }
-    } else {
-      this.folderNav = [];
-      this.folderNav.push({ name: 'My Files', id: null });
-    }
-    this.loading = false;
-  }
+  // setSelFoldFiles(fl: any = { id: null }) {
+  //   this.loading = true;
+  //   this.selFolders = [];
+  //   this.selFiles = [];
+  //   this.allFiles = [];
+  //   for (let k = 0; k < this.folders.length; k++) {
+  //     if (this.folders[k].folderId === fl.id)
+  //       this.selFolders.push({ ...this.folders[k], isFldr: true });
+  //   }
+  //   for (let k = 0; k < this.files.length; k++) {
+  //     if (this.files[k].folderId === fl.id)
+  //       this.selFiles.push({ ...this.files[k] });
+  //   }
+  //   this.allFiles = [...this.selFolders, ...this.selFiles];
+  //   this.selFolder = fl;
+  //   if (fl.id) {
+  //     const index = this.folderNav.findIndex((ele: any) => ele.id == fl.id);
+  //     if (index >= 0) {
+  //       this.folderNav.splice(index + 1);
+  //     } else {
+  //       this.folderNav.push(fl);
+  //     }
+  //   } else {
+  //     this.folderNav = [];
+  //     this.folderNav.push({ name: 'My Files', id: null });
+  //   }
+  //   this.loading = false;
+  // }
 
   switchView = () => {
     this.view = !this.view;
   }
 
+  navgToFldr(fl:any){
+    this.router.navigate(['/web-app/resource/my-files/' + fl.id]);
+  }
+
   chkFolderAndAdd(fl: any) {
-    if (fl.isFldr)
-      this.setSelFoldFiles(fl);
+    if (fl.isFldr){
+        this.navgToFldr(fl);
+      // this.setSelFoldFiles(fl);
+    }
     else {
       // console.log("file click")
       this.router.navigate(['/web-app/view/' + fl.id]);
@@ -160,7 +176,8 @@ export class FileComponent implements OnInit {
       let fldrData: any = {
         ...this.folderForm.value,
         workspaceId: null,
-        folderId: this.selFolder.id ? this.selFolder.id : null
+        folderId: this.fldrid?parseInt(this.fldrid):null
+        // folderId: this.selFolder.id ? this.selFolder.id : null
       }
       if (this.frmType == 'updFldr') {
         this.editFolder(fldrData);
@@ -196,12 +213,13 @@ export class FileComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Folder rename successfully', 'Success!');
-          this.succEeditFldr('folderNav');
-          this.succEeditFldr('allFiles');
-          this.succEeditFldr('folders');
-          this.succEeditFldr('files');
-          this.succEeditFldr('selFolders');
-          this.succEeditFldr('selFiles');
+          this.getFiles();
+          // this.succEeditFldr('folderNav');
+          // this.succEeditFldr('allFiles');
+          // this.succEeditFldr('folders');
+          // this.succEeditFldr('files');
+          // this.succEeditFldr('selFolders');
+          // this.succEeditFldr('selFiles');
         } else {
           this.toastr.error('Unable to rename Folder', 'Error!');
         }
@@ -213,12 +231,12 @@ export class FileComponent implements OnInit {
       });
   }
 
-  succEeditFldr(type: 'folderNav' | 'allFiles' | 'folders' | 'files' | 'selFolders' | 'selFiles') {
-    const index = this[type].findIndex((ele: any) => ele.id == this.selFldrData.id);
-    if (index >= 0) {
-      this[type][index].name = this.folderForm.value.name;
-    }
-  }
+  // succEeditFldr(type: 'folderNav' | 'allFiles' | 'folders' | 'files' | 'selFolders' | 'selFiles') {
+  //   const index = this[type].findIndex((ele: any) => ele.id == this.selFldrData.id);
+  //   if (index >= 0) {
+  //     this[type][index].name = this.folderForm.value.name;
+  //   }
+  // }
 
   // upload button
   uploadBtn = (uf: any) => {

@@ -112,8 +112,7 @@
                           (matChipInputTokenEnd)="addChips($event)" formControlName="name">
                       </mat-chip-list>
                     </mat-form-field>
-                    <button type="submit" class="btn btn-primary ml-auto"
-                      [disabled]="tagForm!.invalid || tagAddDisabled">
+                    <button type="submit" class="btn btn-primary ml-auto" [disabled]="tagForm!.invalid || tagAddDisabled">
                       <app-loader [type]="'btn'" *ngIf="tagAddDisabled"></app-loader>
                       Create
                     </button>
@@ -130,36 +129,34 @@
                 <a ngbNavLink>Disabled</a>
               </li>
             </ul>
-            <div class="card-text px-3">
-              <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
-                <thead>
-                  <tr>
-                    <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
-                      {{col.n}}
-                      <i class="fas ml-1"
-                        [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody *ngIf="!tagLoading && tags.length > 0">
-                  <tr class="curs-ptr" (click)="toggleInfo(tag)" *ngFor="let tag of tags"
-                    [ngClass]="{'sel-row':(rowInfo.id === tag.id)}">
-                    <td>
-                      {{tag.name}}
-                    </td>
-                    <td class="text-hi-dark-grey">No Status</td>
-                    <td>{{(tag.updatedDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="text-center text-secondary" style="min-height: 230px; padding-top:95px;"
-                *ngIf="tags.length == 0 && !tagLoading">
-                No data found
+            <app-loader [type]="'page'" *ngIf="tagLoading"></app-loader>
+            <div *ngIf="!tagLoading">
+              <div class="card-text px-3">
+                <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
+                  <thead>
+                    <tr>
+                      <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
+                        {{col.n}}
+                        <i *ngIf="col.k!='isActive'" class="fas ml-1" [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody *ngIf="!tagLoading && tags.length > 0">
+                    <tr class="curs-ptr" (click)="toggleInfo(tag)" *ngFor="let tag of tags" [ngClass]="{'sel-row':(rowInfo.id === tag.id)}">
+                      <td>{{tag.name}}</td>
+                      <td class="text-hi-dark-grey">{{tag.isActive?'Active':'In Active'}}</td>
+                      <td>{{(tag.updatedDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="text-center text-secondary" style="min-height: 230px; padding-top:95px;"
+                  *ngIf="tags.length == 0">
+                  No data found
+                </div>
               </div>
-              <app-loader [type]="'page'" *ngIf="tagLoading"></app-loader>
+              <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
+                (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
             </div>
-            <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
-              (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
           </div>
         </div>
       </div>

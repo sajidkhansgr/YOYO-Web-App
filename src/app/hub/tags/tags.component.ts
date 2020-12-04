@@ -46,7 +46,7 @@ export class TagsComponent implements OnInit {
   updDisabled!: boolean; catgAddDisabled!: boolean; tagAddDisabled!: boolean;
   catgData!: Catg | undefined;
   catgs!: Catg[]; tags!: Tag[]; allTags!: Tag[];
-  pageNo!: number; pageSize!: number; isActiveTag!: boolean; isActiveCatg!: boolean;
+  pageNo!: number; pageSize!: number; isActiveCatg!: boolean;
   totalCount!: number;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagNames!: string[];
@@ -90,11 +90,11 @@ export class TagsComponent implements OnInit {
     this.updDisabled = false; this.catgAddDisabled = false; this.tagAddDisabled = false;
     this.catgData = undefined;
     this.catgs = []; this.tags = []; this.allTags = [];
-    this.pageNo = 1; this.pageSize = this.lmtPage[0]; this.isActiveTag = true; this.isActiveCatg = true;
+    this.pageNo = 1; this.pageSize = this.lmtPage[0]; this.isActiveCatg = true;
     this.totalCount = 0;
     this.tagNames = [];
     this.searchTxt = '';
-    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Status", asc: false, k: "status" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
+    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Status", asc: false, k: "isActive" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
     this.activeTags = 1; this.activeCatgs = 1;
     this.categoryId = undefined; this.unCategorized = undefined;
     this.sort = {
@@ -106,7 +106,6 @@ export class TagsComponent implements OnInit {
   // -------- tags -------- //
   // change displayed tags (isActive)
   chngDispTags() {
-    this.activeTags == 1 ? this.isActiveTag = true : this.isActiveTag = false;
     this.pageNo = 1;
     this.getTags();
   }
@@ -187,18 +186,20 @@ export class TagsComponent implements OnInit {
 
   // tags sorting
   sortChange(col: any, index: number) {
-    this.pageNo = 1;
-    let colData = { ...col };
-    for (let k = 0; k < this.cols.length; k++) {
-      this.cols[k].asc = false;
+    if(col.k!='isActive'){
+      this.pageNo = 1;
+      let colData = { ...col };
+      for (let k = 0; k < this.cols.length; k++) {
+        this.cols[k].asc = false;
+      }
+      colData.asc = !colData.asc;
+      this.cols[index].asc = colData.asc;
+      this.sort = {
+        sortColumn: col.k,
+        isAscending: colData.asc,
+      }
+      this.getTags();
     }
-    colData.asc = !colData.asc;
-    this.cols[index].asc = colData.asc;
-    this.sort = {
-      sortColumn: col.k,
-      isAscending: colData.asc,
-    }
-    this.getTags();
   }
 
   // change tags listing - table
@@ -224,10 +225,11 @@ export class TagsComponent implements OnInit {
     this.closeDoc();
     let query = {
       hubId: parseInt(this.hubid),
+      LoadDetails: true,
       pageNo: this.pageNo,
       pageSize: this.pageSize,
       searchText: this.searchTxt,
-      isActive: this.isActiveTag,
+      isActive: this.activeTags== 1? true:false,
       categoryId: this.categoryId,
       unCategorized: this.unCategorized,
       ...this.sort
@@ -244,6 +246,7 @@ export class TagsComponent implements OnInit {
         this.tagLoading = false;
       }, (err: any) => {
         this.tags = [];
+        this.totalCount = 0;
         this.tagLoading = false;
       });
   }

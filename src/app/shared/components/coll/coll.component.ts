@@ -2,8 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-
-import { CollectionService } from '../../../web-app/resource/collection/collection.service';
+import { CollService } from '../../services/coll.service'
 
 @Component({
   selector: 'app-coll',
@@ -21,7 +20,7 @@ export class CollComponent implements OnInit {
     public modalRef: NgbActiveModal,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private colctnSrv: CollectionService,
+    private collServ: CollService
   ) { }
 
   ngOnInit(): void {
@@ -60,7 +59,7 @@ export class CollComponent implements OnInit {
 
   // duplicate collection
   duplColct(colctnData: any) {
-    this.colctnSrv.duplColctn(colctnData).subscribe((data: any) => {
+    this.collServ.duplColctn(colctnData).subscribe((data: any) => {
       console.log(data);
       if (data) {
         this.toastr.success(data.message || 'Collection duplicated successfully', 'Success!');
@@ -76,7 +75,7 @@ export class CollComponent implements OnInit {
 
   // rename collection
   renColct(colctnData: any) {
-    this.colctnSrv.renColctn(colctnData).subscribe((data: any) => {
+    this.collServ.renColctn(colctnData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Collection renamed successfully', 'Success!');
         this.modalRef.close(true);
@@ -91,7 +90,7 @@ export class CollComponent implements OnInit {
 
   // add collection
   addColctn(colctnData: any) {
-    this.colctnSrv.addColctn(colctnData).subscribe((data: any) => {
+    this.collServ.addColctn(colctnData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Collection added successfully', 'Success!');
         this.modalRef.close(true);

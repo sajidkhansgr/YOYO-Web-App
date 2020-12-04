@@ -20,12 +20,7 @@ export class FileService {
     }
     return this.http.get(`${AppSettings.MY_FILES}`, {
       params: queryParams
-    }
-    ).pipe(
-      map((res: any) =>
-        res
-      )
-    );
+    }).pipe(map((res: any) =>res));
   }
 
   addFldr(data: any) {

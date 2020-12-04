@@ -203,4 +203,6 @@ export class AppSettings {
   public static GET_CONTENT_COLCT = `api/Collection/GetContentByCollection`;
 
   public static REM_CONTENT_COLCT = `api/Collection/RemoveFromCollection`;
+
+  public static BRD_CRM_LIST = `api/BreadCrum/GetBreadCrum`;
 }
