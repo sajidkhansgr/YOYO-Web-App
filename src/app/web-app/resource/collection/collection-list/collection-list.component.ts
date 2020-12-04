@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -11,6 +11,8 @@ import { FLDR_ICON } from '../../../../shared/constants';
 
 import { ShareMailComponent } from '../../../../shared/components/share-mail/share-mail.component';
 import { GetLinkComponent } from '../../../../shared/components/get-link/get-link.component';
+import { CollComponent } from 'src/app/shared/components/coll/coll.component';
+import { Collection } from 'src/app/shared/models/collection';
 
 @Component({
   selector: 'app-collection-list',
@@ -20,7 +22,6 @@ import { GetLinkComponent } from '../../../../shared/components/get-link/get-lin
 export class CollectionListComponent implements OnInit {
   view!: boolean; disabled!: boolean; loading!: boolean;
   colctnArr!: any[]; selColctn: any; selColctnArr!: any[];
-  colctnForm!: FormGroup;
   multiForm!: number;
   fldrIcon: string = FLDR_ICON;
   cols!: any[]; sort: any;
@@ -43,9 +44,6 @@ export class CollectionListComponent implements OnInit {
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
     this.colctnArr = []; this.selColctn = undefined; this.selColctnArr = [];
-    this.colctnForm = this.fb.group({
-      name: ['', [Validators.required]]
-    });
     this.multiForm = 0;
     this.sort = { sortColumn: 'updatedDate', isAscending: false }
     this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
@@ -114,88 +112,6 @@ export class CollectionListComponent implements OnInit {
     })
   }
 
-  // collection open modal
-  colctnModal(modal: any, type: string, colctn?: any) {
-    if (type == 'add') {
-      this.multiForm = 1;
-    } else if (type == 'ren') {
-      this.multiForm = 2;
-      this.selColctn = colctn;
-      this.colctnForm.patchValue({ ...colctn });
-    } else if (type == 'dupl') {
-      this.multiForm = 3;
-      this.selColctn = colctn;
-      this.colctnForm.patchValue({ ...colctn });
-    }
-    this.openModal(modal);
-  }
-
-  // collection form submit
-  submitColctn() {
-    if (this.colctnForm.valid) {
-      this.disabled = true;
-      let colctnData: any = {
-        ...this.colctnForm.value
-      };
-      if (this.multiForm == 1) {
-        this.addColctn(colctnData);
-      } else if (this.multiForm == 2) {
-        colctnData.id = this.selColctn.id;
-        this.renColct(colctnData);
-      } else if (this.multiForm == 3) {
-        colctnData.collectionNewName = colctnData.name;
-        colctnData.sourceCollectionId = this.selColctn.id;
-        this.duplColct(colctnData);
-      }
-    }
-  }
-
-  // duplicate collection
-  duplColct(colctnData: any) {
-    this.colctnSrv.duplColctn(colctnData).subscribe((data: any) => {
-      console.log(data);
-      if (data) {
-        this.toastr.success(data.message || 'Collection duplicated successfully', 'Success!');
-        this.listColctn();
-      }
-      this.dismissModal();
-      this.disabled = false;
-    }, (err: any) => {
-      this.dismissModal();
-      this.disabled = false;
-    });
-  }
-
-  // rename collection
-  renColct(colctnData: any) {
-    this.colctnSrv.renColctn(colctnData).subscribe((data: any) => {
-      if (data) {
-        this.toastr.success(data.message || 'Collection renamed successfully', 'Success!');
-        this.listColctn();
-      }
-      this.dismissModal();
-      this.disabled = false;
-    }, (err: any) => {
-      this.dismissModal();
-      this.disabled = false;
-    });
-  }
-
-  // add collection
-  addColctn(colctnData: any) {
-    this.colctnSrv.addColctn(colctnData).subscribe((data: any) => {
-      if (data) {
-        this.toastr.success(data.message || 'Collection added successfully', 'Success!');
-        this.listColctn();
-      }
-      this.dismissModal();
-      this.disabled = false;
-    }, (err: any) => {
-      this.dismissModal();
-      this.disabled = false;
-    });
-  }
-
   // get collection list
   listColctn() {
     this.loading = true;
@@ -206,7 +122,6 @@ export class CollectionListComponent implements OnInit {
       isActive: this.isActiveColctn
     }
     this.colctnSrv.colctnList(query).subscribe((data: any) => {
-      console.log(data);
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
         this.colctnArr = data.result.results;
       } else {
@@ -225,11 +140,25 @@ export class CollectionListComponent implements OnInit {
     });
   }
 
-  cmnModal(type: string) {
+  // call shared modals
+  cmnModal(type: string, t?: string, colctn?: Collection) {
     if (type == 'email')
       this.openModal(ShareMailComponent);
     else if (type == 'getLink')
       this.openModal(GetLinkComponent);
+    else if (type == 'coll') {
+      const modalRef = this.modalService.open(CollComponent);
+      modalRef.componentInstance.colctn = colctn;
+      modalRef.componentInstance.type = t;
+      modalRef.result.then((result) => {
+        if (result) {
+          console.log(result);
+          this.listColctn();
+        } else {
+          console.log('else');
+        }
+      })
+    }
   }
 
   dismissModal() {

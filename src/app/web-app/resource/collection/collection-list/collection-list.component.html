@@ -5,7 +5,7 @@
     <div class="float-right">
       <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
         (click)="view = !view;" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
-      <button class="btn btn-primary mb-2" (click)="colctnModal(collection, 'add')">New Collection</button>
+      <button class="btn btn-primary mb-2" (click)="cmnModal('coll', 'add')">New Collection</button>
     </div>
   </h3>
   <div class="text-right mb-2" *ngIf="view">
@@ -66,9 +66,9 @@
                   <i class="fas fa-ellipsis-h"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="optionsDD">
-                  <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i
+                  <a class="dropdown-item" (click)="cmnModal('coll', 'dupl',colctn)"><i
                       class="fas fa-copy mr-1"></i>Duplicate</a>
-                  <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i
+                  <a class="dropdown-item" (click)="cmnModal('coll', 'ren',colctn)"><i
                       class="fas fa-edit mr-1"></i>Rename</a>
                   <a class="dropdown-item dd">
                     <i class="fa fa-download mr-1"></i>Download
@@ -139,9 +139,9 @@
                   <i class="fas fa-ellipsis-h"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="optionsDD">
-                  <a class="dropdown-item" (click)="colctnModal(collection, 'dupl', colctn)"><i
+                  <a class="dropdown-item" (click)="cmnModal('coll', 'dupl',colctn)"><i
                       class="fas fa-copy mr-1"></i>Duplicate</a>
-                  <a class="dropdown-item" (click)="colctnModal(collection, 'ren', colctn)"><i
+                  <a class="dropdown-item" (click)="cmnModal('coll', 'ren',colctn)"><i
                       class="fas fa-edit mr-1"></i>Rename</a>
                   <a class="dropdown-item dd">
                     <i class="fa fa-download mr-1"></i>Download
@@ -181,7 +181,7 @@
 </div>
 
 <!-- new/rename/duplicate collection modal -->
-<ng-template #collection let-modal>
+<!-- <ng-template #collection let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">{{multiForm == 1 ? 'Add' : multiForm == 2 ? 'Rename' : 'Duplicate'}}
       Collection</h4>
@@ -206,4 +206,4 @@
       </button>
     </div>
   </form>
-</ng-template>
+</ng-template> -->

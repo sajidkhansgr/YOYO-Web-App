@@ -14,6 +14,7 @@ import { CollectionService } from '../collection.service'
 import { LoaderModule } from '../../../../shared/components/loader/loader.module';
 import { ShareMailModule } from '../../../../shared/components/share-mail/share-mail.module';
 import { GetLinkModule } from '../../../../shared/components/get-link/get-link.module';
+import { CollModule } from '../../../../shared/components/coll/coll.module';
 
 const routes: Routes = [
   { path: '', component: CollectionListComponent }
@@ -32,7 +33,7 @@ const routes: Routes = [
     FormsModule, ReactiveFormsModule,
     MatDialogModule,
     NgbNavModule,
-    ShareMailModule, GetLinkModule
+    ShareMailModule, GetLinkModule, CollModule
   ],
   providers: [CollectionService],
 })

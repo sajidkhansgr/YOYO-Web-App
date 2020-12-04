@@ -45,7 +45,8 @@
         <div class="card curs-ptr">
           <div class="card-body">
             <div class="imagePreview text-center" (click)="navgToCntnt(cntnt)">
-              <img [src]="cntnt.pdfImages.length > 0?cntnt.pdfImages[0].imagePath : defImg">
+              <img
+                [src]="cntnt.pdfImages && cntnt.pdfImages.length > 0 ? cntnt.pdfImages[0].imagePath : cntnt.urlIconPath ? cntnt.urlIconPath : defImg">
             </div>
             <div class="options rounded">
               <div class="dropleft">
