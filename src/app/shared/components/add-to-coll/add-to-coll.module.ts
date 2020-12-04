@@ -2,16 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AddToCollComponent } from './add-to-coll.component';
 
-
+import { LoaderModule } from '../loader/loader.module';
+import { CollService } from '../../services/coll.service'
 
 @NgModule({
   declarations: [AddToCollComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    LoaderModule
   ],
   entryComponents: [
     AddToCollComponent
   ],
-  providers: []
+  providers: [CollService]
 })
 export class AddToCollModule { }
