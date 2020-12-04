@@ -100,6 +100,7 @@ export class CollectionListComponent implements OnInit {
         this.colctnSrv.actDeactColctn(data, this.isActiveColctn ? false : true).subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Collection${s} ${actDeac}d successfully`, 'Success!');
+            this.selColctnArr = [];
             this.listColctn();
           } else {
             this.toastr.error(`Unable to ${actDeac} collection${s}`, 'Error!');

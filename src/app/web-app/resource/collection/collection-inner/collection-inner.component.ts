@@ -277,6 +277,7 @@ export class CollectionInnerComponent implements OnInit {
         this.colctnSrv.delContentColctn(data).subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || `Content${s} removed successfully`, 'Success!');
+            this.selContentArr = [];
             this.getCntntColl();
           }
         }, (err: any) => {
