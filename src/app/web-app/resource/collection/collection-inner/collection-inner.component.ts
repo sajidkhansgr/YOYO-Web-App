@@ -19,6 +19,7 @@ import { DEF_ICON } from '../../../../shared/constants';
 import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-mail.component';
 import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
 import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to-coll.component';
+import { CollComponent } from 'src/app/shared/components/coll/coll.component';
 
 @Component({
   selector: 'app-collection-inner',
@@ -27,10 +28,8 @@ import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to
 })
 export class CollectionInnerComponent implements OnInit {
   view: boolean = true; id!: number; routerSubs!: Subscription;
-  testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // test array
   disabled!: boolean; loading!: boolean; wrkspcLoading!: boolean; colctnLoading!: boolean; fldrLoading!: boolean; sFldrLoading!: boolean; cntntLoading!: boolean;
   selColctn!: Colctn | undefined;
-  colctnForm!: FormGroup;
   multiForm!: number;
   cntntArr!: Content[]; selContentArr!: Content[];
   showBotDiv!: boolean;
@@ -63,9 +62,6 @@ export class CollectionInnerComponent implements OnInit {
     this.view = true; this.disabled = false; this.loading = true;
     this.wrkspcLoading = true; this.colctnLoading = true; this.fldrLoading = false; this.sFldrLoading = false; this.cntntLoading = false;
     this.selColctn = undefined; this.selContentArr = [];
-    this.colctnForm = this.fb.group({
-      name: ['', [Validators.required]]
-    });
     this.multiForm = 0;
     this.cntntArr = [];
     this.showBotDiv = false;
@@ -74,13 +70,23 @@ export class CollectionInnerComponent implements OnInit {
   }
 
   // open modals
-  cmnModal(type: string) {
+  cmnModal(type: string, t?: string) {
     if (type == 'email')
       this.openModal(ShareMailComponent);
     else if (type == 'getLink')
       this.openModal(GetLinkComponent);
     else if (type == 'addToCollection')
       this.openModal(AddToCollComponent);
+    else if (type == 'coll') {
+      const modalRef = this.modalService.open(CollComponent);
+      modalRef.componentInstance.colctn = this.selColctn;
+      modalRef.componentInstance.type = t;
+      modalRef.result.then((result) => {
+        if (result) {
+          this.listColctn();
+        }
+      })
+    }
   }
 
   // ----- for 'add resource' modal -----
@@ -359,84 +365,6 @@ export class CollectionInnerComponent implements OnInit {
         });
       }
     })
-  }
-
-  // collection open modal
-  colctnModal(modal: any, type: string) {
-    if (type == 'add') {
-      this.multiForm = 1;
-    } else if (type == 'ren') {
-      this.multiForm = 2;
-      this.colctnForm.patchValue({ ...this.selColctn });
-    } else if (type == 'dupl') {
-      this.multiForm = 3;
-      this.colctnForm.patchValue({ ...this.selColctn });
-    }
-    this.openModal(modal);
-  }
-
-  // collection form submit
-  submitColctn() {
-    if (this.colctnForm.valid) {
-      this.disabled = true;
-      let colctnData: any = {
-        ...this.colctnForm.value
-      };
-      if (this.multiForm == 1) {
-        this.addColctn(colctnData);
-      } else if (this.multiForm == 2) {
-        colctnData.id = this.selColctn!.id;
-        this.renColct(colctnData);
-      } else if (this.multiForm == 3) {
-        colctnData.collectionNewName = colctnData.name;
-        colctnData.sourceCollectionId = this.selColctn!.id;
-        this.duplColct(colctnData);
-      }
-    }
-  }
-
-  // duplicate collection
-  duplColct(colctnData: any) {
-    this.colctnSrv.duplColctn(colctnData).subscribe((data: any) => {
-      console.log(data);
-      if (data) {
-        this.toastr.success(data.message || 'Collection duplicated successfully', 'Success!');
-      }
-      this.dismissModal();
-      this.disabled = false;
-    }, (err: any) => {
-      this.dismissModal();
-      this.disabled = false;
-    });
-  }
-
-  // rename collection
-  renColct(colctnData: any) {
-    this.colctnSrv.renColctn(colctnData).subscribe((data: any) => {
-      if (data) {
-        this.toastr.success(data.message || 'Collection renamed successfully', 'Success!');
-        this.getColctn();
-      }
-      this.dismissModal();
-      this.disabled = false;
-    }, (err: any) => {
-      this.dismissModal();
-      this.disabled = false;
-    });
-  }
-
-  // add collection
-  addColctn(colctnData: any) {
-    this.colctnSrv.addColctn(colctnData).subscribe((data: any) => {
-      if (data) {
-        this.toastr.success(data.message || 'Collection added successfully', 'Success!');
-      }
-      this.dismissModal();
-      this.disabled = false;
-    }, (err: any) => {
-      this.dismissModal();
-      this.disabled = false;
-    });
   }
 
   // get collection

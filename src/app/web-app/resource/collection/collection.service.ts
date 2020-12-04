@@ -40,21 +40,6 @@ export class CollectionService {
     }).pipe(map((res: any) => res));
   }
 
-  // add collection
-  addColctn(data: any) {
-    return this.http.post(`${AppSettings.ADD_COLCT}`, data);
-  }
-
-  // rename collection
-  renColctn(data: any) {
-    return this.http.put(`${AppSettings.REN_COLCT}`, data);
-  }
-
-  // duplicate collection
-  duplColctn(data: any) {
-    return this.http.patch(`${AppSettings.DUPL_COLCT}`, data);
-  }
-
   // activate/deactivate collection
   actDeactColctn(data: any, isAct: boolean) {
     let url = isAct ? AppSettings.ACT_COLCT : AppSettings.DEACT_COLCT;

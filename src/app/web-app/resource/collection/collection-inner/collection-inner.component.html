@@ -14,10 +14,10 @@
           <i class="fas fa-ellipsis-h"></i>
         </div>
         <div class="dropdown-menu" aria-labelledby="optionsDD">
-          <a class="dropdown-item curs-ptr" (click)="colctnModal(collection, 'dupl')">
+          <a class="dropdown-item curs-ptr" (click)="cmnModal('col','dupl')">
             <i class="fas fa-copy mr-1"></i>Duplicate
           </a>
-          <a class="dropdown-item curs-ptr" (click)="colctnModal(collection, 'ren')">
+          <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'ren')">
             <i class="fas fa-edit mr-1"></i>Rename
           </a>
           <a class="dropdown-item dd curs-ptr">
@@ -159,34 +159,6 @@
       class="fa fa-folder-plus mr-1"></i>Add to collection</div>
   <div class="btn btn-primary align-self-center"><i class="fas fa-trash-alt mr-1"></i>Delete</div>
 </div>
-
-<!-- new/rename/duplicate collection modal -->
-<ng-template #collection let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{multiForm == 1 ? 'Add' : multiForm == 2 ? 'Rename' : 'Duplicate'}}
-      Collection</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <form name="colctnForm" (ngSubmit)="submitColctn()" [formGroup]="colctnForm">
-    <div class="modal-body" ngbAutofocus>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Name</mat-label>
-        <input matInput type="text" placeholder="New Collection Name" required formControlName="name">
-        <mat-error *ngIf="colctnForm.get('name')!.hasError('required')">
-          Name is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" [disabled]="colctnForm!.invalid || disabled">
-        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
-        Save
-      </button>
-    </div>
-  </form>
-</ng-template>
 
 <!-- add resource modal -->
 <ng-template #addResource let-modal>

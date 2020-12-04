@@ -24,6 +24,10 @@ export class CollComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.initialiseState();
+  }
+
+  initialiseState() {
     this.colctnForm = this.fb.group({
       name: ['', [Validators.required]]
     });
@@ -33,6 +37,9 @@ export class CollComponent implements OnInit {
       this.multiForm = 2;
     } else if (this.type == 'dupl') {
       this.multiForm = 3;
+    }
+    if (this.colctn) {
+      this.colctnForm.patchValue({ ...this.colctn });
     }
     this.disabled = false;
   }

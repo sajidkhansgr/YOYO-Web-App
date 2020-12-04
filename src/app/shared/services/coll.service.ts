@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
 import { AppSettings } from '../../shared/services/app-settings';
 
 @Injectable({
@@ -8,7 +7,7 @@ import { AppSettings } from '../../shared/services/app-settings';
 })
 export class CollService {
 
-  constructor(private http: HttpClient,private toastr: ToastrService,){ }
+  constructor(private http: HttpClient) { }
 
   // add collection
   addColctn(data: any) {
@@ -24,6 +23,4 @@ export class CollService {
   duplColctn(data: any) {
     return this.http.patch(`${AppSettings.DUPL_COLCT}`, data);
   }
-
-
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,7 +20,7 @@ import { Collection } from 'src/app/shared/models/collection';
 })
 export class CollectionListComponent implements OnInit {
   view!: boolean; disabled!: boolean; loading!: boolean;
-  colctnArr!: any[]; selColctn: any; selColctnArr!: any[];
+  colctnArr!: any[]; selColctnArr!: any[];
   multiForm!: number;
   fldrIcon: string = FLDR_ICON;
   cols!: any[]; sort: any;
@@ -30,7 +29,6 @@ export class CollectionListComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private colctnSrv: CollectionService,
-    private fb: FormBuilder,
     private toastr: ToastrService,
     private dialog: MatDialog,
     private router: Router
@@ -43,7 +41,7 @@ export class CollectionListComponent implements OnInit {
 
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
-    this.colctnArr = []; this.selColctn = undefined; this.selColctnArr = [];
+    this.colctnArr = []; this.selColctnArr = [];
     this.multiForm = 0;
     this.sort = { sortColumn: 'updatedDate', isAscending: false }
     this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
@@ -152,10 +150,7 @@ export class CollectionListComponent implements OnInit {
       modalRef.componentInstance.type = t;
       modalRef.result.then((result) => {
         if (result) {
-          console.log(result);
           this.listColctn();
-        } else {
-          console.log('else');
         }
       })
     }
