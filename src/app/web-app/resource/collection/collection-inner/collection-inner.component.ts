@@ -83,7 +83,7 @@ export class CollectionInnerComponent implements OnInit {
       modalRef.componentInstance.type = t;
       modalRef.result.then((result) => {
         if (result) {
-          this.listColctn();
+          this.getColctn();
         }
       })
     }
