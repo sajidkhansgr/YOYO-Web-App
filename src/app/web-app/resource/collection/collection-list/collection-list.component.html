@@ -165,5 +165,5 @@
 </div>
 
 <!-- fixed div on selecting a collection -->
-<app-sel-itm-fxd-div [selColctnArr]="selColctnArr" [isActiveColctn]="isActiveColctn"
-  (actDeact)="actDeactColctn(undefined)" *ngIf="selColctnArr.length > 0"></app-sel-itm-fxd-div>
+<app-sel-itm-fxd-div [selArr]="selColctnArr" [isActive]="isActiveColctn" (actDeact)="actDeactColctn(undefined)"
+  *ngIf="selColctnArr.length > 0"></app-sel-itm-fxd-div>

@@ -68,7 +68,7 @@
               <div class="btn my-1" (click)="cmnModal('addToCollection','',cntnt)">
                 <i class="fas fa-folder-plus"></i>
               </div>
-              <div class="btn" (click)="delContent(cntnt.id)">
+              <div class="btn" (click)="delContent(cntnt.contentId)">
                 <i class="fas fa-trash-alt"></i>
               </div>
             </div>
@@ -131,7 +131,7 @@
               <div class="btn" (click)="cmnModal('addToCollection')">
                 <i class="fas fa-folder-plus"></i>
               </div>
-              <div class="btn">
+              <div class="btn" (click)="delContent(cntnt.contentId)">
                 <i class="fas fa-trash-alt"></i>
               </div>
             </div>
@@ -146,19 +146,8 @@
 </div>
 
 <!-- fixed div on selecting a collection -->
-<div class="row mx-auto fixed-bottom px-3" style="width: 90%; background-color: #fff; height: 50px;" *ngIf="showBotDiv">
-  <div class="selected-items text-secondary align-self-center">1 item selected</div>
-  <div class="mr-1 ml-3 align-self-center">|</div>
-  <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
-  <div class="btn btn-light align-self-center ml-auto bg-white" (click)="cmnModal('email')"><i
-      class="fa fa-envelope mr-1"></i>Email</div>
-  <div class="btn btn-light align-self-center bg-white" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get
-    a
-    link</div>
-  <div class="btn btn-light align-self-center bg-white" (click)="cmnModal('addToCollection')"><i
-      class="fa fa-folder-plus mr-1"></i>Add to collection</div>
-  <div class="btn btn-primary align-self-center"><i class="fas fa-trash-alt mr-1"></i>Delete</div>
-</div>
+<app-sel-itm-fxd-div [selArr]="selContentArr" (delContent)="delContent(undefined)" [content]="true"
+  *ngIf="selContentArr.length > 0"></app-sel-itm-fxd-div>
 
 <!-- add resource modal -->
 <ng-template #addResource let-modal>

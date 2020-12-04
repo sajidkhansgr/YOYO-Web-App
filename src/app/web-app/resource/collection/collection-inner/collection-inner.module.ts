@@ -1,12 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { CollectionInnerComponent } from './collection-inner.component';
@@ -18,7 +14,7 @@ import { ContentWorkspaceService } from '../../../../hub/content-workspace/conte
 import { AddToCollModule } from '../../../../shared/components/add-to-coll/add-to-coll.module';
 import { ShareMailModule } from '../../../../shared/components/share-mail/share-mail.module';
 import { GetLinkModule } from '../../../../shared/components/get-link/get-link.module';
-
+import { SelItmFxdDivModule } from '../../../../shared/components/sel-itm-fxd-div/sel-itm-fxd-div.module';
 
 const routes: Routes = [
   { path: '', component: CollectionInnerComponent }
@@ -30,14 +26,10 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     MatFormFieldModule,
-    MatInputModule,
     MatCheckboxModule,
-    MatSlideToggleModule,
-    MatRadioModule,
     LoaderModule,
-    FormsModule, ReactiveFormsModule,
     MatDialogModule,
-    AddToCollModule, ShareMailModule, GetLinkModule
+    AddToCollModule, ShareMailModule, GetLinkModule, SelItmFxdDivModule
   ],
   providers: [CollectionService, ExpService, FileService, ContentWorkspaceService]
 })

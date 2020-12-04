@@ -1,12 +1,17 @@
 <div class="row mx-auto fixed-bottom px-3" style="width: 90%; background-color: #fff; height: 50px;">
-  <div class="selected-items text-secondary align-self-center">{{selColctnArr.length}} item(s) selected</div>
+  <div class="selected-items text-secondary align-self-center">{{selArr.length}} item(s) selected</div>
   <div class="mr-1 ml-3 align-self-center">|</div>
   <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
   <div class="btn btn-light align-self-center ml-auto bg-white" (click)="cmnModal('email')"><i
       class="fa fa-envelope mr-1"></i>Email</div>
   <div class="btn btn-light align-self-center bg-white" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i> a
     link</div>
-  <div class="btn btn-outline-{{isActiveColctn ? 'primary' : 'success'}} align-self-center" (click)="actDeactFunc()">
-    <i class="mr-1 fas fa-toggle-{{isActiveColctn ? 'off' : 'on'}}"></i> {{isActiveColctn ? 'Deactivate' : 'Activate'}}
+  <div class="btn btn-outline-{{isActive ? 'primary' : 'success'}} align-self-center" (click)="actDeactFunc()"
+    *ngIf="!content">
+    <i class="mr-1 fas fa-toggle-{{isActive ? 'off' : 'on'}}"></i> {{isActive ? 'Deactivate' : 'Activate'}}
   </div>
+  <div class="btn btn-light align-self-center bg-white" *ngIf="content" (click)="cmnModal('addToCollection')"><i
+      class="fa fa-folder-plus mr-1"></i>Add to collection</div>
+  <div class="btn btn-primary align-self-center" (click)="delContentFunc()" *ngIf="content"><i
+      class="fas fa-trash-alt mr-1"></i>Remove</div>
 </div>

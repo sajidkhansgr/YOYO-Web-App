@@ -150,7 +150,15 @@ export class CollectionListComponent implements OnInit {
       modalRef.componentInstance.type = t;
       modalRef.result.then((result) => {
         if (result) {
-          this.listColctn();
+          if (t == "ren") {
+            for (let i = 0; i < this.colctnArr.length; i++) {
+              if (this.colctnArr[i].id == colctn!.id) {
+                this.colctnArr[i].name = result.name;
+              }
+            }
+          } else {
+            this.listColctn();
+          }
         }
       })
     }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
@@ -31,8 +30,7 @@ export class CollectionInnerComponent implements OnInit {
   disabled!: boolean; loading!: boolean; wrkspcLoading!: boolean; colctnLoading!: boolean; fldrLoading!: boolean; sFldrLoading!: boolean; cntntLoading!: boolean;
   selColctn!: Colctn | undefined;
   multiForm!: number;
-  cntntArr!: Content[]; selContentArr!: Content[];
-  showBotDiv!: boolean;
+  cntntArr!: Content[]; selContentArr!: any[];
   workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined; mdlCntntArr!: Content[]; addContentArr!: Content[];
   showAll!: boolean | undefined; contentNav!: any[];
   defImg: string = DEF_ICON;
@@ -43,7 +41,6 @@ export class CollectionInnerComponent implements OnInit {
     private colctnSrv: CollectionService,
     private toastr: ToastrService,
     private router: Router,
-    private fb: FormBuilder,
     private dialog: MatDialog,
     private expServ: ExpService,
     private fileServ: FileService,
@@ -64,23 +61,22 @@ export class CollectionInnerComponent implements OnInit {
     this.selColctn = undefined; this.selContentArr = [];
     this.multiForm = 0;
     this.cntntArr = [];
-    this.showBotDiv = false;
     this.workspcArr = []; this.colctnArr = []; this.fldrArr = []; this.selWrkspc = undefined; this.selFldr = undefined; this.mdlCntntArr = []; this.addContentArr = [];
     this.showAll = true; this.contentNav = [];
   }
 
   // open modals
-  cmnModal(type: string, t?: string,cntnt?:any) {
+  cmnModal(type: string, t?: string, cntnt?: any) {
     if (type == 'email')
       this.openModal(ShareMailComponent);
     else if (type == 'getLink')
       this.openModal(GetLinkComponent);
-    else if (type == 'addToCollection'){
+    else if (type == 'addToCollection') {
       console.log("sdsdsd")
-      const modalRef:any = this.modalService.open(AddToCollComponent);
-      modalRef.componentInstance.data = {...cntnt,type:'coll-inr'};
-      modalRef.result.then((result:any) => {
-        if(result && result.id == this.id){
+      const modalRef: any = this.modalService.open(AddToCollComponent);
+      modalRef.componentInstance.data = { ...cntnt, type: 'coll-inr' };
+      modalRef.result.then((result: any) => {
+        if (result && result.id == this.id) {
           this.getCntntColl();
         }
       })
@@ -90,6 +86,9 @@ export class CollectionInnerComponent implements OnInit {
       modalRef.componentInstance.colctn = this.selColctn;
       modalRef.componentInstance.type = t;
       modalRef.result.then((result) => {
+        if (result && t == "ren") {
+          this.selColctn!.name = result.name;
+        }
       })
     }
   }
@@ -259,24 +258,29 @@ export class CollectionInnerComponent implements OnInit {
   }
 
   // remove content from collection
-  delContent(id: number) {
+  delContent(id?: number) {
+    let dataArr = id ? [id] : this.selContentArr;
+    let s = dataArr.length == 1 ? '' : 's';
+    console.log(dataArr);
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to remove this content from collection?`,
-        title: `Remove Content`
+        msg: `Are you sure you want to remove ${dataArr.length == 1 ? 'this' : 'these'} content${s} from collection?`,
+        title: `Remove Content${s}`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
         let data: any = {
           collectionId: this.id,
-          contentIds: [id]
+          contentIds: dataArr
         }
         this.colctnSrv.delContentColctn(data).subscribe((data: any) => {
           if (data) {
-            this.toastr.success(data.message || 'Content removed successfully', 'Success!');
+            this.toastr.success(data.message || `Content${s} removed successfully`, 'Success!');
             this.getCntntColl();
           }
+        }, (err: any) => {
+          this.toastr.error(data.message || `Unable to remove content${s}`, 'Error!');
         });
       }
     })
@@ -285,14 +289,9 @@ export class CollectionInnerComponent implements OnInit {
   // on selecting a content
   selMe(val: any, content: Content) {
     if (val) {
-      this.selContentArr.push(content);
+      this.selContentArr.push(content.contentId);
     } else {
-      this.selContentArr = this.selContentArr.filter((data: any) => data.id != content.id);
-    }
-    if (this.selContentArr.length > 0) {
-      this.showBotDiv = true;
-    } else {
-      this.showBotDiv = false;
+      this.selContentArr = this.selContentArr.filter((data: any) => data != content.id);
     }
   }
 

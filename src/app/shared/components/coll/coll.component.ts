@@ -84,7 +84,7 @@ export class CollComponent implements OnInit {
     this.collServ.renColctn(colctnData).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Collection renamed successfully', 'Success!');
-        this.modalRef.close(true);
+        this.modalRef.close(this.colctnForm.value);
       }
       this.modalRef.dismiss();
       this.disabled = false;

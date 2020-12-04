@@ -6,9 +6,11 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./sel-itm-fxd-div.component.scss']
 })
 export class SelItmFxdDivComponent implements OnInit {
-  @Input() public selColctnArr: any;
-  @Input() public isActiveColctn!: any;
+  @Input() public selArr: any;
+  @Input() public isActive?: boolean;
+  @Input() public content?: boolean;
   @Output() public actDeact = new EventEmitter();
+  @Output() public delContent = new EventEmitter();
 
   constructor(
   ) { }
@@ -22,6 +24,10 @@ export class SelItmFxdDivComponent implements OnInit {
 
   actDeactFunc() {
     this.actDeact.emit();
+  }
+
+  delContentFunc() {
+    this.delContent.emit();
   }
 
 }

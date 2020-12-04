@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
@@ -28,11 +25,8 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     MatCheckboxModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatTooltipModule,
     LoaderModule,
-    FormsModule, ReactiveFormsModule,
     MatDialogModule,
     NgbNavModule,
     ShareMailModule, GetLinkModule, CollModule, SelItmFxdDivModule
