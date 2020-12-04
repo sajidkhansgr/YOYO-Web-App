@@ -8,6 +8,10 @@ import { AddToCollComponent } from './add-to-coll.component';
   declarations: [AddToCollComponent],
   imports: [
     CommonModule
-  ]
+  ],
+  entryComponents: [
+    AddToCollComponent
+  ],
+  providers: []
 })
 export class AddToCollModule { }

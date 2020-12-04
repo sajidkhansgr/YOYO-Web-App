@@ -7,6 +7,7 @@ import { ExpService } from '../../exp/exp.service';
 import { DEF_ICON, FLDR_ICON } from '../../../../shared/constants';
 import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-mail.component';
 import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
+import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to-coll.component';
 
 @Component({
   selector: 'app-exp-inner',
@@ -53,6 +54,8 @@ export class ExpInnerComponent implements OnInit {
       this.openModal(ShareMailComponent);
     else if (type == 'getLink')
       this.openModal(GetLinkComponent);
+    else if (type == 'addToCollection')
+      this.openModal(AddToCollComponent);
   }
 
   // view content
