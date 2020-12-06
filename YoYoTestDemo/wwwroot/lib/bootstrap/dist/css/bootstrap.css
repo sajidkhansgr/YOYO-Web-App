@@ -4453,12 +4453,17 @@ input[type="button"].btn-block {
   display: none;
 }
 
-.navbar-light .navbar-brand {
-  color: rgba(0, 0, 0, 0.9);
+.navbar-light .navbar-brand
+{
+    color: snow;
+    font-weight: 900;
+    background-color: cornflowerblue !important;
 }
 
-.navbar-light .navbar-brand:hover, .navbar-light .navbar-brand:focus {
-  color: rgba(0, 0, 0, 0.9);
+.navbar-light .navbar-brand:hover, .navbar-light .navbar-brand:focus
+{
+    color: #fff;
+    background-color: cornflowerblue !important;
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -6587,8 +6592,9 @@ button.bg-dark:focus {
   background-color: #1d2124 !important;
 }
 
-.bg-white {
-  background-color: #fff !important;
+.bg-white
+{
+    background-color: cornflowerblue !important;
 }
 
 .bg-transparent {
