@@ -155,7 +155,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" ngbAutofocus>
     <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
     <mat-checkbox class="d-block ml-3">All Users</mat-checkbox>
     <mat-checkbox class="d-block ml-3">HES & Hi-Force</mat-checkbox>
@@ -164,7 +164,7 @@
     <mat-checkbox class="d-block ml-3">Protec & Hi-Force</mat-checkbox>
   </div>
   <div class="modal-footer">
-    <button type="button" ngbAutofocus class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
   </div>
 </ng-template>
 
@@ -207,6 +207,6 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" ngbAutofocus class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
   </div>
 </ng-template>
