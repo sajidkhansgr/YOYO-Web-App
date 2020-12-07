@@ -81,7 +81,7 @@
                     <div class="dropdown-divider"></div>
                     <button class="dropdown-item" *ngFor="let ex of exps">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox"  id="{{ex.id}}">
+                        <input class="form-check-input" type="checkbox" id="{{ex.id}}">
                         <label class="form-check-label" for="{{ex.id}}">{{ex.name}}</label>
                       </div>
                     </button>
@@ -136,13 +136,14 @@
               </div>
             </div>
           </div>
-          <div class="card-header bg-hi-light-grey p-1 row m-0">
-            <button class="btn btn-light">
+          <div class="card-header bg-hi-light-grey d-flex">
+            <div class="btn btn-sm btn-outline-{{rowInfo.isActive ? 'primary' : 'success'}}" (click)=" actDeactGrp()">
+              {{rowInfo.isActive ? 'Deactivate' : 'Activate'}}
+              <i class="fas" [ngClass]="{'fa-toggle-off': rowInfo.isActive, 'fa-toggle-on': !rowInfo.isActive}"></i>
+            </div>
+            <div class="btn btn-sm btn-light ml-auto">
               <i class="fas fa-edit" (click)="openModal(grpModal, true);"></i>
-            </button>
-            <button class="btn btn-light" (click)="actDeactGrp()">
-              {{rowInfo.isActive?'Deactivate':'Activate'}}
-            </button>
+            </div>
           </div>
           <div class="card-body">
             <div class="doc-details details border-bottom mb-3 pb-3">
@@ -264,7 +265,8 @@
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input #hubName matInput [(ngModel)]="hubTxt" name="hubTxt" [ngModelOptions]="{standalone: true}" placeholder="Add Hub" [matAutocomplete]="auto">
+          <input #hubName matInput [(ngModel)]="hubTxt" name="hubTxt" [ngModelOptions]="{standalone: true}"
+            placeholder="Add Hub" [matAutocomplete]="auto">
           <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,hubName)"
