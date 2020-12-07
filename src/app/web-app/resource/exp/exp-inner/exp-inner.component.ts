@@ -57,8 +57,11 @@ export class ExpInnerComponent implements OnInit {
 
   // open modals
   cmnModal(wSC: any, type: string) {
-    if (type == 'email')
-      this.openModal(ShareMailComponent);
+    if (type == 'email') {
+      const modalRef = this.modalService.open(ShareMailComponent, { size: 'lg' });
+      modalRef.componentInstance.type = 'content';
+      modalRef.componentInstance.data = wSC;
+    }
     else if (type == 'getLink')
       this.openModal(GetLinkComponent);
     else if (type == 'addToColl') {

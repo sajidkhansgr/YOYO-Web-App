@@ -1,42 +1,48 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-basic-title">Common Email</h4>
+  <h4 class="modal-title" id="modal-basic-title">Email</h4>
   <button type="button" class="close" aria-label="Close" (click)="modalRef.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<div class="modal-body" ngbAutofocus>
-  <div class="row">
-    <div class="col-9 border-right">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>To</mat-label>
-        <input matInput type="text" placeholder="Recipients">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Subject</mat-label>
-        <input matInput type="text" placeholder="Subject">
-      </mat-form-field>
-      <div class="row">
-        <mat-form-field appearance="outline" class="col-8">
-          <mat-label>Message</mat-label>
-          <input matInput type="text" placeholder="Search Content">
+<form name="emailForm" (ngSubmit)="sendMail()" [formGroup]="emailForm">
+  <div class="modal-body" ngbAutofocus>
+    <div class="row">
+      <div class="col-9 border-right">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>To</mat-label>
+          <input matInput type="text" placeholder="Recipients" formControlName="emailAddresses" required>
         </mat-form-field>
-        <div class="col-4 mt-3">
-          <div class="btn btn-primary" (click)="openModal()">
-            <i class="fas fa-file-medical mr-1"></i>Add resource
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Subject</mat-label>
+          <input matInput type="text" placeholder="Subject" formControlName="title" required>
+        </mat-form-field>
+        <!-- <div class="row">
+          <mat-form-field appearance="outline" class="col-8">
+            <mat-label>Search Content</mat-label>
+            <input matInput type="text" placeholder="Search Content">
+          </mat-form-field>
+          <div class="col-4 mt-3">
+            <div class="btn btn-primary" (click)="openModal()">
+              <i class="fas fa-file-medical mr-1"></i>Add resource
+            </div>
           </div>
-        </div>
+        </div> -->
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Message</mat-label>
+          <textarea matInput type="text" placeholder="Message" formControlName="body"></textarea>
+        </mat-form-field>
       </div>
-      <mat-form-field appearance="outline" class="w-100">
-        <textarea matInput type="text" placeholder=""></textarea>
-      </mat-form-field>
-    </div>
-    <div class="col-3">
-      <h5>Sharing Settings</h5>
-      <mat-checkbox class="ml-2">Allow downloads</mat-checkbox>
-      <mat-checkbox class="ml-2">Send me a copy</mat-checkbox>
+      <div class="col-3">
+        <h5>Sharing Settings</h5>
+        <mat-checkbox class="ml-2">Allow downloads</mat-checkbox>
+        <mat-checkbox class="ml-2" formControlName="sendMeCopy">Send me a copy</mat-checkbox>
+      </div>
     </div>
   </div>
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-primary" (click)="modalRef.close('Save click')">Save</button>
-</div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary" [disabled]="emailForm!.invalid || disabled">
+      <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+      Save
+    </button>
+  </div>
+</form>

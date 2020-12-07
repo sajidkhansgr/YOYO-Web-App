@@ -9,6 +9,7 @@ import { ContentWorkspaceService } from '../../../hub/content-workspace/content-
 import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-mail.component';
 import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
 import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to-coll.component';
+import { Content } from 'src/app/shared/models/content';
 
 @Component({
   selector: 'app-file',
@@ -26,7 +27,7 @@ export class FileComponent implements OnInit {
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   folderForm!: FormGroup;
   frmType!: string; selFldrData!: any;
-  fldrid!:string;
+  fldrid!: string;
 
   constructor(
     private router: Router,
@@ -47,7 +48,7 @@ export class FileComponent implements OnInit {
 
   }
 
-  initialiseState(){
+  initialiseState() {
     this.loading = true;
     this.folderNav = [];
     this.files = [];
@@ -62,9 +63,12 @@ export class FileComponent implements OnInit {
   }
 
   // open modals
-  cmnModal(type: string) {
-    if (type == 'email')
-      this.openModal(ShareMailComponent);
+  cmnModal(type: string, cntnt?: Content) {
+    if (type == 'email') {
+      const modalRef = this.modalService.open(ShareMailComponent, { size: 'lg' });
+      modalRef.componentInstance.type = 'content';
+      modalRef.componentInstance.data = cntnt;
+    }
     else if (type == 'getLink')
       this.openModal(GetLinkComponent);
     else if (type == 'addToCollection')
@@ -79,7 +83,10 @@ export class FileComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result) {
           if (Array.isArray(data.result.folders)) {
-            this.folders = data.result.folders;
+            for (let i = 0; i < data.result.folders.length; i++) {
+              this.folders.push({ ...data.result.folders[i], isFldr: true });
+            }
+            // this.folders = data.result.folders;
           }
           if (Array.isArray(data.result.contents)) {
             this.files = data.result.contents;
@@ -128,13 +135,13 @@ export class FileComponent implements OnInit {
     this.view = !this.view;
   }
 
-  navgToFldr(fl:any){
+  navgToFldr(fl: any) {
     this.router.navigate(['/web-app/resource/my-files/' + fl.id]);
   }
 
   chkFolderAndAdd(fl: any) {
-    if (fl.isFldr){
-        this.navgToFldr(fl);
+    if (fl.isFldr) {
+      this.navgToFldr(fl);
       // this.setSelFoldFiles(fl);
     }
     else {
@@ -176,7 +183,7 @@ export class FileComponent implements OnInit {
       let fldrData: any = {
         ...this.folderForm.value,
         workspaceId: null,
-        folderId: this.fldrid?parseInt(this.fldrid):null
+        folderId: this.fldrid ? parseInt(this.fldrid) : null
         // folderId: this.selFolder.id ? this.selFolder.id : null
       }
       if (this.frmType == 'updFldr') {

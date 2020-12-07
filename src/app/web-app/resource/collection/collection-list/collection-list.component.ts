@@ -141,12 +141,14 @@ export class CollectionListComponent implements OnInit {
 
   // call shared modals
   cmnModal(type: string, t?: string, colctn?: Collection) {
-    if (type == 'email')
-      this.openModal(ShareMailComponent);
-    else if (type == 'getLink')
+    if (type == 'email') {
+      const modalRef = this.modalService.open(ShareMailComponent, { size: 'lg' });
+      modalRef.componentInstance.type = 'collection';
+      modalRef.componentInstance.data = colctn;
+    } else if (type == 'getLink') {
       this.openModal(GetLinkComponent);
-    else if (type == 'coll') {
-      const modalRef = this.modalService.open(CollComponent);
+    } else if (type == 'coll') {
+      const modalRef = this.modalService.open(CollComponent, { size: 'lg' });
       modalRef.componentInstance.colctn = colctn;
       modalRef.componentInstance.type = t;
       modalRef.result.then((result) => {

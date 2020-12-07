@@ -52,8 +52,10 @@
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item" (click)="cmnModal('email')"><i class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a link</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, colctn)"><i
+                      class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a
+                    link</a>
                 </div>
               </div>
               <div class="btn my-1" (click)="actDeactColctn(colctn.id)">
@@ -125,8 +127,10 @@
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item" (click)="cmnModal('email')"><i class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a link</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, colctn)"><i
+                      class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a
+                    link</a>
                 </div>
               </div>
               <div class="btn" (click)="actDeactColctn(colctn.id)">

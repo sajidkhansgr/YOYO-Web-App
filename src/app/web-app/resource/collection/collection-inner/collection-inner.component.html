@@ -3,7 +3,7 @@
   <h3 class="mb-4 clearfix heading align-self-center">
     {{selColctn!.name}}
     <div class="float-right d-flex">
-      <div class="btn btn-light" (click)="cmnModal('email')">
+      <div class="btn btn-light" (click)="cmnModal('email', undefined, undefined, selColctn)">
         <i class="fa fa-envelope mr-1"></i>
       </div>
       <div class="btn btn-light" (click)="cmnModal('getLink')">
@@ -55,8 +55,10 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
                   <!-- <h6 class="ml-2 text-white-50">External Sharing</h6> -->
-                  <a class="dropdown-item" (click)="cmnModal('email')"><i class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a link</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, cntnt)"><i
+                      class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a
+                    link</a>
                   <!-- <div class="dropdown-divider"></div>
                   <h6 class="ml-2 text-white-50">Internal Sharing</h6>
                   <a class="dropdown-item" (click)="openModal(shareColl)"><i class="fa fa-user-friends mr-1"></i>Share
@@ -123,8 +125,10 @@
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item" (click)="cmnModal('email')"><i class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a link</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, cntnt)"><i
+                      class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a
+                    link</a>
                 </div>
               </div>
               <div class="btn" (click)="cmnModal('addToCollection')">
