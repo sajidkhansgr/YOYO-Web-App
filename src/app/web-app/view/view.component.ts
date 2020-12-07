@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT,Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -41,6 +41,7 @@ export class ViewComponent implements OnInit {
     private fileServ: FileService,
     private colctnSrv: CollectionService,
     private tokenDataServ: TokenDataService,
+    private loc: Location
   ) { }
 
   ngOnInit(): void {
@@ -75,6 +76,7 @@ export class ViewComponent implements OnInit {
               }else{
                 this.cntnt!.pdfImages = [];
               }
+              this.cntnt!.pdf = this.cntnt!.documentType==4?this.cntnt!.contentPath:this.cntnt!.pdfContentPath;
               this.loading = false;
               // pdfImages
               setTimeout(()=>{
@@ -96,7 +98,7 @@ export class ViewComponent implements OnInit {
   }
 
   renderPDf(){
-    if(this.cntnt!.pdfContentPath){
+    if(this.cntnt!.pdf){
       this.viewSDKClient.ready().then(() => {
         /* By default the embed mode will be Full Window */
         let data ={
@@ -110,7 +112,7 @@ export class ViewComponent implements OnInit {
           name: this.cntnt!.name,
           id: this.id,
           divId: 'pdf-div',
-          url: this.cntnt!.pdfContentPath
+          url: this.cntnt!.pdf
         }
         this.viewSDKClient.previewFile(data);
       })
@@ -259,6 +261,10 @@ export class ViewComponent implements OnInit {
       this.colls = [];
       this.collLoad = false;
     });
+  }
+
+  goBack(){
+    this.loc.back();
   }
 
   openModal(content: any, type: string) {

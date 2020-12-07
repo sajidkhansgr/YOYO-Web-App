@@ -68,7 +68,7 @@ export class ExpInnerComponent implements OnInit {
 
   // view content
   viewContent(id: number) {
-    this.router.navigate(['/web-app/view/' + this.id]);
+    this.router.navigate(['/web-app/view/' + id]);
   }
 
   getAllFromWrkspc() {

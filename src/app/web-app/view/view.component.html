@@ -33,7 +33,7 @@
             class="fas fa-expand-alt"></i></div>
         <div class="btn" *ngIf="isFullScreen" (click)="closeFullscreen()" ngbTooltip="Exit from Full Screen"><i
             class="fas fa-compress-arrows-alt"></i></div>
-        <div class="btn"><i class="fas fa-times"></i></div>
+        <div class="btn" (click)="goBack()"><i class="fas fa-times"></i></div>
       </div>
       <div class="btn btn-outline-secondary right-side-toggle" [ngClass]="{'pdfView': cntnt.contentType == 1}"
         placement="left" ngbTooltip="{{rightSide?'Hide Detailed Section':'Show Detailed Section'}}"
@@ -72,10 +72,10 @@
       <div class="main-body overflow-auto w-100">
         <div class="h-100" [ngSwitch]="cntnt.contentType">
           <div class="h-100" *ngSwitchCase="1">
-            <div class="h-100" *ngIf="cntnt.pdfContentPath">
+            <div class="h-100" *ngIf="cntnt.pdf">
               <div id='pdf-div' class='pdf-view'></div>
             </div>
-            <div *ngIf="!cntnt.pdfContentPath" class="text-center pt-5">No pdf found</div>
+            <div *ngIf="!cntnt.pdf" class="text-center pt-5">No pdf found</div>
           </div>
           <div class="text-center mt-5 mx-3" *ngSwitchCase="2">
             <img [src]="cntnt.contentPath?cntnt.contentPath:defIcon" alt="Image" />

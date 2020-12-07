@@ -7,10 +7,11 @@ export interface Content {
   url: string;
   description: boolean;
   // content: binary;
-  contentType: number;
-  documentType: number;
+  contentType: number;//url,document,img,video
+  documentType: number; //df,xls,doc,pt
   contentPath: string;
   pdfContentPath: string;
+  pdf?: string; //used for local
   canBeShared: number;
   hubId: number;
   size: number;
