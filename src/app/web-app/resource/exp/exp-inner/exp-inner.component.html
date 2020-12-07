@@ -2,7 +2,7 @@
   <ol class="breadcrumb rounded-0">
     <li class="breadcrumb-item active align-self-center" aria-current="page">English</li>
     <span class="ml-auto">
-      <div class="curs-ptr" (click)="view = !view;" *ngIf="wrkspcCntnts.length>0">
+      <div class="curs-ptr" (click)="view = !view;">
         <i class="fa" [ngClass]="{'fa-list-ul' : view, 'fa-th-large': !view}" style="font-size:1.75rem;"></i>
       </div>
     </span>
@@ -23,7 +23,7 @@
         </ng-container>
         <div class="col-md-3 text-center file curs-ptr my-2" *ngSwitchDefault>
           <div class="icon" (click)="viewContent(wSC.id)">
-            <img [src]="wSC.pdfImage?wSC.pdfImage:defImg">
+            <img [src]="wSC.pdfImagePath ? wSC.pdfImagePath : wSC.pdfImage ? wSC.pdfImage : defImg">
           </div>
           <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
             <i class="fa fa-file ml-3 align-self-center mr-1"></i>
@@ -61,7 +61,7 @@
         </ng-template>
       </ng-container>
     </ng-container>
-    <div class="text-center" *ngIf="wrkspcCntnts.length<=0">
+    <div class="mx-auto pt-5" *ngIf="wrkspcCntnts.length<=0">
       No data found
     </div>
   </ng-container>
@@ -130,7 +130,8 @@
           <div class="file d-flex bg-white rounded p-3 curs-ptr my-2" *ngSwitchDefault>
             <mat-checkbox class="align-self-center"></mat-checkbox>
             <div class="icon align-self-center mx-4" (click)="viewContent(wSC.id)">
-              <img [src]="wSC.pdfImage?wSC.pdfImage:defImg" style="max-width: 72px;">
+              <img [src]="wSC.pdfImagePath ? wSC.pdfImagePath : wSC.pdfImage ? wSC.pdfImage : defImg"
+                style="max-width: 72px;">
             </div>
             <div class="info align-self-center">
               <h5 class="mb-0" (click)="viewContent(wSC.id)">{{wSC.name}}</h5>
@@ -170,7 +171,7 @@
           </div>
         </ng-template>
       </ng-container>
-      <div *ngIf="wrkspcCntnts.length<=0">
+      <div class="text-center pt-5" *ngIf="wrkspcCntnts.length<=0">
         No data found
       </div>
       <hr>
