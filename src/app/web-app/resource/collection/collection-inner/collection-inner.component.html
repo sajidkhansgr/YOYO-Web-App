@@ -45,8 +45,7 @@
         <div class="card curs-ptr">
           <div class="card-body">
             <div class="imagePreview text-center" (click)="navgToCntnt(cntnt)">
-              <img
-                [src]="cntnt.pdfImages && cntnt.pdfImages.length > 0 ? cntnt.pdfImages[0].imagePath : cntnt.urlIconPath ? cntnt.urlIconPath : defImg">
+              <img [src]="cntnt.pdfImagePath ? cntnt.pdfImagePath : cntnt.urlIconPath ? cntnt.urlIconPath : defImg">
             </div>
             <div class="options rounded">
               <div class="dropleft">
@@ -74,7 +73,7 @@
             </div>
           </div>
           <div class="card-footer">
-            <div class="name">{{cntnt.name}}</div>
+            <div class="name text-truncate">{{cntnt.name}}</div>
             <div class="float-left text-secondary d-flex">
               <div class="items" *ngIf="cntnt.pageNo">Page&nbsp;{{cntnt.pageNo}}</div>
             </div>
@@ -110,7 +109,7 @@
           <td class="align-middle">
             <div class="d-flex" (click)="navgToCntnt(cntnt)">
               <div class="imagePreview border mr-2">
-                <img [src]="cntnt.pdfImage?cntnt.pdfImage:defImg">
+                <img [src]="cntnt.pdfImagePath ? cntnt.pdfImagePath : cntnt.urlIconPath ? cntnt.urlIconPath : defImg">
               </div>
               <div class="name align-self-center">{{cntnt.name}}</div>
             </div>

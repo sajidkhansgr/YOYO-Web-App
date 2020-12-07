@@ -31,12 +31,11 @@
           <div class="card">
             <div class="card-body curs-ptr" (click)="showContent(colctn.id)">
               <div class="imagePreview text-center">
-                <img
-                  [src]="colctn.collectionContents.length > 0 ? colctn.collectionContents[0].pdfImage ? colctn.collectionContents[0].pdfImage : colctn.collectionContents[0].urlIconPath :fldrIcon">
+                <img [src]="colctn.pdfImagePath ? colctn.pdfImagePath : fldrIcon">
               </div>
             </div>
             <div class="card-footer">
-              <div class="name">{{colctn.name}}</div>
+              <div class="name text-truncate">{{colctn.name}}</div>
               <div class="float-left text-secondary d-flex">
                 <div class="date">{{(colctn.updatedDate|date:'dd MMM, yyyy')||'N/A'}}</div>
                 <div class="mx-2">l</div>
@@ -112,7 +111,7 @@
           <td class="align-middle curs-ptr" (click)="showContent(colctn.id)">
             <div class="d-flex">
               <div class="imagePreview border mr-2">
-                <img [src]="colctn.pdfImage?colctn.pdfImage:fldrIcon">
+                <img [src]="colctn.pdfImagePath ? colctn.pdfImagePath : fldrIcon">
               </div>
               <div class="name align-self-center">{{colctn.name}}</div>
             </div>

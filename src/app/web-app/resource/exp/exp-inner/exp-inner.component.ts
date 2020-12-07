@@ -9,6 +9,7 @@ import { BreadcrumbService } from '../../../../shared/services/breadcrumb.servic
 import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-mail.component';
 import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
 import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to-coll.component';
+import { ContentWorkspaceService } from 'src/app/hub/content-workspace/content-workspace.service';
 
 @Component({
   selector: 'app-exp-inner',
@@ -17,7 +18,7 @@ import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to
 })
 export class ExpInnerComponent implements OnInit {
   routerSubs!: Subscription;
-  id!: string; fldrid!: string;
+  id!: string; fldrid!: string; smtFldrid!: string;
   view: boolean = true; loading!: boolean;
   wrkspcCntnts: any[] = [];
   defImg: string = DEF_ICON; fldrIcon: string = FLDR_ICON;
@@ -30,13 +31,15 @@ export class ExpInnerComponent implements OnInit {
     private router: Router,
     private expServ: ExpService,
     private toastr: ToastrService,
-    private brdcrmServ: BreadcrumbService
+    private brdcrmServ: BreadcrumbService,
+    private cwServ: ContentWorkspaceService
   ) { }
 
   ngOnInit(): void {
     this.routerSubs = this.route.params.subscribe(params => {
       this.id = params['expid'] || '0';
       this.fldrid = params['fldrid'] || '';
+      this.smtFldrid = params['smtFldrid'] || '';
       this.initialiseState(); // reset and set based on new parameter this time
     });
   }
@@ -45,7 +48,7 @@ export class ExpInnerComponent implements OnInit {
     if (this.id != '0') {
       this.loading = true;
       // this.brdcrmList();
-      this.getAllFromWrkspc();
+      this.fldrid ? this.getAllFromWrkspc() : this.smtFldrid ? this.getContentSmtFldr() : this.getAllFromWrkspc();
     } else {
       this.toastr.error("Not a valid Workspace", "Error");
       this.router.navigate(['/web-app/experiences']);
@@ -53,15 +56,15 @@ export class ExpInnerComponent implements OnInit {
   }
 
   // open modals
-  cmnModal(wSC:any, type: string) {
+  cmnModal(wSC: any, type: string) {
     if (type == 'email')
       this.openModal(ShareMailComponent);
     else if (type == 'getLink')
       this.openModal(GetLinkComponent);
-    else if (type == 'addToColl'){
-      const modalRef:any = this.modalService.open(AddToCollComponent);
-      modalRef.componentInstance.data = {...wSC,type:'wrkspc'};
-      modalRef.result.then((result:any) => {
+    else if (type == 'addToColl') {
+      const modalRef: any = this.modalService.open(AddToCollComponent);
+      modalRef.componentInstance.data = { ...wSC, type: 'wrkspc' };
+      modalRef.result.then((result: any) => {
       })
     }
   }
@@ -96,15 +99,32 @@ export class ExpInnerComponent implements OnInit {
       })
   }
 
-  toggleView = () => {
-    this.view = !this.view;
+  // get content by smart folder
+  getContentSmtFldr() {
+    let query: any = {
+      smartFolderId: this.smtFldrid
+    };
+    this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+        this.wrkspcCntnts.push(...data.result);
+      }
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+    });
   }
 
-  navgToCntnt(id: number) {
-    this.router.navigate(['/web-app/resource/experiences/' + this.id + '/' + id]);
+  navgToCntnt(data: any) {
+    let type;
+    if (data.key === 'fldr') {
+      type = 'folder';
+    } else if (data.key === 'smtFldr') {
+      type = 'smart-folder';
+    }
+    this.router.navigate(['/web-app/resource/experiences/' + this.id + '/' + type + '/' + data.id]);
   }
 
-  brdcrmList(){
+  brdcrmList() {
     // {
     //       Workspace = 1,
     //       Folder = 2,
@@ -117,7 +137,7 @@ export class ExpInnerComponent implements OnInit {
     }
     this.brdcrmServ.getList(params)
       .subscribe((data: any) => {
-        console.log(data,'data')
+        console.log(data, 'data')
         if (data && Array.isArray(data.result) && data.result.length > 0) {
 
         } else {

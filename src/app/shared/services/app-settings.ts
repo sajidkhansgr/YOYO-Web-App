@@ -204,5 +204,11 @@ export class AppSettings {
 
   public static REM_CONTENT_COLCT = `api/Collection/RemoveFromCollection`;
 
+  // ---- BREADCRUM ---- //
+
   public static BRD_CRM_LIST = `api/BreadCrum/GetBreadCrum`;
+
+  // ---- COMMON ---- //
+
+  public static SEND_MAIL = `api/Common/SendMail`;
 }

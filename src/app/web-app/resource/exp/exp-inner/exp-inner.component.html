@@ -2,7 +2,7 @@
   <ol class="breadcrumb rounded-0">
     <li class="breadcrumb-item active align-self-center" aria-current="page">English</li>
     <span class="ml-auto">
-      <div class="curs-ptr" (click)="toggleView()" *ngIf="wrkspcCntnts.length>0">
+      <div class="curs-ptr" (click)="view = !view;" *ngIf="wrkspcCntnts.length>0">
         <i class="fa" [ngClass]="{'fa-list-ul' : view, 'fa-th-large': !view}" style="font-size:1.75rem;"></i>
       </div>
     </span>
@@ -51,7 +51,7 @@
         </div>
         <ng-template #cntntFldr>
           <div class="col-md-3 text-center folder curs-ptr my-2">
-            <div class="icon" (click)="navgToCntnt(wSC.id)">
+            <div class="icon" (click)="navgToCntnt(wSC)">
               <img [src]="wSC.folderIconPath?wSC.folderIconPath : fldrIcon">
             </div>
             <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto" *ngIf="!wSC.hideLabelInWorkspace">
@@ -146,7 +146,8 @@
                 <div class="dropdown-menu" aria-labelledby="shareDD">
                   <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'email')"><i
                       class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'getLink')"><i class="fa fa-link mr-1"></i>Get a
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'getLink')"><i class="fa fa-link mr-1"></i>Get
+                    a
                     link</a>
                 </div>
               </div>
@@ -159,11 +160,11 @@
         <ng-template #cntntFldr1>
           <div class="folder d-flex bg-white rounded p-3 curs-ptr my-2">
             <mat-checkbox class="align-self-center"></mat-checkbox>
-            <div class="icon align-self-center mx-4" (click)="navgToCntnt(wSC.id)">
+            <div class="icon align-self-center mx-4" (click)="navgToCntnt(wSC)">
               <img [src]="wSC.folderIconPath?wSC.folderIconPath:fldrIcon" style="max-width: 72px;">
             </div>
             <div class="info align-self-center" *ngIf="!wSC.hideLabelInWorkspace">
-              <h5 class="mb-0" (click)="navgToCntnt(wSC.id)">{{wSC.name}}</h5>
+              <h5 class="mb-0" (click)="navgToCntnt(wSC)">{{wSC.name}}</h5>
               <!-- <i class="fa fa-folder mr-2"></i>Folder in English -->
             </div>
           </div>
