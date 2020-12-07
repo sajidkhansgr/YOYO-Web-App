@@ -150,8 +150,8 @@
                               <mat-autocomplete #autoT="matAutocomplete"
                                 (optionSelected)="selFromAutoComp($event.option.value,'selTags2',cntInfoInp)"
                                 [displayWith]="displayFn">
-                                <mat-option *ngFor="let tag of tags|filterName: cntntInfoTag: 'name'" [value]="tag">
-                                  {{tag.name}}
+                                <mat-option *ngFor="let tg of tags|filterName: cntntInfoTag: 'name'" [value]="tg">
+                                  {{tg.name}}
                                 </mat-option>
                               </mat-autocomplete>
                             </mat-form-field>
@@ -685,53 +685,60 @@
               </ul>
               <hr class="mt-0">
               <app-loader [type]="'page'" *ngIf="folderLoading"></app-loader>
-              <div class="main row py-4" *ngIf="(folderArr.length > 0 || cntntArr.length > 0) && !folderLoading">
-                <div class="col-3 curs-ptr my-2" *ngFor="let folder of folderArr">
-                  <div class="image">
-                    <img src="{{folder.folderIconPath ? folder.folderIconPath : fldrIcon}}"
-                      (click)="changeFolder(folder)">
-                    <div class="dropdown" style="z-index:1;">
-                      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                        data-toggle="dropdown">
-                        <i class="fas fa-cog"></i>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                        <a class="dropdown-item curs-ptr"
-                          (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'edit', folder)">
-                          <i class="fas fa-edit mr-1"></i>Edit {{folder.key=='fldr' ? '' : 'Smart '}}Folder</a>
-                        <a class="dropdown-item curs-ptr"
-                          (click)="openFolderModal(folder.key=='fldr' ? folderModal : smartFolderModal, 'dupl', folder)">
-                          <i class="fas fa-clone mr-1"></i>Duplicate {{folder.key=='fldr' ? '' : 'Smart '}}Folder</a>
-                        <a class="dropdown-item" href="javascript:void(0)">
-                          <i class="fas fa-link mr-1"></i>App Link</a>
-                        <a class="dropdown-item text-{{folder.isActive ? 'primary' : 'success'}}"
-                          (click)="actDeactFolder(folder)">
-                          <i class="mr-1 fas"
-                            [ngClass]="{'fa-toggle-off': folder.isActive, 'fa-toggle-on': !folder.isActive}"></i>
-                          {{folder.isActive ? 'Deactivate' : 'Activate'}} {{folder.key=='fldr' ? '' : 'Smart '}}Folder
-                        </a>
-                        <a class="dropdown-item" href="javascript:void(0)">
-                          <i class="fas fa-folder-plus mr-1"></i>Create New Channel from Folder</a>
+              <div class="min-ht pl-0 mt-2 mb-0" cdkDropList id="fldrLists" [cdkDropListData]="fldrCntntArr" (cdkDropListDropped)="drop($event)"
+                *ngIf="!folderLoading">
+                <div class="main row py-4" *ngIf="fldrCntntArr.length > 0">
+                  <!-- <div *cdkDragPreview class="col-3 curs-ptr my-2">wrkspc dragging</div>
+                  <div *cdkDragPlaceholder  class="col-3 curs-ptr my-2">VIKAS KOHLI</div> -->
+                  <div class="col-3 curs-ptr my-2" *ngFor="let fldCntn of fldrCntntArr" cdkDrag>
+                   <ng-container *ngIf="(fldCntn.key==='fldr' || fldCntn.key==='smtFldr') else onlyCntnt">
+                      <div class="image">
+                        <img src="{{fldCntn.folderIconPath ? fldCntn.folderIconPath : fldrIcon}}"
+                          (click)="changeFolder(fldCntn)">
+                        <div class="dropdown" style="z-index:1;">
+                          <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
+                            data-toggle="dropdown">
+                            <i class="fas fa-cog"></i>
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="comInfoDD">
+                            <a class="dropdown-item curs-ptr"
+                              (click)="openFolderModal(fldCntn.key=='fldr' ? folderModal : smartFolderModal, 'edit', fldCntn)">
+                              <i class="fas fa-edit mr-1"></i>Edit {{fldCntn.key=='fldr' ? '' : 'Smart '}}Folder</a>
+                            <a class="dropdown-item curs-ptr"
+                              (click)="openFolderModal(fldCntn.key=='fldr' ? folderModal : smartFolderModal, 'dupl', fldCntn)">
+                              <i class="fas fa-clone mr-1"></i>Duplicate {{fldCntn.key=='fldr' ? '' : 'Smart '}}Folder</a>
+                            <a class="dropdown-item" href="javascript:void(0)">
+                              <i class="fas fa-link mr-1"></i>App Link</a>
+                            <a class="dropdown-item text-{{fldCntn.isActive ? 'primary' : 'success'}}"
+                              (click)="actDeactFolder(fldCntn)">
+                              <i class="mr-1 fas"
+                                [ngClass]="{'fa-toggle-off': fldCntn.isActive, 'fa-toggle-on': !fldCntn.isActive}"></i>
+                              {{fldCntn.isActive?'Deactivate':'Activate'}} {{fldCntn.key=='fldr'?'':'Smart '}}Folder
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0)">
+                              <i class="fas fa-folder-plus mr-1"></i>Create New Channel from Folder</a>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
-                    *ngIf="!folder.hideLabelInWorkspace" (click)="changeFolder(folder)">
-                    {{folder.name}}
+                      <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
+                        *ngIf="!fldCntn.hideLabelInWorkspace" (click)="changeFolder(fldCntn)">
+                        {{fldCntn.name}}
+                      </div>
+                   </ng-container>
+                   <ng-template #onlyCntnt>
+                     <div class="image">
+                       <img src="{{getImg(fldCntn)}}">
+                     </div>
+                     <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate">
+                       {{fldCntn.name}}
+                     </div>
+                   </ng-template>
                   </div>
                 </div>
-                <div class="col-3 curs-ptr my-2" *ngFor="let ct of cntntArr">
-                  <div class="image">
-                    <img src="{{getImg(ct)}}">
-                  </div>
-                  <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate">
-                    {{ct.name}}
-                  </div>
+                <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;"
+                  *ngIf="fldrCntntArr.length == 0">
+                  No data found
                 </div>
-              </div>
-              <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;"
-                *ngIf="folderArr.length == 0 && cntntArr.length == 0 && !folderLoading">
-                No data found
               </div>
             </div>
           </ng-container>
@@ -772,7 +779,7 @@
                 </span>
               </ul>
               <span class="ml-2 heading">Hidden Columns</span>
-              <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList" [cdkDropListData]="hidCols"
+              <ul cdkDropList #hidList="cdkDropList" [cdkDropListData]="hidCols"
                 class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
                 <button class="dropdown-item pl-2" *ngFor="let col of hidCols;let i=index" cdkDrag>
                   <span class="ellipsis mr-2 mb-1">
@@ -868,7 +875,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="dropdown mb-1">
+        <!-- <div class="dropdown mb-1">
           <button class="btn btn-light dropdown-toggle" id="authorDD" data-toggle="dropdown">
             Author
           </button>
@@ -899,7 +906,7 @@
               <button class="btn btn-primary btn-sm">Save</button>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="card-title pl-2" *ngIf="filteredList.length>0">
         <span class="mr-2">Filtered by:</span>
@@ -935,9 +942,11 @@
             </th>
           </tr>
         </thead>
-        <tbody *ngIf="cntnts.length > 0">
+        <tbody cdkDropList id="cntntLists" [cdkDropListData]="cntnts"
+         class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)" *ngIf="cntnts.length > 0">
           <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)"
-            [ngClass]="{'sel-row':(rowInfo.id === cntnt.id)}">
+            [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()" cdkDrag>
+            <div *cdkDragPreview>{{cntnt.name}}</div>
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
                 <span *ngSwitchCase="'name'">
@@ -968,9 +977,13 @@
       <div class="text-center text-secondary pt-5 mt-4" *ngIf="cntnts.length<= 0">
         No Content found
       </div>
-      <div class="row justify-content-between" *ngIf="!view">
+      <div class="row justify-content-between" *ngIf="!view"
+        cdkDropList id="cntntLists" [cdkDropListData]="cntnts"
+       [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)">
         <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-2 p-3 rounded" *ngFor="let cntnt of cntnts"
-          (click)="toggleInfo(cntnt)" style="max-width:400px;" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id)}">
+          (click)="toggleInfo(cntnt)" style="max-width:400px;"
+            [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()" cdkDrag>
+          <div *cdkDragPreview>{{cntnt.name}}</div>
           <img [src]="cntnt.img" alt="Thumbnail" style="max-height:200px;">
           <div class="name bg-hi-grey rounded w-75 mx-auto px-2 my-2">{{cntnt.name}}</div>
         </div>
@@ -1037,8 +1050,8 @@
           </mat-chip-list>
           <mat-autocomplete #auto2="matAutocomplete"
             (optionSelected)="selFromAutoComp($event.option.value,'selTags',cntntTgInp)" [displayWith]="displayFn">
-            <mat-option *ngFor="let tag of tags|filterName: cntntTag: 'name'" [value]="tag">
-              {{tag.name}}
+            <mat-option *ngFor="let tg of tags|filterName: cntntTag: 'name'" [value]="tg">
+              {{tg.name}}
             </mat-option>
           </mat-autocomplete>
           <mat-hint>Tags help you filter content or create smart folders</mat-hint>
@@ -1046,7 +1059,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary btn-sm mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
+      <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
       <button class="btn btn-primary" [disabled]="files.length<=0 || cntntDisb">
         <app-loader [type]="'btn'" *ngIf="cntntDisb"></app-loader>
         Save
@@ -1118,8 +1131,8 @@
         </mat-chip-list>
         <mat-autocomplete #auto1="matAutocomplete"
           (optionSelected)="selFromAutoComp($event.option.value,'selTags',urlTgInp)" [displayWith]="displayFn">
-          <mat-option *ngFor="let tag of tags|filterName: urlTag: 'name'" [value]="tag">
-            {{tag.name}}
+          <mat-option *ngFor="let tg of tags|filterName: urlTag: 'name'" [value]="tg">
+            {{tg.name}}
           </mat-option>
         </mat-autocomplete>
         <mat-hint>Tags help you filter content or create smart folders</mat-hint>
@@ -1136,7 +1149,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary btn-sm mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
+      <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
       <button class="btn btn-primary" [disabled]="urlForm!.invalid || urlDisb">
         <app-loader [type]="'btn'" *ngIf="urlDisb"></app-loader>
         Save
@@ -1264,6 +1277,7 @@
       </div>
     </div>
     <div class="modal-footer">
+      <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
       <button type="submit" class="btn btn-primary" [disabled]="folderForm!.invalid || disabled">
         <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
         Save
@@ -1388,9 +1402,9 @@
                   </mat-chip-list>
                   <mat-autocomplete #autoNone="matAutocomplete"
                     (optionSelected)="selFromAutoComp($event.option.value,'noneTags',noTg)" [displayWith]="displayFn">
-                    <mat-option *ngFor="let tag of tags|filterName: noTgTxt: 'name'" [value]="tag"
+                    <mat-option *ngFor="let tg of tags|filterName: noTgTxt: 'name'" [value]="tg"
                       (click)="$event.stopPropagation();">
-                      {{tag.name}}
+                      {{tg.name}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
@@ -1462,6 +1476,7 @@
       </div>
     </div>
     <div class="modal-footer">
+      <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
       <button type="submit" class="btn btn-primary" [disabled]="smartFolderForm!.invalid || disabled">
         <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
         Save
@@ -1582,6 +1597,7 @@
       </div>
     </div>
     <div class="modal-footer">
+      <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
       <button type="submit" class="btn btn-primary" [disabled]="updWrkspcForm!.invalid || disabled">
         <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
         Save
@@ -1671,6 +1687,7 @@
     </div>
   </div>
   <div class="modal-footer">
+    <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
     <button class="btn btn-primary">
       Save
     </button>
