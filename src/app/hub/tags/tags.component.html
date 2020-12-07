@@ -103,8 +103,8 @@
                     <mat-form-field class="custom-mat-input mr-3" appearance="outline" [floatLabel]="'never'"
                       style="flex:1;">
                       <mat-chip-list #tagList aria-label="tag selection" formControlName="name">
-                        <mat-chip *ngFor="let tag of tagNames" selectable removable (removed)="removeChip(tag)">
-                          {{tag}}
+                        <mat-chip *ngFor="let tg of tagNames" selectable removable (removed)="removeChip(tg)">
+                          {{tg}}
                           <i class="fa fa-times" matChipRemove></i>
                         </mat-chip>
                         <input placeholder="Add Tags (Separate tags by comma or enter)" [matChipInputFor]="tagList"
@@ -142,10 +142,10 @@
                     </tr>
                   </thead>
                   <tbody *ngIf="!tagLoading && tags.length > 0">
-                    <tr class="curs-ptr" (click)="toggleInfo(tag)" *ngFor="let tag of tags" [ngClass]="{'sel-row':(rowInfo.id === tag.id)}">
-                      <td>{{tag.name}}</td>
-                      <td class="text-hi-dark-grey">{{tag.isActive?'Active':'In Active'}}</td>
-                      <td>{{(tag.updatedDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}</td>
+                    <tr class="curs-ptr" (click)="toggleInfo(tg)" *ngFor="let tg of tags" [ngClass]="{'sel-row':(rowInfo.id === tg.id)}">
+                      <td>{{tg.name}}</td>
+                      <td class="text-hi-dark-grey">{{tg.isActive?'Active':'In Active'}}</td>
+                      <td>{{(tg.updatedDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}</td>
                     </tr>
                   </tbody>
                 </table>

@@ -28,11 +28,13 @@ export class DivisionComponent implements OnInit {
   ) {
     this.routerSubs = this.dataServ.currentInfo
       .subscribe((data: any) => {
-        if (this.hubs.length > 0 && Array.isArray(data) && data.length > 0) {
+        if (this.hubs.length >= 0 && Array.isArray(data) && data.length > 0) {
           this.hubs = data;
-          const index = this.hubs.findIndex(ele => ele.id == this.selHub!.id);
-          if (index >= 0) {
-            this.selHub = this.hubs[index];
+          if(this.selHub){
+            const index = this.hubs.findIndex(ele => ele.id == this.selHub!.id);
+            if (index >= 0) {
+              this.selHub = this.hubs[index];
+            }
           }
         }
       })

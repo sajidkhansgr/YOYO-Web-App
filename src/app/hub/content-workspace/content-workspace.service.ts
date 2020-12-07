@@ -190,6 +190,11 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.ADD_CMNT_CNTNT}`, data)
   }
 
+  // add content to wowrkspace/folder
+  addCntntToWrkspcFldr(data: any) {
+    return this.http.post(`${AppSettings.ADD_CNTNT_WRKSPC}`, data)
+  }
+
   // delete content
   delCntnt(id: any) {
     return this.http.post(`${AppSettings.DEL_CNTNT}?id=${id}`, {});

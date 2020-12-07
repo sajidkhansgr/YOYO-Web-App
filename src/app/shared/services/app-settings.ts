@@ -174,6 +174,10 @@ export class AppSettings {
 
   public static GET_CNTNT_SMT_FLDR = `api/Content/GetContentBySmartFolder`;
 
+  public static UPL_VER_CNTNT = `api/Content/UploadNewVersion`; //need to work on
+
+  public static ADD_CNTNT_WRKSPC = `api/Content/AddContentToWorkspaceFolder`;
+
   // ---- LANGUAGE ---- //
 
   public static LIST_LNG = `api/Language/GetAll`;

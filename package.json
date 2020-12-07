@@ -10,6 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build_dev_prod": "ng build --build-optimizer --prod --configuration=dev && mv dist/HiForceAdminUI HiForceAdminUI-dev && rmdir dist",
+    "build_uat_prod": "ng build --build-optimizer --prod --configuration=uat && mv dist/HiForceAdminUI HiForceAdminUI-uat && rmdir dist",
     "build_live_prod": "ng build --build-optimizer --prod --configuration=production && mv dist/HiForceAdminUI HiForceAdminUI-prod && rmdir dist"
   },
   "private": true,

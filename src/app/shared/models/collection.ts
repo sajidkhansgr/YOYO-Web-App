@@ -7,4 +7,5 @@ export interface Collection {
   updatedDate: string;
   createdDate: string;
   isActive: boolean;
+  pdfImagePath?:string;
 }

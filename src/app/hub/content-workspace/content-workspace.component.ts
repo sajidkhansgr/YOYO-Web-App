@@ -5,7 +5,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem, copyArrayItem } from '@angular/cdk/drag-drop';
 
 import { DEF_ICON, DEF_IMG, FILE_TYPES, FLDR_ICON } from '../../shared/constants';
 import { EnumHelper } from '../../shared/enum-helper';
@@ -39,7 +39,7 @@ export class ContentWorkspaceComponent implements OnInit {
   addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; smartFolderForm!: FormGroup;;
   cntntForm!: FormGroup; urlForm!: FormGroup;
   disabled!: boolean;
-  folderArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; cntntArr!: Content[];
+  fldrCntntArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; cntntArr!: Content[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
   view!: boolean; edit!: boolean | undefined;
@@ -120,7 +120,7 @@ export class ContentWorkspaceComponent implements OnInit {
       // more fields need to be added
     });
     this.disabled = false;
-    this.folderArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = []; this.cntntArr = [];
+    this.fldrCntntArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
     let cmnCols = [{ n: "Added", k: "createdDate", asc: false }, { n: "Size", k: "size", asc: false },
     { n: "Last Updated", k: "updatedDate", asc: false }];
@@ -197,8 +197,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // listing all folders
   listFolders() {
     this.folderLoading = true;
-    this.folderArr = [];
-    this.cntntArr = [];
+    this.fldrCntntArr = [];
     this.dispFolder ? this.dispFolder.key == 'fldr' ? this.getAllObjWrkspc() : this.getContentSmtFldr() : this.getAllObjWrkspc();
   }
 
@@ -212,13 +211,13 @@ export class ContentWorkspaceComponent implements OnInit {
     this.cwServ.getAllObjWrkspc(params).subscribe((data: any) => {
       if (data && data.result) {
         if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0) {
-          this.cntntArr.push(...data.result[0].contents);
+          this.fldrCntntArr.push(...data.result[0].contents);
         }
         if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0) {
-          this.folderArr.push(...data.result[0].folders.map((fldr: any) => ({ ...fldr, key: 'fldr' })));
+          this.fldrCntntArr.push(...data.result[0].folders.map((fldr: any) => ({ ...fldr, key: 'fldr' })));
         }
         if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0) {
-          this.folderArr.push(...data.result[0].smartFolders.map((fldr: any) => ({ ...fldr, key: 'smtFldr' })));
+          this.fldrCntntArr.push(...data.result[0].smartFolders.map((fldr: any) => ({ ...fldr, key: 'smtFldr' })));
         }
       }
       this.folderLoading = false;
@@ -785,15 +784,59 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // drag and drop
   drop = (event: CdkDragDrop<string[]>) => {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+    if(event.previousContainer.id =="cntntLists"){
+      if(event.previousContainer.id =="cntntLists" && event.container.id =="fldrLists"){
+        if(this.dispFolder && this.dispFolder.id && this.dispFolder.key== "smtFldr"){
+          this.toastr.info("Content can't be add to smart folder.")
+        }else{
+          this.addCntntToWrkspc(event);
+        }
+      }
+    }else{
+      if (event.previousContainer === event.container) {
+        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      } else {
+        transferArrayItem(event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex);
+        }
     }
   }
+
+  addCntntToWrkspc(event: any){
+    let data:any = {
+      contentId: event.previousContainer.data[event.previousIndex].id,
+      workspaceId: this.selWrkspc!.id,
+      folderId: this.dispFolder ? this.dispFolder!.id : null,
+    }
+    this.cwServ.addCntntToWrkspcFldr(data).subscribe((data: any) => {
+      if (data && data.result &&  data.result.id ) {
+        copyArrayItem(
+          event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex
+        );
+        this.fldrCntntArr[event.currentIndex] = data.result;
+        this.toastr.success('Added successfully', 'Success!');
+      }else{
+        this.toastr.error('Unable to add', 'Error!');
+      }
+    }, (err: any) => {
+    });
+  }
+
+  canDrag(): boolean{
+    if(this.selWrkspc && this.selWrkspc.id){
+      if(this.dispFolder && this.dispFolder.id && this.dispFolder.key== "smtFldr"){
+        return true;
+      }
+      return false;
+    }
+    return true;
+  }
+
   showHideCols = (col: any, type: string, i: number) => {
     if (type === 'show') {
       this.hidCols.splice(i, 1);
@@ -890,7 +933,7 @@ export class ContentWorkspaceComponent implements OnInit {
     };
     this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.cntntArr.push(...data.result);
+        this.fldrCntntArr.push(...data.result);
       }
       this.folderLoading = false;
     }, (err: any) => {
