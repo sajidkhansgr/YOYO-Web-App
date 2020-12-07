@@ -81,10 +81,8 @@
                     <div class="dropdown-divider"></div>
                     <button class="dropdown-item" *ngFor="let ex of exps">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="{{ex.id}}">
-                        <label class="form-check-label" for="{{ex.id}}">
-                          {{ex.name}}
-                        </label>
+                        <input class="form-check-input" type="checkbox"  id="{{ex.id}}">
+                        <label class="form-check-label" for="{{ex.id}}">{{ex.name}}</label>
                       </div>
                     </button>
                   </div>
@@ -105,19 +103,18 @@
                     </th>
                   </tr>
                 </thead>
-                <tbody *ngIf="!loading && grps.length > 0">
+                <tbody *ngIf="grps.length > 0">
                   <tr *ngFor="let grp of grps" (click)="toggleInfo(grp)"
                     [ngClass]="{'deact': !grp.isActive,'sel-row':(rowInfo.id === grp.id)}">
                     <td>
                       <span class="d-block">{{grp.name}}</span>
                     </td>
-                    <td class="text-hi-dark-grey">{{(grp.createdDate|date:'dd MMM, yyyy')||'N/A'}}</td>
-                    <td>St dae</td>
-                    <td class="text-hi-dark-grey">Static ROle</td>
+                    <!-- <td class="text-hi-dark-grey">{{(grp.createdDate|date:'dd MMM, yyyy')||'N/A'}}</td> -->
+                    <td class="text-hi-dark-grey">{{grp.isActive?'Active':'In Active'}}</td>
                   </tr>
                 </tbody>
               </table>
-              <div class="text-center text-secondary" *ngIf="!loading && grps.length == 0">
+              <div class="text-center text-secondary" *ngIf="grps.length == 0">
                 No Group found
               </div>
             </div>
@@ -279,7 +276,7 @@
       </mat-form-field>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary btn-sm mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
+      <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
       <button type="submit" class="btn btn-primary" [disabled]="groupForm!.invalid || disabled">
         <app-loader [type]="'btn'" *ngIf="disabled"></app-loader> <!-- loader -->
         {{isEdit?"Update":"Save"}}

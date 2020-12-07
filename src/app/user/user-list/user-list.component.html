@@ -345,7 +345,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <small>Select from the oprions below to send invitations to corresponding
+    <small>Select from the options below to send invitations to corresponding
       users:</small>
     <ul class="list-unstyled mt-3">
       <li class="form-group form-check">
@@ -363,7 +363,7 @@
     </ul>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-secondary btn-sm mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
+    <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
     <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
   </div>
 </ng-template>
@@ -499,7 +499,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary btn-sm mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
+      <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
       <button class="btn btn-primary" [disabled]="usrForm!.invalid || usrLoading">
         <app-loader [type]="'btn'" *ngIf="usrLoading"></app-loader>
         {{isEdit?'Update':'Save'}}

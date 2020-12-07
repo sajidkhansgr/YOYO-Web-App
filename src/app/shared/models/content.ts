@@ -30,6 +30,7 @@ export interface Content {
   updatedBy: number;
   contentId?: number;
   pdfImage?: string;
+  pdfImagePath?: string;
   pageNo?: string;//Array
 }
 

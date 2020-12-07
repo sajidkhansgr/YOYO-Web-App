@@ -73,7 +73,7 @@ export class GroupComponent implements OnInit {
 
   intializeState() {
     this.pageSize = this.lmtPage[0]; this.pageNo = 1;
-    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Created", asc: false, k: "createdDate" }, { n: "Members", asc: false }, { n: "Anonymized", asc: false }];
+    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Status", asc: false, k: "isActive" }];
     this.totalCount = 0;
   }
 
@@ -103,12 +103,11 @@ export class GroupComponent implements OnInit {
           this.grps = data.result.results;
           this.totalCount = data.result.totalCount;
         } else {
-          this.grps = [];
+          this.grps = [];this.totalCount = 0;
         }
         this.loading = false;
       }, (err: any) => {
-        console.log(err);
-        this.grps = [];
+        this.grps = [];this.totalCount = 0;
         this.loading = false;
       });
   }
@@ -142,17 +141,6 @@ export class GroupComponent implements OnInit {
       IsAscending: colData.asc,
     }
     this.grpsList();
-  }
-
-  getGrp() {
-    this.grpServ.viewGroup(this.grpDetail!.id.toString()).subscribe((data: any) => {
-      if (data && data.result && data.result.id) {
-        this.grpDetail = data.result;
-      }
-      this.docLoading = false;
-    }, (err: any) => {
-      this.docLoading = false;
-    });
   }
 
   onSubmit() {
@@ -233,32 +221,46 @@ export class GroupComponent implements OnInit {
     if (this.showRowInfo && this.rowInfo.id == row.id) {
       this.closeDoc();
     } else {
-      //directly setting w/o hit api
       this.showRowInfo = true;
       this.docLoading = true;
-      this.hubTxt = '';
-      this.selDiv = [];
-      setTimeout(() => {
-        this.rowInfo = row;
-        if(Array.isArray(this.rowInfo.groupHubs)){
-          for(let k=0;k<this.rowInfo.groupHubs.length;k++){
-            let isFound= false;
-            for(let l=0;l<this.divArr.length;l++){
-              if(this.rowInfo.groupHubs[k].hubId===this.divArr[l].id){
-                isFound = true;
-                this.selDiv.push(this.divArr[l]);
-                this.rowInfo.groupHubs[k].name = this.divArr[l].name;
-              }
-              if(isFound)break;
-            }
-          }
-        }else{
-          this.rowInfo.groupHubs = [];
-        }
-        this.docLoading = false;
-
-      }, 900)
+      this.getGrp(row);
     }
+  }
+
+  getGrp(grp: Group) {
+    this.docLoading = true;
+    this.grpServ.viewGroup(grp.id.toString()).subscribe((data: any) => {
+      if (data && data.result && data.result.id) {
+        this.rowInfo = data.result;
+      } else {
+        this.rowInfo = grp;
+      }
+      this.setDefGrpData();
+    }, (err: any) => {
+      this.rowInfo = grp;
+      this.setDefGrpData();
+    });
+  }
+
+  setDefGrpData(){
+    this.hubTxt = '';
+    this.selDiv = [];
+    if(Array.isArray(this.rowInfo.groupHubs)){
+      for(let k=0;k<this.rowInfo.groupHubs.length;k++){
+        let isFound= false;
+        for(let l=0;l<this.divArr.length;l++){
+          if(this.rowInfo.groupHubs[k].hubId===this.divArr[l].id){
+            isFound = true;
+            this.selDiv.push(this.divArr[l]);
+            this.rowInfo.groupHubs[k].name = this.divArr[l].name;
+          }
+          if(isFound)break;
+        }
+      }
+    }else{
+      this.rowInfo.groupHubs = [];
+    }
+    this.docLoading = false;
   }
 
   closeDoc = () => {

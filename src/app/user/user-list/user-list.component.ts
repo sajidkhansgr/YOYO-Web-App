@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { fromEvent, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +12,7 @@ import { User } from '../../shared/models/user';
 import { Group } from '../../shared/models/group';
 import { CommonValidations } from '../../shared/validations/common-validations';
 import { EnumHelper } from '../../shared/enum-helper';
-import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+// import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { UserService } from '../user.service';
 import { GroupService } from '../group/group.service';
 
@@ -43,8 +43,7 @@ export class UserListComponent implements OnInit {
   private subscription!: Subscription;
 
   visbCols: any[] = [{ n: "Role", k: "roleId", asc: false, }];
-  hidCols: any[] = [{ n: "Property", k: "prop", asc: false, }, { n: "License Type", k: "lic", asc: false, }, { n: "License Type", k: "lic", asc: false, },
-  { n: "License Type", k: "lic", asc: false, }, { n: "License Type", k: "lic", asc: false, }];
+  hidCols: any[] = [{ n: "Property", k: "prop", asc: false }];
   cols: any[] = [{ n: "Name", asc: false, k: "name" }];
   roles = ROLES; rolesArr!: any; lngs = LNGS; lngArr!: any;
   usrForm!: FormGroup; usrLoading: boolean = false; activeIndex: number = 0; docLoading!: boolean;
@@ -461,7 +460,7 @@ export class UserListComponent implements OnInit {
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this.dismissModal();
-    if(!!this.subscription)
+    if (!!this.subscription)
       this.subscription.unsubscribe();
   }
 
