@@ -215,4 +215,8 @@ export class AppSettings {
   // ---- COMMON ---- //
 
   public static SEND_MAIL = `api/Common/SendEmail`;
+
+  // ---- COMMON ---- //
+
+  public static ADD_SHARE = `api/Share/Add`;
 }

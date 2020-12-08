@@ -7,6 +7,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { ShareMailComponent } from './share-mail.component';
 import { ShareMailService } from './share-mail.service';
+import { ShareService } from '../../../web-app/share/share.service';
 import { LoaderModule } from '../loader/loader.module';
 
 @NgModule({
@@ -20,6 +21,6 @@ import { LoaderModule } from '../loader/loader.module';
   entryComponents: [
     ShareMailComponent
   ],
-  providers: [ShareMailService]
+  providers: [ShareMailService, ShareService]
 })
 export class ShareMailModule { }

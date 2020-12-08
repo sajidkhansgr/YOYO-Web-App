@@ -16,17 +16,17 @@
           <mat-label>Subject</mat-label>
           <input matInput type="text" placeholder="Subject" formControlName="title" required>
         </mat-form-field>
-        <!-- <div class="row">
+        <div class="row">
           <mat-form-field appearance="outline" class="col-8">
             <mat-label>Search Content</mat-label>
             <input matInput type="text" placeholder="Search Content">
           </mat-form-field>
           <div class="col-4 mt-3">
-            <div class="btn btn-primary" (click)="openModal()">
+            <div class="btn btn-primary" (click)="openRsrcModal()">
               <i class="fas fa-file-medical mr-1"></i>Add resource
             </div>
           </div>
-        </div> -->
+        </div>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Message</mat-label>
           <textarea matInput type="text" placeholder="Message" formControlName="body"></textarea>
@@ -34,7 +34,7 @@
       </div>
       <div class="col-3">
         <h5>Sharing Settings</h5>
-        <mat-checkbox class="ml-2">Allow downloads</mat-checkbox>
+        <mat-checkbox class="ml-2" formControlName="allowDownload">Allow downloads</mat-checkbox>
         <mat-checkbox class="ml-2" formControlName="sendMeCopy">Send me a copy</mat-checkbox>
       </div>
     </div>
