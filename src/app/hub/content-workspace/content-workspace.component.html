@@ -984,7 +984,7 @@
           (click)="toggleInfo(cntnt)" style="max-width:400px;"
             [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()" cdkDrag>
           <div *cdkDragPreview>{{cntnt.name}}</div>
-          <img [src]="cntnt.img" alt="Thumbnail" style="max-height:200px;">
+          <img [src]="getImg(cntnt)" alt="Thumbnail" style="max-height:200px;">
           <div class="name bg-hi-grey rounded w-75 mx-auto px-2 my-2">{{cntnt.name}}</div>
         </div>
       </div>
