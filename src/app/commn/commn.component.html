@@ -265,7 +265,7 @@
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Subject</mat-label>
-        <input matInput placeholder="Subject" formControlName="subject" required/>
+        <input matInput placeholder="Subject" formControlName="subject" maxlength="100" required/>
         <mat-error *ngIf="ancmntForm.get('subject')!.hasError('required')">
           Subject is required
         </mat-error>
@@ -273,7 +273,7 @@
       <br />
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Announcement</mat-label>
-        <textarea matInput placeholder="Announcement" formControlName="body" rows="3" required></textarea>
+        <textarea matInput placeholder="Body" formControlName="body" rows="3" maxlength="1000" required></textarea>
         <mat-error *ngIf="ancmntForm.get('body')!.hasError('required')">
           Announcement is required
         </mat-error>
@@ -308,7 +308,6 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-
       <mat-form-field appearance="outline" class="w-100"
         *ngIf="ancmntForm.controls.usrGrps && ancmntForm.value.sendToGroup==3">
         <mat-chip-list #chipList1 aria-label="Select user Group(s)">
@@ -333,11 +332,14 @@
       <div class="row justify-content-between m-0">
         <mat-form-field appearance="outline">
           <mat-label>Choose a date</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="date">
+          <input matInput [matDatepicker]="picker" formControlName="date" [min]="minDate">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="ancmntForm.get('date')!.hasError('required')">
             Date is required
+          </mat-error>
+          <mat-error *ngIf="ancmntForm.get('date')!.hasError('matDatepickerMin')">
+            Date should be equal to or greater than today's date
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -362,59 +364,3 @@
     </div>
   </form>
 </ng-template>
-
-<!-- <ng-template #anncModal class="custom-modal" let-modal>
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" ngbAutofocus>New Announcement</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Subject</mat-label>
-          <input matInput placeholder="Subject">
-        </mat-form-field>
-        <br />
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Announcement</mat-label>
-          <textarea matInput placeholder="Announcement"></textarea>
-        </mat-form-field>
-        <br />
-        <mat-form-field appearance="outline">
-          <mat-label>Send To</mat-label>
-          <mat-select>
-            <mat-option>All Users</mat-option>
-            <mat-option>Selected Experiences</mat-option>
-            <mat-option>Selected User Groups</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <br />
-        <mat-checkbox>Request user to update content</mat-checkbox><br />
-        <mat-checkbox>Notify User by Email</mat-checkbox><br />
-        <mat-checkbox>Send Later</mat-checkbox><br />
-        <div class="row justify-content-between m-0">
-          <mat-form-field appearance="outline">
-            <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Time</mat-label>
-            <mat-select>
-              <mat-option>00:00</mat-option>
-              <mat-option>01:00</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send</button>
-      </div>
-    </div>
-  </div>
-</ng-template> -->

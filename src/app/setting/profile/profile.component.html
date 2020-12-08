@@ -66,21 +66,21 @@
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>First Name</mat-label>
-        <input matInput type="text" placeholder="First Name" formControlName="firstName" required>
+        <input matInput type="text" placeholder="First Name" formControlName="firstName" maxlength="50" required />
         <mat-error *ngIf="profForm.get('firstName')!.hasError('required')">>
           First Name is required
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Last Name</mat-label>
-        <input matInput type="text" placeholder="Last Name" formControlName="lastName" required>
+        <input matInput type="text" placeholder="Last Name" formControlName="lastName" maxlength="50" required />
         <mat-error *ngIf="profForm.get('lastName')!.hasError('required')">
           Last Name is required
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Email</mat-label>
-        <input matInput type="text" placeholder="Email" formControlName="email" required>
+        <input matInput type="text" placeholder="Email" formControlName="email" maxlength="100" required />
         <mat-error *ngIf="profForm.get('email')!.hasError('required')">
           Email required
         </mat-error>
@@ -94,7 +94,7 @@
           <mat-option *ngFor="let lng of lngArr" [value]="lng.v">{{lng.n}}</mat-option>
         </mat-select>
         <mat-error *ngIf="profForm.get('languageId')!.hasError('required')">
-          Last Name is required
+          Language is required
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
