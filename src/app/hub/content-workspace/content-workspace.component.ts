@@ -44,7 +44,6 @@ export class ContentWorkspaceComponent implements OnInit {
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
   view!: boolean; edit!: boolean | undefined;
   activeFldrs!: number; isActiveFldrs!: boolean; activeWrkspc!: number;
-  // isActiveWrkspc!: boolean;
 
   tags!: Tag[]; selTags: Tag[] = []; selTags2: Tag[] = [];//using in selTags add and selTags2 form
   cntnts!: any[]; totalCount!: number; sort: any = {}; searchTxt!: string;
@@ -130,7 +129,6 @@ export class ContentWorkspaceComponent implements OnInit {
     this.view = true;
     this.edit = false;
     this.activeFldrs = 1; this.isActiveFldrs = true; this.activeWrkspc = 1;
-    // this.isActiveWrkspc = true;
     this.showRowInfo = false; this.rowInfo = {}; this.docLoading = false;
     this.pageSize = this.lmtPage[0]; this.pageNo = 1;
     this.cntntTypeFltr = this.fileTypesArr;
@@ -267,7 +265,6 @@ export class ContentWorkspaceComponent implements OnInit {
   // ---- smart folder ---- //
   // for add and edit modal in smart folder (autocomplete and chips)
 
-
   // add file type filter for smart folder and main list
   addFileType(val: boolean, fT: any, isList: boolean = false) {
     if (val) {
@@ -330,23 +327,7 @@ export class ContentWorkspaceComponent implements OnInit {
         isActive: this.selFolder!.isActive,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
-      let tagIds = [];
-      if (this.allTags.length > 0) {
-        for (let i = 0; i < this.allTags.length; i++) {
-          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 1 }));
-        }
-      }
-      if (this.anyTags.length > 0) {
-        for (let i = 0; i < this.allTags.length; i++) {
-          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 2 }));
-        }
-      }
-      if (this.noneTags.length > 0) {
-        for (let i = 0; i < this.allTags.length; i++) {
-          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 3 }));
-        }
-      }
-      folderData.tagIds = '[' + tagIds.toString() + ']';
+      folderData.tagIds = this.fldrTgs();
       this.cwServ.updSmartFolder(folderData)
         .subscribe((data: any) => {
           if (data) {
@@ -355,17 +336,9 @@ export class ContentWorkspaceComponent implements OnInit {
           } else {
             this.toastr.error('Unable to update smart folder', 'Error!');
           }
-          this.disabled = false;
-          this.dismissModal();
-          this.smartFolderForm.reset();
-          this.iconUrl = undefined;
-          this.addURLIcon = '';
+          this.setDefFldr('smartFolderForm');
         }, (err: any) => {
-          this.disabled = false;
-          this.dismissModal();
-          this.smartFolderForm.reset();
-          this.iconUrl = undefined;
-          this.addURLIcon = '';
+          this.setDefFldr('smartFolderForm');
         });
     }
   }
@@ -382,23 +355,7 @@ export class ContentWorkspaceComponent implements OnInit {
         isActive: true,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
-      let tagIds = [];
-      if (this.allTags.length > 0) {
-        for (let i = 0; i < this.allTags.length; i++) {
-          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 1 }));
-        }
-      }
-      if (this.anyTags.length > 0) {
-        for (let i = 0; i < this.allTags.length; i++) {
-          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 2 }));
-        }
-      }
-      if (this.noneTags.length > 0) {
-        for (let i = 0; i < this.allTags.length; i++) {
-          tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 3 }));
-        }
-      }
-      folderData.tagIds = '[' + tagIds.toString() + ']';
+      folderData.tagIds = this.fldrTgs();
       this.cwServ.addSmartFolder(folderData)
         .subscribe((data: any) => {
           if (data) {
@@ -407,19 +364,31 @@ export class ContentWorkspaceComponent implements OnInit {
           } else {
             this.toastr.error('Unable to add smart folder', 'Error!');
           }
-          this.disabled = false;
-          this.dismissModal();
-          this.smartFolderForm.reset();
-          this.iconUrl = undefined;
-          this.addURLIcon = '';
+          this.setDefFldr('smartFolderForm');
         }, (err: any) => {
-          this.disabled = false;
-          this.dismissModal();
-          this.smartFolderForm.reset();
-          this.iconUrl = undefined;
-          this.addURLIcon = '';
+          this.setDefFldr('smartFolderForm');
         });
     }
+  }
+
+  fldrTgs(){
+    let tagIds = [];
+    if (this.allTags.length > 0) {
+      for (let i = 0; i < this.allTags.length; i++) {
+        tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 1 }));
+      }
+    }
+    if (this.anyTags.length > 0) {
+      for (let i = 0; i < this.allTags.length; i++) {
+        tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 2 }));
+      }
+    }
+    if (this.noneTags.length > 0) {
+      for (let i = 0; i < this.allTags.length; i++) {
+        tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 3 }));
+      }
+    }
+    return '[' + tagIds.toString() + ']';
   }
 
   // get smart folder by id
@@ -450,7 +419,6 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- folder ---- //
-  // folder submit functions (add/update)
   folderSubmit() {
     this.edit ? this.updFolder() : this.addFolder();
   }
@@ -498,17 +466,9 @@ export class ContentWorkspaceComponent implements OnInit {
         } else {
           this.toastr.error('Unable to add Folder', 'Error!');
         }
-        this.disabled = false;
-        this.dismissModal();
-        this.folderForm.reset();
-        this.iconUrl = undefined;
-        this.addURLIcon = '';
+        this.setDefFldr();
       }, (err: any) => {
-        this.disabled = false;
-        this.dismissModal();
-        this.folderForm.reset();
-        this.iconUrl = undefined;
-        this.addURLIcon = '';
+        this.setDefFldr();
       });
     }
   }
@@ -528,23 +488,23 @@ export class ContentWorkspaceComponent implements OnInit {
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || 'Folder added successfully', 'Success!');
-            this.listFolders()
+            this.listFolders();
           } else {
             this.toastr.error('Unable to add Folder', 'Error!');
           }
-          this.disabled = false;
-          this.dismissModal();
-          this.folderForm.reset();
-          this.iconUrl = undefined;
-          this.addURLIcon = '';
+          this.setDefFldr();
         }, (err: any) => {
-          this.disabled = false;
-          this.dismissModal();
-          this.folderForm.reset();
-          this.iconUrl = undefined;
-          this.addURLIcon = '';
+          this.setDefFldr();
         });
     }
+  }
+
+  setDefFldr(fType:'folderForm'|'smartFolderForm'='folderForm'){
+    this.disabled = false;
+    this.dismissModal();
+    this[fType].reset();
+    this.iconUrl = undefined;
+    this.addURLIcon = '';
   }
 
   // get folder by id
@@ -564,7 +524,6 @@ export class ContentWorkspaceComponent implements OnInit {
   // ---- workspace ---- //
   // change displayed workspace (isActive)
   changeDispWrkspc() {
-    // this.activeWrkspc == 1 ? this.isActiveWrkspc = true : this.isActiveWrkspc = false;
     this.getWrkspcList();
   }
 
@@ -629,7 +588,6 @@ export class ContentWorkspaceComponent implements OnInit {
     } else if (type == 'dupl') {
       this.edit = false;
     }
-
     this.updWrkspcForm.patchValue({ ...this.selWrkspc });
     this.openModal(content);
   }
@@ -666,6 +624,7 @@ export class ContentWorkspaceComponent implements OnInit {
   selectWrkspc(wrkspc: Workspace) {
     this.selWrkspc = wrkspc;
     this.folderNav = [];
+    this.dispFolder = undefined;
     this.listFolders();
     this.selUsrGrpWrkspc = [];
     this.isUrGrpLoad = false;
@@ -1028,9 +987,6 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.cntnts = data.result.results;
-          for (let k = 0; k < this.cntnts.length; k++) {
-            this.cntnts[k].img = this.getImg(this.cntnts[k]);
-          }
           this.totalCount = data.result.totalCount;
         } else {
           this.cntnts = [];
@@ -1057,11 +1013,8 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.tags = data.result.results;
-        } else {
-          this.tags = [];
         }
       }, (err: any) => {
-        this.tags = [];
       });
   }
 
@@ -1073,11 +1026,8 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
           this.lngs = data.result;
-        } else {
-          this.lngs = [];
         }
       }, (err: any) => {
-        this.lngs = [];
       });
   }
 
@@ -1135,28 +1085,6 @@ export class ContentWorkspaceComponent implements OnInit {
       this[type].splice(index, 1);
     }
   }
-
-  // selTag(tag: Tag, type: string) {
-  //   let temp: any;
-  //   type == 'all' ? temp = this.allTags : type == 'any' ? temp = this.anyTags : temp = this.noneTags;
-  //   const index = temp.findIndex((ele: any) => ele.id == tag.id);
-  //   if (index >= 0) {
-  //     this.toastr.clear();
-  //     this.toastr.info("This tag is already selected", "Selected");
-  //   } else {
-  //     temp.push(tag);
-  //     type == 'all' ? this.allTags = temp : type == 'any' ? this.anyTags = temp : this.noneTags = temp;
-  //   }
-  // }
-  // removeTag(tag: Tag, type: string): void {
-  //   let temp: any;
-  //   type == 'all' ? temp = this.allTags : type == 'any' ? temp = this.anyTags : temp = this.noneTags;
-  //   const index = temp.findIndex((ele: any) => ele.id == tag.id);
-  //   if (index >= 0) {
-  //     temp.splice(index, 1);
-  //     type == 'all' ? this.allTags = temp : type == 'any' ? this.anyTags = temp : this.noneTags = temp;
-  //   }
-  // }
 
   onCntntSubmit() {
     if (this.cntntForm.valid) {
@@ -1273,10 +1201,10 @@ export class ContentWorkspaceComponent implements OnInit {
   getImg(data: any): string {
     if (data.urlIconPath)
       return data.urlIconPath;
-    // if (data.contentPath)
-    //   return data.contentPath;
     else if (data.pdfImage)
       return data.pdfImage;
+    else if (Array.isArray(data.pdfImages) && data.pdfImages.length>0 && data.pdfImages[0].imagePath)
+      return data.pdfImages[0].imagePath;
     else
       return this.defImg;
   }
