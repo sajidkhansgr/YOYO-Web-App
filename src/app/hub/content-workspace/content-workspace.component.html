@@ -499,7 +499,7 @@
                     <div class="add-comment mt-4">
                       <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
                         [floatLabel]="'never'">
-                        <input matInput placeholder="Write a comment..." [(ngModel)]="cmnt" name="cmnt" class="ml-0">
+                        <input matInput placeholder="Write a comment..." [(ngModel)]="cmnt" name="cmnt" class="ml-0" maxlength="500" required />
                         <i matSuffix class="fa fa-angle-double-right curs-ptr"></i>
                       </mat-form-field>
                       <div class="form-group text-right">
@@ -1110,11 +1110,11 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Description</mat-label>
-        <textarea rows="3" matInput placeholder="Add a Description" formControlName="description"></textarea>
+        <textarea rows="3" matInput placeholder="Add a Description" formControlName="description" maxlength="300"></textarea>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>URL </mat-label>
-        <input matInput placeholder="Add a URL" formControlName="url" required>
+        <input matInput placeholder="Add a URL" formControlName="url" maxlength="300" required />
         <mat-error *ngIf="urlForm.get('name')!.hasError('required')">
           URL is required
         </mat-error>
@@ -1199,21 +1199,23 @@
         </div>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Folder Label</mat-label>
-          <input matInput placeholder="Folder Label" formControlName="name">
+          <input matInput placeholder="Folder Label" formControlName="name" maxlength="100" required />
+          <mat-error *ngIf="folderForm.get('name')!.hasError('required')">
+            Name is required
+          </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Description</mat-label>
-          <textarea matInput placeholder="Description" formControlName="description"></textarea>
+          <textarea matInput placeholder="Description" formControlName="description" maxlength="200"></textarea>
         </mat-form-field>
         <div class="options">
           Options
-          <mat-checkbox class="d-block ml-3" formControlName="hideLabelInWorkspace">Hide label in Experience
-          </mat-checkbox>
+          <mat-checkbox class="d-block ml-3" formControlName="hideLabelInWorkspace">Hide label in Experience</mat-checkbox>
         </div>
       </div>
       <hr *ngIf="edit">
       <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed"
-        [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmartFolder" *ngIf="edit">
+        [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmrtFldr" *ngIf="edit">
         Edit Contained Smart Folders (0)
         <div class="float-right">
           <ng-container *ngIf="!editSmrtCollapsed; else elseIcon">
@@ -1224,7 +1226,7 @@
           </ng-template>
         </div>
       </div>
-      <div class="smartFolders" id="editSmartFolder" [ngbCollapse]="editSmrtCollapsed" *ngIf="edit">
+      <div class="smartFolders" id="editSmrtFldr" [ngbCollapse]="editSmrtCollapsed" *ngIf="edit">
         <div class="add">
           <mat-checkbox class="ml-3">Add</mat-checkbox>
           <div class="row mx-0 justify-content-between">
@@ -1294,7 +1296,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="smartFolderModalForm" (ngSubmit)="smartFolderSubmit()" [formGroup]="smartFolderForm" novalidate>
+  <form name="smartFolderModalForm" (ngSubmit)="smartFolderSubmit()" [formGroup]="smartFldrForm" novalidate>
     <div class="modal-body" ngbAutofocus>
       <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,true)">
         <input type="file" id="uploadFileInput" #inp (change)="fileBrowseHandler($event ,true)" accept="image/*">
@@ -1313,11 +1315,14 @@
       </div>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Smart Folder Label</mat-label>
-        <input matInput placeholder="Smart Folder Label" formControlName="name">
+        <input matInput placeholder="Smart Folder Label" formControlName="name" maxlength="100" required />
+        <mat-error *ngIf="smartFldrForm.get('name')!.hasError('required')">
+          Name is required
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Description</mat-label>
-        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+        <textarea matInput placeholder="Description" formControlName="description" maxlength="200"></textarea>
       </mat-form-field>
       <div class="options">
         Options
@@ -1477,7 +1482,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
-      <button type="submit" class="btn btn-primary" [disabled]="smartFolderForm!.invalid || disabled">
+      <button type="submit" class="btn btn-primary" [disabled]="smartFldrForm!.invalid || disabled">
         <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
         Save
       </button>
@@ -1509,14 +1514,14 @@
       <div class="general" *ngIf="dispGnrl">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Workspace Label</mat-label>
-          <input matInput type="text" placeholder="Workspace Label" formControlName="name">
+          <input matInput type="text" placeholder="Workspace Label" formControlName="name" maxlength="100" required />
           <mat-error *ngIf="updWrkspcForm.get('name')!.hasError('required')">
             Name is required
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100" *ngIf="edit">
           <mat-label>Description</mat-label>
-          <textarea matInput type="text" placeholder="Description"></textarea>
+          <textarea matInput type="text" placeholder="Description" maxlength="300"></textarea>
         </mat-form-field>
       </div>
       <hr>
@@ -1618,7 +1623,7 @@
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Workspace Label</mat-label>
-        <input matInput type="text" placeholder="Workspace Label" formControlName="name" required>
+        <input matInput type="text" placeholder="Workspace Label" formControlName="name" maxlength="100" required />
         <mat-error *ngIf="addWrkspcForm.get('name')!.hasError('required')">
           Name is required
         </mat-error>

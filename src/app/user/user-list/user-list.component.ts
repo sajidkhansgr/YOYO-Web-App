@@ -43,7 +43,7 @@ export class UserListComponent implements OnInit {
   private subscription!: Subscription;
 
   visbCols: any[] = [{ n: "Role", k: "roleId", asc: false, }];
-  hidCols: any[] = [{ n: "Property", k: "prop", asc: false }];
+  hidCols: any[] = [];
   cols: any[] = [{ n: "Name", asc: false, k: "name" }];
   roles = ROLES; rolesArr!: any; lngs = LNGS; lngArr!: any;
   usrForm!: FormGroup; usrLoading: boolean = false; activeIndex: number = 0; docLoading!: boolean;
@@ -183,31 +183,11 @@ export class UserListComponent implements OnInit {
     this.usrForm.updateValueAndValidity();
   }
 
-  toggleNgDropdown = (myDrop: any) => {
-    myDrop.toggle();
-  }
-
-  outsideCloseDD = (dropdown: any, event?: any) => {
-    if (!event.target!.classList.contains('fas')) {
-      if (dropdown!.classList.contains('show')) {
-        dropdown!.classList.remove('show');
-      }
-    }
-  }
-
   saveHdrChngs = (event: any) => {
     let nData = this.cols.slice(0, 1);
     this.cols = [...nData, ...this.visbCols];
     this.closeDropdown(event);
   }
-
-  // toggleDropdown = (event: any) => {
-  //   if (event.target!.classList.contains('fas')) {
-  //     event.target.parentNode.nextSibling!.classList.toggle('show');
-  //   } else {
-  //     event.target.nextSibling!.classList.toggle('show');
-  //   }
-  // }
 
   closeDropdown = (event: any) => {
     event.target.parentNode.parentNode!.classList.remove('show');

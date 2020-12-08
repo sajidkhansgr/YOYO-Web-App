@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { NgbModal, NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
@@ -34,6 +34,7 @@ export class CommnComponent implements OnInit {
   showRowInfo: boolean = false; rowInfo: any; sort: any = {};
   cols: any[] = [];
   totalCount!: number;
+  minDate!:any;
 
   constructor(
     private modalService: NgbModal,
@@ -46,6 +47,8 @@ export class CommnComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    let datePipe = new DatePipe("en-US");
+    this.minDate = datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.initialiseState();
     this.initForm();
     this.getAncmnts();
@@ -189,7 +192,6 @@ export class CommnComponent implements OnInit {
         this.rowInfo = row;
         this.docLoading = false;
       }, 900)
-      console.log(this.rowInfo);
     }
   }
 
@@ -235,11 +237,9 @@ export class CommnComponent implements OnInit {
         ancmntData.scheduledOn = datePipe.transform(new Date(ancmntData.date), 'yyyy-MM-dd') + 'T' + ancmntData.time + ':00.000Z';
         delete ancmntData.date; delete ancmntData.time;
       }
-      console.log(ancmntData, "ancmntData");
       if (this.isEdit) {
         this.editAncmnt(ancmntData);
       } else {
-        console.log("addAncmnt");
         this.addAncmnt(ancmntData);
       }
     }
@@ -281,15 +281,12 @@ export class CommnComponent implements OnInit {
   }
 
   openModal(content: any, type: boolean) {
-    // console.log('abc');
     this.ancmntForm.reset();
     this.isEdit = type;
     this.setFormData();
     this.modalService.open(content, { centered: true }).result
       .then((result) => {
-        // console.log(`Closed with: ${result}`);
       }, (reason) => {
-        // console.log('dism reason', reason);
       });
   }
 
@@ -303,6 +300,7 @@ export class CommnComponent implements OnInit {
     }
     this.ancmntForm.updateValueAndValidity();
   }
+
 
   setValdOrErr(type: string, isValidate: boolean) {
     if (isValidate) {
@@ -402,7 +400,6 @@ export class CommnComponent implements OnInit {
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        // console.log(tag);
         this.commnServ.archAncmnt(ancmnt!.id.toString()).subscribe((data: any) => {
           if (data) {
             this.pageNo = 1;this.getAncmnts();

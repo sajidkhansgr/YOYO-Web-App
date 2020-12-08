@@ -23,7 +23,7 @@
               <form name="catgForm" (ngSubmit)="addCatg()" [formGroup]="catgForm" novalidate *ngIf="showCatgIn">
                 <mat-form-field appearance="outline" class="custom-mat-input sp-mat-input w-100 my-2 flex bg-white"
                   [floatLabel]="'never'">
-                  <input matInput placeholder="Add Category" class="ml-0" formControlName="name" required>
+                  <input matInput placeholder="Add Category" class="ml-0" formControlName="name" maxlength="100" required />
                   <div matSuffix>
                     <button class="btn btn-secondary input-btn mr-1" (click)="cancelCatg();">
                       <i class="fas fa-times"></i>
@@ -250,7 +250,7 @@
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Name</mat-label>
-        <input matInput type="text" placeholder="Name" formControlName="name" required>
+        <input matInput type="text" placeholder="Name" formControlName="name" maxlength="100" required />
         <mat-error *ngIf="updCatgForm.get('name')!.hasError('required')">
           Name is required
         </mat-error>
@@ -285,7 +285,7 @@
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Name</mat-label>
-        <input matInput type="text" placeholder="Name" formControlName="name" required>
+        <input matInput type="text" placeholder="Name" formControlName="name" maxlength="100" required />
         <mat-error *ngIf="tagForm.get('name')!.hasError('required')">
           Name is required
         </mat-error>

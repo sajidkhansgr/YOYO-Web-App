@@ -250,14 +250,14 @@
     <div class="modal-body" ngbAutofocus>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Name</mat-label>
-        <input matInput placeholder="Name Group" formControlName="name">
+        <input matInput placeholder="Name Group" formControlName="name" maxlength="100" required />
         <mat-error *ngIf="groupForm.get('name')!.hasError('required')">
           Name is required
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Description</mat-label>
-        <textarea matInput placeholder="Type Description" formControlName="description"></textarea>
+        <textarea matInput placeholder="Type Description" formControlName="description" maxlength="200"></textarea>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-chip-list #chipList aria-label="Recipient  Names *">

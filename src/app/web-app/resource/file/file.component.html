@@ -240,7 +240,7 @@
       <div class="modal-body" ngbAutofocus>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Folder Name</mat-label>
-          <input type="text" matInput placeholder="Folder Name" formControlName="name" required>
+          <input type="text" matInput placeholder="Folder Name" formControlName="name" maxlength="100" required />
           <mat-error *ngIf="folderForm.get('name')!.hasError('required')">
             Folder Name is required
           </mat-error>
@@ -270,7 +270,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>URL</mat-label>
-        <input type="text" matInput placeholder="Eg. https://www.hiforce.com">
+        <input type="text" matInput placeholder="Eg. https://www.hiforce.com" maxlength="300">
       </mat-form-field>
     </div>
     <div class="modal-footer">
