@@ -19,6 +19,7 @@ import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-m
 import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
 import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to-coll.component';
 import { CollComponent } from 'src/app/shared/components/coll/coll.component';
+import { AddRsrcComponent } from 'src/app/shared/components/add-rsrc/add-rsrc.component';
 
 @Component({
   selector: 'app-collection-inner',
@@ -27,13 +28,13 @@ import { CollComponent } from 'src/app/shared/components/coll/coll.component';
 })
 export class CollectionInnerComponent implements OnInit {
   view: boolean = true; id!: number; routerSubs!: Subscription;
-  disabled!: boolean; loading!: boolean; wrkspcLoading!: boolean; colctnLoading!: boolean; fldrLoading!: boolean; sFldrLoading!: boolean; cntntLoading!: boolean;
+  disabled!: boolean; loading!: boolean;
   selColctn!: Colctn | undefined;
   multiForm!: number;
   cntntArr!: Content[]; selContentArr!: any[];
-  workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined; mdlCntntArr!: Content[]; addContentArr!: Content[];
-  showAll!: boolean | undefined; contentNav!: any[];
   defImg: string = DEF_ICON;
+  addContentArr!: Content[];
+
 
   constructor(
     private modalService: NgbModal,
@@ -41,10 +42,7 @@ export class CollectionInnerComponent implements OnInit {
     private colctnSrv: CollectionService,
     private toastr: ToastrService,
     private router: Router,
-    private dialog: MatDialog,
-    private expServ: ExpService,
-    private fileServ: FileService,
-    private cwServ: ContentWorkspaceService
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -57,12 +55,10 @@ export class CollectionInnerComponent implements OnInit {
 
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
-    this.wrkspcLoading = true; this.colctnLoading = true; this.fldrLoading = false; this.sFldrLoading = false; this.cntntLoading = false;
     this.selColctn = undefined; this.selContentArr = [];
     this.multiForm = 0;
     this.cntntArr = [];
-    this.workspcArr = []; this.colctnArr = []; this.fldrArr = []; this.selWrkspc = undefined; this.selFldr = undefined; this.mdlCntntArr = []; this.addContentArr = [];
-    this.showAll = true; this.contentNav = [];
+    this.addContentArr = [];
   }
 
   // open modals
@@ -82,8 +78,7 @@ export class CollectionInnerComponent implements OnInit {
           this.getCntntColl();
         }
       })
-    }
-    else if (type == 'coll') {
+    } else if (type == 'coll') {
       const modalRef = this.modalService.open(CollComponent, { size: 'lg' });
       modalRef.componentInstance.colctn = this.selColctn;
       modalRef.componentInstance.type = t;
@@ -92,139 +87,14 @@ export class CollectionInnerComponent implements OnInit {
           this.selColctn!.name = result.name;
         }
       })
-    }
-  }
-
-  // ----- for 'add resource' modal -----
-  // selecting contents to add
-  selectContent(content: Content, val: boolean) {
-    if (val) {
-      this.addContentArr.push(content);
-    } else {
-      this.addContentArr = this.addContentArr.filter((data: any) => data.id != content.id);
-    }
-  }
-
-  // show my files
-  showMyFiles(fldr?: any, val?: string) {
-    // console.log(fldr);
-    this.fldrLoading = true; this.cntntLoading = true;
-    val !== 'back' ? fldr ? this.contentNav.push(fldr) : this.contentNav = [{ name: "My Files" }] : undefined;
-    let query = {
-      folderId: fldr ? fldr.id : undefined
-    };
-    // console.log(query);
-    this.fileServ.myFiles(query).subscribe((data: any) => {
-      // console.log(data);
-      if (data && data.result) {
-        if (Array.isArray(data.result.contents) && data.result.contents.length > 0) {
-          this.mdlCntntArr = data.result.contents;
-        } else if (Array.isArray(data.result.contents) && data.result.contents.length == 0) {
-          this.mdlCntntArr = [];
+    } else if (type == 'resource') {
+      const modalRef = this.modalService.open(AddRsrcComponent, { size: 'lg' });
+      modalRef.result.then((result) => {
+        if (result) {
+          this.addContentArr = result;
+          this.addContent();
         }
-        if (Array.isArray(data.result.folders) && data.result.folders.length > 0) {
-          this.fldrArr = data.result.folders;
-        } else if (Array.isArray(data.result.folders) && data.result.folders.length == 0) {
-          this.fldrArr = [];
-        }
-      }
-      this.showAll = undefined;
-      this.fldrLoading = false; this.cntntLoading = false;
-    }, (err: any) => {
-      this.showAll = false;
-      this.fldrLoading = false; this.cntntLoading = false;
-    });
-  }
-
-  // get list of workspaces
-  getWrkspcList() {
-    this.wrkspcLoading = true;
-    this.expServ.wrkspcListEmp()
-      .subscribe((data: any) => {
-        // console.log(data);
-        if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-          this.workspcArr = data.result;
-        }
-        this.wrkspcLoading = false;
-      }, (err: any) => {
-        this.wrkspcLoading = false;
       });
-  }
-
-  // get folder and smart folder from wrkspace and content from workpspace and folder
-  getAllObjWrkspc() {
-    let params = {
-      workspaceId: this.selWrkspc!.id,
-      isActive: true,
-      folderId: this.selFldr ? this.selFldr!.id : undefined,
-    };
-    this.expServ.getAllObjWrkspc(params).subscribe((data: any) => {
-      if (data && data.result && data.result.result) {
-        if (Array.isArray(data.result.result[0].contents) && data.result.result[0].contents.length > 0) {
-          this.mdlCntntArr.push(...data.result.result[0].contents);
-        }
-        if (Array.isArray(data.result.result[0].folders) && data.result.result[0].folders.length > 0) {
-          for (let i = 0; i < data.result.result[0].folders.length; i++) {
-            this.fldrArr.push({ ...data.result.result[0].folders[i], key: 'fldr' });
-          }
-        }
-        if (Array.isArray(data.result.result[0].smartFolders) && data.result.result[0].smartFolders.length > 0) {
-          for (let i = 0; i < data.result.result[0].smartFolders.length; i++) {
-            this.fldrArr.push({ ...data.result.result[0].smartFolders[i], key: 'smtFldr' });
-          }
-        }
-      }
-      this.fldrLoading = false;
-    }, (err: any) => {
-      this.fldrLoading = false;
-    });
-  }
-
-  // get collection list
-  listColctn() {
-    this.colctnArr = [];
-    this.colctnLoading = true;
-    this.colctnSrv.colctnList({ pageNo: 0 }).subscribe((data: any) => {
-      // console.log(data);
-      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-        this.colctnArr = data.result.results;
-      }
-      this.colctnLoading = false;
-    }, (err: any) => {
-      this.colctnLoading = false;
-    });
-  }
-
-  // show folders on workspace click
-  showWorkspcFldrs(wrkspc: Wrkspc | undefined, fldr?: Folder) {
-    if (fldr) {
-      this.contentNav.push(fldr);
-      this.selFldr = fldr;
-      this.mdlCntntArr = [];
-      // this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr(); ---- pending
-    } else {
-      this.selWrkspc = wrkspc;
-      this.contentNav = [wrkspc];
-    }
-    this.fldrArr = [];
-    this.getAllObjWrkspc();
-    this.showAll = false;
-  }
-
-  // back nav click
-  backNav() {
-    this.contentNav.pop();
-    this.selFldr = this.contentNav.length > 1 ? this.contentNav[this.contentNav.length - 1] : undefined;
-    this.fldrArr = [];
-    this.mdlCntntArr = [];
-    if (this.contentNav.length == 0) {
-      this.selFldr = undefined;
-      this.showAll = true;
-    } else {
-      this.showAll === false ? this.getAllObjWrkspc() : this.showMyFiles(this.selFldr, 'back');
-      // this.getFolderList();
-      // this.getSmartFolderList();
-      // this.selFldr ? this.selFldr!.key == 'fldr' ? this.getContentFldr() : this.getContentSmtFldr() : undefined;
     }
   }
 
@@ -250,13 +120,6 @@ export class CollectionInnerComponent implements OnInit {
       this.dismissModal();
       this.disabled = false;
     });
-  }
-
-  // add resource modal
-  addResourceModal(modal: any) {
-    this.getWrkspcList();
-    this.listColctn();
-    this.openModal(modal);
   }
 
   // remove content from collection
@@ -298,53 +161,20 @@ export class CollectionInnerComponent implements OnInit {
     }
   }
 
-  // get content by smart folder
-  getContentSmtFldr() {
-    this.cntntLoading = true;
-    let query: any = {
-      workspaceId: this.selWrkspc!.id,
-      folderId: this.selFldr ? this.selFldr!.id : undefined
-    };
-    this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.mdlCntntArr.push(...data.result);
-      }
-      this.cntntLoading = false;
-    }, (err: any) => {
-      this.cntntLoading = false;
-    });
-  }
-
   // get content by collection
-  getCntntColl(colctn?: Colctn) {
+  getCntntColl() {
     let id: number;
-    if (colctn) {
-      id = colctn.id;
-      this.contentNav = [colctn];
-      this.cntntLoading = true;
-    } else {
-      this.loading = true;
-      id = this.id;
-    }
+    this.loading = true;
+    id = this.id;
     this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        colctn ? this.mdlCntntArr = data.result : this.cntntArr = data.result;
+        this.cntntArr = data.result;
       } else if (data && data.result && Array.isArray(data.result) && data.result.length == 0) {
-        colctn ? this.mdlCntntArr = [] : this.cntntArr = [];
+        this.cntntArr = [];
       }
-      if (colctn) {
-        this.showAll = false;
-        this.cntntLoading = false;
-      } else {
-        this.loading = false;
-      }
+      this.loading = false;
     }, (err: any) => {
-      if (colctn) {
-        this.showAll = false;
-        this.cntntLoading = false;
-      } else {
-        this.loading = false;
-      }
+      this.loading = false;
     });
   }
 
@@ -399,10 +229,8 @@ export class CollectionInnerComponent implements OnInit {
   }
 
   openModal(content: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
-
+    this.modalService.open(content, { size: 'lg' }).result.then((result) => {
     }, (reason) => {
-
     });
   }
 

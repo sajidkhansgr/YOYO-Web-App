@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppSettings } from '../../../shared/services/app-settings';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class FileService {
 
   constructor(
@@ -20,7 +22,7 @@ export class FileService {
     }
     return this.http.get(`${AppSettings.MY_FILES}`, {
       params: queryParams
-    }).pipe(map((res: any) =>res));
+    }).pipe(map((res: any) => res));
   }
 
   addFldr(data: any) {

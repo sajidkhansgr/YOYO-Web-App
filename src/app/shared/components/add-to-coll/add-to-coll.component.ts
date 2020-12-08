@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { CollService } from '../../services/coll.service';
+import { CollService } from '../coll/coll.service';
 import { FLDR_ICON } from '../../constants';
 import { Collection } from '../../models/collection';
 
@@ -12,8 +12,8 @@ import { Collection } from '../../models/collection';
 })
 export class AddToCollComponent implements OnInit {
   @Input() private data!: any;
-  collLoad:boolean = true;
-  colls: any=[];
+  collLoad: boolean = true;
+  colls: any = [];
   fldrIcon: string = FLDR_ICON;
 
   constructor(
@@ -40,20 +40,20 @@ export class AddToCollComponent implements OnInit {
       });
   }
 
-  addCntntToColl(coll: Collection){
-    let data:any = {
+  addCntntToColl(coll: Collection) {
+    let data: any = {
       id: coll.id, contents: [],
       pages: { pageNumbers: [] }
     }
-    if(this.data.type=='wrkspc'){
+    if (this.data.type == 'wrkspc') {
       data.contents = [this.data.id];
-    }else if(this.data.type=='coll-inr'){
-      if(this.data.pageNo){
+    } else if (this.data.type == 'coll-inr') {
+      if (this.data.pageNo) {
         data.pages = {
           pageNumbers: [this.data.pageNo],
           contentId: this.data.contentId
         }
-      }else{
+      } else {
         data.contents = [this.data.contentId];
       }
     }
@@ -62,7 +62,7 @@ export class AddToCollComponent implements OnInit {
       if (data) {
         this.toastr.success(data.message || 'Added successfully to collection', 'Success!');
         this.modalRef.close(coll);
-      }else{
+      } else {
         this.modalRef.dismiss();
       }
       this.collLoad = false;

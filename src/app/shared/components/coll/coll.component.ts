@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { CollService } from '../../services/coll.service';
+import { CollService } from './coll.service';
 
 @Component({
   selector: 'app-coll',

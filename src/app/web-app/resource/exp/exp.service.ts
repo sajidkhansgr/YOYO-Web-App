@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppSettings } from '../../../shared/services/app-settings';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ExpService {
 
   constructor(
@@ -26,6 +28,6 @@ export class ExpService {
     }
     return this.http.get(`${AppSettings.GET_OBJ_WRKSPC_EMP}`, {
       params: queryParams
-    }).pipe(map((res: any) => res ));
+    }).pipe(map((res: any) => res));
   }
 }

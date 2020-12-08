@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { CollComponent } from './coll.component';
 import { LoaderModule } from '../loader/loader.module';
-import { CollService } from '../../services/coll.service'
+import { CollService } from './coll.service'
 
 @NgModule({
   declarations: [CollComponent],

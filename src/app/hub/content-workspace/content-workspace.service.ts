@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppSettings } from '../../shared/services/app-settings';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ContentWorkspaceService {
 
   constructor(
