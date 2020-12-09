@@ -68,7 +68,9 @@ export class CollectionInnerComponent implements OnInit {
       modalRef.componentInstance.type = colctn ? 'collection' : 'content';
       modalRef.componentInstance.data = colctn ? colctn : cntnt;
     } else if (type == 'getLink') {
-      this.openModal(GetLinkComponent);
+      const modalRef = this.modalService.open(GetLinkComponent, { size: 'lg' });
+      modalRef.componentInstance.type = colctn ? 'collection' : 'content';
+      modalRef.componentInstance.data = colctn ? colctn : cntnt;
     } else if (type == 'addToCollection') {
       console.log("sdsdsd")
       const modalRef: any = this.modalService.open(AddToCollComponent, { size: 'lg' });

@@ -62,8 +62,11 @@ export class ExpInnerComponent implements OnInit {
       modalRef.componentInstance.type = 'content';
       modalRef.componentInstance.data = wSC;
     }
-    else if (type == 'getLink')
-      this.openModal(GetLinkComponent);
+    else if (type == 'getLink') {
+      const modalRef = this.modalService.open(GetLinkComponent, { size: 'lg' });
+      modalRef.componentInstance.type = 'content';
+      modalRef.componentInstance.data = wSC;
+    }
     else if (type == 'addToColl') {
       const modalRef: any = this.modalService.open(AddToCollComponent);
       modalRef.componentInstance.data = { ...wSC, type: 'wrkspc' };

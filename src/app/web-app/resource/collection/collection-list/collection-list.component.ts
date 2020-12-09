@@ -146,7 +146,9 @@ export class CollectionListComponent implements OnInit {
       modalRef.componentInstance.type = 'collection';
       modalRef.componentInstance.data = colctn;
     } else if (type == 'getLink') {
-      this.openModal(GetLinkComponent);
+      const modalRef = this.modalService.open(GetLinkComponent, { size: 'lg' });
+      modalRef.componentInstance.type = 'collection';
+      modalRef.componentInstance.data = colctn;
     } else if (type == 'coll') {
       const modalRef = this.modalService.open(CollComponent, { size: 'lg' });
       modalRef.componentInstance.colctn = colctn;

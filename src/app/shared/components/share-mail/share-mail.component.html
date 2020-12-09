@@ -19,10 +19,20 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes" matChipInputAddOnBlur
               (matChipInputTokenEnd)="addChips($event)" formControlName="emailAddresses">
           </mat-chip-list>
+          <mat-error *ngIf="emailForm.get('emailAddresses')!.hasError('required')">
+            Email Address is required
+          </mat-error>
+          <mat-error
+            *ngIf="!emailForm.get('emailAddresses')!.hasError('required') && emailForm.get('emailAddresses')!.hasError('invalidEmail')">
+            Please enter a valid email address
+          </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Subject</mat-label>
           <input matInput type="text" placeholder="Subject" formControlName="title" required>
+          <mat-error *ngIf="emailForm.get('title')!.hasError('required')">
+            Subject is required
+          </mat-error>
         </mat-form-field>
         <div class="bg-hi-grey p-2 rounded d-flex">
           <div class="ml-3 align-self-center">Resources</div>
@@ -51,7 +61,9 @@
           <app-loader [type]="'div'" *ngIf="loading"></app-loader>
           <div class="view-selected" *ngIf="!loading">
             <div class="d-flex bg-hi-grey border rounded px-3 py-1 my-2" *ngFor="let vs of viewSel">
-              <img src="{{vs.pdfImagePath ? vs.pdfImagePath : vs.pdfImage ? vs.pdfImage : defImg}}">
+              <div class="align-self-center">
+                <img src="{{vs.pdfImagePath ? vs.pdfImagePath : vs.pdfImage ? vs.pdfImage : defImg}}">
+              </div>
               <div class="ml-2 align-self-center w-75">
                 <div class="text-truncate">{{vs.name}}</div>
                 <div class="text-secondary" *ngIf="vs.pageNo">Page {{vs.pageNo}}</div>
@@ -65,6 +77,9 @@
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Message</mat-label>
           <textarea matInput type="text" placeholder="Message" formControlName="body"></textarea>
+          <mat-error *ngIf="emailForm.get('body')!.hasError('required')">
+            Message is required
+          </mat-error>
         </mat-form-field>
       </div>
       <div class="col-3">
@@ -75,7 +90,8 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary" [disabled]="emailForm!.invalid || disabled || viewMe">
+    <button type="submit" class="btn btn-primary"
+      [disabled]="emailForm!.invalid || disabled || viewMe || viewSel.length == 0">
       <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
       Save
     </button>

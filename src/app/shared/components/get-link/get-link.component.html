@@ -4,26 +4,64 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<div class="modal-body" ngbAutofocus>
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Name</mat-label>
-    <input type="text" matInput placeholder="Name">
-  </mat-form-field>
-  <mat-checkbox>Allow downloads</mat-checkbox>
-  <mat-label class="d-block mt-3">Content</mat-label>
-  <div class="row">
-    <div class="col-9">
-      <mat-form-field appearance="outline" class="w-100 search">
-        <mat-label class="ml-2">Search for content</mat-label>
-        <input class="ml-2" type="text" matInput placeholder="Search for content">
-        <i class="fa fa-search text-secondary" matPrefix style="font-size: 18px;"></i>
+<form name="linkForm" [formGroup]="linkForm">
+  <div class="modal-body" ngbAutofocus>
+    <ng-container *ngIf="viewMe; else elseNotMe">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput placeholder="Name" formControlName="name" required />
+        <mat-error *ngIf="linkForm.get('name')!.hasError('required')">
+          Name is required
+        </mat-error>
       </mat-form-field>
-    </div>
-    <div class="col-3 mt-3">
-      <div class="btn btn-primary">Browse</div>
-    </div>
+      <mat-checkbox class="ml-3" formControlName="allowDownload">Allow downloads</mat-checkbox>
+      <div class="bg-hi-grey p-2 rounded d-flex mt-3">
+        <div class="ml-3 align-self-center">Resources</div>
+      </div>
+      <div class="rounded border m-2 p-2">
+        <div class="row mt-2">
+          <div class="col-8">
+            <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
+              <i matPrefix class="fas fa-search"></i>
+              <input matInput placeholder="Search Content">
+            </mat-form-field>
+          </div>
+          <div class="col-4">
+            <div class="btn btn-primary" (click)="openRsrcModal()">
+              <i class="fas fa-file-medical mr-1"></i>Add resource
+            </div>
+          </div>
+        </div>
+        <app-loader [type]="'div'" *ngIf="loading"></app-loader>
+        <div class="view-selected" *ngIf="!loading">
+          <div class="d-flex bg-hi-grey border rounded px-3 py-1 my-2" *ngFor="let vs of viewSel">
+            <div class="align-self-center">
+              <img src="{{vs.pdfImagePath ? vs.pdfImagePath : vs.pdfImage ? vs.pdfImage : defImg}}">
+            </div>
+            <div class="ml-2 align-self-center w-75">
+              <div class="text-truncate">{{vs.name}}</div>
+              <div class="text-secondary" *ngIf="vs.pageNo">Page {{vs.pageNo}}</div>
+            </div>
+            <div class="ml-auto align-self-center">
+              <i class="fas fa-trash-alt curs-ptr" (click)="removeMe(vs)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #elseNotMe>
+      <div class="d-flex px-4 py-3">
+        <input type="text" value="{{link}}" class="w-75" readonly #copyMe>
+        <div class="btn btn-primary ml-auto" (click)=copyLink(copyMe)>Copy Link</div>
+      </div>
+    </ng-template>
   </div>
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-primary" (click)="modalRef.close('Save click')">Save</button>
-</div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-{{viewMe ? 'primary' : 'secondary'}}"
+      (click)="rsrcBtn(viewMe ? 'done' : 'change')" [disabled]="linkForm!.invalid || disabled || viewSel.length == 0">
+      <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+      {{viewMe ? 'Next' : 'Back'}}
+    </button>
+    <button type="button" class="btn btn-primary" (click)="modalRef.dismiss()" *ngIf="!viewMe">Done</button>
+  </div>
+</form>

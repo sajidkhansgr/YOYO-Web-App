@@ -10,6 +10,7 @@ import { ShareService } from 'src/app/web-app/share/share.service';
 import { ShareMailService } from './share-mail.service';
 import { AddRsrcComponent } from '../add-rsrc/add-rsrc.component';
 import { DEF_ICON } from '../../constants';
+import { CommonValidations } from '../../validations/common-validations';
 
 @Component({
   selector: 'app-share-mail',
@@ -43,7 +44,7 @@ export class ShareMailComponent implements OnInit {
 
   initialiseState() {
     this.emailForm = this.fb.group({
-      emailAddresses: ['', [Validators.required]],
+      emailAddresses: ['', [Validators.required, CommonValidations.emailValidator]],
       title: ['', [Validators.required]],
       body: ['', [Validators.required]],
       sendMeCopy: [false],
@@ -77,13 +78,13 @@ export class ShareMailComponent implements OnInit {
         if (sel.pageNo || data.pageNo) {
           return data.pageNo !== sel.pageNo;
         } else {
-          return data.contentId !== sel.contentId; //error
+          return data.contentId !== sel.contentId;
         }
       } else if (sel.id && (sel.id == data.id)) {
         if (sel.pageNo || data.pageNo) {
           return data.pageNo !== sel.pageNo;
         } else {
-          return data.id !== sel.id; //error
+          return data.id !== sel.id;
         }
       } else {
         return true;
@@ -125,10 +126,10 @@ export class ShareMailComponent implements OnInit {
   addChips(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
-    if ((value || '').trim()) {
+    if ((value || '').trim() && !this.emailForm.get('emailAddresses')!.hasError('invalidEmail')) {
       this.emailAddresses.push(value.trim());
     }
-    if (input) {
+    if (input && !this.emailForm.get('emailAddresses')!.hasError('invalidEmail')) {
       input.value = '';
     }
   }
