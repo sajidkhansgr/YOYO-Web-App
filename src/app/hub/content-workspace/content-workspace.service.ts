@@ -15,11 +15,10 @@ export class ContentWorkspaceService {
 
   // for images in form (folder and smart folder)
   freezeFolderObj(data: any) {
-    console.log("sdf")
     const formData: FormData = new FormData();
     for (let key in data) {
       if (data[key] || key === 'IsUrl') {
-        if (key === 'folderIcon' || key === 'Content' || key === 'UrlIcon' && data[key] && data[key].name) {
+        if (key === 'folderIcon' || key === 'content' || key === 'urlIcon' && data[key] && data[key].name) {
           formData.append(key, data[key], data[key].name);
         } else {
           formData.append(key, data[key]);
@@ -197,9 +196,12 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.ADD_CNTNT_WRKSPC}`, data)
   }
 
-  // delete content
-  delCntnt(id: any) {
-    return this.http.post(`${AppSettings.DEL_CNTNT}?id=${id}`, {});
+  // delete content or upd status
+  updCntntStatusOrDel(data: any) {
+    if(data.status==3)
+      return this.http.post(`${AppSettings.DEL_CNTNT}?id=${data.id}`, {});
+    else
+      return this.http.post(`${AppSettings.UPD_CNTNT_STATUS}?id=${data.id}&status=${data.status}`, {});
   }
 
   // get all users and groupd in workspace
@@ -221,6 +223,17 @@ export class ContentWorkspaceService {
   //  remove usr/grp to workspace
   remUsrGrpWrkspc(data: any) {
     return this.http.post(`${AppSettings.REM_USR_GRP_WRKSPC}`, data);
+  }
+
+  deactCtntOrFldr(data: any){
+    if(data.isFldr)
+      return this.actDeactFldr(data.id, false);
+    else
+      return this.updCntntStatusOrDel(data);
+  }
+
+  newVersion(data: any) {
+    return this.http.post(`${AppSettings.UPL_VER_CNTNT}`, this.freezeFolderObj(data))
   }
 
 }

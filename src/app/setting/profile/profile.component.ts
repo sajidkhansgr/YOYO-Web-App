@@ -115,7 +115,6 @@ export class ProfileComponent implements OnInit {
       }
       this.pswdServ.changePassword(passData)
         .subscribe((data: any) => {
-          // console.log(data, 'data');
           if(data){
             this.toastr.success(data.message || 'Password changed successfully', 'Success!');
             this.disMissMdodal();
@@ -137,7 +136,6 @@ export class ProfileComponent implements OnInit {
       }
       this.usrServ.updateEmpl(profData)
         .subscribe((data: any) => {
-          // console.log(data, 'data');
           if (data) {
             this.toastr.success(data.message || 'User profile updated successfully', 'Success!');
             this.disMissMdodal();
@@ -152,9 +150,7 @@ export class ProfileComponent implements OnInit {
   openModal(content: any, isChange?:any) {
     this.modalService.open(isChange?ChngPassComponent:content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
     .then((result: any) => {
-      console.log(`Closed with: ${result}`);
     }, (reason: any) => {
-      console.log(`Dismissed ${(reason)}`);
     });
   }
 

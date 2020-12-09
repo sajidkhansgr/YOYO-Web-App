@@ -94,7 +94,7 @@ export class TagsComponent implements OnInit {
     this.totalCount = 0;
     this.tagNames = [];
     this.searchTxt = '';
-    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Status", asc: false, k: "isActive" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
+    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Status", k: "isActive" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
     this.activeTags = 1; this.activeCatgs = 1;
     this.categoryId = undefined; this.unCategorized = undefined;
     this.sort = {
@@ -186,11 +186,12 @@ export class TagsComponent implements OnInit {
 
   // tags sorting
   sortChange(col: any, index: number) {
-    if(col.k!='isActive'){
+    if(col.hasOwnProperty("asc")){
       this.pageNo = 1;
       let colData = { ...col };
       for (let k = 0; k < this.cols.length; k++) {
-        this.cols[k].asc = false;
+        if(this.cols[k].hasOwnProperty("asc"))
+          this.cols[k].asc = false;
       }
       colData.asc = !colData.asc;
       this.cols[index].asc = colData.asc;
@@ -234,19 +235,16 @@ export class TagsComponent implements OnInit {
       unCategorized: this.unCategorized,
       ...this.sort
     }
+    this.tags = [];
+    this.totalCount = 0;
     this.tagServ.tagList(query)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.tags = data.result.results;
           this.totalCount = data.result.totalCount;
-        } else {
-          this.tags = [];
-          this.totalCount = 0;
         }
         this.tagLoading = false;
       }, (err: any) => {
-        this.tags = [];
-        this.totalCount = 0;
         this.tagLoading = false;
       });
   }
@@ -341,16 +339,14 @@ export class TagsComponent implements OnInit {
   // list of categories
   getCatgs() {
     this.catgLoading = true;
+    this.catgs = [];
     this.tagServ.catgList({ hubId: this.hubid, isActive: this.isActiveCatg })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.catgs = data.result.results;
-        } else {
-          this.catgs = [];
         }
         this.catgLoading = false;
       }, (err: any) => {
-        this.catgs = [];
         this.catgLoading = false;
       });
   }

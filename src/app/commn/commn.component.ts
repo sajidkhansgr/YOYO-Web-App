@@ -140,17 +140,16 @@ export class CommnComponent implements OnInit {
       searchText: this.searchTxt, ...this.sort,
       status: this.activeIndex === 2 ? 3 : this.activeIndex == 1 ? 2 : 1,
     }
+    this.ancmnts = [];
+    this.totalCount = 0
     this.commnServ.ancmntList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.ancmnts = data.result.results;
           this.totalCount = data.result.totalCount;
-        } else {
-          this.ancmnts = [];
         }
         this.loading = false;
       }, (err: any) => {
-        this.ancmnts = [];
         this.loading = false;
       });
   }

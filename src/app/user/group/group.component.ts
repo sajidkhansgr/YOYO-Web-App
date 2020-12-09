@@ -72,9 +72,9 @@ export class GroupComponent implements OnInit {
   }
 
   intializeState() {
-    this.pageSize = this.lmtPage[0]; this.pageNo = 1;
-    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Status", asc: false, k: "isActive" }];
-    this.totalCount = 0;
+    this.pageSize = this.lmtPage[0]; this.pageNo = 1;this.totalCount = 0;
+    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Status", asc: false, k: "isActive" },
+        { n: "Created Date", asc: false, k: "createdDate" },{ n: "Members", k: "usersCount" }];
   }
 
   // when changing page size
@@ -97,17 +97,15 @@ export class GroupComponent implements OnInit {
       searchText: this.searchTxt,
       ...this.sort
     }
+    this.grps = [];this.totalCount = 0;
     this.grpServ.groupList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.grps = data.result.results;
           this.totalCount = data.result.totalCount;
-        } else {
-          this.grps = [];this.totalCount = 0;
         }
         this.loading = false;
       }, (err: any) => {
-        this.grps = [];this.totalCount = 0;
         this.loading = false;
       });
   }
@@ -119,7 +117,6 @@ export class GroupComponent implements OnInit {
           this.divArr = data.result.results;
         }
       }, (err: any) => {
-        console.log(err);
       });
   }
 
@@ -128,19 +125,22 @@ export class GroupComponent implements OnInit {
   }
 
   sortChange(col: any, index: number) {
-    this.loading = true;
-    this.pageNo = 1;
-    let colData = { ...col };
-    for (let k = 0; k < this.cols.length; k++) {
-      this.cols[k].asc = false;
+    if(col.hasOwnProperty("asc")){
+      this.loading = true;
+      this.pageNo = 1;
+      let colData = { ...col };
+      for (let k = 0; k < this.cols.length; k++) {
+        if(this.cols[k].hasOwnProperty("asc"))
+          this.cols[k].asc = false;
+      }
+      colData.asc = !colData.asc;
+      this.cols[index].asc = colData.asc;
+      this.sort = {
+        SortColumn: col.k,
+        IsAscending: colData.asc,
+      }
+      this.grpsList();
     }
-    colData.asc = !colData.asc;
-    this.cols[index].asc = colData.asc;
-    this.sort = {
-      SortColumn: col.k,
-      IsAscending: colData.asc,
-    }
-    this.grpsList();
   }
 
   onSubmit() {
@@ -201,7 +201,6 @@ export class GroupComponent implements OnInit {
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
         this.grpServ.actDeactGrp(this.rowInfo.id.toString(), this.rowInfo.isActive ? false : true).subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Group ${actDeac}d successfully`, 'Success!');

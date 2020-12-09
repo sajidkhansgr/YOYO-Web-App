@@ -23,7 +23,6 @@ export class DashboardComponent implements OnInit {
     this.sgnlServ.notifList().subscribe((data: any) => {
       this.msgs = data.result.results as Array<Notification>;
     }, (err: any) => {
-      console.log("Error");
     });
   }
 

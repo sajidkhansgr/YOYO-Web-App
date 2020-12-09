@@ -144,7 +144,6 @@ export class TestComponent implements OnInit {
 
   handlePages = (page: any) => {
     const scale = 1.0;
-    console.log(page, "page")
     let pageId: any = this.getPageID();
     let viewport = page.getViewport({scale});
     // const container: any = this.document.querySelector('#' + pageId);

@@ -68,7 +68,6 @@ export class CreatePasswordComponent implements OnInit {
           }
           this.loading = false;
         }, (err: any) => {
-          // console.log(err, 'err');
           this.loading = false;
         })
     }

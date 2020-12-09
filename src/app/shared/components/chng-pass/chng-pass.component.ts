@@ -59,14 +59,12 @@ export class ChngPassComponent implements OnInit {
       }
       this.pswdServ.changePassword(passData)
         .subscribe((data: any) => {
-          // console.log(data, 'data');
           if(data){
             this.toastr.success(data.message || 'Password changed successfully', 'Success!');
-            this.modalRef.dismiss("update")
+            this.modalRef.dismiss("update");
           }
           this.loading = false;
         }, (err: any) => {
-          console.log(err, 'err')
           this.loading = false;
         })
     }

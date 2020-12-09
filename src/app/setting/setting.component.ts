@@ -31,7 +31,7 @@ export class SettingComponent implements OnInit {
         mergeMap((route) => route.paramMap),
       ).subscribe(
         (paramAsMap) => {
-          console.log(this.route.snapshot.firstChild)
+          // console.log(this.route.snapshot.firstChild);
           // Get the params (paramAsMap.params) and use them to highlight or everything that meet your need
           this.checkAndGet();
         }

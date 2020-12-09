@@ -137,11 +137,11 @@
                     <tr>
                       <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
                         {{col.n}}
-                        <i *ngIf="col.k!='isActive'" class="fas ml-1" [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
+                        <i *ngIf="col.hasOwnProperty('asc')" class="fas ml-1" [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
                       </th>
                     </tr>
                   </thead>
-                  <tbody *ngIf="!tagLoading && tags.length > 0">
+                  <tbody *ngIf="tags.length > 0">
                     <tr class="curs-ptr" (click)="toggleInfo(tg)" *ngFor="let tg of tags" [ngClass]="{'sel-row':(rowInfo.id === tg.id)}">
                       <td>{{tg.name}}</td>
                       <td class="text-hi-dark-grey">{{tg.isActive?'Active':'In Active'}}</td>

@@ -4,12 +4,14 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
 import { FileService } from './file.service';
 import { ContentWorkspaceService } from '../../../hub/content-workspace/content-workspace.service';
-import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-mail.component';
-import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
-import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to-coll.component';
-import { Content } from 'src/app/shared/models/content';
+import { Content } from '../../../shared/models/content';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ShareMailComponent } from '../../../shared/components/share-mail/share-mail.component';
+import { GetLinkComponent } from '../../../shared/components/get-link/get-link.component';
+import { AddToCollComponent } from '../../../shared/components/add-to-coll/add-to-coll.component';
 
 @Component({
   selector: 'app-file',
@@ -35,6 +37,7 @@ export class FileComponent implements OnInit {
     private fb: FormBuilder,
     private modalService: NgbModal,
     private toastr: ToastrService,
+    private dialog: MatDialog,
     private fileServ: FileService,
     private cwServ: ContentWorkspaceService
   ) { }
@@ -94,7 +97,6 @@ export class FileComponent implements OnInit {
         }
         this.allFiles = [...this.folders, ...this.files];
         // this.setSelFoldFiles();
-        // console.log(data);
         this.loading = false;
       }, (err: any) => {
         // this.setSelFoldFiles();
@@ -189,7 +191,6 @@ export class FileComponent implements OnInit {
       if (this.frmType == 'updFldr') {
         this.editFolder(fldrData);
       } else {
-        console.log("addFolder");
         this.addFolder(fldrData);
       }
     }
@@ -236,6 +237,40 @@ export class FileComponent implements OnInit {
         this.fldrLoad = false;
         this.dismissModal();
       });
+  }
+
+  //showing deleted but actually its deactive
+  delCntntOrFldr(d:any, isFldr:boolean=false){
+    let mdlMsg,mdlTtl, stsData:any = {id: d.id},res:string;
+    if(isFldr || d.isFldr){
+      mdlMsg = ` folder`; mdlTtl = `Delete Folder`;
+      res = `Folder deleted`;
+      stsData.isFldr = true;
+    }else{
+      mdlMsg = ``; mdlTtl = `Delete Content`;
+      res = `Content deleted`;
+      stsData.status = 2; //move to trash
+    }
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to delete ${d.name}${mdlMsg}?`,
+        title: mdlTtl
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.cwServ.deactCtntOrFldr(stsData).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(`${res} successfully.`, 'Success!');
+            this.getFiles();
+          } else {
+            this.toastr.error(`Please try after some time`, 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
   }
 
   // succEeditFldr(type: 'folderNav' | 'allFiles' | 'folders' | 'files' | 'selFolders' | 'selFiles') {

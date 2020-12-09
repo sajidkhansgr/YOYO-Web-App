@@ -126,19 +126,16 @@ export class UserListComponent implements OnInit {
       params.isActive = true;
     else if (this.activeIndex == 2)
       params.isActive = false;
-    // console.log(params);
+    this.usrs = [];
+    this.totalCount = 0
     this.usrServ.emplList(params)
       .subscribe((data: any) => {
-        // console.log(data);
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.usrs = data.result.results;
           this.totalCount = data.result.totalCount;
-        } else {
-          this.usrs = [];
         }
         this.loading = false;
       }, (err: any) => {
-        this.usrs = [];
         this.loading = false;
       });
   }
@@ -278,7 +275,6 @@ export class UserListComponent implements OnInit {
   addUsr(usrData: any) {
     this.usrServ.addEmpl(usrData)
       .subscribe((data: any) => {
-        // console.log(data, 'data');
         if (data) {
           this.toastr.success(data.message || 'User added successfully', 'Success!');
           this.dismissModal();
@@ -296,7 +292,6 @@ export class UserListComponent implements OnInit {
     usrData.id = this.rowInfo.id;
     this.usrServ.updateEmpl(usrData)
       .subscribe((data: any) => {
-        // console.log(data, 'data');
         if (data) {
           this.toastr.success(data.message || 'User updated successfully', 'Success!');
           this.dismissModal();
@@ -325,16 +320,13 @@ export class UserListComponent implements OnInit {
   }
 
   grpsList() {
+    this.grps = [];
     this.grpServ.groupList({ pageNo: 0 })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.grps = data.result.results;
-        } else {
-          this.grps = [];
         }
       }, (err: any) => {
-        console.log(err);
-        this.grps = [];
       });
   }
 

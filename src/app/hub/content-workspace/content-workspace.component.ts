@@ -36,8 +36,9 @@ export class ContentWorkspaceComponent implements OnInit {
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: Workspace[]; selWrkspc: Workspace | undefined;
   wrkspcLoading!: boolean; folderLoading!: boolean;
-  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; smartFldrForm!: FormGroup;;
+  addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; smartFldrForm!: FormGroup;
   cntntForm!: FormGroup; urlForm!: FormGroup;
+  verForm!: FormGroup;verDisb!:boolean;
   disabled!: boolean;
   fldrCntntArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; cntntArr!: Content[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
@@ -150,6 +151,11 @@ export class ContentWorkspaceComponent implements OnInit {
       description: [''],
       url: ['', [Validators.required]],
     });
+    this.verForm = this.fb.group({
+      KeepCurrentFileName: [false],
+      LikeReset: [false]
+    });
+    this.verDisb = false;
     this.subscription = this.searchTxtChng
       .pipe(
         debounceTime(1000),
@@ -647,12 +653,9 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.wrkspcs = data.result.results;
-        } else if (data && data.result && Array.isArray(data.result.results) && data.result.results.length == 0) {
-          this.wrkspcs = [];
         }
         this.wrkspcLoading = false;
       }, (err: any) => {
-        this.wrkspcs = [];
         this.wrkspcLoading = false;
       });
   }
@@ -925,22 +928,20 @@ export class ContentWorkspaceComponent implements OnInit {
 
   openModal(content: any, isTagReq: boolean = false) {
     if (isTagReq) {
-      this.urlForm.reset();
-      this.cntntForm.reset();
-      this.iconUrl = '';
       this.getTags();
     }
+    this.addWrkspcForm.reset();
+    this.updWrkspcForm.reset();
+    this.folderForm.reset();
+    this.smartFldrForm.reset();
+    this.verForm.reset();
+    this.urlForm.reset();
+    this.cntntForm.reset();
+    this.iconUrl = '';
+    this.addURLIcon = '';
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
       }, (reason) => {
-        if (reason || reason === 0) {
-          this.addWrkspcForm.reset();
-          this.updWrkspcForm.reset();
-          this.folderForm.reset();
-          this.smartFldrForm.reset();
-          this.iconUrl = undefined;
-          this.addURLIcon = '';
-        }
       });
   }
 
@@ -977,25 +978,19 @@ export class ContentWorkspaceComponent implements OnInit {
       searchText: this.searchTxt,
       ...this.sort,
       hubId: parseInt(this.hubid),
-      fltrL: this.filteredList
+      fltrL: this.filteredList,
+      ContentStatus: this.activeIndex==2?2:1
     };
-    // if (this.activeIndex == 1)
-    //   params.isActive = true;
-    // else if (this.activeIndex == 2)
-    //   params.isActive = false;
+    this.cntnts = [];
+    this.totalCount = 0
     this.cwServ.contentList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.cntnts = data.result.results;
           this.totalCount = data.result.totalCount;
-        } else {
-          this.cntnts = [];
-          this.totalCount = 0
         }
         this.cntntLoading = false;
       }, (err: any) => {
-        this.cntnts = [];
-        this.totalCount = 0
         this.cntntLoading = false;
       });
   }
@@ -1087,7 +1082,8 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   onCntntSubmit() {
-    if (this.cntntForm.valid) {
+    //this.cntntForm.valid
+    if (this.files.length>0) {
       this.cntntDisb = true;
       let cntntData: any = {
         content: this.files[0],
@@ -1201,6 +1197,8 @@ export class ContentWorkspaceComponent implements OnInit {
   getImg(data: any): string {
     if (data.urlIconPath)
       return data.urlIconPath;
+    else if (data.contentType===2 && data.contentPath)
+      return data.contentPath;
     else if (data.pdfImage)
       return data.pdfImage;
     else if (Array.isArray(data.pdfImages) && data.pdfImages.length>0 && data.pdfImages[0].imagePath)
@@ -1234,21 +1232,40 @@ export class ContentWorkspaceComponent implements OnInit {
       });
   }
 
-  delCntnt() {
+  updCntntStatus(isDel:boolean=false){
+    let mdlMsg,mdlTtl, stsData:any = {id: this.rowInfo.id},res:string;
+    if(isDel){
+      mdlMsg = `permanently delete ${this.rowInfo.name}`;
+      mdlTtl = `Permanently delete`;
+      res = `Content permanently deleted`;
+      stsData.status = 3;
+    }else{
+      if(this.activeIndex==0){
+        mdlMsg = `move ${this.rowInfo.name} to the trash`;
+        mdlTtl = `Move to trash`;
+        res = `Content move to tash`;
+        stsData.status = 2;
+      }else if(this.activeIndex==2){
+        mdlMsg = `restore ${this.rowInfo.name} from trash`;
+        mdlTtl = `Restore from Tash`;
+        res = `Content restore from trash`;
+        stsData.status = 1;
+      }
+    }
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to move ${this.rowInfo.name} to the trash?`,
-        title: `Move to trash`
+        msg: `Are you sure you want to ${mdlMsg}?`,
+        title: mdlTtl
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.cwServ.delCntnt(this.rowInfo.id.toString()).subscribe((data: any) => {
+        this.cwServ.updCntntStatusOrDel(stsData).subscribe((data: any) => {
           if (data) {
-            this.toastr.success(`Content successfully moved to trash`, 'Success!');
+            this.toastr.success(`${res} successfully.`, 'Success!');
             this.cntntList();
           } else {
-            this.toastr.error(`Unable to trash content`, 'Error!');
+            this.toastr.error(`Please try after some time`, 'Error!');
           }
         }, (err: any) => {
 
@@ -1288,6 +1305,32 @@ export class ContentWorkspaceComponent implements OnInit {
       }
     }
     this.cntntList();
+  }
+
+  newVersion(){
+    //this.verForm.valid
+    if (this.files.length>0) {
+      this.verDisb = true;
+      let cntntData: any = {
+        ...this.verForm.value,
+        id: this.rowInfo.id,
+        content: this.files[0]
+      }
+      this.cwServ.newVersion(cntntData)
+        .subscribe((data: any) => {
+          if (data) {
+            this.toastr.success('New version added successfully', 'Success!');
+            this.files = []; this.pageNo = 1;
+            this.cntntList();
+            this.dismissModal();
+          } else {
+            this.toastr.error('Unable to add new version', 'Error!');
+          }
+          this.verDisb = false;
+        }, (err: any) => {
+          this.verDisb = false;
+        });
+    }
   }
 
   dismissModal() {

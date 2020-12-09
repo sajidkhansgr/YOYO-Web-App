@@ -56,7 +56,6 @@ export class DivisionComponent implements OnInit {
         }
         this.loading = false;
       }, (err: any) => {
-        console.log(err);
         this.loading = false;
       });
   }

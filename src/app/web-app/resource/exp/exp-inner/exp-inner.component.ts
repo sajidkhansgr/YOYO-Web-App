@@ -143,7 +143,6 @@ export class ExpInnerComponent implements OnInit {
     }
     this.brdcrmServ.getList(params)
       .subscribe((data: any) => {
-        console.log(data, 'data')
         if (data && Array.isArray(data.result) && data.result.length > 0) {
 
         } else {

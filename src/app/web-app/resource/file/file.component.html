@@ -79,8 +79,9 @@
                     <div class="_options">
                       <div class="btn btn-light btn-sm mr-1"
                         (click)="$event.stopPropagation();setSelRow(fldrModal,fl);"><i class="fas fa-edit"></i></div>
-                      <div class="btn btn-light btn-sm mr-1" (click)="$event.stopPropagation();"><i
-                          class="fas fa-trash-alt"></i></div>
+                      <div class="btn btn-light btn-sm mr-1" (click)="$event.stopPropagation();delCntntOrFldr(fl,true)">
+                        <i class="fas fa-trash-alt"></i>
+                      </div>
                     </div>
                     <mat-checkbox class="align-self-center" (click)="$event.stopPropagation();"></mat-checkbox>
                   </div>
@@ -105,22 +106,23 @@
                       </button>
                       <div class="dropdown-menu" aria-labelledby="shareDD">
                         <h6 class="ml-2 text-hi-dark">External Sharing</h6>
-                        <a class="dropdown-item" (click)="cmnModal('email', f)"><i
-                            class="fa fa-envelope mr-1"></i>Email</a>
-                        <a class="dropdown-item" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a
-                          link</a>
+                        <a class="dropdown-item" (click)="cmnModal('email', f)">
+                          <i class="fa fa-envelope mr-1"></i>Email
+                        </a>
+                        <a class="dropdown-item" (click)="cmnModal('getLink')">
+                          <i class="fa fa-link mr-1"></i>Get a link
+                        </a>
                         <div class="dropdown-divider"></div>
                         <h6 class="ml-2 text-hi-dark">Internal Sharing</h6>
-                        <a class="dropdown-item" (click)="openModal(shareColl)"><i
-                            class="fa fa-user-friends mr-1"></i>Share
-                          with
-                          colleagues</a>
+                        <a class="dropdown-item" (click)="openModal(shareColl)">
+                          <i class="fa fa-user-friends mr-1"></i>Share with colleagues
+                        </a>
                       </div>
                     </div>
                     <div class="btn my-1" (click)="cmnModal('addToCollection')">
                       <i class="fas fa-folder-plus"></i>
                     </div>
-                    <div class="btn">
+                    <div class="btn" (click)="delCntntOrFldr(f)">
                       <i class="fas fa-trash-alt"></i>
                     </div>
                   </div>
@@ -184,10 +186,12 @@
                         <i class="fas fa-share-square"></i>
                       </button>
                       <div class="dropdown-menu" aria-labelledby="shareDD">
-                        <a class="dropdown-item" (click)="cmnModal('email', aF)"><i
-                            class="fa fa-envelope mr-1"></i>Email</a>
-                        <a class="dropdown-item" (click)="cmnModal('getLink')"><i class="fa fa-link mr-1"></i>Get a
-                          link</a>
+                        <a class="dropdown-item" (click)="cmnModal('email', aF)">
+                          <i class="fa fa-envelope mr-1"></i>Email
+                        </a>
+                        <a class="dropdown-item" (click)="cmnModal('getLink')">
+                          <i class="fa fa-link mr-1"></i>Get a link
+                        </a>
                       </div>
                     </div>
                     <div *ngIf="!aF.isFldr" class="btn" (click)="cmnModal('addToCollection')">
@@ -217,12 +221,12 @@
     <div class="selected-items text-secondary align-self-center">1 item selected</div>
     <div class="mr-1 ml-3 align-self-center">|</div>
     <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
-    <div class="btn btn-light align-self-center ml-auto bg-white" (click)="cmnModal('email')"><i
-        class="fa fa-envelope mr-1"></i>Email</div>
-    <div class="btn btn-light align-self-center bg-white" (click)="cmnModal('getLink')"><i
-        class="fa fa-link mr-1"></i>Get
-      a
-      link</div>
+    <div class="btn btn-light align-self-center ml-auto bg-white" (click)="cmnModal('email')">
+      <i class="fa fa-envelope mr-1"></i>Email
+    </div>
+    <div class="btn btn-light align-self-center bg-white" (click)="cmnModal('getLink')">
+      <i class="fa fa-link mr-1"></i>Get a link
+    </div>
     <div class="btn btn-light align-self-center bg-white" (click)="cmnModal('addToCollection')"><i
         class="fa fa-folder-plus mr-1"></i>Add to collection</div>
     <div class="btn btn-primary align-self-center"><i class="fas fa-trash-alt mr-1"></i>Delete</div>
