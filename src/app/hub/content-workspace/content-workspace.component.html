@@ -1102,7 +1102,7 @@
       <img [src]="iconUrl?iconUrl:defIcon" class="border mt-2 mb-4" style="height: 130px; width: auto;">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Name</mat-label>
-        <input matInput placeholder="Add a Name" formControlName="name" required />
+        <input matInput placeholder="Add a Name" formControlName="name" maxlength="100" required />
         <div matSuffix>.url</div>
         <mat-error *ngIf="urlForm.get('name')!.hasError('required')">
           Name is required
