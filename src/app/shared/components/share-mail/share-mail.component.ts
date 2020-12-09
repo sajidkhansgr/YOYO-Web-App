@@ -1,10 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ShareMailService } from './share-mail.service';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ToastrService } from 'ngx-toastr';
-import { AddRsrcComponent } from '../add-rsrc/add-rsrc.component';
+
+import { CollectionService } from 'src/app/web-app/resource/collection/collection.service';
 import { ShareService } from 'src/app/web-app/share/share.service';
+import { ShareMailService } from './share-mail.service';
+import { AddRsrcComponent } from '../add-rsrc/add-rsrc.component';
+import { DEF_ICON } from '../../constants';
 
 @Component({
   selector: 'app-share-mail',
@@ -12,10 +17,15 @@ import { ShareService } from 'src/app/web-app/share/share.service';
   styleUrls: ['./share-mail.component.scss']
 })
 export class ShareMailComponent implements OnInit {
-  emailForm!: FormGroup; link!: any;
-  disabled!: boolean;
+  emailForm!: FormGroup; link!: any; emailAddresses!: string[];
+  disabled!: boolean; linkDisabled!: boolean
+  viewSel!: any[];
+  defImg: string = DEF_ICON;
+  viewMe!: boolean;
+  loading!: boolean;
   @Input() private type!: string;
   @Input() private data!: any;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(
     public modalRef: NgbActiveModal,
@@ -23,7 +33,8 @@ export class ShareMailComponent implements OnInit {
     private mailSrv: ShareMailService,
     private toastr: ToastrService,
     private modalService: NgbModal,
-    private shareSrv: ShareService
+    private shareSrv: ShareService,
+    private colctnSrv: CollectionService
   ) { }
 
   ngOnInit(): void {
@@ -35,16 +46,17 @@ export class ShareMailComponent implements OnInit {
       emailAddresses: ['', [Validators.required]],
       title: ['', [Validators.required]],
       body: ['', [Validators.required]],
-      sendMeCopy: [''],
+      sendMeCopy: [false],
       allowDownload: [true]
     });
-    this.disabled = false;
+    this.disabled = false; this.linkDisabled = false; this.emailAddresses = [];
+    this.viewMe = true;
+    this.link = undefined;
     if (this.type === 'collection') {
-      this.link = `<a href="http://hiforce.imobisoft.eu/web-app/resource/collections/${this.data.id}">${this.data.name}</a>`;
+      this.loading = true;
+      this.getCntntByClctn(this.data.id);
     } else if (this.type === 'content') {
-      // this.link = `<a href="http://hiforce.imobisoft.eu/web-app/view/${this.data.contentId ? this.data.contentId : this.data.id}">${this.data.name}</a>`;
-      this.getContentLink();
-      // console.log(this.data);
+      this.viewSel = [this.data];
     }
   }
 
@@ -53,42 +65,80 @@ export class ShareMailComponent implements OnInit {
     const modalRef = this.modalService.open(AddRsrcComponent, { size: 'lg' });
     modalRef.result.then((result) => {
       if (result) {
-        console.log(result);
-        // this.addContentArr = result;
-        // this.addContent();
+        this.viewSel.push(...result);
+      }
+    });
+  }
+
+  // remove resource
+  removeMe(sel: any) {
+    this.viewSel = this.viewSel.filter((data) => {
+      if (sel.contentId && (sel.contentId == data.contentId)) {
+        if (sel.pageNo || data.pageNo) {
+          return data.pageNo !== sel.pageNo;
+        } else {
+          return data.contentId !== sel.contentId; //error
+        }
+      } else if (sel.id && (sel.id == data.id)) {
+        if (sel.pageNo || data.pageNo) {
+          return data.pageNo !== sel.pageNo;
+        } else {
+          return data.id !== sel.id; //error
+        }
+      } else {
+        return true;
       }
     });
   }
 
   // send mail
   sendMail() {
-    console.log(this.emailForm.get('allowDownload')!.value);
-    // if (this.emailForm.valid) {
-    //   this.disabled = true;
-    //   let data = {
-    //     ...this.emailForm.value,
-    //     sendMeCopy: false
-    //   }
-    //   data.emailAddresses = [data.emailAddresses];
-    //   data.body += `
-    //   <br />
-    //   <br />
-    //   Attached items:<br />
-    //   1. ${this.link}
-    //   `;
-    //   this.mailSrv.sendMail(data).subscribe((data: any) => {
-    //     if (data && data.result) {
-    //       this.toastr.success(data.result || 'Email sent successfully', 'Success!');
-    //     } else {
-    //       this.toastr.error(data.result || 'Email not sent', 'Error!');
-    //     }
-    //     this.disabled = false;
-    //     this.modalRef.dismiss();
-    //   }, (err: any) => {
-    //     this.disabled = false;
-    //     this.modalRef.dismiss();
-    //   });
-    // }
+    if (this.emailForm.valid) {
+      this.disabled = true;
+      let data = {
+        ...this.emailForm.value,
+        sendMeCopy: this.emailForm.get('sendMeCopy')!.value,
+        emailAddresses: this.emailAddresses
+      }
+      data.body += `
+      <br />
+      <br />
+      Attached Link:<br />
+      <a href="${this.link.link}">${this.link.name}</a>
+      `;
+      this.mailSrv.sendMail(data).subscribe((data: any) => {
+        if (data && data.result) {
+          this.toastr.success(data.result || 'Email sent successfully', 'Success!');
+        } else {
+          this.toastr.error(data.result || 'Email not sent', 'Error!');
+        }
+        this.disabled = false;
+        this.modalRef.dismiss();
+      }, (err: any) => {
+        this.disabled = false;
+        this.modalRef.dismiss();
+      });
+    }
+  }
+
+  // add chips - email addresses
+  addChips(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    if ((value || '').trim()) {
+      this.emailAddresses.push(value.trim());
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  // remove chip - email addresses
+  removeChip(tag: any): void {
+    const index = this.emailAddresses.indexOf(tag);
+    if (index >= 0) {
+      this.emailAddresses.splice(index, 1);
+    }
   }
 
   // get share link of content
@@ -97,19 +147,68 @@ export class ShareMailComponent implements OnInit {
       allowDownload: this.emailForm.get('allowDownload')!.value,
       shareContents: []
     }
-    data.shareContents.push({
-      contentId: this.data.contentId,
-      pageNumber: this.data.pageNo
+    for (let i = 0; i < this.viewSel.length; i++) {
+      data.shareContents.push({
+        contentId: this.viewSel[i].contentId ? this.viewSel[i].contentId : this.viewSel[i].id,
+        pageNumber: this.viewSel[i].pageNo || 0
+      });
+    }
+    this.shareSrv.addShare(data).subscribe((data: any) => {
+      if (data && data.result) {
+        this.link = { name: this.data.name, link: data.result };
+      } else {
+        this.toastr.error(data.message || 'Something went wrong', 'Error!');
+        this.viewMe = true;
+      }
+      this.linkDisabled = false;
+    }, (err: any) => {
+      this.viewMe = true;
+      this.linkDisabled = false;
     });
-    console.log(data);
-    // this.shareSrv.addShare(data).subscribe((data: any) => {
-    //   if (data && data.result) {
-    //     this.link = { name: this.data.name, link: data.result };
-    //     console.log(this.link);
-    //   }
-    // }, (err: any) => {
+  }
 
-    // });
+  // remove share link
+  removeLink() {
+    let id = this.link.link.split('/')[this.link.link.split('/').length - 1];
+    this.shareSrv.delLink(id).subscribe((data: any) => {
+      if (data) {
+        this.link = undefined;
+
+      } else {
+        this.toastr.error(data.message || 'Something went wrong', 'Error!');
+      }
+    }, (err: any) => {
+      this.link = undefined;
+    });
+  }
+
+  // resource button (done/change)
+  rsrcBtn(type: string) {
+    if (type == 'done') {
+      this.viewMe = false;
+      this.linkDisabled = true;
+      this.getContentLink();
+    } else if (type == 'change') {
+      this.removeLink();
+      this.viewMe = true;
+    }
+  }
+
+  // get content by collection id
+  getCntntByClctn(id: number) {
+    this.viewSel = [];
+    this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result)) {
+        this.viewSel.push(...data.result);
+      } else {
+        this.toastr.error(data.message || 'Something went wrong', 'Error!');
+        this.modalRef.dismiss();
+      }
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+      this.modalRef.dismiss();
+    });
   }
 
 }

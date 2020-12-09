@@ -17,4 +17,9 @@ export class ShareService {
   addShare(data: any) {
     return this.http.post(`${AppSettings.ADD_SHARE}`, data);
   }
+
+  // removing share link
+  delLink(id: any) {
+    return this.http.post(`${AppSettings.DEL_SHARE}?identifier=${id}`, {});
+  }
 }

@@ -219,4 +219,6 @@ export class AppSettings {
   // ---- COMMON ---- //
 
   public static ADD_SHARE = `api/Share/Add`;
+
+  public static DEL_SHARE = `api/Share/Delete`;
 }
