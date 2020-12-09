@@ -72,8 +72,11 @@ export class FileComponent implements OnInit {
       modalRef.componentInstance.type = 'content';
       modalRef.componentInstance.data = cntnt;
     }
-    else if (type == 'getLink')
-      this.openModal(GetLinkComponent);
+    else if (type == 'getLink') {
+      const modalRef = this.modalService.open(GetLinkComponent, { size: 'lg' });
+      modalRef.componentInstance.type = 'content';
+      modalRef.componentInstance.data = cntnt;
+    }
     else if (type == 'addToCollection')
       this.openModal(AddToCollComponent);
   }
@@ -240,13 +243,13 @@ export class FileComponent implements OnInit {
   }
 
   //showing deleted but actually its deactive
-  delCntntOrFldr(d:any, isFldr:boolean=false){
-    let mdlMsg,mdlTtl, stsData:any = {id: d.id},res:string;
-    if(isFldr || d.isFldr){
+  delCntntOrFldr(d: any, isFldr: boolean = false) {
+    let mdlMsg, mdlTtl, stsData: any = { id: d.id }, res: string;
+    if (isFldr || d.isFldr) {
       mdlMsg = ` folder`; mdlTtl = `Delete Folder`;
       res = `Folder deleted`;
       stsData.isFldr = true;
-    }else{
+    } else {
       mdlMsg = ``; mdlTtl = `Delete Content`;
       res = `Content deleted`;
       stsData.status = 2; //move to trash
