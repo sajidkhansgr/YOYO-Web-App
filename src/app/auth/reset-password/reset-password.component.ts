@@ -7,6 +7,8 @@ import { takeUntil } from 'rxjs/operators';
 
 import { AuthService } from '../auth.service';
 import { CommonValidations } from '../../shared/validations/common-validations';
+import { TokenDataService } from '../../shared/services/token-data.service';
+
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
@@ -28,6 +30,7 @@ export class ResetPasswordComponent implements OnInit {
     private authSer: AuthService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
+      private tokenDataServ: TokenDataService,
     private router: Router
   ) {
       // Set the private defaults
@@ -61,6 +64,7 @@ export class ResetPasswordComponent implements OnInit {
         .subscribe((data: any) => {
           if(data){
             this.toastr.success(data.message||"Password reset successfully", 'Success');
+            this.tokenDataServ.removeAll();
             this.router.navigate(['/auth/login']);
           }else{
             this.toastr.error("Unable to send email, please try after sometime", 'Error');

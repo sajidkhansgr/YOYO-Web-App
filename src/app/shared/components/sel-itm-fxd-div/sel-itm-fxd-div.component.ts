@@ -11,11 +11,13 @@ export class SelItmFxdDivComponent implements OnInit {
   @Input() public content?: boolean;
   @Output() public actDeact = new EventEmitter();
   @Output() public delContent = new EventEmitter();
+  @Output() public clrSelData = new EventEmitter();
 
   constructor(
   ) { }
 
   ngOnInit(): void {
+    console.log("sdsdsd")
   }
 
   cmnModal(type: string) {
@@ -28,6 +30,10 @@ export class SelItmFxdDivComponent implements OnInit {
 
   delContentFunc() {
     this.delContent.emit();
+  }
+
+  cleanSelData(){
+    this.clrSelData.emit();
   }
 
 }

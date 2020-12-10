@@ -1,4 +1,4 @@
-<div class="sidebar sticky-top border-right" *ngIf="isMain">
+<div class="sidebar sticky-top border-right">
   <div class="navbar-nav">
     <ng-container *ngFor="let item of navigation">
       <a *ngIf="item.url" class="nav-item p-2 text-hi-dark pl-3" [routerLinkActive]="['active']" [routerLink]="[item.url]">

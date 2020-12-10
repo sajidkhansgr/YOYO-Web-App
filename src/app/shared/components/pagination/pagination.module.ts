@@ -4,10 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-
 import { PaginationComponent } from './pagination.component';
-
-
 
 @NgModule({
   declarations: [PaginationComponent],

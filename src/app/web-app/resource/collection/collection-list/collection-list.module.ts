@@ -14,7 +14,6 @@ import { GetLinkModule } from '../../../../shared/components/get-link/get-link.m
 import { CollModule } from '../../../../shared/components/coll/coll.module';
 import { SelItmFxdDivModule } from '../../../../shared/components/sel-itm-fxd-div/sel-itm-fxd-div.module';
 
-
 const routes: Routes = [
   { path: '', component: CollectionListComponent }
 ];

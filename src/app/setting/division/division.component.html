@@ -15,14 +15,15 @@
           <ng-template #noHubs>
             <h6 class="dropdown-item text-secondary">No Hubs Found</h6>
           </ng-template>
-
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item text-primary curs-ptr" (click)="openModal(addDivision,'add')">Add New
-            Division</a>
+          <a class="dropdown-item text-primary curs-ptr" *ngIf="usrInfo && usrInfo.rid==1"
+            (click)="openModal(addDivision,'add')">
+            Add New Division
+          </a>
         </div>
       </div>
     </div>
-    <div class="float-right">
+    <div class="float-right" *ngIf="usrInfo && usrInfo.rid==1">
       <div class="dropdown">
         <button class="btn btn-light dropdown-toggle" type="button" id="cogDD" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">

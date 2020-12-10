@@ -30,6 +30,7 @@ export class FileComponent implements OnInit {
   folderForm!: FormGroup;
   frmType!: string; selFldrData!: any;
   fldrid!: string;
+  selData!: any[]; //checkboxes
 
   constructor(
     private router: Router,
@@ -56,6 +57,7 @@ export class FileComponent implements OnInit {
     this.folderNav = [];
     this.files = [];
     this.folders = [];
+    this.selData = [];
     this.initForm();
   }
 
@@ -79,6 +81,38 @@ export class FileComponent implements OnInit {
     }
     else if (type == 'addToCollection')
       this.openModal(AddToCollComponent);
+  }
+
+  // on selecting a folder/content
+  selMe(val: any, d: any) {
+    if (val) {
+      this.selData.push({id: d.id});
+    } else {
+      const index = this.selData.findIndex((ele: any) => ele.id == d.id);
+      if (index >= 0) {
+        this.selData.splice(index, 1);
+      }
+    }
+  }
+
+  // remove content from collection
+  delContent(id?: number) {
+    let dataArr = id ? [id] : this.selData;
+    let s = dataArr.length == 1 ? '' : 's';
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to remove ${dataArr.length == 1 ? 'this' : 'these'} content${s} from collection?`,
+        title: `Remove Content${s}`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+      }
+    })
+  }
+
+  clrSel(){
+    this.selData = [];
   }
 
   getFiles() {

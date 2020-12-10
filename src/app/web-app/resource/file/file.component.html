@@ -83,7 +83,7 @@
                         <i class="fas fa-trash-alt"></i>
                       </div>
                     </div>
-                    <mat-checkbox class="align-self-center" (click)="$event.stopPropagation();"></mat-checkbox>
+                    <mat-checkbox class="align-self-center" (change)="selMe($event.checked, fl)" (click)="$event.stopPropagation();"></mat-checkbox>
                   </div>
                 </div>
               </div>
@@ -131,11 +131,9 @@
                   <div class="name text-truncate">{{f.name}}</div>
                   <div class="float-left text-secondary d-flex">
                     <div class="date">{{(f.createdDate|date:'dd MMM, yyyy')||'N/A'}}</div>
-                    <div class="mx-2">l</div>
-                    <div class="items">3 Items</div>
                   </div>
                   <div class="float-right" (click)="$event.stopPropagation();">
-                    <mat-checkbox></mat-checkbox>
+                    <mat-checkbox (change)="selMe($event.checked, f)"></mat-checkbox>
                   </div>
                 </div>
               </div>
@@ -163,7 +161,7 @@
             <tbody *ngIf="allFiles.length>0">
               <tr *ngFor="let aF of allFiles">
                 <td class="align-middle">
-                  <mat-checkbox></mat-checkbox>
+                  <mat-checkbox (change)="selMe($event.checked, aF)"></mat-checkbox>
                 </td>
                 <td class="align-middle" (click)="chkFolderAndAdd(aF)">
                   <div class="d-flex" *ngIf="aF.isFldr">
@@ -216,21 +214,10 @@
     </div>
   </div>
 
-  <!-- fixed div on selecting a collection -->
-  <div class="row mx-auto fixed-bottom px-3" style="width: 90%; background-color: #fff; height: 50px;">
-    <div class="selected-items text-secondary align-self-center">1 item selected</div>
-    <div class="mr-1 ml-3 align-self-center">|</div>
-    <div class="btn btn-outline-primary border-0 align-self-center">Clear</div>
-    <div class="btn btn-light align-self-center ml-auto bg-white" (click)="cmnModal('email')">
-      <i class="fa fa-envelope mr-1"></i>Email
-    </div>
-    <div class="btn btn-light align-self-center bg-white" (click)="cmnModal('getLink')">
-      <i class="fa fa-link mr-1"></i>Get a link
-    </div>
-    <div class="btn btn-light align-self-center bg-white" (click)="cmnModal('addToCollection')"><i
-        class="fa fa-folder-plus mr-1"></i>Add to collection</div>
-    <div class="btn btn-primary align-self-center"><i class="fas fa-trash-alt mr-1"></i>Delete</div>
-  </div>
+  {{selData.length > 0}}ss
+  <!-- fixed sel item bootm div -->
+  <app-sel-itm-fxd-div [selArr]="selData" (delContent)="delContent(undefined)" [content]="true" *ngIf="selData.length > 0" (clrSelData)="clrSel()">
+  </app-sel-itm-fxd-div>
 
   <!-- add folder -->
   <ng-template #fldrModal let-modal>
@@ -298,14 +285,12 @@
       <div class="rounded border border-primary d-flex text-justify text-primary px-2 my-3 py-2">
         <i class="fa fa-info-circle align-self-center mr-2"></i>
         File sharing is enabled for this file. Anyone at Hi-Force Hydraulic Tools with the file link will be able to
-        view
-        this file.
+        view this file.
       </div>
       <div *ngIf="sharingValue.checked">
         <mat-label>Share Options:</mat-label>
         <mat-radio-group aria-label="Select an option" class="d-block">
-          <mat-radio-button value="link" class="mx-3" checked="true" #link>Share by
-            Link
+          <mat-radio-button value="link" class="mx-3" checked="true" #link>Share by Link
           </mat-radio-button>
           <mat-radio-button value="email">Share by Email</mat-radio-button>
         </mat-radio-group>

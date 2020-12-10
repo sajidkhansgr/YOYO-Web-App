@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { HubService } from '../../hub/hub.service';
 import { Hub } from '../../shared/models/hub';
 import { DataService } from '../../shared/services/data.service';
+import { TokenDataService } from '../../shared/services/token-data.service';
 
 @Component({
   selector: 'app-division',
@@ -13,7 +14,7 @@ import { DataService } from '../../shared/services/data.service';
   styleUrls: ['./division.component.scss']
 })
 export class DivisionComponent implements OnInit {
-  selHub!: Hub | null;
+  selHub!: Hub | null;usrInfo: any | null;
   hubs: Hub[] = [];
   loading: boolean = true;
   hubForm!: FormGroup; disabled: boolean = false;
@@ -24,7 +25,8 @@ export class DivisionComponent implements OnInit {
     private modalService: NgbModal,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private dataServ: DataService
+    private dataServ: DataService,
+    private tokenDataServ: TokenDataService
   ) {
     this.routerSubs = this.dataServ.currentInfo
       .subscribe((data: any) => {
@@ -42,6 +44,7 @@ export class DivisionComponent implements OnInit {
 
   ngOnInit(): void {
     this.getHubs();
+    this.usrInfo = this.tokenDataServ.getUser();
     this.hubForm = this.fb.group({
       name: ['', Validators.required]
     });

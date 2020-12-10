@@ -1,4 +1,4 @@
-<nav aria-label="breadcrumb">
+<!-- <nav aria-label="breadcrumb">
   <ol class="breadcrumb rounded-0">
     <li class="breadcrumb-item active align-self-center" aria-current="page">English</li>
     <span class="ml-auto">
@@ -7,7 +7,7 @@
       </div>
     </span>
   </ol>
-</nav>
+</nav> -->
 
 <app-loader [type]="'page'" *ngIf="loading"></app-loader>
 <!-- grid view -->
@@ -22,7 +22,7 @@
           <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
         </ng-container>
         <div class="col-md-3 text-center file curs-ptr my-2" *ngSwitchDefault>
-          <div class="icon" (click)="viewContent(wSC.id)">
+          <div class="icon" (click)="viewContent(wSC)">
             <img [src]="wSC.pdfImagePath ? wSC.pdfImagePath : wSC.pdfImage ? wSC.pdfImage : defImg">
           </div>
           <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
@@ -129,12 +129,12 @@
           </ng-container>
           <div class="file d-flex bg-white rounded p-3 curs-ptr my-2" *ngSwitchDefault>
             <mat-checkbox class="align-self-center"></mat-checkbox>
-            <div class="icon align-self-center mx-4" (click)="viewContent(wSC.id)">
+            <div class="icon align-self-center mx-4" (click)="viewContent(wSC)">
               <img [src]="wSC.pdfImagePath ? wSC.pdfImagePath : wSC.pdfImage ? wSC.pdfImage : defImg"
                 style="max-width: 72px;">
             </div>
             <div class="info align-self-center">
-              <h5 class="mb-0" (click)="viewContent(wSC.id)">{{wSC.name}}</h5>
+              <h5 class="mb-0" (click)="viewContent(wSC)">{{wSC.name}}</h5>
               <!-- <i class="fa fa-file mr-2"></i>Document in English -->
               <div class="text-secondary" style="font-size: 12px;">Updated Jan 26,2020</div>
             </div>
@@ -178,7 +178,5 @@
     </div>
   </ng-container>
 </div>
-
-
 
 <!-- font-weight-normal': !col.isSelected IN TAGS TR-->

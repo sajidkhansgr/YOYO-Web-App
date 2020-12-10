@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { CollectionInnerComponent } from './collection-inner.component';
 import { LoaderModule } from '../../../../shared/components/loader/loader.module';
@@ -26,9 +27,8 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     MatFormFieldModule, MatInputModule,
-    MatCheckboxModule,
+    MatCheckboxModule, MatDialogModule,MatChipsModule,
     LoaderModule,
-    MatDialogModule,
     AddToCollModule, ShareMailModule, GetLinkModule, SelItmFxdDivModule, AddRsrcModule
   ],
   providers: [CollectionService]

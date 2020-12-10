@@ -11,8 +11,6 @@ import { FileService } from 'src/app/web-app/resource/file/file.service';
 import { ExpService } from '../../../web-app/resource/exp/exp.service';
 import { CollectionService } from 'src/app/web-app/resource/collection/collection.service';
 
-
-
 @NgModule({
   declarations: [AddRsrcComponent],
   imports: [

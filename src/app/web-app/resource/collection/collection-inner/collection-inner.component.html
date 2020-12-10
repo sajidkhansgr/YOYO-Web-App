@@ -151,5 +151,5 @@
 </div>
 
 <!-- fixed div on selecting a collection -->
-<app-sel-itm-fxd-div [selArr]="selContentArr" (delContent)="delContent(undefined)" [content]="true"
-  *ngIf="selContentArr.length > 0"></app-sel-itm-fxd-div>
+<app-sel-itm-fxd-div [selArr]="selCntntArr" (delContent)="delContent(undefined)" [content]="true" (clrSelData)="clrSel()"
+  *ngIf="selCntntArr.length > 0"></app-sel-itm-fxd-div>
