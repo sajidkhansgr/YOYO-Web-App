@@ -6,7 +6,8 @@
     </button>
   </div>
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo, 'col-md-8': showRowInfo}">
+    <div class="sub-tab-nav"
+      [ngClass]="{'col-md-12': !showRowInfo, 'col-sm-0 col-md-6 col-lg-7 col-xl-8': showRowInfo}">
       <div class="card overflow-hidden">
         <div class="card-body bg-white px-0 pb-0">
           <h5 class="card-title px-3">
@@ -99,7 +100,7 @@
                     <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
                       {{col.n}}
                       <i class="ml-1 fas" *ngIf="col.hasOwnProperty('asc')"
-                      [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
+                        [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
                     </th>
                   </tr>
                 </thead>
@@ -123,7 +124,7 @@
         </div>
       </div>
     </div>
-    <div class="workspace w-100 col-md-4" *ngIf="showRowInfo">
+    <div class="workspace w-100 col-12 col-md-6 col-lg-5 col-xl-4" *ngIf="showRowInfo">
       <app-loader [type]="'page'" *ngIf="docLoading"></app-loader>
       <div class="doc" *ngIf="!docLoading">
         <div class="card">

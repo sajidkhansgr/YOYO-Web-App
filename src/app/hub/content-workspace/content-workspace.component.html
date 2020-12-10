@@ -21,7 +21,8 @@
     </div>
   </div>
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo && !showWork, 'col-md-6': showRowInfo || showWork}">
+    <div class="sub-tab-nav"
+      [ngClass]="{'col-md-12': !showRowInfo && !showWork, 'col-md-0 col-lg-6': showRowInfo || showWork}">
       <div class="card overflow-hidden">
         <div class="card-header border-0">
           <mat-tab-group (selectedTabChange)="onTabChange($event)">
@@ -50,7 +51,7 @@
         </div>
       </div>
     </div>
-    <div class="workspace-container col-md-6" *ngIf="showRowInfo || showWork">
+    <div class="workspace-container col-12 col-lg-6" *ngIf="showRowInfo || showWork">
       <div class="document" *ngIf="showRowInfo">
         <app-loader [type]="'page'" *ngIf="docLoading"></app-loader>
         <div class="card" *ngIf="!docLoading">
@@ -133,7 +134,7 @@
                         <div class="view" *ngIf="!edits.t">
                           <div *ngIf="rowInfo.contentTags && rowInfo.contentTags.length>0 else noCntntTag">
                             <span *ngFor="let tg of rowInfo.contentTags"
-                              class="badge badge-light text-success">{{tg.tagName}}</span>
+                              class="badge badge-light text-success text-wrap m-1">{{tg.tagName}}</span>
                           </div>
                           <ng-template #noCntntTag>
                             <div class="text-hi-dark-grey">No Tags</div>
@@ -489,13 +490,13 @@
                 <mat-tab label="Comments">
                   <div class="comments">
                     <div class="file-comment row pl-3 mt-3 mx-0" *ngFor="let cmnt of rowInfo.comments">
-                      <div class="col-1 align-self-center p-0">
+                      <div class="col-2 col-sm-1 align-self-center p-0">
                         <div class="dp"><i class="fa fa-user-circle"></i></div>
                       </div>
-                      <div class="col-11 p-0">
-                        <div class="user-name">
+                      <div class="col-10 col-sm-11 p-0">
+                        <div class="user-name d-flex">
                           {{cmnt.createdByFullName}}
-                          <span class="date ml-3 text-hi-grey">{{(cmnt.createdDate|date:'dd MMM, yyyy')||'N/A'}}</span>
+                          <div class="date ml-auto text-hi-grey">{{(cmnt.createdDate|date:'dd MMM, yyyy')||'N/A'}}</div>
                         </div>
                         <div class="comment text-hi-dark-grey">{{cmnt.commentText||'N/A'}}</div>
                       </div>
@@ -503,7 +504,8 @@
                     <div class="add-comment mt-4">
                       <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
                         [floatLabel]="'never'">
-                        <input matInput placeholder="Write a comment..." [(ngModel)]="cmnt" name="cmnt" class="ml-0" maxlength="500" required />
+                        <input matInput placeholder="Write a comment..." [(ngModel)]="cmnt" name="cmnt" class="ml-0"
+                          maxlength="500" required />
                         <i matSuffix class="fa fa-angle-double-right curs-ptr"></i>
                       </mat-form-field>
                       <div class="form-group text-right">
@@ -689,13 +691,14 @@
               </ul>
               <hr class="mt-0">
               <app-loader [type]="'page'" *ngIf="folderLoading"></app-loader>
-              <div class="min-ht pl-0 mt-2 mb-0" cdkDropList id="fldrLists" [cdkDropListData]="fldrCntntArr" (cdkDropListDropped)="drop($event)"
-                *ngIf="!folderLoading">
+              <div class="min-ht pl-0 mt-2 mb-0" cdkDropList id="fldrLists" [cdkDropListData]="fldrCntntArr"
+                (cdkDropListDropped)="drop($event)" *ngIf="!folderLoading">
                 <div class="main row py-4" *ngIf="fldrCntntArr.length > 0">
                   <!-- <div *cdkDragPreview class="col-3 curs-ptr my-2">wrkspc dragging</div>
                   <div *cdkDragPlaceholder  class="col-3 curs-ptr my-2">VIKAS KOHLI</div> -->
-                  <div class="col-3 curs-ptr my-2" *ngFor="let fldCntn of fldrCntntArr" cdkDrag>
-                   <ng-container *ngIf="(fldCntn.key==='fldr' || fldCntn.key==='smtFldr') else onlyCntnt">
+                  <div class="view-main curs-ptr my-2 p-2 col-xl-3 col-lg-4 col-md-3 col-sm-4 col-6"
+                    *ngFor="let fldCntn of fldrCntntArr" cdkDrag>
+                    <ng-container *ngIf="(fldCntn.key==='fldr' || fldCntn.key==='smtFldr') else onlyCntnt">
                       <div class="image">
                         <img src="{{fldCntn.folderIconPath ? fldCntn.folderIconPath : fldrIcon}}"
                           (click)="changeFolder(fldCntn)">
@@ -710,7 +713,8 @@
                               <i class="fas fa-edit mr-1"></i>Edit {{fldCntn.key=='fldr' ? '' : 'Smart '}}Folder</a>
                             <a class="dropdown-item curs-ptr"
                               (click)="openFolderModal(fldCntn.key=='fldr' ? folderModal : smartFolderModal, 'dupl', fldCntn)">
-                              <i class="fas fa-clone mr-1"></i>Duplicate {{fldCntn.key=='fldr' ? '' : 'Smart '}}Folder</a>
+                              <i class="fas fa-clone mr-1"></i>Duplicate
+                              {{fldCntn.key=='fldr' ? '' : 'Smart '}}Folder</a>
                             <a class="dropdown-item" href="javascript:void(0)">
                               <i class="fas fa-link mr-1"></i>App Link</a>
                             <a class="dropdown-item text-{{fldCntn.isActive ? 'primary' : 'success'}}"
@@ -728,15 +732,15 @@
                         *ngIf="!fldCntn.hideLabelInWorkspace" (click)="changeFolder(fldCntn)">
                         {{fldCntn.name}}
                       </div>
-                   </ng-container>
-                   <ng-template #onlyCntnt>
-                     <div class="image">
-                       <img src="{{getImg(fldCntn)}}">
-                     </div>
-                     <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate">
-                       {{fldCntn.name}}
-                     </div>
-                   </ng-template>
+                    </ng-container>
+                    <ng-template #onlyCntnt>
+                      <div class="image">
+                        <img src="{{getImg(fldCntn)}}">
+                      </div>
+                      <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate">
+                        {{fldCntn.name}}
+                      </div>
+                    </ng-template>
                   </div>
                 </div>
                 <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;"
@@ -783,8 +787,8 @@
                 </span>
               </ul>
               <span class="ml-2 heading">Hidden Columns</span>
-              <ul cdkDropList #hidList="cdkDropList" [cdkDropListData]="hidCols"
-                class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
+              <ul cdkDropList #hidList="cdkDropList" [cdkDropListData]="hidCols" class="min-ht pl-0 mt-2 mb-0"
+                [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
                 <button class="dropdown-item pl-2" *ngFor="let col of hidCols;let i=index" cdkDrag>
                   <span class="ellipsis mr-2 mb-1">
                     <i class="fa fa-ellipsis-v"></i>
@@ -946,10 +950,11 @@
             </th>
           </tr>
         </thead>
-        <tbody cdkDropList id="cntntLists" [cdkDropListData]="cntnts"
-         class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)" *ngIf="cntnts.length > 0">
+        <tbody cdkDropList id="cntntLists" [cdkDropListData]="cntnts" class="min-ht pl-0 mt-2"
+          [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)" *ngIf="cntnts.length > 0">
           <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)"
-            [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()" cdkDrag>
+            [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()"
+            cdkDrag>
             <div *cdkDragPreview>{{cntnt.name}}</div>
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
@@ -981,12 +986,11 @@
       <div class="text-center text-secondary pt-5 mt-4" *ngIf="cntnts.length<= 0">
         No Content found
       </div>
-      <div class="row justify-content-between" *ngIf="!view"
-        cdkDropList id="cntntLists" [cdkDropListData]="cntnts"
-       [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)">
+      <div class="row justify-content-between" *ngIf="!view" cdkDropList id="cntntLists" [cdkDropListData]="cntnts"
+        [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)">
         <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-2 p-3 rounded" *ngFor="let cntnt of cntnts"
           (click)="toggleInfo(cntnt)" style="max-width:400px;"
-            [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()" cdkDrag>
+          [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()" cdkDrag>
           <div *cdkDragPreview>{{cntnt.name}}</div>
           <img [src]="getImg(cntnt)" alt="Thumbnail" style="max-height:200px;">
           <div class="name bg-hi-grey rounded w-75 mx-auto px-2 my-2">{{cntnt.name}}</div>
@@ -1114,7 +1118,8 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Description</mat-label>
-        <textarea rows="3" matInput placeholder="Add a Description" formControlName="description" maxlength="300"></textarea>
+        <textarea rows="3" matInput placeholder="Add a Description" formControlName="description"
+          maxlength="300"></textarea>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>URL </mat-label>
@@ -1214,7 +1219,8 @@
         </mat-form-field>
         <div class="options">
           Options
-          <mat-checkbox class="d-block ml-3" formControlName="hideLabelInWorkspace">Hide label in Experience</mat-checkbox>
+          <mat-checkbox class="d-block ml-3" formControlName="hideLabelInWorkspace">Hide label in Experience
+          </mat-checkbox>
         </div>
       </div>
       <hr *ngIf="edit">

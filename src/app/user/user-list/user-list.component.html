@@ -17,7 +17,8 @@
   </div>
 
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo, 'col-md-8': showRowInfo}">
+    <div class="sub-tab-nav"
+      [ngClass]="{'col-md-12': !showRowInfo, 'col-sm-0 col-md-6 col-lg-7 col-xl-8': showRowInfo}">
       <div class="card overflow-hidden">
         <div class="card-header border-0">
           <mat-tab-group [selectedIndex]="activeIndex" (selectedTabChange)="onTabChange($event)">
@@ -46,7 +47,7 @@
         </div>
       </div>
     </div>
-    <div class="workspace w-100 col-md-4" *ngIf="showRowInfo">
+    <div class="workspace w-100 col-12 col-md-6 col-lg-5 col-xl-4" *ngIf="showRowInfo">
       <app-loader [type]="'page'" *ngIf="docLoading"></app-loader>
       <div class="doc" *ngIf="!docLoading">
         <div class="card">
@@ -289,7 +290,8 @@
           </tr>
         </thead>
         <tbody *ngIf="!loading && usrs.length > 0">
-          <tr *ngFor="let usr of usrs" (click)="toggleInfo(usr)" [ngClass]="{'deact':!usr.isActive,'sel-row':(rowInfo.id === usr.id)}">
+          <tr *ngFor="let usr of usrs" (click)="toggleInfo(usr)"
+            [ngClass]="{'deact':!usr.isActive,'sel-row':(rowInfo.id === usr.id)}">
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
                 <span *ngSwitchCase="'name'">

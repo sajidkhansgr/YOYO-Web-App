@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit {
       sidebarTexts[i].classList.add('showSidebarText');
     }
     // for arrow (opacity)
-    arrow!.classList.add('showArrow');
+    arrow ? arrow!.classList.add('showArrow') : null;
 
     setTimeout(() => {
       // for text (display)
@@ -103,7 +103,7 @@ export class HeaderComponent implements OnInit {
         sidebarTexts[i].classList.add('displaySidebarText');
       }
       // for arrow (display)
-      arrow!.classList.add('displayArrow');
+      arrow ? arrow!.classList.add('displayArrow') : null;
       // for sidebar (width)
       document.querySelector('.sidebar')!.classList.add('closeSidebar');
     }, 500);
