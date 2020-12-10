@@ -17,6 +17,7 @@ import { ConfirmDialogModule } from '../../../shared/components/confirm-dialog/c
 import { AddToCollModule } from '../../../shared/components/add-to-coll/add-to-coll.module';
 import { ShareMailModule } from '../../../shared/components/share-mail/share-mail.module';
 import { GetLinkModule } from '../../../shared/components/get-link/get-link.module';
+import { SelItmFxdDivModule } from '../../../shared/components/sel-itm-fxd-div/sel-itm-fxd-div.module';
 
 const routes: Routes = [
   { path: '', component: FileComponent }
@@ -31,7 +32,7 @@ const routes: Routes = [
     MatCheckboxModule, MatFormFieldModule, MatInputModule,
     MatTooltipModule, MatSlideToggleModule, MatRadioModule,
     LoaderModule, ConfirmDialogModule,
-    AddToCollModule, ShareMailModule, GetLinkModule
+    AddToCollModule, ShareMailModule, GetLinkModule, SelItmFxdDivModule
   ],
   providers: [FileService, ContentWorkspaceService]
 })

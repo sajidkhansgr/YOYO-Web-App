@@ -41,11 +41,13 @@ export class GetLinkComponent implements OnInit {
     this.viewMe = true;
     this.link = '';
     this.disabled = false;
-    if (this.type === 'collection') {
-      this.loading = true;
-      this.getCntntByClctn(this.data.id);
-    } else if (this.type === 'content') {
-      this.viewSel = [this.data];
+    if(this.data){
+      if (this.data.id &&this.type === 'collection') {
+        this.loading = true;
+        this.getCntntByClctn(this.data.id);
+      } else if (this.type === 'content') {
+        this.viewSel = [this.data];
+      }
     }
     this.linkForm = this.fb.group({
       name: ['', [Validators.required]],

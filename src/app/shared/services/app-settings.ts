@@ -167,7 +167,7 @@ export class AppSettings {
   public static ADD_CMNT_CNTNT = `api/Content/AddCommentToContent`;
 
   public static DEL_CNTNT = `api/Content/Delete`;
-  
+
   public static UPD_CNTNT_STATUS = `api/Content/UpdateContentStatus`;
 
   public static MY_FILES = `api/Content/GetMyContent`;
@@ -179,6 +179,8 @@ export class AppSettings {
   public static UPL_VER_CNTNT = `api/Content/UploadNewVersion`; //need to work on
 
   public static ADD_CNTNT_WRKSPC = `api/Content/AddContentToWorkspaceFolder`;
+
+  public static ADD_CNTNT_EMPL = `api/Content/AddContentByEmployee`;
 
   // ---- LANGUAGE ---- //
 

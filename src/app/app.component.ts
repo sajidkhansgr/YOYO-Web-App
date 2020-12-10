@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { TokenDataService } from './shared/services/token-data.service';
 import { DataService } from './shared/services/data.service';
@@ -19,7 +20,8 @@ export class AppComponent {
   constructor(
     private tokenDataServ: TokenDataService,
     private dataServ: DataService,
-    private router: Router
+    // private router: Router,
+    private loc: Location
   ) {
     this.routerSubs = this.dataServ.currentInfo
       .subscribe((msg: any) => {
@@ -41,12 +43,12 @@ export class AppComponent {
   }
 
   isAuthPage(): boolean {
-    return (this.excUrls.filter(sUrl => this.router.url.indexOf(sUrl)!== -1 || this.router.url.indexOf('auth/'+sUrl)!== -1).length>0)?true:false;
+    return (this.excUrls.filter(sUrl => this.loc.path().indexOf(sUrl)!== -1 || this.loc.path().indexOf('auth/'+sUrl)!== -1).length>0)?true:false;
     // return this.router.url.indexOf('auth/login') !== -1 || this.router.url.indexOf('login') !== -1 ? true : false;
   }
 
   isWebApp(): boolean {
-    return this.router.url.indexOf('web-app') !== -1 ? true : false;
+    return this.loc.path().indexOf('web-app') !== -1 ? true : false;
   }
 
   ngOnDestroy(): void {

@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 import { OfflineInterceptor } from './shared/interceptors/offline.interceptor';
@@ -22,7 +23,6 @@ import { DataService } from './shared/services/data.service';
 import { HeaderModule } from './home-layout/header/header.module';
 import { SidebarModule } from './home-layout/sidebar/sidebar.module';
 import { LoaderModule } from './shared/components/loader/loader.module';
-import { MatChipsModule } from '@angular/material/chips';
 
 const appRoutes: Routes = [
   { path: '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },

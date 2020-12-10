@@ -31,7 +31,7 @@ export class CollectionInnerComponent implements OnInit {
   disabled!: boolean; loading!: boolean;
   selColctn!: Colctn | undefined;
   multiForm!: number;
-  cntntArr!: Content[]; selContentArr!: any[];
+  cntntArr!: Content[]; selCntntArr!: any[];
   defImg: string = DEF_ICON;
   addContentArr!: Content[];
 
@@ -55,7 +55,7 @@ export class CollectionInnerComponent implements OnInit {
 
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
-    this.selColctn = undefined; this.selContentArr = [];
+    this.selColctn = undefined; this.selCntntArr = [];
     this.multiForm = 0;
     this.cntntArr = [];
     this.addContentArr = [];
@@ -125,7 +125,7 @@ export class CollectionInnerComponent implements OnInit {
 
   // remove content from collection
   delContent(id?: number) {
-    let dataArr = id ? [id] : this.selContentArr;
+    let dataArr = id ? [id] : this.selCntntArr;
     let s = dataArr.length == 1 ? '' : 's';
     this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -142,7 +142,7 @@ export class CollectionInnerComponent implements OnInit {
         this.colctnSrv.delContentColctn(data).subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || `Content${s} removed successfully`, 'Success!');
-            this.selContentArr = [];
+            this.selCntntArr = [];
             this.getCntntColl();
           }
         }, (err: any) => {
@@ -155,10 +155,14 @@ export class CollectionInnerComponent implements OnInit {
   // on selecting a content
   selMe(val: any, content: Content) {
     if (val) {
-      this.selContentArr.push(content.contentId);
+      this.selCntntArr.push(content.contentId);
     } else {
-      this.selContentArr = this.selContentArr.filter((data: any) => data != content.id);
+      this.selCntntArr = this.selCntntArr.filter((data: any) => data != content.contentId);
     }
+  }
+
+  clrSel(){
+    this.selCntntArr = [];
   }
 
   // get content by collection

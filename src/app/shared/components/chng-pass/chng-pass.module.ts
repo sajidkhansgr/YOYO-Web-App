@@ -9,7 +9,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { LoaderModule } from '../../components/loader/loader.module';
 import { PasswordService } from '../../services/password.service';
-
 import { ChngPassComponent } from './chng-pass.component';
 
 @NgModule({

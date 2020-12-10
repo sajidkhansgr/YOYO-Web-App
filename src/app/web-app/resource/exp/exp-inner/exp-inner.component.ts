@@ -48,7 +48,7 @@ export class ExpInnerComponent implements OnInit {
     if (this.id != '0') {
       this.loading = true;
       // this.brdcrmList();
-      this.fldrid ? this.getAllFromWrkspc() : this.smtFldrid ? this.getContentSmtFldr() : this.getAllFromWrkspc();
+      this.smtFldrid ? this.getContentSmtFldr() : this.getAllFromWrkspc();
     } else {
       this.toastr.error("Not a valid Workspace", "Error");
       this.router.navigate(['/web-app/experiences']);
@@ -76,7 +76,10 @@ export class ExpInnerComponent implements OnInit {
   }
 
   // view content
-  viewContent(id: number) {
+  viewContent(data: any) {
+    let id = data.id;
+    if(this.smtFldrid)
+      id = data.contentId;
     this.router.navigate(['/web-app/view/' + id]);
   }
 
@@ -110,6 +113,7 @@ export class ExpInnerComponent implements OnInit {
     let query: any = {
       smartFolderId: this.smtFldrid
     };
+    this.wrkspcCntnts = [];
     this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.wrkspcCntnts.push(...data.result);
@@ -121,13 +125,7 @@ export class ExpInnerComponent implements OnInit {
   }
 
   navgToCntnt(data: any) {
-    let type;
-    if (data.key === 'fldr') {
-      type = 'folder';
-    } else if (data.key === 'smtFldr') {
-      type = 'smart-folder';
-    }
-    this.router.navigate(['/web-app/resource/experiences/' + this.id + '/' + type + '/' + data.id]);
+    this.router.navigate(['/web-app/resource/experiences/' + this.id + '/' + (data.key === 'fldr'?'folder':'smart-folder') + '/' + data.id]);
   }
 
   brdcrmList() {

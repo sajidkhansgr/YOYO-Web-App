@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { navigation, Navigation } from '../../shared/navigation';
 import { HubService } from '../../hub/hub.service';
@@ -13,28 +12,21 @@ import { DataService } from '../../shared/services/data.service';
 export class SidebarComponent implements OnInit {
   navigation!: Navigation[];
   routerSubs: Subscription;
-  isMain:boolean=false;
 
   constructor(
     private hubServ: HubService,
-    private dataServ: DataService,
-    private router: Router
+    private dataServ: DataService
   ) {
     this.navigation = navigation
     this.routerSubs = this.dataServ.currentInfo
       .subscribe((msg: any) => {
-        if((msg==='hub-add' || msg==='hub-upd') && this.isMain)
+        if((msg==='hub-add' || msg==='hub-upd'))
           this.getHubs();
       })
   }
 
   ngOnInit(): void {
-    if(this.router.url.includes("web-app")){
-      this.isMain = false;
-    }else{
-      this.isMain = true;
-      this.getHubs();
-    }
+    this.getHubs();
   }
 
   getHubs(){

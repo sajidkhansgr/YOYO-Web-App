@@ -84,6 +84,10 @@ export class CollectionListComponent implements OnInit {
     }
   }
 
+  clrSel(){
+    this.selColctnArr = [];
+  }
+
   // activate/deactivate collection
   actDeactColctn(colctn?: number) {
     let data = colctn ? [colctn] : this.selColctnArr;
