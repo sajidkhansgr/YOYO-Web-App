@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 import { ShareMailComponent } from '../../../shared/components/share-mail/share-mail.component';
 import { GetLinkComponent } from '../../../shared/components/get-link/get-link.component';
 import { AddToCollComponent } from '../../../shared/components/add-to-coll/add-to-coll.component';
+import { FileHelper } from '../../../shared/file-helper';
 
 @Component({
   selector: 'app-file',
@@ -31,6 +32,7 @@ export class FileComponent implements OnInit {
   frmType!: string; selFldrData!: any;
   fldrid!: string;
   selData!: any[]; //checkboxes
+  urlForm!: FormGroup;urlDisb!: boolean;
 
   constructor(
     private router: Router,
@@ -65,6 +67,11 @@ export class FileComponent implements OnInit {
     this.folderForm = this.fb.group({
       name: ['', [Validators.required]]
     });
+    this.urlForm = this.fb.group({
+      name: ['', [Validators.required]],
+      url: ['', [Validators.required]]
+    });
+    this.urlDisb = false;
   }
 
   // open modals
@@ -119,6 +126,7 @@ export class FileComponent implements OnInit {
     let params = {
       folderId: this.fldrid || null
     };
+    this.initialiseState();
     this.fileServ.myFiles(params)
       .subscribe((data: any) => {
         if (data && data.result) {
@@ -191,12 +199,13 @@ export class FileComponent implements OnInit {
 
   openModal(content: any, type: string = '') {
     this.frmType = type;
-    if (this.frmType == 'addFldr' || this.frmType == 'updFldr') {
-      if (this.fldrLoad) {
+    if (this.frmType == 'addFldr' || this.frmType == 'updFldr'|| this.frmType == 'url') {
+      if (this.fldrLoad || this.urlDisb) {
         this.toastr.info("Please wait for previous request");
         return;
       }
       this.folderForm.reset();
+      this.urlForm.reset();
       if (this.frmType == 'updFldr')
         this.folderForm.patchValue({ ...this.selFldrData });
     }
@@ -258,7 +267,10 @@ export class FileComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Folder rename successfully', 'Success!');
-          this.getFiles();
+          // this.getFiles();
+          //local updating
+          this.locUpd('allFiles',fldrData);
+          this.locUpd('folders',fldrData);
           // this.succEeditFldr('folderNav');
           // this.succEeditFldr('allFiles');
           // this.succEeditFldr('folders');
@@ -274,6 +286,13 @@ export class FileComponent implements OnInit {
         this.fldrLoad = false;
         this.dismissModal();
       });
+  }
+
+  locUpd(type: 'allFiles' | 'folders', data:any){
+    const index = this[type].findIndex((ele: any) => ele.id == data.id && ele.isFldr);
+     if (index >= 0) {
+       this[type][index].name = data.name;
+     }
   }
 
   //showing deleted but actually its deactive
@@ -320,6 +339,53 @@ export class FileComponent implements OnInit {
   // upload button
   uploadBtn = (uf: any) => {
     uf?.click();
+  }
+
+  uplCntnt($event: any){
+    if ($event.target && $event.target.files){
+      let data = {
+        content: $event.target.files[0]
+      }
+      this.addCntnt(data, 'Content');
+    }
+  }
+
+  onUrlSubmit(){
+    if (this.urlForm.valid) {
+      let urlData: any = {
+        ...this.urlForm.value,
+        isUrl: true
+      }
+      this.addCntnt(urlData, 'Url');
+      this.urlDisb = true;
+    }
+  }
+
+  addCntnt(cntntData: any, type: string){
+    cntntData.folderId= this.fldrid ? parseInt(this.fldrid) : null
+    this.fileServ.addMyCntnt(cntntData)
+      .subscribe((data: any) => {
+        if (data) {
+          this.toastr.success(data.message||`${type} added successfully`, 'Success!');
+        } else {
+          this.toastr.error('Unable to add', 'Error!');
+        }
+        this.urlChk(type);
+      }, (err: any) => {
+        this.urlChk(type);
+      });
+  }
+
+  urlChk(type: string){
+    if(type=='Url'){
+      this.urlDisb = false;
+      this.dismissModal();
+      this.getFiles();
+    }
+  }
+
+  getImg(d: any): string {
+    return FileHelper.getImg(d);
   }
 
   // copy link button

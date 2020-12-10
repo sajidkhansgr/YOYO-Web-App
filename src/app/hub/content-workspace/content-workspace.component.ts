@@ -31,7 +31,7 @@ export class ContentWorkspaceComponent implements OnInit {
   showWork!: boolean;
   @Input() hubid: any; routerSubs!: Subscription;
   addURLIcon!: string; iconUrl!: any;
-  defIcon: any = DEF_ICON; custIcon: any; files!: any[]; defImg: any = DEF_IMG; fldrIcon: any = FLDR_ICON;
+  defIcon: any = DEF_ICON; custIcon: any; files!: any[]; fldrIcon: any = FLDR_ICON;
   dispPropsSec!: boolean; dispSmFolderSec!: boolean;
   dispGnrl!: boolean; dispSettings!: boolean; dispSmart!: boolean;
   wrkspcs!: Workspace[]; selWrkspc: Workspace | undefined;
@@ -1194,17 +1194,8 @@ export class ContentWorkspaceComponent implements OnInit {
       });
   }
 
-  getImg(data: any): string {
-    if (data.urlIconPath)
-      return data.urlIconPath;
-    else if (data.contentType===2 && data.contentPath)
-      return data.contentPath;
-    else if (data.pdfImage)
-      return data.pdfImage;
-    else if (Array.isArray(data.pdfImages) && data.pdfImages.length>0 && data.pdfImages[0].imagePath)
-      return data.pdfImages[0].imagePath;
-    else
-      return this.defImg;
+  getImg(d: any): string {
+    return FileHelper.getImg(d);
   }
 
   addCmnt(type: string) {
