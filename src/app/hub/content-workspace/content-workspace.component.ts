@@ -38,7 +38,7 @@ export class ContentWorkspaceComponent implements OnInit {
   wrkspcLoading!: boolean; folderLoading!: boolean;
   addWrkspcForm!: FormGroup; updWrkspcForm!: FormGroup; folderForm!: FormGroup; smartFldrForm!: FormGroup;
   cntntForm!: FormGroup; urlForm!: FormGroup;
-  verForm!: FormGroup;verDisb!:boolean;
+  verForm!: FormGroup; verDisb!: boolean;
   disabled!: boolean;
   fldrCntntArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; cntntArr!: Content[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
@@ -49,7 +49,7 @@ export class ContentWorkspaceComponent implements OnInit {
   tags!: Tag[]; selTags: Tag[] = []; selTags2: Tag[] = [];//using in selTags add and selTags2 form
   cntnts!: any[]; totalCount!: number; sort: any = {}; searchTxt!: string;
   searchTxtChng: Subject<string> = new Subject<string>(); filteredList: any = [];
-  cntntTypeFltr:any=[];
+  cntntTypeFltr: any = [];
   private subscription!: Subscription;
   selectable = true; removable: boolean = true;
   urlDisb!: boolean;
@@ -67,9 +67,11 @@ export class ContentWorkspaceComponent implements OnInit {
   cntntTag!: any; urlTag!: any; cntntInfoTag!: any; cntntLng!: any; usrGrpWrkSpcDisb: boolean = false;
 
   allTags!: any[]; anyTags!: any[]; noneTags!: any[];
-  alTgTxt!:string;anTgTxt!:string;noTgTxt!:string;
+  alTgTxt!: string; anTgTxt!: string; noTgTxt!: string;
   allTags1!: any[]; anyTags1!: any[]; noneTags1!: any[];
-  alTgTxt1!:string;anTgTxt1!:string;noTgTxt1!:string;
+  alTgTxt1!: string; anTgTxt1!: string; noTgTxt1!: string;
+
+  getIntervalId: any; procCnt: number = 0;
 
   constructor(
     private modalService: NgbModal,
@@ -90,6 +92,11 @@ export class ContentWorkspaceComponent implements OnInit {
     this.getTags();
     this.getLangs();
     this.cntntList();
+    this.processingCntnt(true);
+    this.getIntervalId = setInterval(() => {
+      this.processingCntnt(true);
+    }, 13000) //13 seconds
+
   }
 
   initialiseState() {
@@ -122,11 +129,15 @@ export class ContentWorkspaceComponent implements OnInit {
     this.disabled = false;
     this.fldrCntntArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
-    let cmnCols = [{ n: "Added", k: "createdDate", asc: false }, { n: "Size", k: "size", asc: false },
-    { n: "Last Updated", k: "updatedDate", asc: false }];
-    this.visbCols = [...cmnCols];
-    this.hidCols = [{ n: "Likes", k: "likes", asc: false },{ n: "Languages", k: "contentLanguages", asc: false }];
-    this.cols = [{ n: "Name", asc: false, k: "name" }, ...cmnCols];
+    if (this.activeIndex == 1) {
+      this.cols = [{ n: "Name", k: "name" }, { n: "Queued Time", k: "queuedAt" }];
+    } else {
+      let cmnCols = [{ n: "Added", k: "createdDate", asc: false }, { n: "Size", k: "size", asc: false },
+      { n: "Last Updated", k: "updatedDate", asc: false }];
+      this.visbCols = [...cmnCols];
+      this.hidCols = [{ n: "Likes", k: "likes", asc: false }, { n: "Languages", k: "contentLanguages", asc: false }];
+      this.cols = [{ n: "Name", asc: false, k: "name" }, ...cmnCols];
+    }
     this.view = true;
     this.edit = false;
     this.activeFldrs = 1; this.isActiveFldrs = true; this.activeWrkspc = 1;
@@ -162,7 +173,8 @@ export class ContentWorkspaceComponent implements OnInit {
         distinctUntilChanged(),
         tap(() => {
           this.pageNo = 1;
-          this.cntntList();
+          this.loadCntnts();
+          // this.cntntList();
         })
       )
       .subscribe();
@@ -260,6 +272,7 @@ export class ContentWorkspaceComponent implements OnInit {
       this.edit = false;
       this.openModal(modal);
     } else if (type == 'edit') {
+      console.log("fdssdsdfsdf")
       this.edit = true;
       this.editFolder(modal, folder);
     } else if (type == 'dupl') {
@@ -377,7 +390,7 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  fldrTgs(){
+  fldrTgs() {
     let tagIds = [];
     if (this.allTags.length > 0) {
       for (let i = 0; i < this.allTags.length; i++) {
@@ -505,7 +518,7 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  setDefFldr(fType:'folderForm'|'smartFldrForm'='folderForm'){
+  setDefFldr(fType: 'folderForm' | 'smartFldrForm' = 'folderForm') {
     this.disabled = false;
     this.dismissModal();
     this[fType].reset();
@@ -647,7 +660,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.wrkspcs = [];
     let query = {
       hubid: this.hubid,
-      isActive: this.activeWrkspc==1?true:false
+      isActive: this.activeWrkspc == 1 ? true : false
     }
     this.cwServ.wrkspcList(query)
       .subscribe((data: any) => {
@@ -746,15 +759,15 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // drag and drop
   drop = (event: CdkDragDrop<string[]>) => {
-    if(event.previousContainer.id =="cntntLists"){
-      if(event.previousContainer.id =="cntntLists" && event.container.id =="fldrLists"){
-        if(this.dispFolder && this.dispFolder.id && this.dispFolder.key== "smtFldr"){
+    if (event.previousContainer.id == "cntntLists") {
+      if (event.previousContainer.id == "cntntLists" && event.container.id == "fldrLists") {
+        if (this.dispFolder && this.dispFolder.id && this.dispFolder.key == "smtFldr") {
           this.toastr.info("Content can't be add to smart folder.")
-        }else{
+        } else {
           this.addCntntToWrkspc(event);
         }
       }
-    }else{
+    } else {
       if (event.previousContainer === event.container) {
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       } else {
@@ -762,18 +775,18 @@ export class ContentWorkspaceComponent implements OnInit {
           event.container.data,
           event.previousIndex,
           event.currentIndex);
-        }
+      }
     }
   }
 
-  addCntntToWrkspc(event: any){
-    let data:any = {
+  addCntntToWrkspc(event: any) {
+    let data: any = {
       contentId: event.previousContainer.data[event.previousIndex].id,
       workspaceId: this.selWrkspc!.id,
       folderId: this.dispFolder ? this.dispFolder!.id : null,
     }
     this.cwServ.addCntntToWrkspcFldr(data).subscribe((data: any) => {
-      if (data && data.result &&  data.result.id ) {
+      if (data && data.result && data.result.id) {
         copyArrayItem(
           event.previousContainer.data,
           event.container.data,
@@ -782,16 +795,16 @@ export class ContentWorkspaceComponent implements OnInit {
         );
         this.fldrCntntArr[event.currentIndex] = data.result;
         this.toastr.success('Added successfully', 'Success!');
-      }else{
+      } else {
         this.toastr.error('Unable to add', 'Error!');
       }
     }, (err: any) => {
     });
   }
 
-  canDrag(): boolean{
-    if(this.selWrkspc && this.selWrkspc.id){
-      if(this.dispFolder && this.dispFolder.id && this.dispFolder.key== "smtFldr"){
+  canDrag(): boolean {
+    if (this.activeIndex == 0 && this.selWrkspc && this.selWrkspc.id) {
+      if (this.dispFolder && this.dispFolder.id && this.dispFolder.key == "smtFldr") {
         return true;
       }
       return false;
@@ -821,33 +834,37 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // toggle workspace
   workspaceToggle = () => {
-    this.showRowInfo = false;
-    this.rowInfo = {};
+    this.closeDoc();
+    this.selWrkspc = undefined;
     this.showWork = !this.showWork;
   }
 
   // content toggle
   toggleInfo = (row: any) => {
-    if (this.showRowInfo && this.rowInfo.id == row.id) {
-      this.closeDoc();
-    } else {
-      this.showWork = false;
-      this.rowInfo = {};
-      this.showRowInfo = true;
-      this.edits = {};
-      this.disb = {};
-      this.desc = '';
-      this.cmnt = '';
-      this.selTags2 = [];
-      this.selLngs = [];
-      this.getCntnt(row);
+    if (this.activeIndex != 1) {
+      if (this.showRowInfo && this.rowInfo.id == row.id) {
+        this.closeDoc();
+      } else {
+        this.showWork = false;
+        this.rowInfo = {};
+        this.showRowInfo = true;
+        this.edits = {};
+        this.disb = {};
+        this.desc = '';
+        this.cmnt = '';
+        this.selTags2 = [];
+        this.selLngs = [];
+        this.getCntnt(row);
+      }
     }
   }
 
-  closeDoc = (isAll:boolean=false) => {
+  closeDoc = (isAll: boolean = false) => {
     this.showRowInfo = false;
-    if(isAll)
+    if (isAll) {
       this.showWork = false;
+      this.selWrkspc = undefined;
+    }
     this.docLoading = false;
     this.rowInfo = {};
   }
@@ -930,18 +947,18 @@ export class ContentWorkspaceComponent implements OnInit {
     if (isTagReq) {
       this.getTags();
     }
-    this.addWrkspcForm.reset();
-    this.updWrkspcForm.reset();
-    this.folderForm.reset();
-    this.smartFldrForm.reset();
     this.verForm.reset();
     this.urlForm.reset();
     this.cntntForm.reset();
-    this.iconUrl = '';
-    this.addURLIcon = '';
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
       }, (reason) => {
+        this.iconUrl = '';
+        this.addURLIcon = '';
+        this.addWrkspcForm.reset();
+        this.updWrkspcForm.reset();
+        this.folderForm.reset();
+        this.smartFldrForm.reset();
       });
   }
 
@@ -950,23 +967,32 @@ export class ContentWorkspaceComponent implements OnInit {
     this.unsubSubs();
     this.searchTxt = "";
     this.initialiseState();
-    this.cntntList();
+    this.loadCntnts();
+  }
+
+  loadCntnts() {
+    if (this.activeIndex == 1) {
+      this.processingCntnt(false);
+    } else
+      this.cntntList();
   }
 
   sortChange(col: any, index: number) {
-    this.cntntLoading = true;
-    this.pageNo = 1;
-    let colData = { ...col };
-    for (let k = 0; k < this.cols.length; k++) {
-      this.cols[k].asc = false;
+    if (this.activeIndex != 1 && col.hasOwnProperty("asc")) {
+      this.cntntLoading = true;
+      this.pageNo = 1;
+      let colData = { ...col };
+      for (let k = 0; k < this.cols.length; k++) {
+        this.cols[k].asc = false;
+      }
+      colData.asc = !colData.asc;
+      this.cols[index].asc = colData.asc;
+      this.sort = {
+        SortColumn: col.k,
+        IsAscending: colData.asc,
+      }
+      this.cntntList();
     }
-    colData.asc = !colData.asc;
-    this.cols[index].asc = colData.asc;
-    this.sort = {
-      SortColumn: col.k,
-      IsAscending: colData.asc,
-    }
-    this.cntntList();
   }
 
   // get content listing
@@ -979,7 +1005,7 @@ export class ContentWorkspaceComponent implements OnInit {
       ...this.sort,
       hubId: parseInt(this.hubid),
       fltrL: this.filteredList,
-      ContentStatus: this.activeIndex==2?2:1
+      ContentStatus: this.activeIndex == 2 ? 2 : 1
     };
     this.cntnts = [];
     this.totalCount = 0
@@ -1043,7 +1069,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   selFromAutoComp(data: any, type: 'selTags' | 'selTags2' | 'selLngs' | 'selUsrGrps'
-  | 'allTags' | 'anyTags' | 'noneTags' |'allTags1' | 'anyTags1' | 'noneTags1', autoSel: any) {
+    | 'allTags' | 'anyTags' | 'noneTags' | 'allTags1' | 'anyTags1' | 'noneTags1', autoSel: any) {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this.toastr.clear();
@@ -1053,11 +1079,11 @@ export class ContentWorkspaceComponent implements OnInit {
         this[type].push({ ...data });
       else if (type === 'selLngs')
         this[type].push({ ...data, lid: data.id });
-      else if(type =='allTags1' || type == 'anyTags1' || type == 'noneTags1'){
-        let necData = {name: data.name,id: data.id};
-        this[type].push({ ...necData});
-        let n = (type =='allTags1'?'All':type =='anyTags1'?'Any':'None')+": "+necData.name;
-        this.filteredList.push({ ...necData,type,n });
+      else if (type == 'allTags1' || type == 'anyTags1' || type == 'noneTags1') {
+        let necData = { name: data.name, id: data.id };
+        this[type].push({ ...necData });
+        let n = (type == 'allTags1' ? 'All' : type == 'anyTags1' ? 'Any' : 'None') + ": " + necData.name;
+        this.filteredList.push({ ...necData, type, n });
         this.cntntList();
       }
       else
@@ -1067,10 +1093,10 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   remove(data: any, type: 'selTags' | 'selTags2' | 'selLngs' | 'selUsrGrps' |
-  'allTags' | 'anyTags' | 'noneTags' |'allTags1' | 'anyTags1' | 'noneTags1' ): void {
+    'allTags' | 'anyTags' | 'noneTags' | 'allTags1' | 'anyTags1' | 'noneTags1'): void {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
-      if(type =='allTags1' || type == 'anyTags1' || type == 'noneTags1'){
+      if (type == 'allTags1' || type == 'anyTags1' || type == 'noneTags1') {
         const index2 = this.filteredList.findIndex((ele: any) => ele.id == data.id);
         if (index2 >= 0) {
           this.filteredList.splice(index2, 1);
@@ -1083,7 +1109,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   onCntntSubmit() {
     //this.cntntForm.valid
-    if (this.files.length>0) {
+    if (this.files.length > 0) {
       this.cntntDisb = true;
       let cntntData: any = {
         content: this.files[0],
@@ -1223,20 +1249,20 @@ export class ContentWorkspaceComponent implements OnInit {
       });
   }
 
-  updCntntStatus(isDel:boolean=false){
-    let mdlMsg,mdlTtl, stsData:any = {id: this.rowInfo.id},res:string;
-    if(isDel){
+  updCntntStatus(isDel: boolean = false) {
+    let mdlMsg, mdlTtl, stsData: any = { id: this.rowInfo.id }, res: string;
+    if (isDel) {
       mdlMsg = `permanently delete ${this.rowInfo.name}`;
       mdlTtl = `Permanently delete`;
       res = `Content permanently deleted`;
       stsData.status = 3;
-    }else{
-      if(this.activeIndex==0){
+    } else {
+      if (this.activeIndex == 0) {
         mdlMsg = `move ${this.rowInfo.name} to the trash`;
         mdlTtl = `Move to trash`;
         res = `Content move to tash`;
         stsData.status = 2;
-      }else if(this.activeIndex==2){
+      } else if (this.activeIndex == 2) {
         mdlMsg = `restore ${this.rowInfo.name} from trash`;
         mdlTtl = `Restore from Tash`;
         res = `Content restore from trash`;
@@ -1269,10 +1295,10 @@ export class ContentWorkspaceComponent implements OnInit {
     this.fileServ.downloadFile(this.rowInfo!.contentPath, this.rowInfo!.name);
   }
 
-  setFltrEmpty(){
+  setFltrEmpty() {
     this.filteredList = [];
     this.allTags1 = []; this.anyTags1 = []; this.noneTags1 = [];
-    this.cntntTypeFltr = this.cntntTypeFltr.map((f: any) => ({ ...f, chk:false }));
+    this.cntntTypeFltr = this.cntntTypeFltr.map((f: any) => ({ ...f, chk: false }));
   }
 
   clearAllFilter() {
@@ -1280,27 +1306,27 @@ export class ContentWorkspaceComponent implements OnInit {
     this.cntntList();
   }
 
-  clearSingleFlter = (fltr:any,i: number) => {
+  clearSingleFlter = (fltr: any, i: number) => {
     this.filteredList.splice(i, 1);
-    if(fltr.type==='fT'){
+    if (fltr.type === 'fT') {
       const index = this.cntntTypeFltr.findIndex((flt: any) => flt.v == fltr.v);
-      if (index >= 0){
+      if (index >= 0) {
         this.cntntTypeFltr[index].chk = false;
       }
     }
-    else if(fltr.type =='allTags1' || fltr.type == 'anyTags1' || fltr.type == 'noneTags1'){
-      let t:'allTags1'|'anyTags1'|'noneTags1' = fltr.type;
+    else if (fltr.type == 'allTags1' || fltr.type == 'anyTags1' || fltr.type == 'noneTags1') {
+      let t: 'allTags1' | 'anyTags1' | 'noneTags1' = fltr.type;
       const index = this[t].findIndex((flt: any) => flt.id == fltr.id);
-      if (index >= 0){
+      if (index >= 0) {
         this[t].splice(index, 1);
       }
     }
     this.cntntList();
   }
 
-  newVersion(){
+  newVersion() {
     //this.verForm.valid
-    if (this.files.length>0) {
+    if (this.files.length > 0) {
       this.verDisb = true;
       let cntntData: any = {
         ...this.verForm.value,
@@ -1321,6 +1347,30 @@ export class ContentWorkspaceComponent implements OnInit {
         }, (err: any) => {
           this.verDisb = false;
         });
+    }
+  }
+
+  processingCntnt(isCount: boolean) {
+    this.cwServ.processCntnt(isCount)
+      .subscribe((data: any) => {
+        this.isProcCount(isCount, data);
+      }, (err: any) => {
+        this.isProcCount(isCount, {})
+        this.procCnt = 0;
+      });
+  }
+
+  isProcCount(isCount: boolean, data: any) {
+    if (isCount) {
+      this.procCnt = data && data.result && data.result.count ? data.result.count : 0
+    } else {
+      if (data && Array.isArray(data.result)) {
+        this.cntnts = data.result;
+      } else {
+        this.cntnts = [];
+      }
+      this.cntntLoading = false;
+      console.log(data)
     }
   }
 
@@ -1406,13 +1456,16 @@ export class ContentWorkspaceComponent implements OnInit {
     return FileHelper.formatBytes(bytes, 2);
   }
 
-  unsubSubs(){
+  unsubSubs() {
     if (!!this.subscription)
       this.subscription.unsubscribe();
   }
 
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
+    if (this.getIntervalId) {
+      clearInterval(this.getIntervalId);
+    }
     this.dismissModal();
     this.unsubSubs();
   }

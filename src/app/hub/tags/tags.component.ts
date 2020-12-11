@@ -23,7 +23,7 @@ export class TagsComponent implements OnInit {
   input: any; searInit!: boolean;
   @ViewChild("sear", { static: false }) set altRefIn(el: ElementRef) {
     this.input = el;
-    if (this.input && this.input?.nativeElement && !this.searInit) {
+    if (this.input && this.input ?.nativeElement && !this.searInit) {
       fromEvent(this.input.nativeElement, 'keyup')
         .pipe(
           debounceTime(1000),
@@ -186,11 +186,11 @@ export class TagsComponent implements OnInit {
 
   // tags sorting
   sortChange(col: any, index: number) {
-    if(col.hasOwnProperty("asc")){
+    if (col.hasOwnProperty("asc")) {
       this.pageNo = 1;
       let colData = { ...col };
       for (let k = 0; k < this.cols.length; k++) {
-        if(this.cols[k].hasOwnProperty("asc"))
+        if (this.cols[k].hasOwnProperty("asc"))
           this.cols[k].asc = false;
       }
       colData.asc = !colData.asc;
@@ -230,7 +230,7 @@ export class TagsComponent implements OnInit {
       pageNo: this.pageNo,
       pageSize: this.pageSize,
       searchText: this.searchTxt,
-      isActive: this.activeTags== 1? true:false,
+      isActive: this.activeTags == 1 ? true : false,
       categoryId: this.categoryId,
       unCategorized: this.unCategorized,
       ...this.sort

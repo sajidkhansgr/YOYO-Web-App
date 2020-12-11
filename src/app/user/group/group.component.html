@@ -6,8 +6,7 @@
     </button>
   </div>
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav"
-      [ngClass]="{'col-md-12': !showRowInfo, 'col-sm-0 col-md-6 col-lg-7 col-xl-8': showRowInfo}">
+    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo, 'col-sm-0 col-md-6 col-lg-7 col-xl-8': showRowInfo}">
       <div class="card overflow-hidden">
         <div class="card-body bg-white px-0 pb-0">
           <h5 class="card-title px-3">
@@ -42,10 +41,8 @@
                   <button class="btn btn-light dropdown-toggle" id="divisionDD" data-toggle="dropdown">
                     Division
                   </button>
-                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" aria-labelledby="divisionDD"
-                    (click)="$event.stopPropagation();">
-                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
-                      [floatLabel]="'never'">
+                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" aria-labelledby="divisionDD" (click)="$event.stopPropagation();">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3" [floatLabel]="'never'">
                       <i matPrefix class="fas fa-search"></i>
                       <input matInput placeholder="Search ...">
                     </mat-form-field>
@@ -67,10 +64,8 @@
                   <button class="btn btn-light dropdown-toggle" id="wrkspcDD" data-toggle="dropdown">
                     Workspace
                   </button>
-                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" aria-labelledby="wrkspcDD"
-                    (click)="$event.stopPropagation();">
-                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
-                      [floatLabel]="'never'">
+                  <div class="dropdown-menu dropdown-menu-right large-dropdown-menu" aria-labelledby="wrkspcDD" (click)="$event.stopPropagation();">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3" [floatLabel]="'never'">
                       <i matPrefix class="fas fa-search"></i>
                       <input matInput placeholder="Search ...">
                     </mat-form-field>
@@ -98,15 +93,12 @@
                 <thead>
                   <tr>
                     <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
-                      {{col.n}}
-                      <i class="ml-1 fas" *ngIf="col.hasOwnProperty('asc')"
-                        [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
+                      {{col.n}} <i class="ml-1 fas" *ngIf="col.hasOwnProperty('asc')" [ngClass]="{'fa-sort-down align-top':!col.asc,'fa-sort-up align-bottom':col.asc}"></i>
                     </th>
                   </tr>
                 </thead>
-                <tbody *ngIf="grps.length > 0">
-                  <tr *ngFor="let grp of grps" (click)="toggleInfo(grp)"
-                    [ngClass]="{'deact': !grp.isActive,'sel-row':(rowInfo.id === grp.id)}">
+                <tbody *ngIf="grps.length>0">
+                  <tr *ngFor="let grp of grps" (click)="toggleInfo(grp)" [ngClass]="{'deact': !grp.isActive,'sel-row':(rowInfo.id === grp.id)}">
                     <td><span class="d-block">{{grp.name}}</span></td>
                     <td class="text-hi-dark-grey">{{grp.isActive?'Active':'In Active'}}</td>
                     <td class="text-hi-dark-grey">{{(grp.createdDate|date:'dd MMM, yyyy')||'N/A'}}</td>
@@ -118,8 +110,7 @@
                 No Group found
               </div>
             </div>
-            <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
-              (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
+            <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo" (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
           </div>
         </div>
       </div>
@@ -265,12 +256,10 @@
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input #hubName matInput [(ngModel)]="hubTxt" name="hubTxt" [ngModelOptions]="{standalone: true}"
-            placeholder="Add Hub" [matAutocomplete]="auto">
+          <input #hubName matInput [(ngModel)]="hubTxt" name="hubTxt" [ngModelOptions]="{standalone: true}" placeholder="Add Hub" [matAutocomplete]="auto">
           <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,hubName)"
-          [displayWith]="displayFn">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,hubName)" [displayWith]="displayFn">
           <mat-option *ngFor="let div of divArr| filterName : hubTxt: 'name'" [value]="div">
             {{div.name}}
           </mat-option>

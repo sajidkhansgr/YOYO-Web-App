@@ -176,11 +176,17 @@ export class AppSettings {
 
   public static GET_CNTNT_SMT_FLDR = `api/Content/GetContentBySmartFolder`;
 
-  public static UPL_VER_CNTNT = `api/Content/UploadNewVersion`; //need to work on
+  public static UPL_VER_CNTNT = `api/Content/UploadNewVersion`;
 
   public static ADD_CNTNT_WRKSPC = `api/Content/AddContentToWorkspaceFolder`;
 
   public static ADD_CNTNT_EMPL = `api/Content/AddContentByEmployee`;
+
+  public static PROC_CNTNT_CNT = `api/Content/ProcessingContentCount`;
+
+  public static PROC_CNTNT = `api/Content/GetProcessingContentDetails`;
+
+  public static PROC_CNTNT_EMPL = `api/Content/GetProcessingContentByEmployee`;
 
   // ---- LANGUAGE ---- //
 

@@ -14,8 +14,7 @@
               </button>
             </div>
             <div class="row mt-4 mx-0">
-              <div class="sub-tab-nav"
-                [ngClass]="{'col-md-12': !showRowInfo, 'col-sm-0 col-md-6 col-lg-7 col-xl-8': showRowInfo}">
+              <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo, 'col-sm-0 col-md-6 col-lg-7 col-xl-8': showRowInfo}">
                 <div class="card overflow-hidden">
                   <div class="card-header border-0">
                     <mat-tab-group [selectedIndex]="activeIndex" (selectedTabChange)="onTabChange($event)">
@@ -66,8 +65,7 @@
                           <div class="value">
                             <span *ngIf="rowInfo.sendToGroup===1">All Users</span>
                             <span *ngIf="rowInfo.sendToGroup!=1 && rowInfo.recipients && rowInfo.recipients.length>0">
-                              <span *ngFor="let rcp of rowInfo.recipients"
-                                class="badge badge-light p-2 mt-2 mt-sm-0">{{rcp.name}}</span>
+                              <span *ngFor="let rcp of rowInfo.recipients" class="badge badge-light p-2 mt-2 mt-sm-0">{{rcp.name}}</span>
                             </span>
                           </div>
                         </div>
@@ -188,22 +186,19 @@
             <tr>
               <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
                 {{col.n}}
-                <i class="ml-1 fas"
-                  [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
+                <i class="ml-1 fas" [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
               </th>
               <th *ngIf="activeIndex==0 || activeIndex==1"></th>
             </tr>
           </thead>
           <tbody *ngIf="!loading && ancmnts.length > 0">
-            <tr *ngFor="let ancmnt of ancmnts" (click)="toggleInfo(ancmnt)"
-              [ngClass]="{'sel-row':(rowInfo.id === ancmnt.id)}">
+            <tr *ngFor="let ancmnt of ancmnts" (click)="toggleInfo(ancmnt)" [ngClass]="{'sel-row':(rowInfo.id === ancmnt.id)}">
               <td *ngFor="let col of cols">
                 <span [ngSwitch]="col.k">
                   <span *ngSwitchCase="'sendToGroup'">
                     <span *ngIf="ancmnt.sendToGroup===1">All Users</span>
                     <span *ngIf="ancmnt.sendToGroup!=1 && ancmnt.recipients && ancmnt.recipients.length>0">
-                      <span *ngFor="let rcp of ancmnt.recipients"
-                        class="badge badge-light p-2 mt-2 mt-sm-0 mr-2">{{rcp.name}}</span>
+                      <span *ngFor="let rcp of ancmnt.recipients" class="badge badge-light p-2 mt-2 mt-sm-0 mr-2">{{rcp.name}}</span>
                     </span>
                   </span>
                   <span *ngSwitchCase="'deliveredOn'">
@@ -219,10 +214,8 @@
                 </span>
               </td>
               <td *ngIf="activeIndex==0 || activeIndex==1">
-                <button *ngIf="activeIndex==0" class="btn btn-primary btn-sm hover-btn"
-                  (click)="archAncmnt($event, ancmnt)">Archive</button>
-                <button *ngIf="activeIndex==1" class="btn btn-primary btn-sm hover-btn"
-                  (click)="updAncmnt($event, ancmnt, anncModal)">Edit</button>
+                <button *ngIf="activeIndex==0" class="btn btn-primary btn-sm hover-btn" (click)="archAncmnt($event, ancmnt)">Archive</button>
+                <button *ngIf="activeIndex==1" class="btn btn-primary btn-sm hover-btn" (click)="updAncmnt($event, ancmnt, anncModal)">Edit</button>
               </td>
             </tr>
           </tbody>
@@ -231,8 +224,7 @@
           No Announcement found
         </div>
       </div>
-      <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
-        (pageSizeChange)="pageSizeChange($event)" (paginationNum)="paginationNum($event)"></app-pagination>
+      <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo" (pageSizeChange)="pageSizeChange($event)" (paginationNum)="paginationNum($event)"></app-pagination>
       <!-- <div class="card-footer row justify-content-between mx-0">
         <div class="pages">
           <mat-form-field appearance="outline" class="mr-2">
@@ -294,40 +286,32 @@
         </mat-error>
       </mat-form-field>
       <br />
-      <mat-form-field appearance="outline" class="w-100"
-        *ngIf="ancmntForm.controls.usrWrkSpcs && ancmntForm.value.sendToGroup==2">
+      <mat-form-field appearance="outline" class="w-100" *ngIf="ancmntForm.controls.usrWrkSpcs && ancmntForm.value.sendToGroup==2">
         <mat-chip-list #chipList aria-label="Select Workspaces">
-          <mat-chip *ngFor="let d of selWrkSpcs" [selectable]="selectable" [removable]="removable"
-            (removed)="remove(d, 'selWrkSpcs')">
+          <mat-chip *ngFor="let d of selWrkSpcs" [selectable]="selectable" [removable]="removable" (removed)="remove(d, 'selWrkSpcs')">
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input matInput #wrkSpcInp formControlName="usrWrkSpcs" placeholder="Select user workspaces(s)"
-            [matAutocomplete]="auto1">
+          <input matInput #wrkSpcInp formControlName="usrWrkSpcs" placeholder="Select user workspaces(s)" [matAutocomplete]="auto1">
           <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
-        <mat-autocomplete #auto1="matAutocomplete"
-          (optionSelected)="selFromAutoComp($event.option.value,'selWrkSpcs',wrkSpcInp)" [displayWith]="displayFn">
+        <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selWrkSpcs',wrkSpcInp)" [displayWith]="displayFn">
           <mat-option *ngFor="let wrkSpc of wrkSpcs" [value]="wrkSpc">
             {{wrkSpc.name}} <br />
             <small *ngIf="wrkSpc.hub && wrkSpc.hub.name">{{wrkSpc.hub.name}}</small>
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-      <mat-form-field appearance="outline" class="w-100"
-        *ngIf="ancmntForm.controls.usrGrps && ancmntForm.value.sendToGroup==3">
+      <mat-form-field appearance="outline" class="w-100" *ngIf="ancmntForm.controls.usrGrps && ancmntForm.value.sendToGroup==3">
         <mat-chip-list #chipList1 aria-label="Select user Group(s)">
-          <mat-chip *ngFor="let d of selGrps" [selectable]="selectable" [removable]="removable"
-            (removed)="remove(d,'selGrps')">
+          <mat-chip *ngFor="let d of selGrps" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selGrps')">
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input matInput #grpInp formControlName="usrGrps" placeholder="Select user group(s)"
-            [matAutocomplete]="auto2">
+          <input matInput #grpInp formControlName="usrGrps" placeholder="Select user group(s)" [matAutocomplete]="auto2">
           <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
-        <mat-autocomplete #auto2="matAutocomplete"
-          (optionSelected)="selFromAutoComp($event.option.value,'selGrps',grpInp)" [displayWith]="displayFn">
+        <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selGrps',grpInp)" [displayWith]="displayFn">
           <mat-option *ngFor="let grp of grps" [value]="grp">
             {{grp.name}}
           </mat-option>
@@ -362,8 +346,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" [disabled]="disabled"
-        (click)="modal.dismiss('Cross click')">Close</button>
+      <button type="button" class="btn btn-secondary" [disabled]="disabled" (click)="modal.dismiss('Cross click')">Close</button>
       <button class="btn btn-primary" [disabled]="ancmntForm!.invalid || (ancmntForm.value.sendToGroup==2 && selWrkSpcs.length<=0)
         || (ancmntForm.value.sendToGroup==3 && selGrps.length<=0) || disabled">
         <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>

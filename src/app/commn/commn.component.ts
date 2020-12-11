@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -34,7 +34,7 @@ export class CommnComponent implements OnInit {
   showRowInfo: boolean = false; rowInfo: any; sort: any = {};
   cols: any[] = [];
   totalCount!: number;
-  minDate!:any;
+  minDate!: any;
 
   constructor(
     private modalService: NgbModal,
@@ -104,12 +104,12 @@ export class CommnComponent implements OnInit {
     this.selGrps = [];
     if (this.isEdit && this.rowInfo && this.rowInfo.id) {
       this.enbDisbDateTime({ checked: true });
-      if(this.rowInfo.scheduledOn){
+      if (this.rowInfo.scheduledOn) {
         let datePipe = new DatePipe("en-US");
         this.rowInfo.date = datePipe.transform(new Date(this.rowInfo.scheduledOn), 'yyyy-MM-dd');
         this.rowInfo.time = datePipe.transform(new Date(this.rowInfo.scheduledOn), 'HH:mm');
-      }else{
-        this.rowInfo.date = '';this.rowInfo.time = '';
+      } else {
+        this.rowInfo.date = ''; this.rowInfo.time = '';
       }
       this.ancmntForm.patchValue({
         ...this.rowInfo,
@@ -117,9 +117,9 @@ export class CommnComponent implements OnInit {
       })
       this.changeGrp({ value: this.rowInfo.sendToGroup });
       if (this.rowInfo.sendToGroup === 2) {
-          this.selWrkSpcs = this.rowInfo.recipients;
+        this.selWrkSpcs = this.rowInfo.recipients;
       } else if (this.rowInfo.sendToGroup === 3) {
-          this.selGrps = this.rowInfo.recipients;
+        this.selGrps = this.rowInfo.recipients;
       }
     } else {
       this.rowInfo = {};
@@ -223,9 +223,9 @@ export class CommnComponent implements OnInit {
         ...this.ancmntForm.value
       }
       if (ancmntData.sendToGroup === 2) {
-          ancmntData.recipients = this.selWrkSpcs.map((wkSpc: any) => wkSpc.id);
+        ancmntData.recipients = this.selWrkSpcs.map((wkSpc: any) => wkSpc.id);
       } else if (ancmntData.sendToGroup === 3) {
-          ancmntData.recipients = this.selGrps.map((grp: any) => grp.id);
+        ancmntData.recipients = this.selGrps.map((grp: any) => grp.id);
       } else {
         ancmntData.recipients = [];
       }
@@ -249,7 +249,7 @@ export class CommnComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Annoucement added successfully', 'Success!');
-          this.pageNo = 1;this.getAncmnts();
+          this.pageNo = 1; this.getAncmnts();
           this.dismissModal();
           //get all annoucem
         } else {
@@ -267,7 +267,7 @@ export class CommnComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Annoucement updated successfully', 'Success!');
-          this.pageNo = 1;this.getAncmnts();
+          this.pageNo = 1; this.getAncmnts();
           this.dismissModal();
           //get all annoucem
         } else {
@@ -371,7 +371,7 @@ export class CommnComponent implements OnInit {
     return (grp && grp.id) ? grp.name : '';
   }
 
-  selFromAutoComp(data: any, type: 'selGrps' | 'selWrkSpcs',autoSel: any) {
+  selFromAutoComp(data: any, type: 'selGrps' | 'selWrkSpcs', autoSel: any) {
     const index = this[type].findIndex((ele: any) => ele.id == data.id);
     if (index >= 0) {
       this.toastr.clear();
@@ -401,7 +401,7 @@ export class CommnComponent implements OnInit {
       if (result) {
         this.commnServ.archAncmnt(ancmnt!.id.toString()).subscribe((data: any) => {
           if (data) {
-            this.pageNo = 1;this.getAncmnts();
+            this.pageNo = 1; this.getAncmnts();
             this.toastr.success(data.message || 'Announcement archived successfully', 'Success!');
           } else {
             this.toastr.error('Unable to arhive announcement', 'Error!');

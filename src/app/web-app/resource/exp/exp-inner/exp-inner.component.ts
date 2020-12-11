@@ -6,10 +6,11 @@ import { ToastrService } from 'ngx-toastr';
 import { DEF_ICON, FLDR_ICON } from '../../../../shared/constants';
 import { ExpService } from '../../exp/exp.service';
 import { BreadcrumbService } from '../../../../shared/services/breadcrumb.service';
-import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-mail.component';
-import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
-import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to-coll.component';
-import { ContentWorkspaceService } from 'src/app/hub/content-workspace/content-workspace.service';
+import { ShareMailComponent } from '../../../../shared/components/share-mail/share-mail.component';
+import { GetLinkComponent } from '../../../../shared/components/get-link/get-link.component';
+import { AddToCollComponent } from '../../../../shared/components/add-to-coll/add-to-coll.component';
+import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
+import { FileHelper } from '../../../../shared/file-helper';
 
 @Component({
   selector: 'app-exp-inner',
@@ -19,7 +20,7 @@ import { ContentWorkspaceService } from 'src/app/hub/content-workspace/content-w
 export class ExpInnerComponent implements OnInit {
   routerSubs!: Subscription;
   id!: string; fldrid!: string; smtFldrid!: string;
-  view: boolean = false; loading!: boolean;
+  view: boolean = true; loading!: boolean;
   wrkspcCntnts: any[] = [];
   defImg: string = DEF_ICON; fldrIcon: string = FLDR_ICON;
   testArr = [1, 2, 3] // for static
@@ -122,6 +123,10 @@ export class ExpInnerComponent implements OnInit {
     }, (err: any) => {
       this.loading = false;
     });
+  }
+
+  getImg(d: any): string {
+    return FileHelper.getImg(d);
   }
 
   navgToCntnt(data: any) {

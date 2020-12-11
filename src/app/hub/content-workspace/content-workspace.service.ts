@@ -198,7 +198,7 @@ export class ContentWorkspaceService {
 
   // delete content or upd status
   updCntntStatusOrDel(data: any) {
-    if(data.status==3)
+    if (data.status == 3)
       return this.http.post(`${AppSettings.DEL_CNTNT}?id=${data.id}`, {});
     else
       return this.http.post(`${AppSettings.UPD_CNTNT_STATUS}?id=${data.id}&status=${data.status}`, {});
@@ -225,15 +225,20 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.REM_USR_GRP_WRKSPC}`, data);
   }
 
-  deactCtntOrFldr(data: any){
-    if(data.isFldr)
+  deactCtntOrFldr(data: any) {
+    if (data.isFldr)
       return this.actDeactFldr(data.id, false);
     else
       return this.updCntntStatusOrDel(data);
   }
 
   newVersion(data: any) {
-    return this.http.post(`${AppSettings.UPL_VER_CNTNT}`, this.freezeFolderObj(data))
+    return this.http.post(`${AppSettings.UPL_VER_CNTNT}`, this.freezeFolderObj(data));
+  }
+
+  processCntnt(isCount: boolean) {
+    let url: string = isCount ? AppSettings.PROC_CNTNT_CNT : AppSettings.PROC_CNTNT;
+    return this.http.get(`${url}`);
   }
 
 }

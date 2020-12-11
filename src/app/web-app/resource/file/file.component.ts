@@ -33,7 +33,7 @@ export class FileComponent implements OnInit {
   fldrid!: string;
   selData!: any[]; //checkboxes
   urlForm!: FormGroup;urlDisb!: boolean;
-
+  cols:any=[]
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -60,6 +60,7 @@ export class FileComponent implements OnInit {
     this.files = [];
     this.folders = [];
     this.selData = [];
+    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
     this.initForm();
   }
 
@@ -380,8 +381,8 @@ export class FileComponent implements OnInit {
     if(type=='Url'){
       this.urlDisb = false;
       this.dismissModal();
-      this.getFiles();
     }
+    this.getFiles();
   }
 
   getImg(d: any): string {

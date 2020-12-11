@@ -1,13 +1,13 @@
-<!-- <nav aria-label="breadcrumb">
+<nav aria-label="breadcrumb">
   <ol class="breadcrumb rounded-0">
-    <li class="breadcrumb-item active align-self-center" aria-current="page">English</li>
+    <!-- <li class="breadcrumb-item active align-self-center" aria-current="page">English</li> -->
     <span class="ml-auto">
       <div class="curs-ptr" (click)="view = !view;">
         <i class="fa" [ngClass]="{'fa-list-ul' : view, 'fa-th-large': !view}" style="font-size:1.75rem;"></i>
       </div>
     </span>
   </ol>
-</nav> -->
+</nav>
 
 <app-loader [type]="'page'" *ngIf="loading"></app-loader>
 <!-- grid view -->
@@ -24,7 +24,7 @@
           </ng-container>
           <div class="view-items col-sm-6 col-md-4 col-lg-3 text-center file curs-ptr my-2 p-2" *ngSwitchDefault>
             <div class="icon" (click)="viewContent(wSC)">
-              <img [src]="wSC.pdfImagePath ? wSC.pdfImagePath : wSC.pdfImage ? wSC.pdfImage : defImg">
+              <img [src]="getImg(wSC)">
             </div>
             <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
               <i class="fa fa-file ml-3 align-self-center mr-1"></i>
@@ -32,8 +32,7 @@
             </div>
             <div class="options rounded">
               <div class="dropleft">
-                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
@@ -136,28 +135,22 @@
           <div class="file row bg-white rounded p-3 curs-ptr my-2 mx-0" *ngSwitchDefault>
             <mat-checkbox class="align-self-center"></mat-checkbox>
             <div class="icon align-self-center mx-2 mx-sm-4" (click)="viewContent(wSC)">
-              <img [src]="wSC.pdfImagePath ? wSC.pdfImagePath : wSC.pdfImage ? wSC.pdfImage : defImg"
-                style="max-width: 72px;">
+              <img [src]="getImg(wSC)" style="max-width: 72px;">
             </div>
             <div class="row w-75">
               <div class="col-md-9 info align-self-center">
                 <h5 class="mb-0 text-truncate" (click)="viewContent(wSC)">{{wSC.name}}</h5>
                 <!-- <i class="fa fa-file mr-2"></i>Document in English -->
-                <div class="text-secondary" style="font-size: 12px;">Updated Jan 26,2020</div>
+                <div class="text-secondary" style="font-size: 12px;">Created {{(wSC.createdDate|date:'mediumDate')||'N/A'}}</div>
               </div>
               <div class="col-md-3 options d-flex align-self-center">
                 <div class="dropleft mr-2">
-                  <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
+                  <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-share-square"></i>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="shareDD">
-                    <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'email')"><i
-                        class="fa fa-envelope mr-1"></i>Email</a>
-                    <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'getLink')"><i
-                        class="fa fa-link mr-1"></i>Get
-                      a
-                      link</a>
+                    <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'email')"><i class="fa fa-envelope mr-1"></i>Email</a>
+                    <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'getLink')"><i class="fa fa-link mr-1"></i>Get a link</a>
                   </div>
                 </div>
                 <div class="btn btn-light" (click)="cmnModal(wSC,'addToColl')">
