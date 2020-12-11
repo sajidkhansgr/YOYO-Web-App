@@ -964,7 +964,7 @@ header {
 
     }
 
-    .col-3:hover {
+    .view-main:hover {
       .dropdown {
         opacity: 1;
       }
@@ -1268,7 +1268,7 @@ header {
 .expid-list {
   .file {
     .options {
-      opacity: 0;
+      opacity: 1;
       transition: opacity linear 0.5s;
     }
   }
