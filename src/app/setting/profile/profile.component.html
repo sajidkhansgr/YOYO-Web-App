@@ -6,7 +6,7 @@
   </h3>
   <div class="mt-2">
     <div class="main-tab-nav row">
-      <div class="col-md-7">
+      <div class="col-lg-7">
         <div class="card">
           <div class="card-header">
             My User Profile
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-5">
+      <div class="col-lg-5 mt-3 mt-lg-0">
         <div class="card">
           <div class="card-header">
             Password
@@ -84,7 +84,8 @@
         <mat-error *ngIf="profForm.get('email')!.hasError('required')">
           Email required
         </mat-error>
-        <mat-error *ngIf="!profForm.get('email')!.hasError('required') && profForm.get('email')!.hasError('invalidEmail')">
+        <mat-error
+          *ngIf="!profForm.get('email')!.hasError('required') && profForm.get('email')!.hasError('invalidEmail')">
           Please enter a valid email address
         </mat-error>
       </mat-form-field>
