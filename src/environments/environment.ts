@@ -8,7 +8,7 @@ export const environment = {
   SGNL_R: "http://hiforceapi.imobisoft.eu/notification",
   CLNT_ID: "8c0cd670273d451cbc9b351b11d22318"
 };
-
+//https://localhost:44314/
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
