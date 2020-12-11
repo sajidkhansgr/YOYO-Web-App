@@ -19,7 +19,7 @@ import { ContentWorkspaceService } from 'src/app/hub/content-workspace/content-w
 export class ExpInnerComponent implements OnInit {
   routerSubs!: Subscription;
   id!: string; fldrid!: string; smtFldrid!: string;
-  view: boolean = true; loading!: boolean;
+  view: boolean = false; loading!: boolean;
   wrkspcCntnts: any[] = [];
   defImg: string = DEF_ICON; fldrIcon: string = FLDR_ICON;
   testArr = [1, 2, 3] // for static

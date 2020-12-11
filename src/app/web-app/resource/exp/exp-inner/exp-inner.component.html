@@ -11,60 +11,62 @@
 
 <app-loader [type]="'page'" *ngIf="loading"></app-loader>
 <!-- grid view -->
-<div class="row mx-0 expid-grid" *ngIf="view">
-  <ng-container *ngIf="!loading">
-    <ng-container *ngFor="let wSC of wrkspcCntnts">
-      <ng-container [ngSwitch]="wSC.key">
-        <ng-container *ngSwitchCase="'fldr'">
-          <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="'smtFldr'">
-          <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
-        </ng-container>
-        <div class="col-md-3 text-center file curs-ptr my-2" *ngSwitchDefault>
-          <div class="icon" (click)="viewContent(wSC)">
-            <img [src]="wSC.pdfImagePath ? wSC.pdfImagePath : wSC.pdfImage ? wSC.pdfImage : defImg">
-          </div>
-          <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
-            <i class="fa fa-file ml-3 align-self-center mr-1"></i>
-            <div class="mx-auto text-truncate pr-1">{{wSC.name}}</div>
-          </div>
-          <div class="options rounded">
-            <div class="dropleft">
-              <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                <i class="fas fa-share-square"></i>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="shareDD">
-                <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'email')">
-                  <i class="fa fa-envelope mr-1"></i>Email
-                </a>
-                <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'getLink')">
-                  <i class="fa fa-link mr-1"></i>Get a link
-                </a>
-              </div>
+<div class="container">
+  <div class="row expid-grid" *ngIf="view">
+    <ng-container *ngIf="!loading">
+      <ng-container *ngFor="let wSC of wrkspcCntnts">
+        <ng-container [ngSwitch]="wSC.key">
+          <ng-container *ngSwitchCase="'fldr'">
+            <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'smtFldr'">
+            <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
+          </ng-container>
+          <div class="view-items col-sm-6 col-md-4 col-lg-3 text-center file curs-ptr my-2 p-2" *ngSwitchDefault>
+            <div class="icon" (click)="viewContent(wSC)">
+              <img [src]="wSC.pdfImagePath ? wSC.pdfImagePath : wSC.pdfImage ? wSC.pdfImage : defImg">
             </div>
-            <div class="btn my-1" (click)="cmnModal(wSC,'addToColl')">
-              <i class="fas fa-folder-plus"></i>
-            </div>
-          </div>
-        </div>
-        <ng-template #cntntFldr>
-          <div class="col-md-3 text-center folder curs-ptr my-2">
-            <div class="icon" (click)="navgToCntnt(wSC)">
-              <img [src]="wSC.folderIconPath?wSC.folderIconPath : fldrIcon">
-            </div>
-            <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto" *ngIf="!wSC.hideLabelInWorkspace">
+            <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
+              <i class="fa fa-file ml-3 align-self-center mr-1"></i>
               <div class="mx-auto text-truncate pr-1">{{wSC.name}}</div>
             </div>
+            <div class="options rounded">
+              <div class="dropleft">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+                  <i class="fas fa-share-square"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="shareDD">
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'email')">
+                    <i class="fa fa-envelope mr-1"></i>Email
+                  </a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'getLink')">
+                    <i class="fa fa-link mr-1"></i>Get a link
+                  </a>
+                </div>
+              </div>
+              <div class="btn my-1" (click)="cmnModal(wSC,'addToColl')">
+                <i class="fas fa-folder-plus"></i>
+              </div>
+            </div>
           </div>
-        </ng-template>
+          <ng-template #cntntFldr>
+            <div class="view-items col-sm-6 col-md-4 col-lg-3 text-center folder curs-ptr my-2 p-2">
+              <div class="icon" (click)="navgToCntnt(wSC)">
+                <img [src]="wSC.folderIconPath?wSC.folderIconPath : fldrIcon">
+              </div>
+              <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto" *ngIf="!wSC.hideLabelInWorkspace">
+                <div class="mx-auto text-truncate pr-1">{{wSC.name}}</div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
       </ng-container>
+      <div class="mx-auto pt-5" *ngIf="wrkspcCntnts.length<=0">
+        No data found
+      </div>
     </ng-container>
-    <div class="mx-auto pt-5" *ngIf="wrkspcCntnts.length<=0">
-      No data found
-    </div>
-  </ng-container>
+  </div>
 </div>
 
 <!-- list view -->
@@ -79,7 +81,9 @@
               Type (0)
             </mat-panel-title>
             <mat-panel-description>
-              <div class="btn btn-light">Clear</div>
+              <div class="align-self-center">
+                <div class="btn btn-light">Clear</div>
+              </div>
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div>
@@ -97,7 +101,9 @@
               Tags (0)
             </mat-panel-title>
             <mat-panel-description>
-              <div class="btn btn-light">Clear</div>
+              <div class="align-self-center">
+                <div class="btn btn-light">Clear</div>
+              </div>
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div>
@@ -127,33 +133,36 @@
           <ng-container *ngSwitchCase="'smtFldr'">
             <ng-container *ngTemplateOutlet="cntntFldr1"></ng-container>
           </ng-container>
-          <div class="file d-flex bg-white rounded p-3 curs-ptr my-2" *ngSwitchDefault>
+          <div class="file row bg-white rounded p-3 curs-ptr my-2 mx-0" *ngSwitchDefault>
             <mat-checkbox class="align-self-center"></mat-checkbox>
-            <div class="icon align-self-center mx-4" (click)="viewContent(wSC)">
+            <div class="icon align-self-center mx-2 mx-sm-4" (click)="viewContent(wSC)">
               <img [src]="wSC.pdfImagePath ? wSC.pdfImagePath : wSC.pdfImage ? wSC.pdfImage : defImg"
                 style="max-width: 72px;">
             </div>
-            <div class="info align-self-center">
-              <h5 class="mb-0" (click)="viewContent(wSC)">{{wSC.name}}</h5>
-              <!-- <i class="fa fa-file mr-2"></i>Document in English -->
-              <div class="text-secondary" style="font-size: 12px;">Updated Jan 26,2020</div>
-            </div>
-            <div class="options d-flex align-self-center ml-auto mr-3">
-              <div class="dropleft mr-2">
-                <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
-                  <i class="fas fa-share-square"></i>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'email')"><i
-                      class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'getLink')"><i class="fa fa-link mr-1"></i>Get
-                    a
-                    link</a>
-                </div>
+            <div class="row w-75">
+              <div class="col-md-9 info align-self-center">
+                <h5 class="mb-0 text-truncate" (click)="viewContent(wSC)">{{wSC.name}}</h5>
+                <!-- <i class="fa fa-file mr-2"></i>Document in English -->
+                <div class="text-secondary" style="font-size: 12px;">Updated Jan 26,2020</div>
               </div>
-              <div class="btn btn-light" (click)="cmnModal(wSC,'addToColl')">
-                <i class="fas fa-folder-plus"></i>
+              <div class="col-md-3 options d-flex align-self-center">
+                <div class="dropleft mr-2">
+                  <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="fas fa-share-square"></i>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="shareDD">
+                    <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'email')"><i
+                        class="fa fa-envelope mr-1"></i>Email</a>
+                    <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'getLink')"><i
+                        class="fa fa-link mr-1"></i>Get
+                      a
+                      link</a>
+                  </div>
+                </div>
+                <div class="btn btn-light" (click)="cmnModal(wSC,'addToColl')">
+                  <i class="fas fa-folder-plus"></i>
+                </div>
               </div>
             </div>
           </div>
