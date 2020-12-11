@@ -217,120 +217,150 @@
       </div>
     </div>
   </div>
+</div>
 
-  <!-- fixed sel item bootm div -->
-  <app-sel-itm-fxd-div [selArr]="selData" (delContent)="delContent(undefined)" [content]="true"
-    *ngIf="selData.length > 0" (clrSelData)="clrSel()">
-  </app-sel-itm-fxd-div>
+<!-- fixed sel item bootm div -->
+<app-sel-itm-fxd-div [selArr]="selData" (delContent)="delContent(undefined)" [content]="true" *ngIf="selData.length > 0"
+  (clrSelData)="clrSel()">
+</app-sel-itm-fxd-div>
 
-  <!-- add folder -->
-  <ng-template #fldrModal let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">{{frmType=='updFldr'?'Rename':'Add'}} Folder</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <form name="folderForm" (ngSubmit)="onSubmit()" [formGroup]="folderForm" novalidate>
-      <div class="modal-body" ngbAutofocus>
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Folder Name</mat-label>
-          <input type="text" matInput placeholder="Folder Name" formControlName="name" maxlength="100" required />
-          <mat-error *ngIf="folderForm.get('name')!.hasError('required')">
-            Folder Name is required
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" [disabled]="fldrLoad">
-          <app-loader [type]="'btn'" *ngIf="fldrLoad"></app-loader>
-          Save
-        </button>
-      </div>
-    </form>
-  </ng-template>
-
-  <!-- add url -->
-  <ng-template #addURL let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Add URL</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <form name="urlForm" (ngSubmit)="onUrlSubmit()" [formGroup]="urlForm" novalidate>
-      <div class="modal-body" ngbAutofocus>
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Name</mat-label>
-          <input matInput placeholder="Add a Name" formControlName="name" maxlength="100" required />
-          <mat-error *ngIf="urlForm.get('name')!.hasError('required')">
-            Name is required
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>URL</mat-label>
-          <input matInput placeholder="Add a URL" formControlName="url" maxlength="300" required />
-          <mat-error *ngIf="urlForm.get('url')!.hasError('required')">
-            Url is required
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" [disabled]="urlForm!.invalid || urlDisb">
-          <app-loader [type]="'btn'" *ngIf="urlDisb"></app-loader>
-          Add
-        </button>
-      </div>
-    </form>
-  </ng-template>
-
-  <!-- share with colleagues -->
-  <ng-template #shareColl let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Add URL</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
+<!-- add folder -->
+<ng-template #fldrModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{frmType=='updFldr'?'Rename':'Add'}} Folder</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form name="folderForm" (ngSubmit)="onSubmit()" [formGroup]="folderForm" novalidate>
     <div class="modal-body" ngbAutofocus>
-      <div class="file-sharing">
-        File Sharing is ON
-        <mat-slide-toggle class="float-right" #sharingValue></mat-slide-toggle>
-      </div>
-      <div class="rounded border border-primary d-flex text-justify text-primary px-2 my-3 py-2">
-        <i class="fa fa-info-circle align-self-center mr-2"></i>
-        File sharing is enabled for this file. Anyone at Hi-Force Hydraulic Tools with the file link will be able to
-        view this file.
-      </div>
-      <div *ngIf="sharingValue.checked">
-        <mat-label>Share Options:</mat-label>
-        <mat-radio-group aria-label="Select an option" class="d-block">
-          <mat-radio-button value="link" class="mx-3" checked="true" #link>Share by Link
-          </mat-radio-button>
-          <mat-radio-button value="email">Share by Email</mat-radio-button>
-        </mat-radio-group>
-        <hr>
-        <div class="link" *ngIf="link.checked">
-          <mat-form-field appearance="outline" class="w-100 copy-link">
-            <mat-label>Get Link</mat-label>
-            <input type="text" matInput value="https://www.google.com" readonly #linkText>
-            <button matSuffix class="btn btn-primary" (click)="copyLink(linkText)">Copy Link</button>
-          </mat-form-field>
-        </div>
-        <div class="email" *ngIf="!link.checked">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Email To</mat-label>
-            <input type="text" matInput placeholder="Enter Names or Email Address">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Note</mat-label>
-            <textarea type="text" matInput placeholder="Add a note ..."></textarea>
-          </mat-form-field>
-        </div>
-      </div>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Folder Name</mat-label>
+        <input type="text" matInput placeholder="Folder Name" formControlName="name" maxlength="100" required />
+        <mat-error *ngIf="folderForm.get('name')!.hasError('required')">
+          Folder Name is required
+        </mat-error>
+      </mat-form-field>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="modal.close('Save click')"
-        [disabled]="!sharingValue.checked">Share</button>
+      <button class="btn btn-primary" [disabled]="fldrLoad">
+        <app-loader [type]="'btn'" *ngIf="fldrLoad"></app-loader>
+        Save
+      </button>
     </div>
-  </ng-template>
+  </form>
+</ng-template>
+
+<!-- add url -->
+<ng-template #addURL let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add URL</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form name="urlForm" (ngSubmit)="onUrlSubmit()" [formGroup]="urlForm" novalidate>
+    <div class="modal-body" ngbAutofocus>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Add a Name" formControlName="name" maxlength="100" required />
+        <mat-error *ngIf="urlForm.get('name')!.hasError('required')">
+          Name is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>URL</mat-label>
+        <input matInput placeholder="Add a URL" formControlName="url" maxlength="300" required />
+        <mat-error *ngIf="urlForm.get('url')!.hasError('required')">
+          Url is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" [disabled]="urlForm!.invalid || urlDisb">
+        <app-loader [type]="'btn'" *ngIf="urlDisb"></app-loader>
+        Add
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- share with colleagues -->
+<ng-template #shareColl let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add URL</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" ngbAutofocus>
+    <div class="file-sharing">
+      File Sharing is ON
+      <mat-slide-toggle class="float-right" #sharingValue></mat-slide-toggle>
+    </div>
+    <div class="rounded border border-primary d-flex text-justify text-primary px-2 my-3 py-2">
+      <i class="fa fa-info-circle align-self-center mr-2"></i>
+      File sharing is enabled for this file. Anyone at Hi-Force Hydraulic Tools with the file link will be able to
+      view this file.
+    </div>
+    <div *ngIf="sharingValue.checked">
+      <mat-label>Share Options:</mat-label>
+      <mat-radio-group aria-label="Select an option" class="d-block">
+        <mat-radio-button value="link" class="mx-3" checked="true" #link>Share by Link
+        </mat-radio-button>
+        <mat-radio-button value="email">Share by Email</mat-radio-button>
+      </mat-radio-group>
+      <hr>
+      <div class="link" *ngIf="link.checked">
+        <mat-form-field appearance="outline" class="w-100 copy-link">
+          <mat-label>Get Link</mat-label>
+          <input type="text" matInput value="https://www.google.com" readonly #linkText>
+          <button matSuffix class="btn btn-primary" (click)="copyLink(linkText)">Copy Link</button>
+        </mat-form-field>
+      </div>
+      <div class="email" *ngIf="!link.checked">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Email To</mat-label>
+          <input type="text" matInput placeholder="Enter Names or Email Address">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Note</mat-label>
+          <textarea type="text" matInput placeholder="Add a note ..."></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')"
+      [disabled]="!sharingValue.checked">Share</button>
+  </div>
+</ng-template>
+
+<!-- upload process -->
+<div class="process">
+  <div class="card">
+    <div class="card-header py-2">
+      Uploaded 1 file
+      <div class="float-right">
+        <div class="btn btn-sm btn-light"><i class="fas fa-angle-down"></i></div>
+        <div class="btn btn-sm btn-light"><i class="fas fa-times"></i></div>
+      </div>
+    </div>
+    <div class="card-body py-2">
+      <div class="d-flex justify-content-between">
+        <div class="name align-self-center">Abc.png</div>
+        <div class="align-self-center">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75"
+              aria-valuemin="0" aria-valuemax="100" style="width: 75%">
+              75%
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="btn">Show</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
