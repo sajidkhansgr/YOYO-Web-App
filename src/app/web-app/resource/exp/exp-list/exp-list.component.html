@@ -5,7 +5,7 @@
     All Workspaces &#40;{{wrkSpcs.length}}&#41;
   </h3>
   <div class="mt-2 row workspaces">
-    <div class="card-container curs-ptr col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let wrkspc of wrkSpcs;"
+    <!-- <div class="card-container curs-ptr col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let wrkspc of wrkSpcs;"
       (click)="changePage(wrkspc.id)">
       <div class="card overflow-hidden">
         <div class="card-body" style="background-image: url(assets/images/bg.jpg);">
@@ -14,6 +14,12 @@
         <div class="card-footer pt-4">
           {{wrkspc.name}}
         </div>
+      </div>
+    </div> -->
+    <div class="col-lg-3 col-md-4 col-sm-6 my-4 mx-auto mx-sm-0" *ngFor="let wrkspc of wrkSpcs;"
+      (click)="changePage(wrkspc.id)">
+      <div class="wrkspc-item rounded-circle text-white curs-ptr mx-auto align-self-center">
+        <div class="text text-center h4">{{wrkspc.name}}</div>
       </div>
     </div>
     <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;" *ngIf="wrkSpcs.length<=0">

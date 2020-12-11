@@ -25,3 +25,11 @@
 .breadcrumb-item {
   font-size: 1.7rem;
 }
+
+.folder-container {
+  .card {
+    @media (max-width: 576px) {
+      max-width: 275px;
+    }
+  }
+}

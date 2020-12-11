@@ -1008,32 +1008,26 @@ header {
 
   // workspaces page
   .workspaces {
-    .card-container {
-      max-width: 280px;
+    .wrkspc-item {
+      height: 220px;
+      width: 220px;
+      transition: box-shadow ease-out 0.5s, transform linear 0.3s;
+      position: relative;
+      background: radial-gradient(circle at 60px 60px, $primary, darken($primary, 30));
 
-      .card {
-        transition: box-shadow ease-out 0.6s, transform linear 0.5s;
-
-        .card-body {
-          position: relative;
-          min-height: 200px;
-          max-height: 250px;
-          background-size: cover;
-          background-position: bottom;
-
-          .icon {
-            position: absolute;
-            bottom: -10px;
-            right: 20px;
-            width: 60px;
-          }
-        }
+      .text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: fit-content;
+        max-width: 90%;
       }
+    }
 
-      .card:hover {
-        transform: translate(-3px, -3px);
-        box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4), 5px 10px 11px rgba(0, 0, 0, 0.2), 5px 10px 11px rgba(0, 0, 0, 0.2);
-      }
+    .wrkspc-item:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4), 5px 10px 11px rgba(0, 0, 0, 0.2), 5px 10px 11px rgba(0, 0, 0, 0.2);
     }
   }
 
@@ -1043,21 +1037,32 @@ header {
 
     // grid view
     .card-container {
-      max-width: 280px;
+      // max-width: 280px;
 
       .card {
         transition: box-shadow ease-out 0.6s;
 
+        @media (max-width: 576px) {
+          max-width: 275px;
+        }
+
         .card-body {
           position: relative;
+          min-height: 220px;
+          max-height: 220px;
 
-          .imagePreview {
-            max-height: 200px;
-            min-height: 200px;
+          @media (min-width:1200px) {
+            min-height: 280px;
+            max-height: 280px;
+          }
 
-            img {
-              max-height: 200px;
-            }
+          img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 95%;
+            max-height: stretch;
           }
         }
 

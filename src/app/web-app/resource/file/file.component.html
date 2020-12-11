@@ -1,7 +1,7 @@
 <div class="main main-employee">
   <div class="row mt-3 mx-0">
     <!-- side -->
-    <div class="side col-sm-2 files-side">
+    <div class="side col-md-3 col-xl-2 files-side">
       <ul class="list-unstyled">
         <li class="pr-2 pl-3 rounded py-2 curs-ptr active"><i class="fas fa-folder mr-1"></i>My Files</li>
         <hr>
@@ -21,7 +21,7 @@
       </div>
     </div>
     <!-- main -->
-    <div class="col-sm-10">
+    <div class="col-md-9 col-xl-10 px-5 px-md-3 mt-3 mt-md-0">
       <h3 class="mb-4 clearfix heading align-self-center">
         <!-- My Files -->
         <div class="float-right d-flex">
@@ -39,7 +39,8 @@
                 <i class="fas fa-folder-plus mr-1"></i>
                 Create Folder
               </a>
-              <a class="dropdown-item curs-ptr" (click)="openModal(addURL, 'url')"><i class="fa fa-link mr-1"></i>Add URL</a>
+              <a class="dropdown-item curs-ptr" (click)="openModal(addURL, 'url')"><i class="fa fa-link mr-1"></i>Add
+                URL</a>
               <a class="dropdown-item curs-ptr" (click)="uploadBtn(uploadFile)"><i class="fa fa-upload mr-1"></i>
                 Upload from hard drive
                 <input type="file" style="display: none;" #uploadFile (change)="uplCntnt($event)">
@@ -72,9 +73,9 @@
           </div>
           <!-- folders -->
           <div class="text-secondary" *ngIf="folders.length>0">Folders</div>
-          <div class="mt-2 row my-files">
-            <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let fl of folders">
-              <div class="card curs-ptr">
+          <div class="mt-2 row my-files mx-0">
+            <div class="folder-container col-xl-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let fl of folders">
+              <div class="card curs-ptr mx-auto">
                 <div class="card-body d-flex" (click)="navgToFldr(fl)">
                   <div class="name align-self-center px-0"><i class="fas fa-folder mr-1"></i>{{fl.name}}</div>
                   <div class="d-flex p-0 __options ml-auto">
@@ -85,7 +86,8 @@
                         <i class="fas fa-trash-alt"></i>
                       </div>
                     </div>
-                    <mat-checkbox class="align-self-center" (change)="selMe($event.checked, fl)" (click)="$event.stopPropagation();"></mat-checkbox>
+                    <mat-checkbox class="align-self-center" (change)="selMe($event.checked, fl)"
+                      (click)="$event.stopPropagation();"></mat-checkbox>
                   </div>
                 </div>
               </div>
@@ -93,9 +95,9 @@
           </div>
           <!-- files -->
           <div class="text-secondary" *ngIf="!loading && files.length>0">Files</div>
-          <div class="mt-2 row my-files">
-            <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let f of files">
-              <div class="card curs-ptr">
+          <div class="mt-2 row my-files mx-0">
+            <div class="card-container col-xl-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let f of files">
+              <div class="card curs-ptr mx-auto">
                 <div class="card-body">
                   <div class="imagePreview text-center" (click)="chkFolderAndAdd(f)">
                     <img [src]="getImg(f)">
@@ -217,7 +219,8 @@
   </div>
 
   <!-- fixed sel item bootm div -->
-  <app-sel-itm-fxd-div [selArr]="selData" (delContent)="delContent(undefined)" [content]="true" *ngIf="selData.length > 0" (clrSelData)="clrSel()">
+  <app-sel-itm-fxd-div [selArr]="selData" (delContent)="delContent(undefined)" [content]="true"
+    *ngIf="selData.length > 0" (clrSelData)="clrSel()">
   </app-sel-itm-fxd-div>
 
   <!-- add folder -->

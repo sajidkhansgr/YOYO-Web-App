@@ -26,13 +26,11 @@
   </ul>
   <ng-container *ngIf="view && !loading">
     <ng-container *ngIf="colctnArr && colctnArr.length>0 else noColctn">
-      <div class="mt-2 row collections mx-0">
-        <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let colctn of colctnArr">
-          <div class="card">
+      <div class="mt-2 row collections">
+        <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3" *ngFor="let colctn of colctnArr">
+          <div class="card mx-auto">
             <div class="card-body curs-ptr" (click)="showContent(colctn.id)">
-              <div class="imagePreview text-center">
-                <img [src]="colctn.pdfImagePath ? colctn.pdfImagePath : fldrIcon">
-              </div>
+              <img [src]="colctn.pdfImagePath ? colctn.pdfImagePath : fldrIcon">
             </div>
             <div class="card-footer">
               <div class="name text-truncate">{{colctn.name}}</div>
