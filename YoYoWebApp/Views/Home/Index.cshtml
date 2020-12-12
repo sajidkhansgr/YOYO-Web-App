@@ -4,106 +4,88 @@
 }
 @model YoYoWebApp.ViewModel.HomeViewModel
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="text-center">
-                <h1 class="display-4">WELCOME TO <br /> YO-YO-TEST</h1>
-            </div>
-        </div>
-    </div>
-    <br />
-    <div class="row justify-content-center">
-        <div class="card" style="width: 30rem;">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div id="controls" class="text-center" hidden>
-                            <button id="playBtn" onclick="start();" type="button" class="btn btn-primary btn-lg rounded-pill mainBtn"><i class="fa fa-play" aria-hidden="true"></i></button>
-                            <button id="pauseBtn" onclick="stop();" type="button" class="btn btn-primary btn-lg rounded-pill mainBtn"><i class="fa fa-pause" aria-hidden="true"></i></button>
-                            <button id="restartBtn" onclick="restart();" type="button" class="btn btn-primary btn-lg rounded-pill mainBtn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                    <div class="col text-center">
-                        <p>Level <span id="currentShuttleLevelNumber"> 0</span> </p>
-                        <p>Shuttle <span id="currentShuttleNumber"> 0</span> </p>
-                        <p><span id="currentShuttleSpeed">0</span> km/hr</p>
-
-                    </div>
-
-                </div>
-                <p>
-                    <div class="progress" style="height: 10px;">
-                        <div id="speed-level-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <br />
-    <div id="finishTestBtn" class="text-center" hidden><button onclick='finishTest();' id="finishTestBtnEle" type="button" class="btn btn-outline-success btn-sm rounded-pill">Finish Test</button></div>
-    <br />
-    <div class="row justify-content-center text-center">
-        <div class="card" style="width: 30rem;">
-            <div class="card-body">
-                <div class="row ">
-
-                    <div class="col">
-                        <p>Next <br /> Shuttle</p>
-                        <p id="cdTimer">__:__</p>
-
-                    </div>
-                    <div class="col">
-                        <p>Total <br /> Time</p>
-                        <p id="timer" class="">__:__</p>
-
-                    </div>
-                    <div class="col">
-                        <p>Total <br /> Distance</p>
-                        <p><span id="currentTotalDistance">__</span> m</p>
-
-                    </div>
+<div class="main-card card mt-4 text-center border-0">
+    <div class="card-header display-4 bg-primary text-white">YoYo Test</div>
+     <div class="card-body">
+            <!-- button div with labels and controls -->
+            <div class="mb-4">
+                <div id="controls" class="text-center" hidden>
+                    <button id="playBtn" onclick="start();" type="button" class="btn btn-lg rounded-circle main-btn">
+                        <i class="fa fa-play disp-center"></i>
+                    </button>
+                    <button id="pauseBtn" onclick="stop();" type="button" class="btn btn-lg rounded-circle main-btn">
+                        <i class="fa fa-pause disp-center"></i>
+                        <div class="btn-text text-center disp-center">
+                              <div>Level <span id="currentShuttleLevelNumber">0</span></div>
+                              <div>Shuttle <span id="currentShuttleNumber">0</span></div>
+                              <div><span id="currentShuttleSpeed">0</span> km/hr</div>
+                         </div>
+                    </button>
+                    <button id="restartBtn" onclick="restart();" type="button" class="btn btn-lg rounded-circle main-btn">
+                        <i class="fa fa-refresh disp-center"></i>
+                    </button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    @*</div>*@
-
-    <br />
-    <div class="row justify-content-center">
-        <div class="card" style="width: 30rem;">
-            <div class="card-header">
-                Participants
+            <div class="progress mb-2">
+                <div id="speed-level-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar"
+                     style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
-            <div class="card-body">
-                @{
-                    int sNo = 0;
-                }
-                @foreach (var item in Model.players)
-                {
-                    sNo++;
 
-                    <div class="row" id="player-@item.id">
-                        <div class="col-8">
-                            @sNo.   @item.name
-                        </div>
-                        <div class="col-2 btnPlayer-@item.id btnPlayer" hidden>
-                            <button id="warnBtnPlayer-@item.id" onclick='warnPlayer("Player-@item.id", @item.id);' type="button" class="btn btn-outline-warning btn-sm rounded-pill">Warn</button>
-                        </div>
-                        <div class="col-2 btnPlayer-@item.id btnPlayer" hidden>
-                            <button id="stopBtnPlayer-@item.id" disabled="disabled" onclick='stopPlayer("Player-@item.id", @item.id);' type="button" class="btn btn-outline-danger btn-sm rounded-pill">Stop</button>
-                        </div>
-                        <div class="col-4 finishedPlayer-@item.id" hidden> <select id="finishedPlayer-@item.id" onchange='playerResultChanged(@item.id, "finishedPlayer-"+@item.id)'></select></div>
-                    </div>
-                    <br />
-
-                }
+            <!-- finish test btn -->
+            <div id="finishTestBtn" hidden>
+                <button onclick='finishTest();' id="finishTestBtnEle" class="btn btn-outline-success mt-3 px-4">Finish</button>
             </div>
-        </div>
-    </div>
 
+            <!-- progress -->
+            <div class="row my-5 w-md-100 w-75 mx-auto">
+                 <div class="col">
+                      <div>NEXT SHUTTLE</div>
+                      <div id="cdTimer">00:00s</div>
+                 </div>
+                 <div class="col border-right border-left">
+                      <div>TOTAL TIME</div>
+                      <div id="timer">00:00m</div>
+                 </div>
+                 <div class="col">
+                      <div>TOTAL DISTANCE</div>
+                      <div><span id="currentTotalDistance">0</span>m</div>
+                 </div>
+            </div>
+
+            <!-- participants -->
+            <div class="mx-3">
+                 <div class="text-left font-weight-bold">Track</div>
+                 <table class="table text-left">
+                      <tbody>
+                            @{
+                                int sNo = 0;
+                            }
+                            @foreach (var item in Model.players)
+                            {
+                                sNo++;
+                                 <tr id="player-@item.id">
+                                    <td class="py-3">
+                                        @sNo.   @item.name
+                                    </td>
+                                    <td class="btnPlayer-@item.id btn-player" hidden>
+                                        <button id="warnBtnPlayer-@item.id" onclick='warnPlayer("Player-@item.id", @item.id);' type="button" class="btn btn-outline-warning px-3 btn-sm rounded-pill">
+                                        Warn
+                                        </button>
+                                    </td>
+                                    <td class="btnPlayer-@item.id btnPlayer" hidden>
+                                        <button id="stopBtnPlayer-@item.id" disabled="disabled" onclick='stopPlayer("Player-@item.id", @item.id);' type="button" class="btn btn-outline-danger px-3 btn-sm rounded-pill">
+                                        Stop
+                                        </button>
+                                    </td>
+                                    <td class="finishedPlayer-@item.id" hidden>
+                                        <select id="finishedPlayer-@item.id" onchange='playerResultChanged(@item.id, "finishedPlayer-"+@item.id)'></select>
+                                    </td>
+                                </tr>
+                            }
+                       </tbody>
+                 </table>
+            </div>
+     </div>
 </div>
 
 
