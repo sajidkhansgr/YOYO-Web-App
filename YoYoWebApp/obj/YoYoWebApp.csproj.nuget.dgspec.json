@@ -1,25 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sajid\\source\\repos\\YOYO-Web-App\\YoYoWebApp\\YoYoWebApp.csproj": {}
+    "I:\\JJ\\yoyo\\YoYoWebApp\\YoYoWebApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sajid\\source\\repos\\YOYO-Web-App\\YoYoWebApp\\YoYoWebApp.csproj": {
+    "I:\\JJ\\yoyo\\YoYoWebApp\\YoYoWebApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sajid\\source\\repos\\YOYO-Web-App\\YoYoWebApp\\YoYoWebApp.csproj",
+        "projectUniqueName": "I:\\JJ\\yoyo\\YoYoWebApp\\YoYoWebApp.csproj",
         "projectName": "YoYoWebApp",
-        "projectPath": "C:\\Users\\sajid\\source\\repos\\YOYO-Web-App\\YoYoWebApp\\YoYoWebApp.csproj",
-        "packagesPath": "C:\\Users\\sajid\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sajid\\source\\repos\\YOYO-Web-App\\YoYoWebApp\\obj\\",
+        "projectPath": "I:\\JJ\\yoyo\\YoYoWebApp\\YoYoWebApp.csproj",
+        "packagesPath": "C:\\Users\\Inamullah\\.nuget\\packages\\",
+        "outputPath": "I:\\JJ\\yoyo\\YoYoWebApp\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
-        ],
         "configFilePaths": [
-          "C:\\Users\\sajid\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\Inamullah\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -75,6 +71,16 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.10, 3.1.10]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[3.1.10, 3.1.10]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -83,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
