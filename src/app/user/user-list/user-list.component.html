@@ -480,7 +480,7 @@
         <div class="ml-3">
           <mat-checkbox class="ml-3 d-block" formControlName="sendLoginInstructionEmail">Send me email with login
             instructions</mat-checkbox>
-          <mat-checkbox class="ml-3 d-block" formControlName="enforceEmployeePasswordReset">Enforce user to reset
+          <mat-checkbox class="ml-3 d-block" formControlName="enforceEmployeePasswordReset" *ngIf="usrForm.value.specifyPassword">Enforce user to reset
             password on first login</mat-checkbox>
         </div>
       </div>

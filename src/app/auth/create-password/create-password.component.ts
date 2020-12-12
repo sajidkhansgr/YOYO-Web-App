@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { AuthService } from '../auth.service';
 import { CommonValidations } from '../../shared/validations/common-validations';
+import { TokenDataService } from '../../shared/services/token-data.service';
 
 @Component({
   selector: 'app-create-password',
@@ -29,6 +30,7 @@ export class CreatePasswordComponent implements OnInit {
     private authSer: AuthService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
+    private tokenDataServ: TokenDataService,
     private router: Router
   ) {
       // Set the private defaults
@@ -61,7 +63,8 @@ export class CreatePasswordComponent implements OnInit {
       this.authSer.createPass(passData)
         .subscribe((data: any) => {
           if(data){
-            this.toastr.success(data.message||"Password create successfully", 'Success');
+            this.toastr.success("Password created successfully", 'Success');
+            this.tokenDataServ.removeAll();
             this.router.navigate(['/auth/login']);
           }else{
             this.toastr.error("Unable to create password, please try after sometime", 'Error');

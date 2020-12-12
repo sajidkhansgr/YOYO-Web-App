@@ -19,7 +19,7 @@ import { TokenDataService } from '../../shared/services/token-data.service';
 })
 export class ResetPasswordComponent implements OnInit {
   resetPassForm!: FormGroup;
-  loading = false;token!: string | null;email!: string | null;
+  loading = false;token!: string | null;email!: string | null;isEnforce!: string| null;
   hidePass = true; hideCPass = true;
 
   // Private
@@ -30,7 +30,7 @@ export class ResetPasswordComponent implements OnInit {
     private authSer: AuthService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
-      private tokenDataServ: TokenDataService,
+    private tokenDataServ: TokenDataService,
     private router: Router
   ) {
       // Set the private defaults
@@ -40,6 +40,7 @@ export class ResetPasswordComponent implements OnInit {
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token');
     this.email = this.route.snapshot.queryParamMap.get('email');
+    this.isEnforce = this.route.snapshot.queryParamMap.get('enforce');
     this.resetPassForm = this.fb.group({
       pswd: ['', [Validators.required, Validators.minLength(6)]],
       confirmPswd: ['', [Validators.required, CommonValidations.MatchPassword]]
@@ -63,7 +64,7 @@ export class ResetPasswordComponent implements OnInit {
       this.authSer.resetPass(passData)
         .subscribe((data: any) => {
           if(data){
-            this.toastr.success(data.message||"Password reset successfully", 'Success');
+            this.toastr.success("Password reset successfully", 'Success');
             this.tokenDataServ.removeAll();
             this.router.navigate(['/auth/login']);
           }else{

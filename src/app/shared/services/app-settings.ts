@@ -9,6 +9,8 @@ export class AppSettings {
 
   public static RESET_PASS = `api/User/ResetPassword`; //get and post method both
 
+  public static CREATE_PASS = `api/User/CreatePassword`;
+
   // ---- HUB ---- //
 
   public static LIST_HUB = `api/Hub/GetAll`;

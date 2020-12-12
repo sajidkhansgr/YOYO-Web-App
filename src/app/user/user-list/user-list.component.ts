@@ -171,6 +171,9 @@ export class UserListComponent implements OnInit {
   }
 
   togglePassword($event: any) {
+    this.usrForm.patchValue({
+      enforceEmployeePasswordReset: false
+    })
     if ($event.value) {
       this.usrForm.addControl('password', new FormControl(''));
       this.usrForm.controls['password'].setValidators([Validators.required]);
@@ -360,7 +363,8 @@ export class UserListComponent implements OnInit {
       if (type == 'add') {
         this.isEdit = false;
         this.usrForm.controls['isActive'].disable();
-        this.addControls(['specifyPassword', 'sendLoginInstructionEmail', 'enforceEmployeePasswordReset']);
+        this.addControls(['specifyPassword', 'sendLoginInstructionEmail', 'enforceEmployeePasswordReset','password']);
+        this.removeControls(['password']);
         this.usrForm.patchValue({
           specifyPassword: false, sendLoginInstructionEmail: false, enforceEmployeePasswordReset: false,
           isActive: true
@@ -374,7 +378,7 @@ export class UserListComponent implements OnInit {
         if (this.rowInfo && this.rowInfo.employeeGroups && this.rowInfo.employeeGroups.length > 0) {
           this.selGrps = this.rowInfo.employeeGroups.map((grp: any) => ({ id: grp.groupId, name: grp.groupName }));
         }
-        this.removeControls(['specifyPassword', 'sendLoginInstructionEmail', 'enforceEmployeePasswordReset']);
+        this.removeControls(['specifyPassword', 'sendLoginInstructionEmail', 'enforceEmployeePasswordReset', 'password']);
         this.isEdit = true;
       }
       this.usrForm.updateValueAndValidity();
