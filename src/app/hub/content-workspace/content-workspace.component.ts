@@ -40,7 +40,7 @@ export class ContentWorkspaceComponent implements OnInit {
   cntntForm!: FormGroup; urlForm!: FormGroup;
   verForm!: FormGroup; verDisb!: boolean;
   disabled!: boolean;
-  fldrCntntArr!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; cntntArr!: Content[];
+  wrkspcItems!: any[]; selFolder: Folder | undefined; dispFolder: any; folderNav!: any[]; cntntArr!: Content[];
   gnrlCollapsed!: boolean; editSmrtCollapsed!: boolean; locationCollapsed!: boolean;
   visbCols!: any[]; hidCols!: any[]; cols!: any[]; data!: any[];
   view!: boolean; edit!: boolean | undefined;
@@ -127,7 +127,7 @@ export class ContentWorkspaceComponent implements OnInit {
       // more fields need to be added
     });
     this.disabled = false;
-    this.fldrCntntArr = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
+    this.wrkspcItems = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
     this.gnrlCollapsed = false; this.editSmrtCollapsed = true; this.locationCollapsed = true;
     if (this.activeIndex == 1) {
       this.cols = [{ n: "Name", k: "name" }, { n: "Queued Time", k: "queuedAt" }];
@@ -189,7 +189,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.custIcon = undefined;
   }
 
-  // change displayed folders and smart foldera (isActive)
+  // change displayed folders and smart folders (isActive)
   changeDispFldrs() {
     this.activeFldrs == 1 ? this.isActiveFldrs = true : this.isActiveFldrs = false;
     this.dispFolder = this.folderNav[this.folderNav.length - 1];
@@ -203,7 +203,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.listFolders();
   }
 
-  // change folder (show sub folders)
+  // change folder an smart folders (show sub folders and content)
   changeFolder(folder: any) {
     this.dispFolder = folder;
     this.folderNav.push(folder);
@@ -213,28 +213,20 @@ export class ContentWorkspaceComponent implements OnInit {
   // listing all folders
   listFolders() {
     this.folderLoading = true;
-    this.fldrCntntArr = [];
-    this.dispFolder ? this.dispFolder.key == 'fldr' ? this.getAllObjWrkspc() : this.getContentSmtFldr() : this.getAllObjWrkspc();
+    this.wrkspcItems = [];
+    this.dispFolder ? this.dispFolder.entityType === 1 ? this.getAllDataWrkspc() : this.getContentSmtFldr() : this.getAllDataWrkspc();
   }
 
-  // get folder and smart folder from wrkspace and content from workpspace and folder
-  getAllObjWrkspc() {
+  // get folder and smart folder from wrkspace; content from workpspace and folder
+  getAllDataWrkspc() {
     let params = {
       workspaceId: this.selWrkspc!.id,
       isActive: this.isActiveFldrs,
-      folderId: this.dispFolder ? this.dispFolder!.id : undefined,
+      parentId: this.dispFolder ? this.dispFolder!.entityId : undefined,
     };
-    this.cwServ.getAllObjWrkspc(params).subscribe((data: any) => {
-      if (data && data.result) {
-        if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0) {
-          this.fldrCntntArr.push(...data.result[0].contents);
-        }
-        if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0) {
-          this.fldrCntntArr.push(...data.result[0].folders.map((fldr: any) => ({ ...fldr, key: 'fldr' })));
-        }
-        if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0) {
-          this.fldrCntntArr.push(...data.result[0].smartFolders.map((fldr: any) => ({ ...fldr, key: 'smtFldr' })));
-        }
+    this.cwServ.getAllDataWrkspc(params).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+        this.wrkspcItems = data.result;
       }
       this.folderLoading = false;
     }, (err: any) => {
@@ -253,14 +245,15 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // edit folder/smart folder modal
   editFolder(modal: any, folder: any) {
-    if (folder.folderIconPath) {
+    if (folder.imagePath) {
       this.addURLIcon = 'cust-icon';
-      this.iconUrl = folder.folderIconPath;
+      this.iconUrl = folder.imagePath;
     }
-    if (folder.key == 'fldr') {
-      this.getFolder(folder.id);
-    } else if (folder.key == 'smtFldr') {
-      this.getSmartFolder(folder.id);
+    if (folder.entityType === 1) {
+      this.getFolder(folder.entityId);
+    } else if (folder.entityType === 2) {
+      // console.log(folder);
+      this.getSmartFolder(folder.entityId);
     }
     this.openModal(modal);
   }
@@ -272,7 +265,6 @@ export class ContentWorkspaceComponent implements OnInit {
       this.edit = false;
       this.openModal(modal);
     } else if (type == 'edit') {
-      console.log("fdssdsdfsdf")
       this.edit = true;
       this.editFolder(modal, folder);
     } else if (type == 'dupl') {
@@ -282,8 +274,6 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // ---- smart folder ---- //
-  // for add and edit modal in smart folder (autocomplete and chips)
-
   // add file type filter for smart folder and main list
   addFileType(val: boolean, fT: any, isList: boolean = false) {
     if (val) {
@@ -416,19 +406,20 @@ export class ContentWorkspaceComponent implements OnInit {
       if (data && data.result) {
         this.selFolder = data.result;
         this.smartFldrForm.patchValue({ ...this.selFolder });
-        if (data.result.smartFolderTags.length > 0) {
-          let temp = this.tags;
-          this.allTags = []; this.anyTags = []; this.noneTags = [];
-          for (let i = 0; i < data.result.smartFolderTags.length; i++) {
-            if (data.result.smartFolderTags[i].tagId === 1) {
-              this.allTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-            } else if (data.result.smartFolderTags[i].tagId === 2) {
-              this.anyTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-            } else if (data.result.smartFolderTags[i].tagId === 3) {
-              this.noneTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-            }
-          }
-        }
+        console.log(data)
+        // if (data.result.smartFolderTags.length > 0) {
+        //   let temp = this.tags;
+        //   this.allTags = []; this.anyTags = []; this.noneTags = [];
+        // for (let i = 0; i < data.result.smartFolderTags.length; i++) {
+        //   if (data.result.smartFolderTags[i].tagId === 1) {
+        //     this.allTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
+        //   } else if (data.result.smartFolderTags[i].tagId === 2) {
+        //     this.anyTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
+        //   } else if (data.result.smartFolderTags[i].tagId === 3) {
+        //     this.noneTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
+        //   }
+        // }
+        // }
       } else {
         this.selFolder = undefined;
       }
@@ -793,7 +784,7 @@ export class ContentWorkspaceComponent implements OnInit {
           event.previousIndex,
           event.currentIndex
         );
-        this.fldrCntntArr[event.currentIndex] = data.result;
+        this.wrkspcItems[event.currentIndex] = data.result;
         this.toastr.success('Added successfully', 'Success!');
       } else {
         this.toastr.error('Unable to add', 'Error!');
@@ -912,7 +903,7 @@ export class ContentWorkspaceComponent implements OnInit {
     };
     this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.fldrCntntArr.push(...data.result);
+        this.wrkspcItems.push(...data.result);
       }
       this.folderLoading = false;
     }, (err: any) => {

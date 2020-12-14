@@ -28,15 +28,15 @@ export class ContentWorkspaceService {
     return formData;
   }
 
-  // get all from workspace
-  getAllObjWrkspc(params: any): Observable<any[]> {
+  // get all data from workspace
+  getAllDataWrkspc(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
       if (params[key]) {
         queryParams = queryParams.set(key, params[key]);
       }
     }
-    return this.http.get(`${AppSettings.GET_OBJ_WRKSPC}`, {
+    return this.http.get(`${AppSettings.GET_DATA_WRKSPC}`, {
       params: queryParams
     }).pipe(map((res: any) => res));
   }

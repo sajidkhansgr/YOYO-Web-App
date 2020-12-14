@@ -1,6 +1,6 @@
 import { DEF_IMG } from '../shared/constants';
 
-export class FileHelper{
+export class FileHelper {
 
   public static formatBytes(bytes: any, decimals?: any) {
     if (bytes === 0) {
@@ -14,14 +14,16 @@ export class FileHelper{
   }
 
   public static getImg(d: any): string {
-    if(d){
+    if (d) {
+      if (d.imagePath)
+        return d.imagePath;
       if (d.urlIconPath)
         return d.urlIconPath;
-      else if (d.contentType===2 && d.contentPath)
+      else if (d.contentType === 2 && d.contentPath)
         return d.contentPath;
       else if (d.pdfImage)
         return d.pdfImage;
-      else if (Array.isArray(d.pdfImages) && d.pdfImages.length>0 && d.pdfImages[0].imagePath)
+      else if (Array.isArray(d.pdfImages) && d.pdfImages.length > 0 && d.pdfImages[0].imagePath)
         return d.pdfImages[0].imagePath;
     }
     return DEF_IMG;

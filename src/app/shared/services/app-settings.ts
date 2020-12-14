@@ -71,7 +71,7 @@ export class AppSettings {
 
   public static REM_USR_GRP_WRKSPC = `api/Workspace/RemoveUserOrGroupFromWorkspace`;
 
-  public static GET_OBJ_WRKSPC = 'api/Workspace/GetObjectByWorkspace';
+  public static GET_DATA_WRKSPC = 'api/Workspace/GetDataByWorkspace';
 
   public static GET_OBJ_WRKSPC_EMP = 'api/Workspace/GetObjectByWorkspaceByEmployee';
 
