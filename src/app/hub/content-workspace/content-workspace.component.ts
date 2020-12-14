@@ -222,7 +222,7 @@ export class ContentWorkspaceComponent implements OnInit {
     let params = {
       workspaceId: this.selWrkspc!.id,
       isActive: this.isActiveFldrs,
-      parentId: this.dispFolder ? this.dispFolder!.entityId : undefined,
+      parentId: this.dispFolder ? this.dispFolder!.id : undefined,
     };
     this.cwServ.getAllDataWrkspc(params).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
@@ -360,7 +360,7 @@ export class ContentWorkspaceComponent implements OnInit {
         ...this.smartFldrForm.value,
         smartFolderIcon: this.custIcon,
         workspaceId: this.selWrkspc!.id,
-        folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].id : 0,
+        folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0,
         isActive: true,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
@@ -491,7 +491,7 @@ export class ContentWorkspaceComponent implements OnInit {
         ...this.folderForm.value,
         folderIcon: this.custIcon,
         workspaceId: this.selWrkspc!.id,
-        folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].id : 0,
+        folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : null,
         isActive: true
       };
       this.cwServ.addFolder(folderData)
