@@ -214,7 +214,8 @@ export class ContentWorkspaceComponent implements OnInit {
   listFolders() {
     this.folderLoading = true;
     this.wrkspcItems = [];
-    this.dispFolder ? this.dispFolder.entityType === 1 ? this.getAllDataWrkspc() : this.getContentSmtFldr() : this.getAllDataWrkspc();
+    // this.getAllDataWrkspc() ;
+    this.dispFolder ? this.dispFolder.entityType === 2 ? this.getContentSmtFldr() : this.getAllDataWrkspc() : this.getAllDataWrkspc();
   }
 
   // get folder and smart folder from wrkspace; content from workpspace and folder
@@ -760,7 +761,12 @@ export class ContentWorkspaceComponent implements OnInit {
       }
     } else {
       if (event.previousContainer === event.container) {
-        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        if (event.container.id == "fldrLists") {
+          if(event.previousContainer.data[event.previousIndex]!=event.container.data[event.currentIndex])
+            this.rearrDataInWrkspc(event);
+        }else{
+          moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        }
       } else {
         transferArrayItem(event.previousContainer.data,
           event.container.data,
@@ -771,20 +777,22 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   addCntntToWrkspc(event: any) {
-    let data: any = {
+    let d: any = {
       contentId: event.previousContainer.data[event.previousIndex].id,
       workspaceId: this.selWrkspc!.id,
+      sequenceNumber: event.currentIndex,
       folderId: this.dispFolder ? this.dispFolder!.id : null,
     }
-    this.cwServ.addCntntToWrkspcFldr(data).subscribe((data: any) => {
-      if (data && data.result && data.result.id) {
+    this.cwServ.addCntntToWrkspcFldr(d).subscribe((data: any) => {
+      if (data && Array.isArray(data.result)) {
         copyArrayItem(
           event.previousContainer.data,
           event.container.data,
           event.previousIndex,
           event.currentIndex
         );
-        this.wrkspcItems[event.currentIndex] = data.result;
+        this.wrkspcItems = data.result;
+        // this.wrkspcItems[event.currentIndex] = data.result;
         this.toastr.success('Added successfully', 'Success!');
       } else {
         this.toastr.error('Unable to add', 'Error!');
@@ -793,9 +801,31 @@ export class ContentWorkspaceComponent implements OnInit {
     });
   }
 
+  rearrDataInWrkspc(event: any) {
+    let d: any = {
+      workspaceId: this.selWrkspc!.id,
+      parentId: this.dispFolder ? this.dispFolder!.id : null,
+      workspaceObjects: [
+        {
+          id: event.previousContainer.data[event.previousIndex].id,
+          sequenceNumber: event.currentIndex+1
+        }
+      ]
+    };
+    this.cwServ.rearrWrkspcData(d).subscribe((data: any) => {
+      if (data) {
+        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        this.toastr.success('Rearrange successfully', 'Success!');
+      } else {
+        this.toastr.error('Unable to rearrange', 'Error!');
+      }
+    }, (err: any) => {
+    });
+  }
+
   canDrag(): boolean {
     if (this.activeIndex == 0 && this.selWrkspc && this.selWrkspc.id) {
-      if (this.dispFolder && this.dispFolder.id && this.dispFolder.key == "smtFldr") {
+      if (this.dispFolder && this.dispFolder.id && this.dispFolder.entityType == 2) {
         return true;
       }
       return false;
@@ -899,7 +929,7 @@ export class ContentWorkspaceComponent implements OnInit {
   getContentSmtFldr() {
     this.folderLoading = true;
     let query: any = {
-      smartFolderId: this.dispFolder ? this.dispFolder!.id : undefined
+      smartFolderId: this.dispFolder ? this.dispFolder!.entityId : undefined
     };
     this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
