@@ -251,7 +251,8 @@ mat-checkbox {
   }
 }
 
-.btn-spinner {
+.btn-spinner,
+.btn-red-spinner {
   display: inline-block;
   padding: 1px;
   vertical-align: middle;
@@ -266,9 +267,24 @@ mat-checkbox {
       width: 14px !important;
 
       circle {
-        stroke: white !important;
         stroke-width: 18% !important;
       }
+    }
+  }
+}
+
+.btn-spinner {
+  mat-spinner {
+    circle {
+      stroke: white !important;
+    }
+  }
+}
+
+.btn-red-spinner {
+  mat-spinner {
+    circle {
+      stroke: $primary !important;
     }
   }
 }
@@ -515,7 +531,7 @@ header {
 
     .navbar-brand {
       img {
-        height: 40px;
+        height: 31px;
       }
     }
 
