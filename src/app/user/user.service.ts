@@ -39,4 +39,9 @@ export class UserService {
       params: { id }
     });
   }
+  resendInv(id: string) {
+    return this.http.get(`${AppSettings.RESEND_INV}`, {
+      params: { id }
+    });
+  }
 }

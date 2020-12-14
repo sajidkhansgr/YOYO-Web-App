@@ -12,7 +12,7 @@ import { User } from '../../shared/models/user';
 import { Group } from '../../shared/models/group';
 import { CommonValidations } from '../../shared/validations/common-validations';
 import { EnumHelper } from '../../shared/enum-helper';
-// import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { UserService } from '../user.service';
 import { GroupService } from '../group/group.service';
 
@@ -42,7 +42,7 @@ export class UserListComponent implements OnInit {
   searchTxtChng: Subject<string> = new Subject<string>();
   private subscription!: Subscription;
 
-  visbCols: any[] = [{ n: "Role", k: "roleId", asc: false, }];
+  visbCols: any[] = [{ n: "Role", k: "roleId", asc: false },{ n: "Latest Activity", k: "latestActivity", asc: false },{ n: "Date Created", k: "createdDate", asc: false }];
   hidCols: any[] = [];
   cols: any[] = [{ n: "Name", asc: false, k: "name" }];
   roles = ROLES; rolesArr!: any; lngs = LNGS; lngArr!: any;
@@ -171,13 +171,14 @@ export class UserListComponent implements OnInit {
   }
 
   togglePassword($event: any) {
-    this.usrForm.patchValue({
-      enforceEmployeePasswordReset: false
-    })
+    this.usrForm.patchValue({ enforceEmployeePasswordReset: false });
     if ($event.value) {
       this.usrForm.addControl('password', new FormControl(''));
       this.usrForm.controls['password'].setValidators([Validators.required]);
+      this.usrForm.controls['sendLoginInstructionEmail'].enable();
     } else {
+      this.usrForm.patchValue({ sendLoginInstructionEmail: true });
+      this.usrForm.controls['sendLoginInstructionEmail'].disable();
       this.usrForm.removeControl('password');
     }
     this.usrForm.updateValueAndValidity();
@@ -259,13 +260,12 @@ export class UserListComponent implements OnInit {
     if (this.usrForm.valid) {
       this.usrLoading = true;
       let usrData = {
-        ...this.usrForm.value
+        ...this.usrForm.getRawValue()
       }
       delete usrData.group;
       if (this.selGrps && this.selGrps.length > 0) {
         usrData.employeeGroups = this.selGrps.map((grp: any) => grp.id);
       }
-      usrData.isActive = this.usrForm.getRawValue().isActive;
       if (this.isEdit) {
         this.editUsr(usrData);
       } else {
@@ -356,6 +356,29 @@ export class UserListComponent implements OnInit {
     }
   }
 
+  resendLink = (usr: User)=> {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to resend the invitation?`,
+        title: `Resend Invitation`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // console.log(catg);
+        this.usrServ.resendInv(usr.id.toString()).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(data.message||'Resend invite successfully', 'Success!');
+          } else {
+            this.toastr.error('Unable to resend invite', 'Error!');
+          }
+        }, (err: any) => {
+
+        });
+      }
+    })
+  }
+
   openModal(content: any, type?: string) {
     if (type == 'add' || type == 'edit') {
       this.usrForm.reset();
@@ -364,9 +387,10 @@ export class UserListComponent implements OnInit {
         this.isEdit = false;
         this.usrForm.controls['isActive'].disable();
         this.addControls(['specifyPassword', 'sendLoginInstructionEmail', 'enforceEmployeePasswordReset','password']);
+        this.usrForm.controls['sendLoginInstructionEmail'].disable();
         this.removeControls(['password']);
         this.usrForm.patchValue({
-          specifyPassword: false, sendLoginInstructionEmail: false, enforceEmployeePasswordReset: false,
+          specifyPassword: false, sendLoginInstructionEmail: true, enforceEmployeePasswordReset: false,
           isActive: true
         })
       } else {
@@ -417,16 +441,6 @@ export class UserListComponent implements OnInit {
       }
     })
   } */
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
 
   dismissModal() {
     if (this.modalService)

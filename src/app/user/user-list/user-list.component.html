@@ -290,6 +290,18 @@
                 <span *ngSwitchCase="'roleId'">
                   {{usr.role && usr.role.name ?usr.role.name:'N/A'}}
                 </span>
+                <span *ngSwitchCase="'latestActivity'">
+                  <span *ngIf="usr.status==3">
+                    {{(usr.invitedOn|date:'dd MMM, yyyy')||'N/A'}}<br />
+                    <button class="btn btn-primary btn-sm" (click)="$event.stopPropagation();resendLink(usr)">Resend</button>
+                  </span>
+                  <span *ngIf="usr.status!=3">
+                    {{(usr.latestActivity|date:'dd MMM, yyyy')||'N/A'}}
+                  </span>
+                </span>
+                <span *ngSwitchCase="'createdDate'">
+                  {{(usr.createdDate|date:'dd MMM, yyyy')||'N/A'}}
+                </span>
                 <span *ngSwitchDefault>{{usr[col.k]}}</span>
               </span>
             </td>

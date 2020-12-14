@@ -156,6 +156,8 @@ export class AppSettings {
 
   public static GET_EMPL = `api/Employee/GetById`;
 
+  public static RESEND_INV = `api/Employee/ResendInvitation`;
+
   // ---- CONTENT ---- //
 
   public static LIST_CNTNT = `api/Content/GetAll`;
@@ -224,6 +226,7 @@ export class AppSettings {
 
   public static BRD_CRM_LIST = `api/BreadCrum/GetBreadCrum`;
 
+  public static MY_BRD_CRM_LIST = `api/BreadCrum/GetBreadCrumForMyContent`; //my files
   // ---- COMMON ---- //
 
   public static SEND_MAIL = `api/Common/SendEmail`;

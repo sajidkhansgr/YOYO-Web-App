@@ -7,6 +7,7 @@ export interface User {
   name?: string; //for local
   roleId: number;
   role?: Role;
+  status?: number;
   languageId: number;
   language?: any;
   employeeStatus: number;
@@ -18,6 +19,8 @@ export interface User {
   letEmployeeCreatePassword: boolean;
   sendLoginInstructionEmail: boolean;
   enforceEmployeePasswordReset: boolean;
+  latestActivity?: Date;
+  createdDate?: Date;
 }
 
 export interface Role{
