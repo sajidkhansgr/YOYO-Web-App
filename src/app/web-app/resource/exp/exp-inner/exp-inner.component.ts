@@ -25,6 +25,7 @@ export class ExpInnerComponent implements OnInit {
   defImg: string = DEF_ICON; fldrIcon: string = FLDR_ICON;
   testArr = [1, 2, 3] // for static
   // entityId!:number;
+  navg!: any;
 
   constructor(
     private modalService: NgbModal,
@@ -48,7 +49,8 @@ export class ExpInnerComponent implements OnInit {
   initialiseState() {
     if (this.id != '0') {
       this.loading = true;
-      // this.brdcrmList();
+      this.brdcrmList();
+      this.navg = [];
       this.smtFldrid ? this.getContentSmtFldr() : this.getAllFromWrkspc();
     } else {
       this.toastr.error("Not a valid Workspace", "Error");
@@ -134,25 +136,29 @@ export class ExpInnerComponent implements OnInit {
   }
 
   brdcrmList() {
-    // {
-    //       Workspace = 1,
-    //       Folder = 2,
-    //       SmartFolder=3
-    //   }
     let params = {
       entityWorkspaceID: this.id,
-      entityType: 1,//this.entityId,
-      entityId: this.fldrid || null
+      parentId: this.fldrid?this.fldrid:this.smtFldrid?this.smtFldrid:null
     }
     this.brdcrmServ.getList(params)
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
-
+          let arr = data.result;
+          arr.sort((a:any, b:any) => a.level - b.level);
+          this.navg = arr;
         } else {
           //no data found
         }
       }, (err: any) => {
       })
+  }
+
+  navgClick = (n: any) => {
+    let url: string = '/web-app/resource/experiences/' + this.id;
+    if(n.workspaceObjectId){
+      url+='/folder/' + n.workspaceObjectId;
+    }
+    this.router.navigate([url]);
   }
 
   openModal(content: any) {

@@ -1,5 +1,8 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb rounded-0">
+    <li class="breadcrumb-item active align-self-center" *ngFor="let n of navg" (click)="navgClick(n)">
+      {{n.workspaceObjectName}}
+    </li>
     <!-- <li class="breadcrumb-item active align-self-center" aria-current="page">English</li> -->
     <span class="ml-auto">
       <div class="curs-ptr" (click)="view = !view;">

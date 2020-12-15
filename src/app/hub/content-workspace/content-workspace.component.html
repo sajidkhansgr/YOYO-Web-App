@@ -695,12 +695,12 @@
                   <div class="view-main curs-ptr my-2 p-2 col-xl-3 col-lg-4 col-md-3 col-sm-4 col-6"
                     *ngFor="let wi of wrkspcItems" cdkDrag>
                     <!-- <div *cdkDragPlaceholder class="example-custom-placeholder"></div> -->
-                    <div *cdkDragPreview>
-                      <img style="width:100px;height:100px" [src]="wi.folderIconPath?wi.folderIconPath:fldrIcon">
-                    </div>
                     <ng-container *ngIf="(wi.entityType === 1 || wi.entityType === 2) else onlyCntnt">
+                      <div *cdkDragPreview>
+                        <img style="width:100px;height:100px" [src]="wi.imagePath?wi.imagePath:fldrIcon">
+                      </div>
                       <div class="image">
-                        <img src="{{wi.imagePath ? wi.imagePath : fldrIcon}}" (click)="changeFolder(wi)">
+                        <img [src]="wi.imagePath?wi.imagePath:fldrIcon" (click)="changeFolder(wi)">
                         <div class="dropdown" style="z-index:1;">
                           <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
                             data-toggle="dropdown">

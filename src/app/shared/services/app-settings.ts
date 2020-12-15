@@ -74,6 +74,8 @@ export class AppSettings {
   public static GET_DATA_WRKSPC = 'api/Workspace/GetDataByWorkspace';
 
   public static GET_OBJ_WRKSPC_EMP = 'api/Workspace/GetObjectByWorkspaceByEmployee';
+  
+  public static REARR_WRKSPC_ITEMS = `api/Workspace/RearrangeWorkspaceData`;
 
   // ---- FOLDER ---- //
 
