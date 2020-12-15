@@ -1082,7 +1082,8 @@ header {
       width: 220px;
       transition: box-shadow ease-out 0.5s, transform linear 0.3s;
       position: relative;
-      background: radial-gradient(circle at 60px 60px, $primary, darken($primary, 30));
+      // background: radial-gradient(circle at 60px 60px, $primary, darken($primary, 30));
+      background: linear-gradient($primary, darken($primary, 20));
 
       .text {
         position: absolute;

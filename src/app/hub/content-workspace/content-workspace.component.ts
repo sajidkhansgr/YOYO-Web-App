@@ -73,6 +73,8 @@ export class ContentWorkspaceComponent implements OnInit {
 
   getIntervalId: any; procCnt: number = 0;
 
+  mdlItems!: any[]; mdlLoading!: boolean;
+
   constructor(
     private modalService: NgbModal,
     private cwServ: ContentWorkspaceService,
@@ -180,6 +182,7 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe();
     this.allTags = []; this.anyTags = []; this.noneTags = [];
     this.setFltrEmpty();
+    this.mdlItems = []; this.mdlLoading = true;
   }
 
   // ---- folder and smart folder ---- //
@@ -211,27 +214,33 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // listing all folders
-  listFolders() {
-    this.folderLoading = true;
-    this.wrkspcItems = [];
-    this.getAllDataWrkspc() ;
+  listFolders(wid?: number) {
+    wid ? this.mdlLoading = true : this.folderLoading = true;
+    wid ? this.mdlItems = [] : this.wrkspcItems = [];
+    this.getAllDataWrkspc(wid);
     // this.dispFolder ? this.dispFolder.entityType === 2 ? this.getContentSmtFldr() : this.getAllDataWrkspc() : this.getAllDataWrkspc();
   }
 
   // get folder and smart folder from wrkspace; content from workpspace and folder
-  getAllDataWrkspc() {
+  getAllDataWrkspc(wid?: number) {
     let params = {
-      workspaceId: this.selWrkspc!.id,
-      isActive: this.isActiveFldrs,
+      workspaceId: wid ? wid : this.selWrkspc!.id,
+      isActive: wid ? true : this.isActiveFldrs,
       parentId: this.dispFolder ? this.dispFolder!.id : undefined,
     };
     this.cwServ.getAllDataWrkspc(params).subscribe((data: any) => {
       if (data && Array.isArray(data.result) && data.result.length > 0) {
-        this.wrkspcItems = data.result;
+        if (wid) {
+          for (let i = 0; i < data.result.length; i++) {
+            data.result[i].entityType !== 3 ? this.mdlItems.push(data.result[i]) : undefined;
+          }
+        } else {
+          this.wrkspcItems = data.result;
+        }
       }
-      this.folderLoading = false;
+      wid ? this.mdlLoading = false : this.folderLoading = false;
     }, (err: any) => {
-      this.folderLoading = false;
+      wid ? this.mdlLoading = false : this.folderLoading = false;
     });
   }
 
@@ -646,21 +655,27 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // list of workspaces
-  getWrkspcList() {
-    this.wrkspcLoading = true;
-    this.wrkspcs = [];
+  getWrkspcList(mdl?: boolean) {
     let query = {
       hubid: this.hubid,
-      isActive: this.activeWrkspc == 1 ? true : false
+      isActive: true
+    }
+    if (mdl) {
+      this.mdlItems = [];
+      this.mdlLoading = true;
+    } else {
+      this.wrkspcLoading = true;
+      this.wrkspcs = [];
+      query.isActive = this.activeWrkspc == 1 ? true : false
     }
     this.cwServ.wrkspcList(query)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-          this.wrkspcs = data.result.results;
+          mdl ? this.mdlItems = data.result.results : this.wrkspcs = data.result.results;
         }
-        this.wrkspcLoading = false;
+        mdl ? this.mdlLoading = false : this.wrkspcLoading = false;
       }, (err: any) => {
-        this.wrkspcLoading = false;
+        mdl ? this.mdlLoading = false : this.wrkspcLoading = false;
       });
   }
 
@@ -761,9 +776,9 @@ export class ContentWorkspaceComponent implements OnInit {
     } else {
       if (event.previousContainer === event.container) {
         if (event.container.id == "fldrLists") {
-          if(event.previousContainer.data[event.previousIndex]!=event.container.data[event.currentIndex])
+          if (event.previousContainer.data[event.previousIndex] != event.container.data[event.currentIndex])
             this.rearrDataInWrkspc(event);
-        }else{
+        } else {
           moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         }
       } else {
@@ -807,7 +822,7 @@ export class ContentWorkspaceComponent implements OnInit {
       workspaceObjects: [
         {
           id: event.previousContainer.data[event.previousIndex].id,
-          sequenceNumber: event.currentIndex+1
+          sequenceNumber: event.currentIndex + 1
         }
       ]
     };

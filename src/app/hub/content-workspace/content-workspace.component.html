@@ -1273,8 +1273,9 @@
         </div>
       </div>
       <hr *ngIf="edit">
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="locationCollapsed = !locationCollapsed"
-        [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder" *ngIf="edit">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2"
+        (click)="locationCollapsed = !locationCollapsed; getWrkspcList(true);" [attr.aria-expanded]="!locationCollapsed"
+        aria-controls="locationFolder" *ngIf="edit">
         Location
         <div class="float-right">
           <ng-container *ngIf="!locationCollapsed; else elseIcon">
@@ -1286,9 +1287,12 @@
         </div>
       </div>
       <div class="location px-2" id="locationFolder" [ngbCollapse]="locationCollapsed" *ngIf="edit">
-        <div class="dark-bg-hover rounded p-2">
-          <i class="fa fa-angle-right mr-3"></i>
-          abc
+        <app-loader [type]="'btn'" *ngIf="mdlLoading"></app-loader>
+        <div *ngIf="!mdlLoading">
+          <div class="dark-bg-hover rounded p-2" *ngFor="let item of mdlItems">
+            <div class="btn" (click)="listFolders(item.id)"><i class="fa fa-angle-right mr-3"></i></div>
+            {{item.name}}
+          </div>
         </div>
       </div>
     </div>
