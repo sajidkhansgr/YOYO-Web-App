@@ -29,4 +29,15 @@ export class FileHelper {
     return DEF_IMG;
   }
 
+  // public static restrictSize(bytes: any, type: string, max: number){
+  //   let ttlBytes: number = 0;
+  //   switch(type){
+  //     case 'kb': ttlBytes/
+  //     case 'mb':
+  //     case 'gb':
+  //     default:
+  //   }
+  //
+  // }
+
 }

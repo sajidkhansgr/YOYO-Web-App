@@ -767,7 +767,7 @@ export class ContentWorkspaceComponent implements OnInit {
   drop = (event: CdkDragDrop<string[]>) => {
     if (event.previousContainer.id == "cntntLists") {
       if (event.previousContainer.id == "cntntLists" && event.container.id == "fldrLists") {
-        if (this.dispFolder && this.dispFolder.id && this.dispFolder.key == "smtFldr") {
+        if (this.dispFolder && this.dispFolder.id && this.dispFolder.entityType == 2) {
           this.toastr.info("Content can't be add to smart folder.")
         } else {
           this.addCntntToWrkspc(event);
@@ -794,8 +794,8 @@ export class ContentWorkspaceComponent implements OnInit {
     let d: any = {
       contentId: event.previousContainer.data[event.previousIndex].id,
       workspaceId: this.selWrkspc!.id,
-      sequenceNumber: event.currentIndex,
-      folderId: this.dispFolder ? this.dispFolder!.id : null,
+      sequenceNumber: event.currentIndex+1,
+      folderId: this.dispFolder ? this.dispFolder!.entityId : null
     }
     this.cwServ.addCntntToWrkspcFldr(d).subscribe((data: any) => {
       if (data && Array.isArray(data.result)) {
