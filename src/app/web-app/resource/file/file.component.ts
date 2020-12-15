@@ -35,6 +35,8 @@ export class FileComponent implements OnInit {
   selData!: any[]; //checkboxes
   urlForm!: FormGroup;urlDisb!: boolean;
   cols:any=[];navg!: any;
+  getIntervalId: any;procFiles:any[]=[];isClose: boolean=false;showProcDetail: boolean = true;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -48,6 +50,10 @@ export class FileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.processingData();
+    this.getIntervalId = setInterval(() => {
+      this.processingData();
+    }, 13000) //13 seconds
     this.routerSubs = this.route.params.subscribe(params => {
       this.fldrid = params['fldrid'] || '';
       this.initialiseState(); // reset and set based on new parameter this time
@@ -387,6 +393,8 @@ export class FileComponent implements OnInit {
       this.dismissModal();
     }
     this.getFiles();
+    this.processingData();
+    this.isClose = false;
   }
 
   brdcrmList() {
@@ -404,6 +412,16 @@ export class FileComponent implements OnInit {
         }
       }, (err: any) => {
       })
+  }
+
+  processingData() {
+    this.fileServ.procesMyData()
+      .subscribe((data: any) => {
+        if (data && Array.isArray(data.result)) {
+          this.procFiles = data.result;
+        }
+      }, (err: any) => {
+      });
   }
 
   getImg(d: any): string {
@@ -424,6 +442,9 @@ export class FileComponent implements OnInit {
 
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
+    if (this.getIntervalId) {
+      clearInterval(this.getIntervalId);
+    }
     this.dismissModal();
   }
 
