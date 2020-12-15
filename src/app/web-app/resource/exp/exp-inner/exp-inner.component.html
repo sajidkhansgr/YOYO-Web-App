@@ -1,10 +1,13 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb rounded-0">
-    <li class="breadcrumb-item active align-self-center" *ngFor="let n of navg" (click)="navgClick(n)">
-      {{n.workspaceObjectName}}
+    <li class="breadcrumb-item" *ngFor="let n of navg;let l=last">
+      <span class="curs-ptr text-hover" (click)="navgClick(n)" *ngIf="!l">
+        {{n.workspaceObjectName}}
+      </span>
+      <span *ngIf="l">{{n.workspaceObjectName}}</span>
     </li>
     <!-- <li class="breadcrumb-item active align-self-center" aria-current="page">English</li> -->
-    <span class="ml-auto">
+    <span class="ml-auto" *ngIf="!loading">
       <div class="curs-ptr" (click)="view = !view;">
         <i class="fa" [ngClass]="{'fa-list-ul' : view, 'fa-th-large': !view}" style="font-size:1.75rem;"></i>
       </div>
@@ -18,11 +21,11 @@
   <div class="row expid-grid" *ngIf="view">
     <ng-container *ngIf="!loading">
       <ng-container *ngFor="let wSC of wrkspcCntnts">
-        <ng-container [ngSwitch]="wSC.key">
-          <ng-container *ngSwitchCase="'fldr'">
+        <ng-container [ngSwitch]="wSC.entityType">
+          <ng-container *ngSwitchCase="1">
             <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
           </ng-container>
-          <ng-container *ngSwitchCase="'smtFldr'">
+          <ng-container *ngSwitchCase="2">
             <ng-container *ngTemplateOutlet="cntntFldr"></ng-container>
           </ng-container>
           <div class="view-items col-sm-6 col-md-4 col-lg-3 text-center file curs-ptr my-2 p-2" *ngSwitchDefault>
@@ -54,7 +57,7 @@
           </div>
           <ng-template #cntntFldr>
             <div class="view-items col-sm-6 col-md-4 col-lg-3 text-center folder curs-ptr my-2 p-2">
-              <div class="icon" (click)="navgToCntnt(wSC)">
+              <div class="icon" (click)="navgToFldr(wSC)">
                 <img [src]="wSC.folderIconPath?wSC.folderIconPath : fldrIcon">
               </div>
               <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto" *ngIf="!wSC.hideLabelInWorkspace">
@@ -128,11 +131,11 @@
     </div>
     <div class="col-md-9">
       <ng-container *ngFor="let wSC of wrkspcCntnts">
-        <ng-container [ngSwitch]="wSC.key">
-          <ng-container *ngSwitchCase="'fldr'">
+        <ng-container [ngSwitch]="wSC.entityType">
+          <ng-container *ngSwitchCase="1">
             <ng-container *ngTemplateOutlet="cntntFldr1"></ng-container>
           </ng-container>
-          <ng-container *ngSwitchCase="'smtFldr'">
+          <ng-container *ngSwitchCase="2">
             <ng-container *ngTemplateOutlet="cntntFldr1"></ng-container>
           </ng-container>
           <div class="file row bg-white rounded p-3 curs-ptr my-2 mx-0" *ngSwitchDefault>
@@ -166,11 +169,11 @@
         <ng-template #cntntFldr1>
           <div class="folder d-flex bg-white rounded p-3 curs-ptr my-2">
             <mat-checkbox class="align-self-center"></mat-checkbox>
-            <div class="icon align-self-center mx-4" (click)="navgToCntnt(wSC)">
+            <div class="icon align-self-center mx-4" (click)="navgToFldr(wSC)">
               <img [src]="wSC.folderIconPath?wSC.folderIconPath:fldrIcon" style="max-width: 72px;">
             </div>
             <div class="info align-self-center" *ngIf="!wSC.hideLabelInWorkspace">
-              <h5 class="mb-0" (click)="navgToCntnt(wSC)">{{wSC.name}}</h5>
+              <h5 class="mb-0" (click)="navgToFldr(wSC)">{{wSC.name}}</h5>
               <!-- <i class="fa fa-folder mr-2"></i>Folder in English -->
             </div>
           </div>

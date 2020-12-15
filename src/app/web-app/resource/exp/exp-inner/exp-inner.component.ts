@@ -19,7 +19,8 @@ import { FileHelper } from '../../../../shared/file-helper';
 })
 export class ExpInnerComponent implements OnInit {
   routerSubs!: Subscription;
-  id!: string; fldrid!: string; smtFldrid!: string;
+  id!: string; fldrid!: string;
+  // smtFldrid!: string;
   view: boolean = true; loading!: boolean;
   wrkspcCntnts: any[] = [];
   defImg: string = DEF_ICON; fldrIcon: string = FLDR_ICON;
@@ -41,7 +42,7 @@ export class ExpInnerComponent implements OnInit {
     this.routerSubs = this.route.params.subscribe(params => {
       this.id = params['expid'] || '0';
       this.fldrid = params['fldrid'] || '';
-      this.smtFldrid = params['smtFldrid'] || '';
+      // this.smtFldrid = params['smtFldrid'] || '';
       this.initialiseState(); // reset and set based on new parameter this time
     });
   }
@@ -49,9 +50,10 @@ export class ExpInnerComponent implements OnInit {
   initialiseState() {
     if (this.id != '0') {
       this.loading = true;
-      this.brdcrmList();
       this.navg = [];
-      this.smtFldrid ? this.getContentSmtFldr() : this.getAllFromWrkspc();
+      this.brdcrmList();
+      this.getAllFromWrkspc();
+      // this.smtFldrid ? this.getContentSmtFldr() : this.getAllFromWrkspc();
     } else {
       this.toastr.error("Not a valid Workspace", "Error");
       this.router.navigate(['/web-app/experiences']);
@@ -79,29 +81,30 @@ export class ExpInnerComponent implements OnInit {
   }
 
   // view content
-  viewContent(data: any) {
-    let id = data.id;
-    if(this.smtFldrid)
-      id = data.contentId;
-    this.router.navigate(['/web-app/view/' + id]);
+  viewContent(d: any) {
+    // let id = d.id;
+    // if(this.smtFldrid)
+    //   id = data.contentId;
+    this.router.navigate(['/web-app/view/' + d.entityId]);
   }
 
   getAllFromWrkspc() {
     let params = {
       workspaceId: this.id,
       isActive: true,
-      folderId: this.fldrid || null
+      parentId: this.fldrid || null
     };
     this.wrkspcCntnts = [];
     this.expServ.getAllObjWrkspc(params)
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
-          if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0)
-            this.wrkspcCntnts = data.result[0].contents;
-          if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0)
-            this.wrkspcCntnts.push(...data.result[0].folders.map((fldr: any) => ({ ...fldr, key: 'fldr' })));
-          if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0)
-            this.wrkspcCntnts.push(...data.result[0].smartFolders.map((fldr: any) => ({ ...fldr, key: 'smtFldr' })));
+          this.wrkspcCntnts = data.result;
+          // if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0)
+          //   this.wrkspcCntnts = data.result[0].contents;
+          // if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0)
+          //   this.wrkspcCntnts.push(...data.result[0].folders.map((fldr: any) => ({ ...fldr, key: 'fldr' })));
+          // if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0)
+          //   this.wrkspcCntnts.push(...data.result[0].smartFolders.map((fldr: any) => ({ ...fldr, key: 'smtFldr' })));
         } else {
           //no data found
         }
@@ -111,34 +114,35 @@ export class ExpInnerComponent implements OnInit {
       })
   }
 
-  // get content by smart folder
-  getContentSmtFldr() {
-    let query: any = {
-      smartFolderId: this.smtFldrid
-    };
-    this.wrkspcCntnts = [];
-    this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.wrkspcCntnts.push(...data.result);
-      }
-      this.loading = false;
-    }, (err: any) => {
-      this.loading = false;
-    });
-  }
+  // get content by smart folder -> now no need as manage iu get all data by workspace
+  // getContentSmtFldr() {
+  //   let query: any = {
+  //     smartFolderId: this.smtFldrid
+  //   };
+  //   this.wrkspcCntnts = [];
+  //   this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
+  //     if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+  //       this.wrkspcCntnts.push(...data.result);
+  //     }
+  //     this.loading = false;
+  //   }, (err: any) => {
+  //     this.loading = false;
+  //   });
+  // }
 
   getImg(d: any): string {
     return FileHelper.getImg(d);
   }
 
-  navgToCntnt(data: any) {
-    this.router.navigate(['/web-app/resource/experiences/' + this.id + '/' + (data.key === 'fldr'?'folder':'smart-folder') + '/' + data.id]);
+  navgToFldr(d: any) {
+    this.router.navigate(['/web-app/resource/experiences/' + this.id + '/folder/' + d.id]);
   }
 
   brdcrmList() {
     let params = {
       entityWorkspaceID: this.id,
-      parentId: this.fldrid?this.fldrid:this.smtFldrid?this.smtFldrid:null
+      // parentId: this.fldrid?this.fldrid:this.smtFldrid?this.smtFldrid:null
+      parentId: this.fldrid?this.fldrid:null
     }
     this.brdcrmServ.getList(params)
       .subscribe((data: any) => {

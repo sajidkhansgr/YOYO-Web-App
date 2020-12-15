@@ -26,7 +26,7 @@ export class ExpService {
         queryParams = queryParams.set(key, params[key]);
       }
     }
-    return this.http.get(`${AppSettings.GET_OBJ_WRKSPC_EMP}`, {
+    return this.http.get(`${AppSettings.GET_DATA_WRKSPC_EMP}`, {
       params: queryParams
     }).pipe(map((res: any) => res));
   }

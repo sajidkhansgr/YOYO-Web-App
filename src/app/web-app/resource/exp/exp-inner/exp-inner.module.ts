@@ -8,11 +8,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
 import { ExpInnerComponent } from './exp-inner.component';
 import { ExpService } from '../../exp/exp.service';
-import { BreadcrumbService } from '../../../../shared/services/breadcrumb.service';
 import { LoaderModule } from '../../../../shared/components/loader/loader.module';
 import { AddToCollModule } from '../../../../shared/components/add-to-coll/add-to-coll.module';
 import { ShareMailModule } from '../../../../shared/components/share-mail/share-mail.module';
 import { GetLinkModule } from '../../../../shared/components/get-link/get-link.module';
+import { BreadcrumbService } from '../../../../shared/services/breadcrumb.service';
 import { ContentWorkspaceService } from 'src/app/hub/content-workspace/content-workspace.service';
 
 const routes: Routes = [

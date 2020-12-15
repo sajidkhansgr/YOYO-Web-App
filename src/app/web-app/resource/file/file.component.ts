@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { FileService } from './file.service';
 import { ContentWorkspaceService } from '../../../hub/content-workspace/content-workspace.service';
+import { BreadcrumbService } from '../../../shared/services/breadcrumb.service';
 import { Content } from '../../../shared/models/content';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ShareMailComponent } from '../../../shared/components/share-mail/share-mail.component';
@@ -23,7 +24,7 @@ export class FileComponent implements OnInit {
   routerSubs!: Subscription;
   view: boolean = true; fldrLoad!: boolean;
   files!: any[]; loading!: boolean; folders!: any[];
-  folderNav!: any[];
+  // folderNav!: any[];
   // selFolder: any = {};
   allFiles: any[] = [];
   // selFiles: any[] = []; selFolders: any[] = [];
@@ -33,7 +34,7 @@ export class FileComponent implements OnInit {
   fldrid!: string;
   selData!: any[]; //checkboxes
   urlForm!: FormGroup;urlDisb!: boolean;
-  cols:any=[]
+  cols:any=[];navg!: any;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -42,7 +43,8 @@ export class FileComponent implements OnInit {
     private toastr: ToastrService,
     private dialog: MatDialog,
     private fileServ: FileService,
-    private cwServ: ContentWorkspaceService
+    private cwServ: ContentWorkspaceService,
+    private brdcrmServ: BreadcrumbService
   ) { }
 
   ngOnInit(): void {
@@ -56,11 +58,13 @@ export class FileComponent implements OnInit {
 
   initialiseState() {
     this.loading = true;
-    this.folderNav = [];
+    // this.folderNav = [];
     this.files = [];
     this.folders = [];
     this.selData = [];
+    this.navg = [];
     this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
+    this.brdcrmList();
     this.initForm();
   }
 
@@ -184,7 +188,7 @@ export class FileComponent implements OnInit {
   }
 
   navgToFldr(fl: any) {
-    this.router.navigate(['/web-app/resource/my-files/' + fl.id]);
+    this.router.navigate(['/web-app/resource/my-files/'+(fl.id==0?'':fl.id)]);
   }
 
   chkFolderAndAdd(fl: any) {
@@ -383,6 +387,23 @@ export class FileComponent implements OnInit {
       this.dismissModal();
     }
     this.getFiles();
+  }
+
+  brdcrmList() {
+    let params = {
+      parentFolderId: this.fldrid?this.fldrid:null
+    }
+    this.brdcrmServ.getList(params, true)
+      .subscribe((data: any) => {
+        if (data && Array.isArray(data.result) && data.result.length > 0) {
+          let arr = data.result;
+          arr.sort((a:any, b:any) => a.level - b.level);
+          this.navg = arr;
+        } else {
+          //no data found
+        }
+      }, (err: any) => {
+      })
   }
 
   getImg(d: any): string {

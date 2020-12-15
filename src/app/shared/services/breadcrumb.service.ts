@@ -10,15 +10,15 @@ export class BreadcrumbService {
 
   constructor(private http: HttpClient){ }
 
-  //change password
-  getList(params: any){
+  getList(params: any,isMy: boolean=false){
     let queryParams = new HttpParams();
     for (let key in params) {
       if (params[key]) {
         queryParams = queryParams.set(key, params[key]);
       }
     }
-    return this.http.get(`${AppSettings.BRD_CRM_LIST}`, {
+    let url: string = isMy?AppSettings.MY_BRD_CRM_LIST:AppSettings.BRD_CRM_LIST;
+    return this.http.get(`${url}`, {
       params: queryParams
     }).pipe(map((res: any) => res ));
   }

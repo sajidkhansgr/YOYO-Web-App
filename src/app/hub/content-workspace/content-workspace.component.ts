@@ -214,8 +214,8 @@ export class ContentWorkspaceComponent implements OnInit {
   listFolders() {
     this.folderLoading = true;
     this.wrkspcItems = [];
-    // this.getAllDataWrkspc() ;
-    this.dispFolder ? this.dispFolder.entityType === 2 ? this.getContentSmtFldr() : this.getAllDataWrkspc() : this.getAllDataWrkspc();
+    this.getAllDataWrkspc() ;
+    // this.dispFolder ? this.dispFolder.entityType === 2 ? this.getContentSmtFldr() : this.getAllDataWrkspc() : this.getAllDataWrkspc();
   }
 
   // get folder and smart folder from wrkspace; content from workpspace and folder
@@ -226,7 +226,7 @@ export class ContentWorkspaceComponent implements OnInit {
       parentId: this.dispFolder ? this.dispFolder!.id : undefined,
     };
     this.cwServ.getAllDataWrkspc(params).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+      if (data && Array.isArray(data.result) && data.result.length > 0) {
         this.wrkspcItems = data.result;
       }
       this.folderLoading = false;
@@ -407,7 +407,6 @@ export class ContentWorkspaceComponent implements OnInit {
       if (data && data.result) {
         this.selFolder = data.result;
         this.smartFldrForm.patchValue({ ...this.selFolder });
-        console.log(data)
         // if (data.result.smartFolderTags.length > 0) {
         //   let temp = this.tags;
         //   this.allTags = []; this.anyTags = []; this.noneTags = [];
@@ -925,21 +924,21 @@ export class ContentWorkspaceComponent implements OnInit {
     this.edits[type] = true;
   }
 
-  // get content by smart folder
-  getContentSmtFldr() {
-    this.folderLoading = true;
-    let query: any = {
-      smartFolderId: this.dispFolder ? this.dispFolder!.entityId : undefined
-    };
-    this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-        this.wrkspcItems.push(...data.result);
-      }
-      this.folderLoading = false;
-    }, (err: any) => {
-      this.folderLoading = false;
-    });
-  }
+  // get content by smart folder -> now no need as manage iu get all data by workspace
+  // getContentSmtFldr() {
+  //   this.folderLoading = true;
+  //   let query: any = {
+  //     smartFolderId: this.dispFolder ? this.dispFolder!.entityId : undefined
+  //   };
+  //   this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
+  //     if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+  //       this.wrkspcItems.push(...data.result);
+  //     }
+  //     this.folderLoading = false;
+  //   }, (err: any) => {
+  //     this.folderLoading = false;
+  //   });
+  // }
 
   closeEdit(type: string, isUpd: boolean = true) {
     if (type && isUpd) {

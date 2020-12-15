@@ -11,13 +11,15 @@ import { MatRadioModule } from '@angular/material/radio';
 
 import { FileComponent } from './file.component';
 import { FileService } from './file.service';
-import { ContentWorkspaceService } from '../../../hub/content-workspace/content-workspace.service';
 import { LoaderModule } from '../../../shared/components/loader/loader.module';
 import { ConfirmDialogModule } from '../../../shared/components/confirm-dialog/confirm-dialog.module';
 import { AddToCollModule } from '../../../shared/components/add-to-coll/add-to-coll.module';
 import { ShareMailModule } from '../../../shared/components/share-mail/share-mail.module';
 import { GetLinkModule } from '../../../shared/components/get-link/get-link.module';
 import { SelItmFxdDivModule } from '../../../shared/components/sel-itm-fxd-div/sel-itm-fxd-div.module';
+
+import { ContentWorkspaceService } from '../../../hub/content-workspace/content-workspace.service';
+import { BreadcrumbService } from '../../../shared/services/breadcrumb.service';
 
 const routes: Routes = [
   { path: '', component: FileComponent }
@@ -34,6 +36,6 @@ const routes: Routes = [
     LoaderModule, ConfirmDialogModule,
     AddToCollModule, ShareMailModule, GetLinkModule, SelItmFxdDivModule
   ],
-  providers: [FileService, ContentWorkspaceService]
+  providers: [FileService, ContentWorkspaceService, BreadcrumbService]
 })
 export class FileModule { }
