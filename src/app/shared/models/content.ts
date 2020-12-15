@@ -32,6 +32,7 @@ export interface Content {
   pdfImage?: string;
   pdfImagePath?: string;
   pageNo?: string;//Array
+  imagePath?: string;
 }
 
 export interface Comment {
