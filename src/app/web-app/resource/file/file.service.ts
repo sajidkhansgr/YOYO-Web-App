@@ -51,4 +51,8 @@ export class FileService {
     return this.http.post(`${AppSettings.ADD_CNTNT_EMPL}`, this.freezeFormObj(data))
   }
 
+  procesMyData() {
+    return this.http.get(`${AppSettings.PROC_CNTNT_EMPL}`);
+  }
+
 }
