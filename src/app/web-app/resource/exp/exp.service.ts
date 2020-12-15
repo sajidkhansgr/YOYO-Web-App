@@ -19,7 +19,7 @@ export class ExpService {
   }
 
   // get all from workspace by employee
-  getAllObjWrkspc(params: any): Observable<any[]> {
+  getAllDataWrkspc(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
       if (params[key]) {

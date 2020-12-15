@@ -95,7 +95,7 @@ export class ExpInnerComponent implements OnInit {
       parentId: this.fldrid || null
     };
     this.wrkspcCntnts = [];
-    this.expServ.getAllObjWrkspc(params)
+    this.expServ.getAllDataWrkspc(params)
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
           this.wrkspcCntnts = data.result;
@@ -142,13 +142,13 @@ export class ExpInnerComponent implements OnInit {
     let params = {
       entityWorkspaceID: this.id,
       // parentId: this.fldrid?this.fldrid:this.smtFldrid?this.smtFldrid:null
-      parentId: this.fldrid?this.fldrid:null
+      parentId: this.fldrid ? this.fldrid : null
     }
     this.brdcrmServ.getList(params)
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
           let arr = data.result;
-          arr.sort((a:any, b:any) => a.level - b.level);
+          arr.sort((a: any, b: any) => a.level - b.level);
           this.navg = arr;
         } else {
           //no data found
@@ -159,8 +159,8 @@ export class ExpInnerComponent implements OnInit {
 
   navgClick = (n: any) => {
     let url: string = '/web-app/resource/experiences/' + this.id;
-    if(n.workspaceObjectId){
-      url+='/folder/' + n.workspaceObjectId;
+    if (n.workspaceObjectId) {
+      url += '/folder/' + n.workspaceObjectId;
     }
     this.router.navigate([url]);
   }

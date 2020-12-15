@@ -9,6 +9,7 @@ import { ExpService } from 'src/app/web-app/resource/exp/exp.service';
 import { FileService } from 'src/app/web-app/resource/file/file.service';
 import { CollectionService } from 'src/app/web-app/resource/collection/collection.service';
 import { ContentWorkspaceService } from 'src/app/hub/content-workspace/content-workspace.service';
+import { FLDR_ICON, DEF_ICON } from '../../constants';
 
 @Component({
   selector: 'app-add-rsrc',
@@ -20,6 +21,8 @@ export class AddRsrcComponent implements OnInit {
   workspcArr!: Wrkspc[]; colctnArr!: Colctn[]; fldrArr!: Folder[]; selWrkspc!: Wrkspc | undefined; selFldr!: Folder | undefined; mdlCntntArr!: Content[]; addContentArr!: Content[];
   wrkspcLoading!: boolean; colctnLoading!: boolean; fldrLoading!: boolean; cntntLoading!: boolean;
   disabled!: boolean;
+  fldrIcon: any = FLDR_ICON;
+  defIcon: any = DEF_ICON;
 
 
   constructor(
@@ -99,27 +102,21 @@ export class AddRsrcComponent implements OnInit {
       });
   }
 
-  // get folder and smart folder from wrkspace and content from workpspace and folder
+  // get folder and smart folder from wrkspace and content from workspace and folder
   getAllObjWrkspc() {
     this.fldrLoading = true;
     let params = {
       workspaceId: this.selWrkspc!.id,
       isActive: true,
-      folderId: this.selFldr ? this.selFldr!.id : undefined,
+      parentId: this.selFldr ? this.selFldr!.id : undefined,
     };
-    this.expServ.getAllObjWrkspc(params).subscribe((data: any) => {
-      if (data && data.result) {
-        if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0) {
-          this.mdlCntntArr.push(...data.result[0].contents);
-        }
-        if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0) {
-          for (let i = 0; i < data.result[0].folders.length; i++) {
-            this.fldrArr.push({ ...data.result[0].folders[i], key: 'fldr' });
-          }
-        }
-        if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0) {
-          for (let i = 0; i < data.result[0].smartFolders.length; i++) {
-            this.fldrArr.push({ ...data.result[0].smartFolders[i], key: 'smtFldr' });
+    this.expServ.getAllDataWrkspc(params).subscribe((data: any) => {
+      if (data && data.result && Array.isArray(data.result)) {
+        for (let i = 0; i < data.result.length; i++) {
+          if (data.result[i].entityType === 3) {
+            this.mdlCntntArr.push(data.result[i]);
+          } else {
+            this.fldrArr.push(data.result[i]);
           }
         }
       }
@@ -153,7 +150,9 @@ export class AddRsrcComponent implements OnInit {
       this.selWrkspc = wrkspc;
       this.contentNav = [wrkspc];
     }
-    fldr ? this.selFldr!.key == 'fldr' ? this.getAllObjWrkspc() : this.getContentSmtFldr() : this.getAllObjWrkspc();
+    // getContent by smart folder to be implemented in this api too
+    // fldr ? this.selFldr!.entityType === 1 ? this.getAllObjWrkspc() : this.getContentSmtFldr() : this.getAllObjWrkspc();
+    this.getAllObjWrkspc();
     this.fldrArr = [];
     this.showAll = false;
   }
@@ -181,6 +180,7 @@ export class AddRsrcComponent implements OnInit {
     this.contentNav = [colctn];
     this.cntntLoading = true;
     this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
+      console.log(data);
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.mdlCntntArr = data.result;
       } else if (data && data.result && Array.isArray(data.result) && data.result.length == 0) {

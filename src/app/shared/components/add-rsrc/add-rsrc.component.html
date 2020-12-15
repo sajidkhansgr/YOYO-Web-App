@@ -1,6 +1,6 @@
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Select Resource</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modalRef.dismiss('Cross click')">
+    <button type="button" class="close" aria-label="Close" (click)="modalRef.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -32,7 +32,7 @@
         <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let workspc of workspcArr"
           (click)="showWorkspcFldrs(workspc)">
           <div class="icon align-self-center mr-2">
-            <img src="assets/images/discription.png" style="max-height:50px; width: 40px;">
+            <img src="{{fldrIcon}}" style="max-height:50px; width: 40px;">
           </div>
           <div class="name align-self-center">
             {{workspc.name}}
@@ -59,7 +59,7 @@
         <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let colctn of colctnArr"
           (click)="getCntntColl(colctn)">
           <div class="icon align-self-center mr-2">
-            <img src="assets/images/discription.png" style="max-height:50px; width: 40px;">
+            <img src="{{colctn.pdfImagePath ? colctn.pdfImagePath : fldrIcon}}" style="max-height:50px; width: 40px;">
           </div>
           <div class="name align-self-center">{{colctn.name}}</div>
           <div class="arrow align-self-center ml-auto mr-3">
@@ -73,7 +73,7 @@
           <div class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let fldr of fldrArr"
             (click)="showAll === false ? showWorkspcFldrs(undefined, fldr) : showMyFiles(fldr);">
             <div class="icon align-self-center mr-2">
-              <img src="{{fldr.folderIconPath ? fldr.folderIconPath : 'assets/images/folderIcon.png'}}"
+              <img src="{{fldr.imagePath ? fldr.imagePath : fldr.folderIconPath ? fldr.folderIconPath : fldrIcon}}"
                 style="max-height:50px; width: 40px;">
             </div>
             <div class="name align-self-center">
@@ -89,7 +89,7 @@
             </mat-checkbox>
             <div class="icon align-self-center mr-2">
               <img
-                src="{{content.pdfImages && content.pdfImages.length > 0 ? content.pdfImages[0].imagePath : content.urlIconPath}}"
+                src="{{content.imagePath ? content.imagePath : content.pdfImagePath ? content.pdfImagePath : content.urlIconPath ? content.urlIconPath : defIcon}}"
                 style="max-height:50px; width: 40px;">
             </div>
             <div class="name align-self-center">

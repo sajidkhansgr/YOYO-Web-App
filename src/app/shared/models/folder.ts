@@ -22,4 +22,7 @@ export interface Folder {
   smartFolderTags?: Array<any>;
   smartFolderFilters?: Array<any>;
   key?: string;
+  imagePath?: string;
+  entityType?: number;
+  entityId?: number;
 }
