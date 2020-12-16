@@ -53,7 +53,9 @@ export class ContentWorkspaceComponent implements OnInit {
   private subscription!: Subscription;
   selectable = true; removable: boolean = true;
   urlDisb!: boolean;
-  cntntDisb!: boolean; cntntLoading!: boolean; activeIndex: number = 0;
+  cntntDisb!: boolean; cntntLoading!: boolean;activeIndex: number = 0;
+  procUpld!:boolean; procUpldData!:any; procUpldLoad!: boolean;
+
   pageNo!: number; pageSize!: number; @Input() lmtPage: any;
   showRowInfo!: boolean; rowInfo!: any; docLoading!: boolean;
   desc!: string; isShared!: boolean; cmnt!: string;
@@ -147,6 +149,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.pageSize = this.lmtPage[0]; this.pageNo = 1;
     this.cntntTypeFltr = this.fileTypesArr;
     this.cntntDisb = false;
+    this.procUplDef();
     this.totalCount = 0;
     this.cntntLoading = true; //use in cntnt listing
     this.urlDisb = false;
@@ -183,6 +186,10 @@ export class ContentWorkspaceComponent implements OnInit {
     this.allTags = []; this.anyTags = []; this.noneTags = [];
     this.setFltrEmpty();
     this.mdlItems = []; this.mdlLoading = true; this.mdlNav = []; this.mdlSelected = undefined;
+  }
+
+  procUplDef(){
+    this.procUpld = false;this.procUpldData = [];this.procUpldLoad = false;
   }
 
   // ---- folder and smart folder ---- //
@@ -1005,9 +1012,9 @@ export class ContentWorkspaceComponent implements OnInit {
     if (isTagReq) {
       this.getTags();
     }
-    this.verForm.reset();
-    this.urlForm.reset();
-    this.cntntForm.reset();
+    this.verForm.reset();this.urlForm.reset();this.cntntForm.reset();
+    // this.cntntDisb = false;
+    this.procUplDef();
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
       }, (reason) => {
@@ -1165,12 +1172,12 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  onCntntSubmit() {
+  async onCntntSubmit() {
     //this.cntntForm.valid
     if (this.files.length > 0) {
       this.cntntDisb = true;
       let cntntData: any = {
-        content: this.files[0],
+        // content: this.files[0],
         hubId: parseInt(this.hubid),
         isUrl: false
       }
@@ -1178,21 +1185,69 @@ export class ContentWorkspaceComponent implements OnInit {
         cntntData.ContentTagsString = this.selTags.map((tag: any) => ({ tagId: tag.id }));
         cntntData.ContentTagsString = JSON.stringify(cntntData.ContentTagsString)
       }
-      this.cwServ.addContent(cntntData)
-        .subscribe((data: any) => {
-          if (data) {
-            this.toastr.success('Content added successfully', 'Success!');
-            this.files = []; this.pageNo = 1;
-            this.cntntList();
-            this.dismissModal();
-          } else {
-            this.toastr.error('Unable to add content', 'Error!');
+      // this.files = this.files.map((f: any) => ({ ...f, load: true }));
+      this.procUpld = true;
+      // setTimeout(()=>{
+        for (let i=0;i<this.files.length;i++) {
+          cntntData.content = this.files[i];
+          const data:any = await this.cwServ.addContentProms(cntntData);
+          if (data && data.result && data.result.id) {
+              this.files[i].id = data.result.id;
+              this.files[i].t = 1;
+          }else{
+            this.files[i].t = 2;
           }
-          this.cntntDisb = false;
-        }, (err: any) => {
-          this.cntntDisb = false;
-        });
+        }
+        this.cntntDisb = false;
+      // },9000)
+      // this.cwServ.addContent(cntntData)
+      //   .subscribe((data: any) => {
+      //     console.log(data, 'data')
+      //     if (data && data.result && data.result.id) {
+      //       this.procUpldData.push({id:data.result.id,name: cntntData})
+      //       this.toastr.success('Content added successfully', 'Success!');
+      //       // this.files = []; this.pageNo = 1;
+      //       // this.cntntList();
+      //       // this.dismissModal();
+      //     } else {
+      //       this.toastr.error('Unable to add content', 'Error!');
+      //     }
+      //     // this.cntntDisb = false;
+      //   }, (err: any) => {
+      //     // this.cntntDisb = false;
+      //   });
     }
+  }
+
+  changeProcStatus(isStart: boolean){
+    if(this.files.length>0){
+      this.procUpldLoad = true;
+      let contentIds = [];
+      for(let k=0;k<this.files.length;k++){
+        if(this.files[k].id)
+          contentIds.push(this.files[k].id)
+      }
+      this.files.map((f: any) => f.id)
+      let d: any = {
+        hubId: parseInt(this.hubid),
+        contentIds
+      }
+      this.cwServ.procCntntStatus(d, isStart)
+        .subscribe((data: any) => {
+          this.setFilesDef();
+        }, (err: any) => {
+          this.setFilesDef();
+        });
+    }else{
+      this.setFilesDef();
+    }
+  }
+
+  setFilesDef(){
+    this.procUpldLoad = false;
+    this.files = [];
+    this.cntntDisb = false;
+    this.dismissModal();
   }
 
   onUrlSubmit() {
@@ -1214,9 +1269,9 @@ export class ContentWorkspaceComponent implements OnInit {
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success('Content added successfully', 'Success!');
-            this.files = []; this.pageNo = 1;
-            this.cntntList();
-            this.dismissModal();
+            // this.files = []; this.pageNo = 1;
+            // this.cntntList();
+            // this.dismissModal();
           } else {
             this.toastr.error('Unable to add content', 'Error!');
           }
@@ -1409,7 +1464,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   processingCntnt(isCount: boolean) {
-    this.cwServ.processCntnt(isCount)
+    this.cwServ.processCntnt(this.hubid,isCount)
       .subscribe((data: any) => {
         this.isProcCount(isCount, data);
       }, (err: any) => {
@@ -1428,7 +1483,6 @@ export class ContentWorkspaceComponent implements OnInit {
         this.cntnts = [];
       }
       this.cntntLoading = false;
-      console.log(data)
     }
   }
 
@@ -1489,7 +1543,7 @@ export class ContentWorkspaceComponent implements OnInit {
             clearInterval(progressInterval);
             this.uploadFilesSimulator(index + 1);
           } else {
-            this.files[index].progress += 20;
+            this.files[index].progress += 50;
           }
         }, 100);
       }
@@ -1504,6 +1558,7 @@ export class ContentWorkspaceComponent implements OnInit {
     if (!isIcon) {
       for (const item of files) {
         item.progress = 0;
+        item.t=0;
         this.files.push(item);
       }
       this.uploadFilesSimulator(0);

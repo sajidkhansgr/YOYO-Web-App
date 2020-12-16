@@ -1010,35 +1010,90 @@
 <ng-template #uploadFile let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Upload Files</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <button type="button" class="close" aria-label="Close" (click)="changeProcStatus(false)">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="cntntForm" (ngSubmit)="onCntntSubmit()" [formGroup]="cntntForm" novalidate>
-    <div class="modal-body" ngbAutofocus>
-      <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event)">
-        <input type="file" multiple (change)="fileBrowseHandler($event)">
-        <input type="hidden" formControlName="img" /> <!-- Validation Field -->
-        <div class="text-center my-5">
-          <h2><i class="fa fa-upload"></i></h2>
-          <h5>Drag & Drop file here</h5>
-          OR
-          <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
+  <ng-container *ngIf="!procUpld">
+    <form name="cntntForm" (ngSubmit)="onCntntSubmit()" [formGroup]="cntntForm" novalidate>
+      <div class="modal-body" ngbAutofocus>
+        <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event)">
+          <input type="file" multiple (change)="fileBrowseHandler($event)">
+          <input type="hidden" formControlName="img" /> <!-- Validation Field -->
+          <div class="text-center my-5">
+            <h2><i class="fa fa-upload"></i></h2>
+            <h5>Drag & Drop file here</h5>
+            OR
+            <div class="btn btn-primary d-block w-25 mx-auto mt-3">Browse</div>
+          </div>
+        </div>
+        <div class="files-list">
+          <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
+            <div class="info mx-auto">
+              <h6 class="name mb-0 text-wrap">
+                {{ file?.name }}
+              </h6>
+              <p class="size mb-0">
+                {{ getSize(file?.size) }}
+              </p>
+              <app-file-progess [progress]="file?.progress"></app-file-progess>
+            </div>
+            <div>
+              <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="w-100 dark-bg-hover p-2 rounded" (click)="this.dispPropsSec = !this.dispPropsSec;">
+          Properties
+          <div class="float-right">
+            <i class="fa" [ngClass]="{'fa-angle-up': !dispPropsSec,'fa-angle-down': dispPropsSec}"></i>
+          </div>
+        </div>
+        <div class="mt-2" *ngIf="dispPropsSec">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-chip-list aria-label="Select tags">
+              <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable"
+                (removed)="remove(d,'selTags')">
+                {{d.name}}
+                <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
+              </mat-chip>
+              <input matInput #cntntTgInp [(ngModel)]="cntntTag" name="cntntTag" [ngModelOptions]="{standalone: true}"
+                placeholder="Select tags" [matAutocomplete]="auto2">
+            </mat-chip-list>
+            <mat-autocomplete #auto2="matAutocomplete"
+              (optionSelected)="selFromAutoComp($event.option.value,'selTags',cntntTgInp)" [displayWith]="displayFn">
+              <mat-option *ngFor="let tg of tags|filterName: cntntTag: 'name'" [value]="tg">
+                {{tg.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-hint>Tags help you filter content or create smart folders</mat-hint>
+          </mat-form-field>
         </div>
       </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
+        <button class="btn btn-primary" [disabled]="files.length<=0 || cntntDisb">
+          <app-loader [type]="'btn'" *ngIf="cntntDisb"></app-loader>
+          Upload
+        </button>
+      </div>
+    </form>
+  </ng-container>
+  <ng-container *ngIf="procUpld">
+    <div class="modal-body" ngbAutofocus>
       <div class="files-list">
-        <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
-          <div class="info mx-auto">
-            <h6 class="name mb-0 text-wrap">
-              {{ file?.name }}
+        <div class="single-file mt-3 row mx-0 p-2" *ngFor="let f of files;">
+          <div class="info d-flex col-10">
+            <i class="fas fa-exclamation-triangle mr-1" *ngIf="f.t==2"></i>
+            <i class="fas fa-check-circle" *ngIf="f.t==1"></i>
+            <app-loader [type]="'btn-red'" *ngIf="f.t==0"></app-loader>
+            <h6 class="name mb-0 text-wrap ml-2">
+              {{ f?.name||'' }}
             </h6>
-            <p class="size mb-0">
-              {{ getSize(file?.size) }}
-            </p>
-            <app-file-progess [progress]="file?.progress"></app-file-progess>
           </div>
-          <div>
-            <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
+          <div class="col-2">
+            {{ getSize(f?.size) }}
           </div>
         </div>
       </div>
@@ -1051,33 +1106,22 @@
       </div>
       <div class="mt-2" *ngIf="dispPropsSec">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-chip-list aria-label="Select tags">
-            <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable"
-              (removed)="remove(d,'selTags')">
+          <mat-chip-list>
+            <mat-chip *ngFor="let d of selTags">
               {{d.name}}
-              <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
             </mat-chip>
-            <input matInput #cntntTgInp [(ngModel)]="cntntTag" name="cntntTag" [ngModelOptions]="{standalone: true}"
-              placeholder="Select tags" [matAutocomplete]="auto2">
           </mat-chip-list>
-          <mat-autocomplete #auto2="matAutocomplete"
-            (optionSelected)="selFromAutoComp($event.option.value,'selTags',cntntTgInp)" [displayWith]="displayFn">
-            <mat-option *ngFor="let tg of tags|filterName: cntntTag: 'name'" [value]="tg">
-              {{tg.name}}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-hint>Tags help you filter content or create smart folders</mat-hint>
         </mat-form-field>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
-      <button class="btn btn-primary" [disabled]="files.length<=0 || cntntDisb">
-        <app-loader [type]="'btn'" *ngIf="cntntDisb"></app-loader>
-        Save
+      <button class="btn btn-secondary mr-2" (click)="changeProcStatus(false);">Cancel</button>
+      <button class="btn btn-primary" [disabled]="files.length<=0 || cntntDisb" (click)="changeProcStatus(true);">
+        <app-loader [type]="'btn'" *ngIf="cntntDisb || procUpldLoad"></app-loader>
+        Done
       </button>
     </div>
-  </form>
+  </ng-container>
 </ng-template>
 
 <!-- add url modal  -->

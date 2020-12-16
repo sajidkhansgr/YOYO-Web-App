@@ -174,6 +174,11 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.ADD_CNTNT}`, this.freezeFolderObj(data))
   }
 
+  // add content
+  addContentProms(data: any) {
+    return this.http.post(`${AppSettings.ADD_CNTNT}`, this.freezeFolderObj(data)).toPromise()
+  }
+
   // update content
   updContent(data: any) {
     return this.http.post(`${AppSettings.UPD_CNTNT}`, data)
@@ -236,14 +241,19 @@ export class ContentWorkspaceService {
     return this.http.post(`${AppSettings.UPL_VER_CNTNT}`, this.freezeFolderObj(data));
   }
 
-  processCntnt(isCount: boolean) {
+  processCntnt(hubId: string, isCount: boolean) {
     let url: string = isCount ? AppSettings.PROC_CNTNT_CNT : AppSettings.PROC_CNTNT;
-    return this.http.get(`${url}`);
+    return this.http.get(`${url}?hubId=${hubId}`);
   }
 
   // add content to wowrkspace/folder
   rearrWrkspcData(data: any) {
     return this.http.post(`${AppSettings.REARR_WRKSPC_ITEMS}`, data)
+  }
+
+  procCntntStatus(data: any, isStart: boolean) {
+    let url: string = isStart ? AppSettings.START_PROC_CNTNT : AppSettings.CANCEL_PROC_CNTNT;
+    return this.http.post(`${url}`, data);
   }
 
 }
