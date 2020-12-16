@@ -194,6 +194,10 @@ export class AppSettings {
 
   public static PROC_CNTNT_EMPL = `api/Content/GetProcessingContentByEmployee`;
 
+  public static START_PROC_CNTNT = `api/Content/StartContentProcessing`;
+
+  public static CANCEL_PROC_CNTNT = `api/Content/CancelContentProcessing`;
+
   // ---- LANGUAGE ---- //
 
   public static LIST_LNG = `api/Language/GetAll`;
