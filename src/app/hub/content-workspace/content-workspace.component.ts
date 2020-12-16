@@ -73,7 +73,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   getIntervalId: any; procCnt: number = 0;
 
-  mdlItems!: any[]; mdlLoading!: boolean;
+  mdlItems!: any[]; mdlLoading!: boolean; mdlNav!: any[]; mdlSelected: any;
 
   constructor(
     private modalService: NgbModal,
@@ -182,7 +182,7 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe();
     this.allTags = []; this.anyTags = []; this.noneTags = [];
     this.setFltrEmpty();
-    this.mdlItems = []; this.mdlLoading = true;
+    this.mdlItems = []; this.mdlLoading = true; this.mdlNav = []; this.mdlSelected = undefined;
   }
 
   // ---- folder and smart folder ---- //
@@ -200,10 +200,16 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // back nav folder
-  backFolder() {
-    this.folderNav.pop();
-    this.dispFolder = this.folderNav[this.folderNav.length - 1];
-    this.listFolders();
+  backFolder(val?: boolean) {
+    if (val) {
+      this.mdlNav.pop();
+      let l = this.mdlNav.length;
+      l === 0 ? this.getWrkspcList(true) : this.listFolders(this.mdlNav[l - 1]);
+    } else {
+      this.folderNav.pop();
+      this.dispFolder = this.folderNav[this.folderNav.length - 1];
+      this.listFolders();
+    }
   }
 
   // change folder an smart folders (show sub folders and content)
@@ -213,24 +219,40 @@ export class ContentWorkspaceComponent implements OnInit {
     this.listFolders()
   }
 
+  // show sub content in modal (edit folder)
+  mdlListFolders(item: any) {
+    this.mdlNav.push(item);
+    this.listFolders(item);
+  }
+
+  // // select folder in modal (edit folder)
+  // selectMe(item: any) {
+  //   this.mdlSelected = item;
+  // }
+
   // listing all folders
-  listFolders(wid?: number) {
-    wid ? this.mdlLoading = true : this.folderLoading = true;
-    wid ? this.mdlItems = [] : this.wrkspcItems = [];
-    this.getAllDataWrkspc(wid);
+  listFolders(item?: any) {
+    if (item) {
+      this.mdlLoading = true;
+      this.mdlItems = [];
+    } else {
+      this.folderLoading = true;
+      this.wrkspcItems = [];
+    }
+    this.getAllDataWrkspc(item);
     // this.dispFolder ? this.dispFolder.entityType === 2 ? this.getContentSmtFldr() : this.getAllDataWrkspc() : this.getAllDataWrkspc();
   }
 
   // get folder and smart folder from wrkspace; content from workpspace and folder
-  getAllDataWrkspc(wid?: number) {
+  getAllDataWrkspc(item?: any) {
     let params = {
-      workspaceId: wid ? wid : this.selWrkspc!.id,
-      isActive: wid ? true : this.isActiveFldrs,
-      parentId: this.dispFolder ? this.dispFolder!.id : undefined,
+      workspaceId: item ? item.workspaceId ? item.workspaceId : item.id : this.selWrkspc!.id,
+      isActive: item ? true : this.isActiveFldrs,
+      parentId: item ? item.workspaceId ? item.id : undefined : this.dispFolder ? this.dispFolder!.id : undefined,
     };
     this.cwServ.getAllDataWrkspc(params).subscribe((data: any) => {
       if (data && Array.isArray(data.result) && data.result.length > 0) {
-        if (wid) {
+        if (item) {
           for (let i = 0; i < data.result.length; i++) {
             data.result[i].entityType !== 3 ? this.mdlItems.push(data.result[i]) : undefined;
           }
@@ -238,9 +260,9 @@ export class ContentWorkspaceComponent implements OnInit {
           this.wrkspcItems = data.result;
         }
       }
-      wid ? this.mdlLoading = false : this.folderLoading = false;
+      item ? this.mdlLoading = false : this.folderLoading = false;
     }, (err: any) => {
-      wid ? this.mdlLoading = false : this.folderLoading = false;
+      item ? this.mdlLoading = false : this.folderLoading = false;
     });
   }
 
@@ -474,10 +496,11 @@ export class ContentWorkspaceComponent implements OnInit {
         ...this.folderForm.value,
         id: this.selFolder!.id,
         folderIcon: this.custIcon,
-        workspaceId: this.selFolder!.workspaceId,
-        folderId: this.selFolder!.folderId,
+        workspaceId: this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId,
+        folderId: this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId,
         isActive: this.selFolder!.isActive
       };
+      // console.log(folderData);
       this.cwServ.updFolder(folderData).subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Folder added successfully', 'Success!');
@@ -794,7 +817,7 @@ export class ContentWorkspaceComponent implements OnInit {
     let d: any = {
       contentId: event.previousContainer.data[event.previousIndex].id,
       workspaceId: this.selWrkspc!.id,
-      sequenceNumber: event.currentIndex+1,
+      sequenceNumber: event.currentIndex + 1,
       folderId: this.dispFolder ? this.dispFolder!.entityId : null
     }
     this.cwServ.addCntntToWrkspcFldr(d).subscribe((data: any) => {
