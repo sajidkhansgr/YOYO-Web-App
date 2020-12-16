@@ -355,7 +355,7 @@ export class FileComponent implements OnInit {
   uplCntnt($event: any){
     if ($event.target && $event.target.files){
       let data = {
-        content: $event.target.files[0]
+        content: $event.target.files
       }
       this.addCntnt(data, 'Content');
     }
