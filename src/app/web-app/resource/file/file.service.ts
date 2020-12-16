@@ -17,9 +17,13 @@ export class FileService {
     const formData: FormData = new FormData();
     for (let key in data) {
       if (data[key] || key === 'IsUrl') {
-        if (key === 'folderIcon' || key === 'content' || key === 'urlIcon' && data[key] && data[key].name) {
-          formData.append(key, data[key], data[key].name);
-        } else {
+        if (key === 'mulFile') {
+          if (data[key] && data[key].length > 0) {
+            for (let k = 0; k < data[key].length; k++) {
+              formData.append('Contents', data[key][k], data[key][k].name);
+            }
+          }
+        }else{
           formData.append(key, data[key]);
         }
       }
