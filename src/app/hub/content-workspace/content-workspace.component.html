@@ -1331,11 +1331,26 @@
         </div>
       </div>
       <div class="location px-2" id="locationFolder" [ngbCollapse]="locationCollapsed" *ngIf="edit">
-        <app-loader [type]="'btn'" *ngIf="mdlLoading"></app-loader>
-        <div *ngIf="!mdlLoading">
-          <div class="dark-bg-hover rounded p-2" *ngFor="let item of mdlItems">
-            <div class="btn" (click)="listFolders(item.id)"><i class="fa fa-angle-right mr-3"></i></div>
-            {{item.name}}
+        <nav aria-label="breadcrumb" *ngIf="mdlNav.length>0">
+          <ol class="breadcrumb bg-white mb-0 p-0 ml-3">
+            <li class="curs-ptr text-primary mr-2" (click)="backFolder(true)">
+              <i class="fa fa-arrow-left align-self-center"></i>
+            </li>
+            <li class="breadcrumb-item" *ngFor="let nav of mdlNav">{{nav.name}}</li>
+          </ol>
+        </nav>
+        <div class="scrollMe">
+          <app-loader [type]="'page'" *ngIf="mdlLoading"></app-loader>
+          <div *ngIf="!mdlLoading && mdlItems.length > 0">
+            <div class="rounded d-flex m-2"
+              [ngClass]="{'bg-light border-left border-primary': mdlSelected && (item.entityId ? (mdlSelected.entityId == item.entityId) && (mdlSelected.entityType == item.entityType) : mdlSelected.id == item.id)}"
+              *ngFor="let item of mdlItems">
+              <div class="btn btn-light mr-2" (click)="mdlListFolders(item)"><i class="fa fa-angle-right"></i></div>
+              <div class="align-self-center curs-ptr w-100 py-2" (click)="mdlSelected = item;">{{item.name}}</div>
+            </div>
+          </div>
+          <div class="text-secondary text-center mt-5" *ngIf="!mdlLoading && mdlItems.length == 0">
+            No Folder Found
           </div>
         </div>
       </div>
