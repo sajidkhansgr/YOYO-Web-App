@@ -526,31 +526,59 @@ mat-checkbox {
 .login-ui {
   min-height: 100vh;
 
-  .carousel-inner {
-    .carousel-item {
-      img {
-        height: 100vh;
+  .carousel {
+    position: relative;
+
+    .text {
+      position: absolute;
+      top: 35%;
+      left: 0;
+    }
+
+    .carousel-inner {
+      .img-1 {
+        background: url('assets/images/carousel-1.jpg');
       }
 
-      .carousel-caption {
-        left: 0;
-        bottom: 30%;
+      .img-2 {
+        background: url('assets/images/carousel-2.jpg');
+      }
 
-        .num {
-          width: 120px;
-          position: relative;
-        }
+      .img-3 {
+        background: url('assets/images/carousel-3.jpg');
+      }
 
-        .num:before {
-          position: absolute;
-          content: '';
-          top: 0;
+      .img-4 {
+        background: url('assets/images/carousel-4.jpg');
+      }
+
+      .carousel-item {
+        height: 100vh;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        filter: brightness(0.6);
+
+        .carousel-caption {
           left: 0;
-          border-bottom: 48px solid $primary;
-          border-right: 25px solid transparent;
-          height: 0;
-          width: 100%;
-          z-index: -1;
+          bottom: 70%;
+
+          .num {
+            width: 120px;
+            position: relative;
+          }
+
+          .num:before {
+            position: absolute;
+            content: '';
+            top: 0;
+            left: 0;
+            border-bottom: 48px solid $primary;
+            border-right: 25px solid transparent;
+            height: 0;
+            width: 100%;
+            z-index: -1;
+          }
         }
       }
     }
