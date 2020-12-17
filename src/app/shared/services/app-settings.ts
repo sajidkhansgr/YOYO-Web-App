@@ -244,4 +244,6 @@ export class AppSettings {
   public static ADD_SHARE = `api/Share/Add`;
 
   public static DEL_SHARE = `api/Share/Delete`;
+
+  public static GET_SHARE_LNK = `api/Share/GetContentByIdentifier`;
 }
