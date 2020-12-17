@@ -34,6 +34,7 @@ const appRoutes: Routes = [
   { path: 'reports', loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule), canActivate: [AuthGuard] },
   { path: 'account', loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule), canActivate: [AuthGuard] },
   { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule), canActivate: [AuthGuard] },
+  { path: 'share-link/:id', loadChildren: () => import('./share-link/share-link.module').then(m => m.ShareLinkModule), canActivate: [AuthGuard] },
   { path: 'web-app', loadChildren: () => import('./web-app/web-app.module').then(m => m.WebAppModule), canActivate: [AuthGuard] },
 
   { path: 'test', loadChildren: () => import('./test/test.module').then(m => m.TestModule), canActivate: [AuthGuard] },
