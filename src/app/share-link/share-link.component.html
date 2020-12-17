@@ -1,1 +1,63 @@
-<p>share-link works!</p>
+<app-loader [type]="'page'" *ngIf="loading"></app-loader>
+<div *ngIf="!loading">
+  <ng-container *ngIf="lnkData.length>0 else noData">
+    <div class="heading bg-white w-100 mx-0 p-2">
+      <div class="float-right d-flex">
+        <div class="btn" ngbTooltip="View in Full Screen">About</div>
+        <div class="btn" ngbTooltip="View in Full Screen">Share</div>
+      </div>
+    </div>
+    <div class="pdf-view d-flex mx-0">
+      <div class="left-body bg-white text-center">
+        <div class="d-flex my-3 pl-3" *ngFor="let lD of lnkData;let i=index">
+          <div class="curs-ptr" (click)="scroll('c-'+lD.contentId+i)">
+            <div class="thumbnail" [ngSwitch]="lD.contentType">
+              <div *ngSwitchCase="2">
+                <img [src]="lD.contentPath?lD.contentPath:defIcon" alt="Image" />
+              </div>
+              <div *ngSwitchCase="3">
+                <img [src]="lD.contentPath?lD.contentPath:defIcon" alt="Image" />
+              </div>
+              <div *ngSwitchDefault>
+                <img [src]="defIcon" alt="Image" />
+              </div>
+            </div>
+            <div class="name py-1 px-2 mx-auto mt-1 rounded w-fit">{{lD.contentName}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="main-body overflow-auto w-100">
+        <div class="d-flex my-3 pl-3" [id]="'c-'+lD.contentId+i" *ngFor="let lD of lnkData;let i=index">
+          <div [ngSwitch]="lD.contentType">
+            <div class="h-100" *ngSwitchCase="1">
+              <pdf-viewer *ngIf="lD.contentPath" [src]="lD.contentPath" [original-size]="false"></pdf-viewer>
+              <!-- <iframe *ngIf="lD.contentPath"
+                [src]="lD.contentPath"
+                frameBorder="0"
+                scrolling="auto"
+                height="100%"
+                width="100%" ></iframe> -->
+            </div>
+            <div class="img text-center mt-5 mx-3" *ngSwitchCase="2">
+              <img [src]="lD.contentPath?lD.contentPath:defIcon" alt="Image" />
+            </div>
+            <div class="img text-center mt-5 mx-3" *ngSwitchCase="3">
+              <div>Url : {{lD.url||'N/A'}}</div>
+              <img [src]="lD.urlIconPath?lD.urlIconPath:defIcon" alt="Url Icon" />
+            </div>
+            <div class="h-100 text-center mt-5" *ngSwitchCase="4">
+              <video *ngIf="lD.contentPath" controls controlsList="nodownload" width="720" height="400">
+                <source [src]="lD.contentPath">
+                Your browser does not support the video player.
+              </video>
+            </div>
+            <div *ngSwitchDefault>Not a valid content</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noData>
+    <div class="text-center mt-5">No data found in the share item</div>
+  </ng-template>
+</div>
