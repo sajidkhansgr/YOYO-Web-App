@@ -31,12 +31,6 @@
           <div [ngSwitch]="lD.contentType">
             <div class="h-100" *ngSwitchCase="1">
               <pdf-viewer *ngIf="lD.contentPath" [src]="lD.contentPath" [original-size]="false"></pdf-viewer>
-              <!-- <iframe *ngIf="lD.contentPath"
-                [src]="lD.contentPath"
-                frameBorder="0"
-                scrolling="auto"
-                height="100%"
-                width="100%" ></iframe> -->
             </div>
             <div class="img text-center mt-5 mx-3" *ngSwitchCase="2">
               <img [src]="lD.contentPath?lD.contentPath:defIcon" alt="Image" />
