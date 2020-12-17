@@ -14,6 +14,7 @@ import { ShareMailComponent } from '../../../shared/components/share-mail/share-
 import { GetLinkComponent } from '../../../shared/components/get-link/get-link.component';
 import { AddToCollComponent } from '../../../shared/components/add-to-coll/add-to-coll.component';
 import { FileHelper } from '../../../shared/file-helper';
+import { FILE_EXT } from '../../../shared/constants';
 
 @Component({
   selector: 'app-file',
@@ -34,7 +35,7 @@ export class FileComponent implements OnInit {
   fldrid!: string;
   selData!: any[]; //checkboxes
   urlForm!: FormGroup;urlDisb!: boolean;
-  cols:any=[];navg!: any;
+  cols:any=[];navg!: any;fileExt = FILE_EXT;
   getIntervalId: any;procFiles:any[]=[];isClose: boolean=false;showProcDetail: boolean = true;
 
   constructor(
@@ -51,6 +52,7 @@ export class FileComponent implements OnInit {
 
   ngOnInit(): void {
     this.processingData();
+    // this.fileExt.toString();
     this.getIntervalId = setInterval(() => {
       this.processingData();
     }, 13000) //13 seconds
@@ -59,7 +61,6 @@ export class FileComponent implements OnInit {
       this.initialiseState(); // reset and set based on new parameter this time
       this.getFiles();
     });
-
   }
 
   initialiseState() {
@@ -351,13 +352,29 @@ export class FileComponent implements OnInit {
   uploadBtn = (uf: any) => {
     uf?.click();
   }
-
+  //"Only .jpeg, .png, .jpg ,.mp4, .xls, .xlsx, .ppt, .pptx, .doc, .docx and .pdf files are allowed."
   uplCntnt($event: any){
     if ($event.target && $event.target.files){
-      let data = {
-        mulFile: $event.target.files
+      let mulFile = $event.target.files;
+      let size=0;
+      for(let k=0;k<mulFile.length;k++){
+        if(this.fileExt.filter(ext => mulFile[k].name.includes(ext)).length<=0){
+          this.toastr.error("Not valid file, please try with other file", "File Type Error");
+          return;
+        }
+        size += mulFile[k].size;
       }
-      this.addCntnt(data, 'Content');
+      if(FileHelper.bytestoOther(size,'gb')<1){
+        this.addCntnt({mulFile}, 'Content');
+        return;
+      }else{
+        this.toastr.error("Size should be less than 1 GB", "File Size Error");
+        return;
+      }
+      // let d = {
+      //   mulFile: $event.target.files
+      // }
+      // this.addCntnt({mulFile}, 'Content');
     }
   }
 
@@ -373,7 +390,7 @@ export class FileComponent implements OnInit {
   }
 
   addCntnt(cntntData: any, type: string){
-    cntntData.folderId= this.fldrid ? parseInt(this.fldrid) : null
+    cntntData.folderId= this.fldrid ? parseInt(this.fldrid) : null;
     this.fileServ.addMyCntnt(cntntData)
       .subscribe((data: any) => {
         if (data) {

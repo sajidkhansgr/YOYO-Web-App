@@ -35,6 +35,7 @@ enum FILE_TYPES {
   "Document" = 1, "Photo", "URL", "Video"
 }
 
+const FILE_EXT = [".jpeg",".png", ".jpg",".mp4", ".xls", ".xlsx", ".ppt", ".pptx", ".doc", ".docx", ".pdf" ]
 // const  FILE_TYPES = [{ id: 1, name: "Document" }, { id: 2, name: "Photo" }, { id: 3, name: "URL" }, { id: 4, name: "Video" }]
 
-export { LMT_PAGE, DEF_IMG, DEF_ICON, TIME, GRP_TYPE, ROLES, EMP_STATUS, ANCMT_STATUS, LNGS, FILE_TYPES, FLDR_ICON };
+export { LMT_PAGE, DEF_IMG, DEF_ICON, TIME, GRP_TYPE, ROLES, EMP_STATUS, ANCMT_STATUS, LNGS, FILE_TYPES, FLDR_ICON, FILE_EXT };
