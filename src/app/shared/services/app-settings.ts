@@ -97,6 +97,8 @@ export class AppSettings {
 
   public static UPD_FLDR_EMPL = `api/Folder/UpdateFolderByEmployee`;
 
+  public static DUPL_FLDR = `api/Folder/Duplicate`;
+
   // ---- SMART FOLDER ---- //
 
   public static LIST_SMT_FLDR_WRKSPC = `api/SmartFolder/GetAllByWorkspace`;

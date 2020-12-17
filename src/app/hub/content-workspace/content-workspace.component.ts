@@ -76,7 +76,7 @@ export class ContentWorkspaceComponent implements OnInit {
   getIntervalId: any; procCnt: number = 0;
 
   mdlItems!: any[]; mdlLoading!: boolean; mdlNav!: any[]; mdlSelected: any;
-  hasIcon!: boolean;fileExt = FILE_EXT;
+  hasIcon!: boolean; fileExt = FILE_EXT;
 
   constructor(
     private modalService: NgbModal,
@@ -229,7 +229,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.listFolders()
   }
 
-  // show sub content in modal (edit folder)
+  // show sub folders in modal (edit folder)
   mdlListFolders(item: any) {
     this.mdlNav.push(item);
     this.listFolders(item);
@@ -259,7 +259,7 @@ export class ContentWorkspaceComponent implements OnInit {
       if (data && Array.isArray(data.result) && data.result.length > 0) {
         if (item) {
           for (let i = 0; i < data.result.length; i++) {
-            data.result[i].entityType !== 3 ? this.mdlItems.push(data.result[i]) : undefined;
+            data.result[i].entityType === 1 ? this.mdlItems.push(data.result[i]) : undefined;
           }
         } else {
           this.wrkspcItems = data.result;
@@ -413,8 +413,6 @@ export class ContentWorkspaceComponent implements OnInit {
         folderData.folderId = this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0;
       }
       folderData.tagIds = this.fldrTgs();
-      // console.log(folderData);
-      // console.log(this.mdlSelected);
       this.cwServ.addDuplSmartFolder(folderData, this.edit)
         .subscribe((data: any) => {
           if (data) {
@@ -479,7 +477,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // ---- folder ---- //
   folderSubmit() {
-    this.edit ? this.updFolder() : this.addFolder();
+    this.edit ? this.updFolder() : this.addDuplFolder();
   }
 
   // activate/deactivate folder
@@ -533,18 +531,27 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  // add folder
-  addFolder() {
+  // add/duplicate folder
+  addDuplFolder() {
     if (this.folderForm.valid) {
       this.disabled = true;
       let folderData: any = {
         ...this.folderForm.value,
         folderIcon: this.custIcon,
-        workspaceId: this.selWrkspc!.id,
-        folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : null,
         isActive: true
-      };
-      this.cwServ.addFolder(folderData)
+      }
+      if (this.edit === undefined) {
+        folderData.parentFolderIdForDuplicateFolder = this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId;
+        folderData.workspaceIdForDuplicateFolder = this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId;
+        folderData.originalFolderId = this.selFolder!.id;
+        folderData.originalWorkspaceId = this.selFolder!.workspaceId;
+        folderData.hasIcon = this.hasIcon;
+      } else {
+        folderData.workspaceId = this.selWrkspc!.id;
+        folderData.folderId = this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0;
+      }
+      console.log(folderData);
+      this.cwServ.addDuplFolder(folderData, this.edit)
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || 'Folder added successfully', 'Success!');
@@ -1021,7 +1028,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   openModal(content: any, modalType: string = '') {
     this.files = []
-    if (modalType=='uplFile' || modalType == 'addUrl') {
+    if (modalType == 'uplFile' || modalType == 'addUrl') {
       this.getTags();
     }
     this.verForm.reset(); this.urlForm.reset(); this.cntntForm.reset();
@@ -1030,8 +1037,6 @@ export class ContentWorkspaceComponent implements OnInit {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
       }, (reason) => {
-        this.iconUrl = '';
-        this.addURLIcon = '';
         this.addWrkspcForm.reset();
         this.updWrkspcForm.reset();
         this.folderForm.reset();
@@ -1499,13 +1504,16 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   dismissModal() {
+    this.addURLIcon = '';
+    this.iconUrl = undefined;
+    this.custIcon = undefined;
     if (this.modalService)
       this.modalService.dismissAll();
   }
 
   // on file drop handler
   onFileDropped($event: any, isIcon: boolean = false, type: string = '') {
-    if (!isIcon){
+    if (!isIcon) {
       this.newVersDef(type);
       this.prepareFilesList($event);
     }
@@ -1516,7 +1524,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // handle file from browsing
   fileBrowseHandler($event: any, isIcon: boolean = false, type: string = '') {
-    if ($event.target && $event.target.files && !isIcon){
+    if ($event.target && $event.target.files && !isIcon) {
       this.newVersDef(type);
       this.prepareFilesList($event.target.files);
     }
@@ -1526,8 +1534,8 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  newVersDef(type: string){
-    if(type==='newVer'){
+  newVersDef(type: string) {
+    if (type === 'newVer') {
       this.files = [];
     }
   }
@@ -1559,14 +1567,14 @@ export class ContentWorkspaceComponent implements OnInit {
         return;
       } else {
         const progressInterval = setInterval(() => {
-          if(this.files && this.files[index]){
+          if (this.files && this.files[index]) {
             if (this.files[index].progress === 100) {
               clearInterval(progressInterval);
               this.uploadFilesSimulator(index + 1);
             } else {
               this.files[index].progress += 50;
             }
-          }else{
+          } else {
             clearInterval(progressInterval);
           }
         }, 100);
@@ -1577,15 +1585,15 @@ export class ContentWorkspaceComponent implements OnInit {
   /** * Convert Files list to normal array list */
   prepareFilesList(files: Array<any>) {
     for (const item of files) {
-      if(this.fileExt.filter(ext => item.name.includes(ext)).length<=0){
+      if (this.fileExt.filter(ext => item.name.includes(ext)).length <= 0) {
         this.toastr.error("Not valid file, please try with other file", "File Type Error");
         return;
       }
-      if(FileHelper.bytestoOther(item.size,'gb')<1){
+      if (FileHelper.bytestoOther(item.size, 'gb') < 1) {
         item.progress = 0;
         item.t = 0;
         this.files.push(item);
-      }else{
+      } else {
         this.toastr.error("Size should be less than 1 GB", "File Size Error");
         return;
       }

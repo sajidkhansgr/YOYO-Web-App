@@ -1215,7 +1215,7 @@
   </form>
 </ng-template>
 
-<!-- add/edit folder modal  -->
+<!-- add/edit/duplicate folder modal  -->
 <ng-template #folderModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{edit ? 'Edit' : edit == undefined ? 'Duplicate' : 'Add'}} Folder
@@ -1344,7 +1344,7 @@
           <app-loader [type]="'page'" *ngIf="mdlLoading"></app-loader>
           <div *ngIf="!mdlLoading && mdlItems.length > 0">
             <div class="rounded d-flex m-2"
-              [ngClass]="{'bg-light border-left border-primary': mdlSelected && (item.entityId ? (mdlSelected.entityId == item.entityId) && (mdlSelected.entityType == item.entityType) : mdlSelected.id == item.id)}"
+              [ngClass]="{'bg-light border-left border-primary': mdlSelected && (item.entityId || mdlSelected.entityId ? mdlSelected.entityId == item.entityId : mdlSelected.id == item.id)}"
               *ngFor="let item of mdlItems">
               <div class="btn btn-light mr-2" (click)="mdlListFolders(item)"><i class="fa fa-angle-right"></i></div>
               <div class="align-self-center curs-ptr w-100 py-2" (click)="mdlSelected = item;">{{item.name}}</div>
@@ -1366,7 +1366,7 @@
   </form>
 </ng-template>
 
-<!-- add/edit smart folder modal  -->
+<!-- add/edit/duplicate smart folder modal  -->
 <ng-template #smartFolderModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{edit ? 'Edit' : edit == undefined ? 'Duplicate' : 'Add'}} Smart Folder</h4>
@@ -1599,7 +1599,7 @@
           <app-loader [type]="'page'" *ngIf="mdlLoading"></app-loader>
           <div *ngIf="!mdlLoading && mdlItems.length > 0">
             <div class="rounded d-flex m-2"
-              [ngClass]="{'bg-light border-left border-primary': mdlSelected && (item.entityId ? (mdlSelected.entityId == item.entityId) && (mdlSelected.entityType == item.entityType) : mdlSelected.id == item.id)}"
+              [ngClass]="{'bg-light border-left border-primary': mdlSelected && (item.entityId || mdlSelected.entityId ? mdlSelected.entityId == item.entityId : mdlSelected.id == item.id)}"
               *ngFor="let item of mdlItems">
               <div class="btn btn-light mr-2" (click)="mdlListFolders(item)"><i class="fa fa-angle-right"></i></div>
               <div class="align-self-center curs-ptr w-100 py-2" (click)="mdlSelected = item;">{{item.name}}</div>

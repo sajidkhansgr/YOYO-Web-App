@@ -56,7 +56,6 @@ export class ContentWorkspaceService {
   // add/duplicate smart folder
   addDuplSmartFolder(data: any, edit?: boolean) {
     let url = edit === undefined ? AppSettings.DUPL_SMT_FLDR : AppSettings.ADD_SMT_FLDR;
-    console.log(url);
     return this.http.post(`${url}`, this.freezeFolderObj(data));
   }
 
@@ -78,9 +77,10 @@ export class ContentWorkspaceService {
     return this.http.put(`${AppSettings.UPD_FLDR}`, this.freezeFolderObj(data));
   }
 
-  // add folder
-  addFolder(data: any) {
-    return this.http.post(`${AppSettings.ADD_FLDR}`, this.freezeFolderObj(data));
+  // add/duplicate folder
+  addDuplFolder(data: any, edit?: boolean) {
+    let url = edit === undefined ? AppSettings.DUPL_FLDR : AppSettings.ADD_FLDR;
+    return this.http.post(`${url}`, this.freezeFolderObj(data));
   }
 
   // get folder by id
