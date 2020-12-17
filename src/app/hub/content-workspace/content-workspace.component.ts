@@ -1,13 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Subscription, Subject, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap, map } from 'rxjs/operators';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, copyArrayItem } from '@angular/cdk/drag-drop';
 
-import { DEF_ICON, DEF_IMG, FILE_TYPES, FLDR_ICON } from '../../shared/constants';
+import { DEF_ICON, FILE_TYPES, FLDR_ICON, FILE_EXT } from '../../shared/constants';
 import { EnumHelper } from '../../shared/enum-helper';
 import { FileHelper } from '../../shared/file-helper';
 import { Workspace } from '../../shared/models/workspace';
@@ -76,7 +76,7 @@ export class ContentWorkspaceComponent implements OnInit {
   getIntervalId: any; procCnt: number = 0;
 
   mdlItems!: any[]; mdlLoading!: boolean; mdlNav!: any[]; mdlSelected: any;
-  hasIcon!: boolean;
+  hasIcon!: boolean;fileExt = FILE_EXT;
 
   constructor(
     private modalService: NgbModal,
@@ -1019,8 +1019,9 @@ export class ContentWorkspaceComponent implements OnInit {
     this.urlForm.updateValueAndValidity();
   }
 
-  openModal(content: any, isTagReq: boolean = false) {
-    if (isTagReq) {
+  openModal(content: any, modalType: string = '') {
+    this.files = []
+    if (modalType=='uplFile' || modalType == 'addUrl') {
       this.getTags();
     }
     this.verForm.reset(); this.urlForm.reset(); this.cntntForm.reset();
@@ -1504,8 +1505,10 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // on file drop handler
   onFileDropped($event: any, isIcon: boolean = false, type: string = '') {
-    if (!isIcon)
-      this.prepareFilesList($event, isIcon);
+    if (!isIcon){
+      this.newVersDef(type);
+      this.prepareFilesList($event);
+    }
     else {
       this.renderImg($event[0], type);
     }
@@ -1513,11 +1516,19 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // handle file from browsing
   fileBrowseHandler($event: any, isIcon: boolean = false, type: string = '') {
-    if ($event.target && $event.target.files)
-      this.prepareFilesList($event.target.files, isIcon);
+    if ($event.target && $event.target.files && !isIcon){
+      this.newVersDef(type);
+      this.prepareFilesList($event.target.files);
+    }
     let input = $event.target;
     if (input.files && input.files && isIcon) {
       this.renderImg(input.files[0], type);
+    }
+  }
+
+  newVersDef(type: string){
+    if(type==='newVer'){
+      this.files = [];
     }
   }
 
@@ -1536,10 +1547,7 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  /**
-   * Delete file from files list
-   * @param index (File index)
-   */
+  /** * Delete file from files list  */
   deleteFile(index: number) {
     this.files.splice(index, 1);
   }
@@ -1551,30 +1559,38 @@ export class ContentWorkspaceComponent implements OnInit {
         return;
       } else {
         const progressInterval = setInterval(() => {
-          if (this.files[index].progress === 100) {
+          if(this.files && this.files[index]){
+            if (this.files[index].progress === 100) {
+              clearInterval(progressInterval);
+              this.uploadFilesSimulator(index + 1);
+            } else {
+              this.files[index].progress += 50;
+            }
+          }else{
             clearInterval(progressInterval);
-            this.uploadFilesSimulator(index + 1);
-          } else {
-            this.files[index].progress += 50;
           }
         }, 100);
       }
     }, 300);
   }
 
-  /**
-   * Convert Files list to normal array list
-   * @param files (Files List)
-   */
-  prepareFilesList(files: Array<any>, isIcon: boolean) {
-    if (!isIcon) {
-      for (const item of files) {
+  /** * Convert Files list to normal array list */
+  prepareFilesList(files: Array<any>) {
+    for (const item of files) {
+      if(this.fileExt.filter(ext => item.name.includes(ext)).length<=0){
+        this.toastr.error("Not valid file, please try with other file", "File Type Error");
+        return;
+      }
+      if(FileHelper.bytestoOther(item.size,'gb')<1){
         item.progress = 0;
         item.t = 0;
         this.files.push(item);
+      }else{
+        this.toastr.error("Size should be less than 1 GB", "File Size Error");
+        return;
       }
-      this.uploadFilesSimulator(0);
     }
+    this.uploadFilesSimulator(0);
   }
 
   getSize(bytes: any) {

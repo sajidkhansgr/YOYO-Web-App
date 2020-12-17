@@ -6,11 +6,11 @@
         Add Content
       </button>
       <div class="dropdown-menu" aria-labelledby="addContentDD">
-        <a class="dropdown-item curs-ptr" (click)="openModal(uploadFile, true)">
+        <a class="dropdown-item curs-ptr" (click)="openModal(uploadFile, 'uplFile')">
           <i class="fas fa-file-alt mr-1"></i>
           Upload Files
         </a>
-        <a class="dropdown-item curs-ptr" (click)="openModal(addUrl, true)">
+        <a class="dropdown-item curs-ptr" (click)="openModal(addUrl, 'addUrl')">
           <i class="fas fa-link mr-1"></i>
           Add a URL
         </a>
@@ -78,7 +78,7 @@
                 <i class="fas fa-ellipsis-h"></i>
               </button>
               <div class="dropdown-menu" aria-labelledby="optDD">
-                <a class="dropdown-item curs-ptr" (click)="openModal(uplNewVer)">
+                <a class="dropdown-item curs-ptr" (click)="openModal(uplNewVer, 'newVer')">
                   <i class="fas fa-upload mr-1"></i>Upload new version
                 </a>
                 <a class="dropdown-item curs-ptr" *ngIf="rowInfo.contentPath" (click)="downloadFile()">
@@ -1018,7 +1018,7 @@
     <form name="cntntForm" (ngSubmit)="onCntntSubmit()" [formGroup]="cntntForm" novalidate>
       <div class="modal-body" ngbAutofocus>
         <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event)">
-          <input type="file" multiple (change)="fileBrowseHandler($event)">
+          <input type="file" multiple (change)="fileBrowseHandler($event)" accept="{{fileExt.toString()}}">
           <input type="hidden" formControlName="img" /> <!-- Validation Field -->
           <div class="text-center my-5">
             <h2><i class="fa fa-upload"></i></h2>
@@ -1785,8 +1785,8 @@
         <i class="fas fa-exclamation-triangle mr-2"></i>If this file is used in Collections and Shares, it will be
         updated automatically in all those places.
       </div>
-      <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event)">
-        <input type="file" multiple (change)="fileBrowseHandler($event)">
+      <div class="custom-file-select" appFileDnd (fileDropped)="onFileDropped($event,false,'newVer')">
+        <input type="file" (change)="fileBrowseHandler($event,false,'newVer')" accept="{{fileExt.toString()}}">
         <input type="hidden" />
         <div class="text-center my-5">
           <h2><i class="fa fa-upload"></i></h2>
@@ -1796,13 +1796,13 @@
         </div>
       </div>
       <div class="files-list">
-        <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
+        <div class="single-file mt-3 row mx-0 p-2" *ngFor="let f of files; let i = index">
           <div class="info mx-auto">
             <h6 class="name mb-0 text-wrap">
-              {{ file?.name }}
+              {{ f?.name }}
             </h6>
             <p class="size mb-0">
-              {{ getSize(file?.size) }}
+              {{ getSize(f?.size) }}
             </p>
             <app-file-progess [progress]="file?.progress"></app-file-progess>
           </div>
@@ -1824,7 +1824,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary mr-2">Cancel</button>
+      <button class="btn btn-secondary mr-2" (click)="modal.dismiss('Cross click')">Cancel</button>
       <button class="btn btn-primary" [disabled]="files.length<=0 || verDisb">
         <app-loader [type]="'btn'" *ngIf="verDisb"></app-loader>
         Save

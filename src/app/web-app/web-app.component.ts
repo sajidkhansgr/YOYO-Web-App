@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { Location } from '@angular/common';
 import { TokenDataService } from '../shared/services/token-data.service';
 
 @Component({
@@ -16,7 +15,7 @@ export class WebAppComponent implements OnInit {
   usrInfo: any | null;
   excUrls = ['view'];
   constructor(
-    private router: Router,
+    private loc: Location,
     private tokenDataServ: TokenDataService
   ) { }
 
@@ -30,7 +29,7 @@ export class WebAppComponent implements OnInit {
   }
 
   isViewPage(): boolean {
-    return (this.excUrls.filter(sUrl => this.router.url.indexOf(sUrl)!== -1).length>0)?true:false;
+    return (this.excUrls.filter(sUrl => this.loc.path().indexOf(sUrl)!== -1).length>0)?true:false;
   }
 
 }
