@@ -53,9 +53,11 @@ export class ContentWorkspaceService {
     return this.http.put(`${AppSettings.UPD_SMT_FLDR}`, this.freezeFolderObj(data));
   }
 
-  // add smart folder
-  addSmartFolder(data: any) {
-    return this.http.post(`${AppSettings.ADD_SMT_FLDR}`, this.freezeFolderObj(data));
+  // add/duplicate smart folder
+  addDuplSmartFolder(data: any, edit?: boolean) {
+    let url = edit === undefined ? AppSettings.DUPL_SMT_FLDR : AppSettings.ADD_SMT_FLDR;
+    console.log(url);
+    return this.http.post(`${url}`, this.freezeFolderObj(data));
   }
 
 

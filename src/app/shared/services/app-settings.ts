@@ -111,6 +111,8 @@ export class AppSettings {
 
   public static ACT_SMT_FLDR = `api/SmartFolder/Activate`;
 
+  public static DUPL_SMT_FLDR = `api/SmartFolder/Duplicate`;
+
   // ---- CATEGORY ---- //
 
   public static LIST_CATG = `api/Category/GetAll`;

@@ -53,8 +53,8 @@ export class ContentWorkspaceComponent implements OnInit {
   private subscription!: Subscription;
   selectable = true; removable: boolean = true;
   urlDisb!: boolean;
-  cntntDisb!: boolean; cntntLoading!: boolean;activeIndex: number = 0;
-  procUpld!:boolean; procUpldData!:any; procUpldLoad!: boolean;
+  cntntDisb!: boolean; cntntLoading!: boolean; activeIndex: number = 0;
+  procUpld!: boolean; procUpldData!: any; procUpldLoad!: boolean;
 
   pageNo!: number; pageSize!: number; @Input() lmtPage: any;
   showRowInfo!: boolean; rowInfo!: any; docLoading!: boolean;
@@ -76,6 +76,7 @@ export class ContentWorkspaceComponent implements OnInit {
   getIntervalId: any; procCnt: number = 0;
 
   mdlItems!: any[]; mdlLoading!: boolean; mdlNav!: any[]; mdlSelected: any;
+  hasIcon!: boolean;
 
   constructor(
     private modalService: NgbModal,
@@ -186,10 +187,11 @@ export class ContentWorkspaceComponent implements OnInit {
     this.allTags = []; this.anyTags = []; this.noneTags = [];
     this.setFltrEmpty();
     this.mdlItems = []; this.mdlLoading = true; this.mdlNav = []; this.mdlSelected = undefined;
+    this.hasIcon = true;
   }
 
-  procUplDef(){
-    this.procUpld = false;this.procUpldData = [];this.procUpldLoad = false;
+  procUplDef() {
+    this.procUpld = false; this.procUpldData = []; this.procUpldLoad = false;
   }
 
   // ---- folder and smart folder ---- //
@@ -197,6 +199,7 @@ export class ContentWorkspaceComponent implements OnInit {
   remImg() {
     this.iconUrl = '';
     this.custIcon = undefined;
+    this.hasIcon = false;
   }
 
   // change displayed folders and smart folders (isActive)
@@ -231,11 +234,6 @@ export class ContentWorkspaceComponent implements OnInit {
     this.mdlNav.push(item);
     this.listFolders(item);
   }
-
-  // // select folder in modal (edit folder)
-  // selectMe(item: any) {
-  //   this.mdlSelected = item;
-  // }
 
   // listing all folders
   listFolders(item?: any) {
@@ -282,22 +280,25 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  // edit folder/smart folder modal
+  // edit/duplicate folder/smart folder modal
   editFolder(modal: any, folder: any) {
+    this.mdlSelected = undefined;
+    this.mdlNav = [];
+    this.locationCollapsed = true;
     if (folder.imagePath) {
       this.addURLIcon = 'cust-icon';
       this.iconUrl = folder.imagePath;
+      this.hasIcon = true;
     }
     if (folder.entityType === 1) {
       this.getFolder(folder.entityId);
     } else if (folder.entityType === 2) {
-      // console.log(folder);
       this.getSmartFolder(folder.entityId);
     }
     this.openModal(modal);
   }
 
-  // folder/smart folder open modal (add/update)
+  // folder/smart folder open modal (add/update/duplicate)
   openFolderModal(modal: any, type: string, folder?: any) {
     if (type == 'add') {
       this.allTags = []; this.anyTags = []; this.noneTags = [];
@@ -333,9 +334,9 @@ export class ContentWorkspaceComponent implements OnInit {
         this.fileTypeArr = this.fileTypeArr.filter((d: any) => d != fT.v);
   }
 
-  // smart folder submit functions (add/update)
+  // smart folder submit functions (add/update/duplicate)
   smartFolderSubmit() {
-    this.edit ? this.updSmartFolder() : this.addSmartFolder();
+    this.edit ? this.updSmartFolder() : this.addDuplSmartFolder();
   }
 
   // activate/deactivate smart folder
@@ -391,26 +392,36 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  // add smart folder
-  addSmartFolder() {
+  // add/duplicate smart folder
+  addDuplSmartFolder() {
     if (this.smartFldrForm.valid) {
       this.disabled = true;
       let folderData: any = {
         ...this.smartFldrForm.value,
         smartFolderIcon: this.custIcon,
-        workspaceId: this.selWrkspc!.id,
-        folderId: this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0,
         isActive: true,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
-      };
+      }
+      if (this.edit === undefined) {
+        folderData.parentFolderIdForDuplicateSmartFolder = this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId;
+        folderData.workspaceIdForDuplicateSmartFolder = this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId;
+        folderData.originalSmartFolderId = this.selFolder!.id;
+        folderData.originalWorkspaceId = this.selFolder!.workspaceId;
+        folderData.hasIcon = this.hasIcon;
+      } else {
+        folderData.workspaceId = this.selWrkspc!.id;
+        folderData.folderId = this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0;
+      }
       folderData.tagIds = this.fldrTgs();
-      this.cwServ.addSmartFolder(folderData)
+      // console.log(folderData);
+      // console.log(this.mdlSelected);
+      this.cwServ.addDuplSmartFolder(folderData, this.edit)
         .subscribe((data: any) => {
           if (data) {
-            this.toastr.success(data.message || 'Smart Folder added successfully', 'Success!');
+            this.toastr.success(data.message || `Smart Folder ${this.edit === undefined ? 'duplicated' : 'added'} successfully`, 'Success!');
             this.listFolders();
           } else {
-            this.toastr.error('Unable to add smart folder', 'Error!');
+            this.toastr.error(`Unable to ${this.edit === undefined ? 'duplicate' : 'add'} smart folder`, 'Error!');
           }
           this.setDefFldr('smartFldrForm');
         }, (err: any) => {
@@ -1012,7 +1023,7 @@ export class ContentWorkspaceComponent implements OnInit {
     if (isTagReq) {
       this.getTags();
     }
-    this.verForm.reset();this.urlForm.reset();this.cntntForm.reset();
+    this.verForm.reset(); this.urlForm.reset(); this.cntntForm.reset();
     // this.cntntDisb = false;
     this.procUplDef();
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
@@ -1188,17 +1199,17 @@ export class ContentWorkspaceComponent implements OnInit {
       // this.files = this.files.map((f: any) => ({ ...f, load: true }));
       this.procUpld = true;
       // setTimeout(()=>{
-        for (let i=0;i<this.files.length;i++) {
-          cntntData.content = this.files[i];
-          const data:any = await this.cwServ.addContentProms(cntntData);
-          if (data && data.result && data.result.id) {
-              this.files[i].id = data.result.id;
-              this.files[i].t = 1;
-          }else{
-            this.files[i].t = 2;
-          }
+      for (let i = 0; i < this.files.length; i++) {
+        cntntData.content = this.files[i];
+        const data: any = await this.cwServ.addContentProms(cntntData);
+        if (data && data.result && data.result.id) {
+          this.files[i].id = data.result.id;
+          this.files[i].t = 1;
+        } else {
+          this.files[i].t = 2;
         }
-        this.cntntDisb = false;
+      }
+      this.cntntDisb = false;
       // },9000)
       // this.cwServ.addContent(cntntData)
       //   .subscribe((data: any) => {
@@ -1219,12 +1230,12 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  changeProcStatus(isStart: boolean){
-    if(this.files.length>0){
+  changeProcStatus(isStart: boolean) {
+    if (this.files.length > 0) {
       this.procUpldLoad = true;
       let contentIds = [];
-      for(let k=0;k<this.files.length;k++){
-        if(this.files[k].id)
+      for (let k = 0; k < this.files.length; k++) {
+        if (this.files[k].id)
           contentIds.push(this.files[k].id)
       }
       this.files.map((f: any) => f.id)
@@ -1238,12 +1249,12 @@ export class ContentWorkspaceComponent implements OnInit {
         }, (err: any) => {
           this.setFilesDef();
         });
-    }else{
+    } else {
       this.setFilesDef();
     }
   }
 
-  setFilesDef(){
+  setFilesDef() {
     this.procUpldLoad = false;
     this.files = [];
     this.cntntDisb = false;
@@ -1464,7 +1475,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   processingCntnt(isCount: boolean) {
-    this.cwServ.processCntnt(this.hubid,isCount)
+    this.cwServ.processCntnt(this.hubid, isCount)
       .subscribe((data: any) => {
         this.isProcCount(isCount, data);
       }, (err: any) => {
@@ -1518,6 +1529,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.iconUrl = event.target.result;
       };
       this.custIcon = file;
+      this.hasIcon = true;
       if (type === 'urlForm')
         this.urlForm.controls['img'].setValue(this.custIcon);
       reader.readAsDataURL(file);
@@ -1558,7 +1570,7 @@ export class ContentWorkspaceComponent implements OnInit {
     if (!isIcon) {
       for (const item of files) {
         item.progress = 0;
-        item.t=0;
+        item.t = 0;
         this.files.push(item);
       }
       this.uploadFilesSimulator(0);
