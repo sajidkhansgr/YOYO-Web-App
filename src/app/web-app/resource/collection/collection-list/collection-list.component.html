@@ -40,7 +40,7 @@
                 <div class="items">{{colctn.contentCount||0}} Item(s)</div>
               </div>
               <div class="float-right">
-                <mat-checkbox (change)="selMe($event.checked, colctn.id)"></mat-checkbox>
+                <mat-checkbox [checked]="colctn.chk" (change)="selMe($event.checked, colctn.id)"></mat-checkbox>
               </div>
             </div>
             <div class="options rounded">
@@ -95,7 +95,7 @@
       <thead>
         <tr>
           <th class="border-top-0">
-            <mat-checkbox></mat-checkbox>
+            <mat-checkbox (change)="selAll($event.checked)"></mat-checkbox>
           </th>
           <th class="border-top-0 curs-ptr" *ngFor="let c of cols, let i = index" (click)="sortChange(c, i)">
             {{c.n}}<i class="fa ml-1"
@@ -107,7 +107,7 @@
       <tbody *ngIf="colctnArr.length > 0 && !loading">
         <tr *ngFor="let colctn of colctnArr">
           <td class="align-middle">
-            <mat-checkbox (change)="selMe($event.checked, colctn.id)"></mat-checkbox>
+            <mat-checkbox [checked]="colctn.chk" (change)="selMe($event.checked, colctn.id)"></mat-checkbox>
           </td>
           <td class="align-middle curs-ptr" (click)="showContent(colctn.id)">
             <div class="d-flex">

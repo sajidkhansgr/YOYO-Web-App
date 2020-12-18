@@ -152,16 +152,29 @@ export class CollectionInnerComponent implements OnInit {
     }
   }
 
+  // clearing selected
   clrSel() {
     this.selCntntArr = [];
+    this.cntntArr = this.cntntArr.map((d: any) => ({ ...d, chk: false }));
+  }
+
+  // selecting all
+  selAll(val: boolean) {
+    if (val) {
+      this.selCntntArr = this.cntntArr;
+      this.cntntArr = this.cntntArr.map((d: any) => ({ ...d, chk: true }));
+    } else {
+      this.clrSel();
+    }
   }
 
   // get content by collection
   getCntntColl() {
-    this.loading = true;this.cntntArr = [];
+    this.loading = true; this.cntntArr = [];
     this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
       if (data && Array.isArray(data.result) && data.result.length > 0) {
-        this.cntntArr = data.result;
+        this.cntntArr = data.result.map((d: any) => ({ ...d, chk: false }));
+        // this.cntntArr = data.result;
       }
       this.loading = false;
     }, (err: any) => {
@@ -184,7 +197,7 @@ export class CollectionInnerComponent implements OnInit {
           if (data) {
             this.toastr.success(`Collection ${actDeac}d successfully`, 'Success!');
             this.getColctn();
-          } else{
+          } else {
             this.toastr.error(`Unable to ${actDeac} collection`, 'Error!');
           }
         }, (err: any) => {
@@ -200,7 +213,7 @@ export class CollectionInnerComponent implements OnInit {
       if (data && data.result && data.result.id) {
         this.selColctn = data.result;
         this.getCntntColl();
-      } else{
+      } else {
         this.router.navigate(['/web-app/resource/collections']);
       }
     }, (err: any) => {

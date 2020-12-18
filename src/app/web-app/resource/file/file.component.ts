@@ -151,10 +151,27 @@ export class FileComponent implements OnInit {
     if (val) {
       this.selData.push({ id: d.id });
     } else {
-      const index = this.selData.findIndex((ele: any) => ele.id == d.id);
-      if (index >= 0) {
-        this.selData.splice(index, 1);
-      }
+      this.selData = this.selData.filter((data: any) => data != d.id);
+    }
+  }
+
+  // clearing selected
+  clrSel() {
+    this.selData = [];
+    this.files = this.files.map((d: any) => ({ ...d, chk: false }));
+    this.folders = this.folders.map((d: any) => ({ ...d, chk: false }));
+    this.allFiles = [...this.folders, ...this.files];
+  }
+
+  // selecting all
+  selAll(val: boolean) {
+    if (val) {
+      this.selData = this.allFiles;
+      this.files = this.files.map((d: any) => ({ ...d, chk: true }));
+      this.folders = this.folders.map((d: any) => ({ ...d, chk: true }));
+      this.allFiles = [...this.folders, ...this.files];
+    } else {
+      this.clrSel();
     }
   }
 
@@ -174,10 +191,6 @@ export class FileComponent implements OnInit {
     })
   }
 
-  clrSel() {
-    this.selData = [];
-  }
-
   getFiles() {
     let params = {
       folderId: this.fldrid || null
@@ -187,13 +200,10 @@ export class FileComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result) {
           if (Array.isArray(data.result.folders)) {
-            for (let i = 0; i < data.result.folders.length; i++) {
-              this.folders.push({ ...data.result.folders[i], isFldr: true });
-            }
-            // this.folders = data.result.folders;
+            this.folders = data.result.folders.map((d: any) => ({ ...d, isFldr: true, chk: false }));
           }
           if (Array.isArray(data.result.contents)) {
-            this.files = data.result.contents;
+            this.files = data.result.contents.map((d: any) => ({ ...d, chk: false }));
           }
         }
         this.allFiles = [...this.folders, ...this.files];

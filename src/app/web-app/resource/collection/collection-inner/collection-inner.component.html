@@ -27,19 +27,23 @@
               <a class="dropdown-item"><i class="fas fa-file-alt mr-1"></i>As separate items</a>
             </div>
           </a>
-          <a class="dropdown-item curs-ptr {{selColctn!.isActive ? 'text-primary' : 'text-success'}}" (click)="actDeactColctn()">
+          <a class="dropdown-item curs-ptr {{selColctn!.isActive ? 'text-primary' : 'text-success'}}"
+            (click)="actDeactColctn()">
             <i class="mr-1 fas fa-toggle-{{selColctn!.isActive ? 'off' : 'on'}}"></i>
             {{selColctn!.isActive ? 'Deactivate' : 'Activate'}}
           </a>
         </div>
       </div>
-      <i class="fa mr-4 curs-ptr align-self-center" *ngIf="cntntArr.length>0" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}" (click)="view = !view;"></i>
+      <i class="fa mr-4 curs-ptr align-self-center" *ngIf="cntntArr.length>0"
+        [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}" (click)="view = !view;"></i>
       <button class="btn btn-primary" (click)="cmnModal('resource')">Add Resource</button>
     </div>
   </h3>
   <ng-container *ngIf="view">
-    <div class="mt-2 row my-files" *ngIf="cntntArr.length>0" cdkDropList id="cntntLists" [cdkDropListData]="cntntArr" (cdkDropListDropped)="drop($event)">
-      <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let cntnt of cntntArr" cdkDrag>
+    <div class="mt-2 row my-files" *ngIf="cntntArr.length>0" cdkDropList id="cntntLists" [cdkDropListData]="cntntArr"
+      (cdkDropListDropped)="drop($event)">
+      <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let cntnt of cntntArr"
+        cdkDrag>
         <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail" style="max-height:180px;max-width:100px"></div>
         <div class="card curs-ptr">
           <div class="card-body">
@@ -48,13 +52,16 @@
             </div>
             <div class="options rounded">
               <div class="dropleft">
-                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
                   <!-- <h6 class="ml-2 text-white-50">External Sharing</h6> -->
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, cntnt)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, cntnt)"><i class="fa fa-link mr-1"></i>Get a link</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, cntnt)"><i
+                      class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, cntnt)"><i
+                      class="fa fa-link mr-1"></i>Get a link</a>
                   <!-- <div class="dropdown-divider"></div>
                   <h6 class="ml-2 text-white-50">Internal Sharing</h6>
                   <a class="dropdown-item" (click)="openModal(shareColl)"><i class="fa fa-user-friends mr-1"></i>Share
@@ -76,7 +83,7 @@
               <div class="items" *ngIf="cntnt.pageNo">Page&nbsp;{{cntnt.pageNo}}</div>
             </div>
             <div class="float-right">
-              <mat-checkbox (change)="selMe($event.checked, cntnt)"></mat-checkbox>
+              <mat-checkbox [checked]="cntnt.chk" (change)="selMe($event.checked, cntnt)"></mat-checkbox>
             </div>
           </div>
         </div>
@@ -92,17 +99,18 @@
       <thead>
         <tr>
           <th>
-            <mat-checkbox></mat-checkbox>
+            <mat-checkbox (change)="selAll($event.checked)"></mat-checkbox>
           </th>
           <th>Name<i class="fas fa-sort-down ml-1 align-top"></i></th>
           <th>Date Modified<i class="fas fa-sort-down ml-1 align-top"></i></th>
           <th></th>
         </tr>
       </thead>
-      <tbody *ngIf="cntntArr.length > 0" cdkDropList id="cntntLists" [cdkDropListData]="cntntArr" (cdkDropListDropped)="drop($event)">
+      <tbody *ngIf="cntntArr.length > 0" cdkDropList id="cntntLists" [cdkDropListData]="cntntArr"
+        (cdkDropListDropped)="drop($event)">
         <tr *ngFor="let cntnt of cntntArr" cdkDrag>
           <td class="align-middle">
-            <mat-checkbox (change)="selMe($event.checked, cntnt)"></mat-checkbox>
+            <mat-checkbox [checked]="cntnt.chk" (change)="selMe($event.checked, cntnt)"></mat-checkbox>
           </td>
           <td class="align-middle">
             <div class="d-flex" (click)="navgToCntnt(cntnt)">
@@ -116,12 +124,15 @@
           <td class="align-middle options">
             <div class="d-flex">
               <div class="dropleft">
-                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, cntnt)"><i class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, cntnt)"><i class="fa fa-link mr-1"></i>Get a
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, cntnt)"><i
+                      class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, cntnt)"><i
+                      class="fa fa-link mr-1"></i>Get a
                     link</a>
                 </div>
               </div>
@@ -143,4 +154,5 @@
 </div>
 
 <!-- fixed div on selecting a collection -->
-<app-sel-itm-fxd-div [selArr]="selCntntArr" (delContent)="delContent(undefined)" [content]="true" (clrSelData)="clrSel()" *ngIf="selCntntArr.length > 0"></app-sel-itm-fxd-div>
+<app-sel-itm-fxd-div [selArr]="selCntntArr" (delContent)="delContent(undefined)" [content]="true"
+  (clrSelData)="clrSel()" *ngIf="selCntntArr.length > 0"></app-sel-itm-fxd-div>

@@ -88,7 +88,7 @@
                         <i class="fas fa-trash-alt"></i>
                       </div>
                     </div>
-                    <mat-checkbox class="align-self-center" (change)="selMe($event.checked, fl)"
+                    <mat-checkbox class="align-self-center" [checked]="fl.chk" (change)="selMe($event.checked, fl)"
                       (click)="$event.stopPropagation();"></mat-checkbox>
                   </div>
                 </div>
@@ -139,7 +139,7 @@
                     <div class="date">{{(f.createdDate|date:'dd MMM, yyyy')||'N/A'}}</div>
                   </div>
                   <div class="float-right" (click)="$event.stopPropagation();">
-                    <mat-checkbox (change)="selMe($event.checked, f)"></mat-checkbox>
+                    <mat-checkbox [checked]="f.chk" (change)="selMe($event.checked, f)"></mat-checkbox>
                   </div>
                 </div>
               </div>
@@ -157,7 +157,7 @@
             <thead>
               <tr>
                 <th>
-                  <mat-checkbox></mat-checkbox>
+                  <mat-checkbox (change)="selAll($event.checked)"></mat-checkbox>
                 </th>
                 <th>Name<i class="fas fa-sort-down ml-1 align-top"></i></th>
                 <th>Date Modified<i class="fas fa-sort-down ml-1 align-top"></i></th>
@@ -167,7 +167,7 @@
             <tbody *ngIf="allFiles.length>0">
               <tr *ngFor="let aF of allFiles">
                 <td class="align-middle">
-                  <mat-checkbox (change)="selMe($event.checked, aF)"></mat-checkbox>
+                  <mat-checkbox [checked]="aF.chk" (change)="selMe($event.checked, aF)"></mat-checkbox>
                 </td>
                 <td class="align-middle" (click)="chkFolderAndAdd(aF)">
                   <div class="d-flex" *ngIf="aF.isFldr">

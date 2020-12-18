@@ -77,7 +77,7 @@ export class CollectionListComponent implements OnInit {
   }
 
   // on selecting a collection
-  selMe(val: any, id: number) {
+  selMe(val: boolean, id: number) {
     if (val) {
       this.selColctnArr.push(id);
     } else {
@@ -85,8 +85,20 @@ export class CollectionListComponent implements OnInit {
     }
   }
 
+  // clearing selected
   clrSel() {
     this.selColctnArr = [];
+    this.colctnArr = this.colctnArr.map((d: any) => ({ ...d, chk: false }));
+  }
+
+  // selecting all
+  selAll(val: boolean) {
+    if (val) {
+      this.selColctnArr = this.colctnArr;
+      this.colctnArr = this.colctnArr.map((d: any) => ({ ...d, chk: true }));
+    } else {
+      this.clrSel();
+    }
   }
 
   // activate/deactivate collection
@@ -128,7 +140,7 @@ export class CollectionListComponent implements OnInit {
     }
     this.colctnSrv.colctnList(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-        this.colctnArr = data.result.results;
+        this.colctnArr = data.result.results.map((d: any) => ({ ...d, chk: false }));
       } else {
         this.colctnArr = [];
       }
