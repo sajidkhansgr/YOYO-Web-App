@@ -23,7 +23,7 @@ export class CollectionListComponent implements OnInit {
   colctnArr!: any[]; selColctnArr!: any[];
   multiForm!: number;
   fldrIcon: string = FLDR_ICON;
-  cols!: any[]; sort: any;
+  cols!: any[];
   activeColctn!: number; isActiveColctn!: boolean;
 
   constructor(
@@ -43,9 +43,8 @@ export class CollectionListComponent implements OnInit {
     this.view = true; this.disabled = false; this.loading = true;
     this.colctnArr = []; this.selColctnArr = [];
     this.multiForm = 0;
-    this.sort = { sortColumn: 'updatedDate', isAscending: false }
     this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
-    this.activeColctn = 1; this.isActiveColctn = true;
+    this.activeColctn = 1;
   }
 
   // show content
@@ -53,7 +52,7 @@ export class CollectionListComponent implements OnInit {
     this.router.navigate(['/web-app/resource/collections/' + id]);
   }
 
-  // ***** collection *****
+  // ------ collection ------
   // sort
   sortChange(col: any, index: number) {
     let colData = { ...col };
@@ -62,17 +61,19 @@ export class CollectionListComponent implements OnInit {
     }
     colData.asc = !colData.asc;
     this.cols[index].asc = colData.asc;
-    this.sort = {
-      sortColumn: col.k,
-      isAscending: colData.asc,
-    }
-    this.listColctn();
-  }
-
-  // change displayed collections (isActive)
-  changeDispColctn() {
-    this.activeColctn == 1 ? this.isActiveColctn = true : this.isActiveColctn = false;
-    this.listColctn();
+    this.colctnArr = this.colctnArr.sort((a, b) => {
+      if (col.k === 'name') {
+        if ((a.name).toLowerCase() < (b.name).toLowerCase())
+          return colData.asc ? -1 : 1;
+        else
+          return colData.asc ? 1 : -1;
+      } else {
+        if ((a.updatedDate).toLowerCase() < (b.updatedDate).toLowerCase())
+          return colData.asc ? -1 : 1;
+        else
+          return colData.asc ? 1 : -1;
+      }
+    });
   }
 
   // on selecting a collection
@@ -84,7 +85,7 @@ export class CollectionListComponent implements OnInit {
     }
   }
 
-  clrSel(){
+  clrSel() {
     this.selColctnArr = [];
   }
 
@@ -92,16 +93,16 @@ export class CollectionListComponent implements OnInit {
   actDeactColctn(colctn?: number) {
     let data = colctn ? [colctn] : this.selColctnArr;
     let s = data.length == 1 ? '' : 's';
-    let actDeac: string = `${this.isActiveColctn ? 'deactivate' : 'activate'}`;
+    let actDeac: string = `${this.activeColctn == 1 ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
         msg: `Are you sure you want to ${actDeac} ${data.length == 1 ? 'this' : 'these'} collection${s}?`,
-        title: `${this.isActiveColctn ? 'Deactivate' : 'Activate'} collection${s}`
+        title: `${this.activeColctn == 1 ? 'Deactivate' : 'Activate'} collection${s}`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.colctnSrv.actDeactColctn(data, this.isActiveColctn ? false : true).subscribe((data: any) => {
+        this.colctnSrv.actDeactColctn(data, this.activeColctn == 1 ? false : true).subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Collection${s} ${actDeac}d successfully`, 'Success!');
             this.selColctnArr = [];
@@ -121,8 +122,9 @@ export class CollectionListComponent implements OnInit {
     this.selColctnArr = [];
     let query = {
       pageNo: 0,
-      ...this.sort,
-      isActive: this.isActiveColctn
+      sortColumn: 'updatedDate',
+      isAscending: false,
+      isActive: this.activeColctn == 1 ? true : false
     }
     this.colctnSrv.colctnList(query).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
