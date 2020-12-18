@@ -1028,15 +1028,15 @@
           </div>
         </div>
         <div class="files-list">
-          <div class="single-file mt-3 row mx-0 p-2" *ngFor="let file of files; let i = index">
+          <div class="single-file mt-3 row mx-0 p-2" *ngFor="let f of files; let i = index">
             <div class="info mx-auto">
               <h6 class="name mb-0 text-wrap">
-                {{ file?.name }}
+                {{ f?.name }}
               </h6>
               <p class="size mb-0">
-                {{ getSize(file?.size) }}
+                {{ getSize(f?.size) }}
               </p>
-              <app-file-progess [progress]="file?.progress"></app-file-progess>
+              <app-file-progess [progress]="f?.progress"></app-file-progess>
             </div>
             <div>
               <i class="fas fa-trash curs-ptr" (click)="deleteFile(i)"></i>
@@ -1417,7 +1417,7 @@
         </mat-form-field>
         <div class="options">
           Options
-          <mat-checkbox class="d-block" formControlName="hideLabelInWorkspace">Hide label in Experience</mat-checkbox>
+          <mat-checkbox class="d-block" formControlName="hideLabelInWorkspace">Hide label in Workspace</mat-checkbox>
         </div>
       </div>
       <hr>
@@ -1760,7 +1760,7 @@
         </mat-error>
       </mat-form-field>
       <!-- <mat-checkbox class="d-block ml-3">Open new Workspace</mat-checkbox> -->
-      <mat-checkbox class="d-block ml-3">Add me to this Workspace</mat-checkbox>
+      <mat-checkbox class="d-block ml-3" formControlName="assignMeToWorkspace">Add me to this Workspace</mat-checkbox>
     </div>
     <div class="modal-footer">
       <button type="submit" class="btn btn-primary" [disabled]="addWrkspcForm!.invalid || disabled">
@@ -1799,7 +1799,7 @@
         <div class="single-file mt-3 row mx-0 p-2" *ngFor="let f of files; let i = index">
           <div class="info mx-auto">
             <h6 class="name mb-0 text-wrap">
-              {{ f?.name }}
+              {{ f?.name||'' }}
             </h6>
             <p class="size mb-0">
               {{ getSize(f?.size) }}

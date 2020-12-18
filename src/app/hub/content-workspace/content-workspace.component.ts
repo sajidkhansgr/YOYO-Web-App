@@ -112,7 +112,8 @@ export class ContentWorkspaceComponent implements OnInit {
     this.wrkspcs = []; this.selWrkspc = undefined;
     this.wrkspcLoading = true; this.folderLoading = true;
     this.addWrkspcForm = this.fb.group({
-      name: ['', [Validators.required]]
+      name: ['', [Validators.required]],
+      assignMeToWorkspace: []
     });
     this.updWrkspcForm = this.fb.group({
       name: ['', [Validators.required]]
@@ -621,29 +622,26 @@ export class ContentWorkspaceComponent implements OnInit {
   // update workspace
   updWrkspc() {
     if (this.updWrkspcForm.valid && !this.edit) {
-      this.addWorkSpc();
+      // this.addWorkSpc();
+      this.toastr.info('Not implemented yet', 'Info!');
     } else if (this.updWrkspcForm.valid && this.edit) {
       this.disabled = true;
-      let wrkspcData: any = {
-        id: this.selWrkspc!.id,
+      let wrkspcD: any = {
         ...this.updWrkspcForm.value,
+        id: this.selWrkspc!.id,
         hubId: this.selWrkspc!.hub.id
       };
-      this.cwServ.updWrkspc(wrkspcData).subscribe((data: any) => {
+      this.cwServ.updWrkspc(wrkspcD).subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Workspace updated successfully', 'Success!');
-          this.selWrkspc = wrkspcData;
+          this.selWrkspc = wrkspcD;
           this.getWrkspcList();
         } else {
           this.toastr.error('Unable to update workspace', 'Error!');
         }
-        this.dismissModal();
-        this.disabled = false;
-        this.updWrkspcForm.reset();
+        this.wrkspcSetDef('updWrkspcForm');
       }, (err: any) => {
-        this.dismissModal();
-        this.disabled = false;
-        this.updWrkspcForm.reset();
+        this.wrkspcSetDef('updWrkspcForm');
       });
     }
   }
@@ -663,12 +661,12 @@ export class ContentWorkspaceComponent implements OnInit {
   addWorkSpc() {
     if (this.addWrkspcForm.valid && !this.edit) {
       this.disabled = true;
-      let wrkspcData: any;
-      wrkspcData = {
+      let wrkspcD: any = {
         ...this.addWrkspcForm.value,
+        assignMeToWorkspace: this.addWrkspcForm.value.assignMeToWorkspace || false,
         hubId: parseInt(this.hubid)
       };
-      this.cwServ.addWrkspc(wrkspcData)
+      this.cwServ.addWrkspc(wrkspcD)
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || 'Workspace added successfully', 'Success!');
@@ -676,15 +674,17 @@ export class ContentWorkspaceComponent implements OnInit {
           } else {
             this.toastr.error('Unable to add Workspace', 'Error!');
           }
-          this.dismissModal();
-          this.disabled = false;
-          this.addWrkspcForm.reset();
+          this.wrkspcSetDef();
         }, (err: any) => {
-          this.dismissModal();
-          this.disabled = false;
-          this.addWrkspcForm.reset();
+          this.wrkspcSetDef();
         });
     }
+  }
+
+  wrkspcSetDef(type: 'addWrkspcForm' | 'updWrkspcForm' = 'addWrkspcForm') {
+    this.dismissModal();
+    this.disabled = false;
+    this[type].reset();
   }
 
   // selected workspace
@@ -1105,9 +1105,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // list of tags
   getTags() {
-    this.tags = [];
-    this.selTags = [];
-    this.custIcon = '';
+    this.tags = []; this.selTags = []; this.custIcon = '';
     let query = {
       hubId: parseInt(this.hubid),
       pageNo: 1, pageSize: 1000
@@ -1123,8 +1121,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // list of languages
   getLangs() {
-    this.lngs = [];
-    this.selLngs = [];
+    this.lngs = []; this.selLngs = [];
     this.lngServ.lngList({})
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
@@ -1141,8 +1138,8 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // change pagination number
-  changePageNo(num: number) {
-    this.pageNo = num;
+  changePageNo(no: number) {
+    this.pageNo = no;
     this.cntntList();
   }
 
@@ -1190,7 +1187,6 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   async onCntntSubmit() {
-    //this.cntntForm.valid
     if (this.files.length > 0) {
       this.cntntDisb = true;
       let cntntData: any = {
@@ -1535,9 +1531,8 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   newVersDef(type: string) {
-    if (type === 'newVer') {
+    if (type === 'newVer')
       this.files = [];
-    }
   }
 
   renderImg(file: any, type: string) {
@@ -1590,8 +1585,7 @@ export class ContentWorkspaceComponent implements OnInit {
         return;
       }
       if (FileHelper.bytestoOther(item.size, 'gb') < 1) {
-        item.progress = 0;
-        item.t = 0;
+        item.progress = 0; item.t = 0;
         this.files.push(item);
       } else {
         this.toastr.error("Size should be less than 1 GB", "File Size Error");
@@ -1612,9 +1606,8 @@ export class ContentWorkspaceComponent implements OnInit {
 
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    if (this.getIntervalId) {
+    if (this.getIntervalId)
       clearInterval(this.getIntervalId);
-    }
     this.dismissModal();
     this.unsubSubs();
   }
