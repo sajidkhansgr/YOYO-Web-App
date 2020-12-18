@@ -16,6 +16,8 @@ import { DEF_ICON } from '../shared/constants';
 export class ShareLinkComponent implements OnInit {
   id!: string; routerSubs!: Subscription;
   lnkData:any=[];loading:boolean=true;defIcon: any = DEF_ICON;
+  showLeft:boolean = true;
+
   constructor(
     private route: ActivatedRoute,
     private shrLnkServ: ShareLinkService,

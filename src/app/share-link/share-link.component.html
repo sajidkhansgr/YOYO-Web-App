@@ -1,34 +1,52 @@
 <app-loader [type]="'page'" *ngIf="loading"></app-loader>
 <div *ngIf="!loading">
   <ng-container *ngIf="lnkData.length>0 else noData">
-    <div class="heading bg-white w-100 mx-0 p-2">
-      <div class="float-right d-flex">
-        <div class="btn" ngbTooltip="View in Full Screen">About</div>
-        <div class="btn" ngbTooltip="View in Full Screen">Share</div>
+    <div class="heading bg-white w-100 row mx-0">
+      <div class="col-6 align-self-center">
+        <a class="logo" href="javascript:void(0)">
+          <img src="assets/images/logo.png" alt="Hi Force">
+        </a>
+      </div>
+      <div class="col-6 text-right align-self-center">
+        <div class="btn btn-light mr-2" ngbTooltip="View in Full Screen">About</div>
+        <div class="btn btn-light" ngbTooltip="View in Full Screen">Share</div>
       </div>
     </div>
     <div class="pdf-view d-flex mx-0">
-      <div class="left-body bg-white text-center">
-        <div class="d-flex my-3 pl-3" *ngFor="let lD of lnkData;let i=index">
-          <div class="curs-ptr" (click)="scroll('c-'+lD.contentId+i)">
-            <div class="thumbnail" [ngSwitch]="lD.contentType">
-              <div *ngSwitchCase="2">
-                <img [src]="lD.contentPath?lD.contentPath:defIcon" alt="Image" />
-              </div>
-              <div *ngSwitchCase="3">
-                <img [src]="lD.contentPath?lD.contentPath:defIcon" alt="Image" />
-              </div>
-              <div *ngSwitchDefault>
-                <img [src]="defIcon" alt="Image" />
-              </div>
-            </div>
-            <div class="name py-1 px-2 mx-auto mt-1 rounded w-fit">{{lD.contentName}}</div>
+      <div class="bg-white text-center border-right" *ngIf="showLeft">
+        <div class="text-left bg-light border-bottom">
+          <div class="float-right">
+            <div class="btn" (click)="showLeft = false;"><i class="fas fa-times"></i></div>
           </div>
+          <div class="p-2">abc</div>
+        </div>
+        <div class="left-body">
+          <div class="d-flex my-3 pl-3" *ngFor="let lD of lnkData;let i=index">
+            <div class="curs-ptr active" (click)="scroll('c-'+lD.contentId+i)">
+              <div class="thumbnail" [ngSwitch]="lD.contentType">
+                <div *ngSwitchCase="2">
+                  <img [src]="lD.contentPath?lD.contentPath:defIcon" alt="Image" />
+                </div>
+                <div *ngSwitchCase="3">
+                  <img [src]="lD.contentPath?lD.contentPath:defIcon" alt="Image" />
+                </div>
+                <div *ngSwitchDefault>
+                  <img [src]="defIcon" alt="Image" />
+                </div>
+              </div>
+              <div class="name py-1 px-2 mx-auto mt-1 rounded w-fit text-truncate">{{lD.contentName}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="m-1" *ngIf="!showLeft">
+        <div class="btn btn-light border">
+          <i class="fas fa-th-large"></i>
         </div>
       </div>
       <div class="main-body overflow-auto w-100">
         <div class="d-flex my-3 pl-3" [id]="'c-'+lD.contentId+i" *ngFor="let lD of lnkData;let i=index">
-          <div [ngSwitch]="lD.contentType">
+          <div [ngSwitch]="lD.contentType" class="mx-auto">
             <div class="h-100" *ngSwitchCase="1">
               <pdf-viewer *ngIf="lD.contentPath" [src]="lD.contentPath" [original-size]="false"></pdf-viewer>
             </div>

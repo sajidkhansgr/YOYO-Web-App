@@ -1,5 +1,5 @@
 .heading {
-  height: 50px;
+  max-height: 50px;
   min-height: 10vh;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
   z-index: 1;
@@ -19,11 +19,13 @@
 
   .thumbnail {
     width: 186px;
-    img{
+
+    img {
       max-height: 130px;
       max-width: 130px;
     }
   }
+
   @media(min-width: 1500px) {
     min-width: 350px;
     width: 350px;
@@ -32,6 +34,7 @@
       width: 286px;
     }
   }
+
   @media (max-width: 1140px) {
     min-width: 200px;
     width: 200px;
@@ -42,12 +45,31 @@
   }
 }
 
-.main-body .img img{
-  max-height: 400px;
+.main-body .img img {
+  max-width: 720px;
+
+  @media (max-width: 992px) {
+    max-width: 480px;
+  }
 }
 
 .active {
   img {
     border: 2px solid #969696;
   }
+
+  .name {
+    background: #969696;
+    color: white;
+  }
+}
+
+.logo {
+  img {
+    width: 13.5rem;
+  }
+}
+
+.w-fit {
+  width: 200px;
 }
