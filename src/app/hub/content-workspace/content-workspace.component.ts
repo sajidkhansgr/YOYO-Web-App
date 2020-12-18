@@ -1240,7 +1240,6 @@ export class ContentWorkspaceComponent implements OnInit {
         if (this.files[k].id)
           contentIds.push(this.files[k].id)
       }
-      this.files.map((f: any) => f.id)
       let d: any = {
         hubId: parseInt(this.hubid),
         contentIds

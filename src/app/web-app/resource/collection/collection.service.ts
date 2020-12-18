@@ -52,4 +52,9 @@ export class CollectionService {
   getColctn(id: any) {
     return this.http.get(`${AppSettings.GET_COLCT}?id=${id}`);
   }
+
+  rearrCntntColl(data: any) {
+    return this.http.post(`${AppSettings.REARR_CNTNT_COLCT}`, data);
+  }
+
 }

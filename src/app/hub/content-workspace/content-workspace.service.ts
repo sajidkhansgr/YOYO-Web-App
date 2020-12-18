@@ -248,7 +248,6 @@ export class ContentWorkspaceService {
     return this.http.get(`${url}?hubId=${hubId}`);
   }
 
-  // add content to wowrkspace/folder
   rearrWrkspcData(data: any) {
     return this.http.post(`${AppSettings.REARR_WRKSPC_ITEMS}`, data)
   }

@@ -1,4 +1,4 @@
-import { DEF_IMG } from '../shared/constants';
+import { DEF_IMG, DEF_ICON } from '../shared/constants';
 
 export class FileHelper {
 
@@ -13,10 +13,12 @@ export class FileHelper {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  public static getImg(d: any): string {
+  public static getImg(d: any, type: string=''): string {
     if (d) {
       if (d.imagePath)
         return d.imagePath;
+      if (d.pdfImagePath)
+        return d.pdfImagePath;
       if (d.urlIconPath)
         return d.urlIconPath;
       else if (d.contentType === 2 && d.contentPath)
@@ -26,6 +28,8 @@ export class FileHelper {
       else if (Array.isArray(d.pdfImages) && d.pdfImages.length > 0 && d.pdfImages[0].imagePath)
         return d.pdfImages[0].imagePath;
     }
+    if(type=='icon')
+      return DEF_ICON;
     return DEF_IMG;
   }
 

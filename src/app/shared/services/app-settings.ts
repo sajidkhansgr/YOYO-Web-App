@@ -232,6 +232,8 @@ export class AppSettings {
 
   public static REM_CONTENT_COLCT = `api/Collection/RemoveFromCollection`;
 
+  public static REARR_CNTNT_COLCT = `api/Collection/ReArrangeCollectionData`;
+
   // ---- BREADCRUM ---- //
 
   public static BRD_CRM_LIST = `api/BreadCrum/GetBreadCrum`;

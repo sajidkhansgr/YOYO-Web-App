@@ -4,22 +4,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { CollectionService } from '../collection.service';
-import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
-import { ExpService } from '../../exp/exp.service';
-import { FileService } from '../../file/file.service';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Collection as Colctn } from '../../../../shared/models/collection';
-import { Workspace as Wrkspc } from '../../../../shared/models/workspace';
-import { Folder } from '../../../../shared/models/folder';
 import { Content } from '../../../../shared/models/content';
-import { DEF_ICON } from '../../../../shared/constants';
-import { ShareMailComponent } from 'src/app/shared/components/share-mail/share-mail.component';
-import { GetLinkComponent } from 'src/app/shared/components/get-link/get-link.component';
-import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to-coll.component';
-import { CollComponent } from 'src/app/shared/components/coll/coll.component';
-import { AddRsrcComponent } from 'src/app/shared/components/add-rsrc/add-rsrc.component';
+import { ShareMailComponent } from '../../../../shared/components/share-mail/share-mail.component';
+import { GetLinkComponent } from '../../../../shared/components/get-link/get-link.component';
+import { AddToCollComponent } from '../../../../shared/components/add-to-coll/add-to-coll.component';
+import { CollComponent } from '../../../../shared/components/coll/coll.component';
+import { AddRsrcComponent } from '../../../../shared/components/add-rsrc/add-rsrc.component';
+import { FileHelper } from '../../../../shared/file-helper';
 
 @Component({
   selector: 'app-collection-inner',
@@ -31,10 +27,8 @@ export class CollectionInnerComponent implements OnInit {
   disabled!: boolean; loading!: boolean;
   selColctn!: Colctn | undefined;
   multiForm!: number;
-  cntntArr!: Content[]; selCntntArr!: any[];
-  defImg: string = DEF_ICON;
+  cntntArr!: any[]; selCntntArr!: any[];
   addContentArr!: Content[];
-
 
   constructor(
     private modalService: NgbModal,
@@ -56,9 +50,7 @@ export class CollectionInnerComponent implements OnInit {
   initialiseState() {
     this.view = true; this.disabled = false; this.loading = true;
     this.selColctn = undefined; this.selCntntArr = [];
-    this.multiForm = 0;
-    this.cntntArr = [];
-    this.addContentArr = [];
+    this.multiForm = 0; this.cntntArr = []; this.addContentArr = [];
   }
 
   // open modals
@@ -104,8 +96,7 @@ export class CollectionInnerComponent implements OnInit {
   addContent() {
     this.disabled = true;
     let data: any = {
-      id: this.id,
-      contents: []
+      id: this.id, contents: []
     };
     for (let i = 0; i < this.addContentArr.length; i++) {
       data.contents.push(this.addContentArr[i].contentId ? this.addContentArr[i].contentId : this.addContentArr[i].id);
@@ -161,20 +152,16 @@ export class CollectionInnerComponent implements OnInit {
     }
   }
 
-  clrSel(){
+  clrSel() {
     this.selCntntArr = [];
   }
 
   // get content by collection
   getCntntColl() {
-    let id: number;
-    this.loading = true;
-    id = this.id;
-    this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
+    this.loading = true;this.cntntArr = [];
+    this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
+      if (data && Array.isArray(data.result) && data.result.length > 0) {
         this.cntntArr = data.result;
-      } else if (data && data.result && Array.isArray(data.result) && data.result.length == 0) {
-        this.cntntArr = [];
       }
       this.loading = false;
     }, (err: any) => {
@@ -197,7 +184,7 @@ export class CollectionInnerComponent implements OnInit {
           if (data) {
             this.toastr.success(`Collection ${actDeac}d successfully`, 'Success!');
             this.getColctn();
-          } else {
+          } else{
             this.toastr.error(`Unable to ${actDeac} collection`, 'Error!');
           }
         }, (err: any) => {
@@ -210,10 +197,10 @@ export class CollectionInnerComponent implements OnInit {
   getColctn() {
     this.loading = true;
     this.colctnSrv.getColctn(this.id).subscribe((data: any) => {
-      if (data && data.result) {
+      if (data && data.result && data.result.id) {
         this.selColctn = data.result;
         this.getCntntColl();
-      } else {
+      } else{
         this.router.navigate(['/web-app/resource/collections']);
       }
     }, (err: any) => {
@@ -230,6 +217,36 @@ export class CollectionInnerComponent implements OnInit {
 
   navgToCntnt(cntnt: Content) {
     this.router.navigate(['/web-app/view/' + cntnt.contentId]);
+  }
+
+  getImg(d: any): string {
+    return FileHelper.getImg(d, 'icon');
+  }
+
+  drop = (event: CdkDragDrop<string[]>) => {
+    if (event.previousContainer === event.container) {
+      if (event.previousContainer.data[event.previousIndex] != event.container.data[event.currentIndex]) {
+        this.rearrDataInWrkspc(event);
+      }
+    } else {
+      console.log("dasadsadsads else ")
+    }
+  }
+
+  rearrDataInWrkspc(event: any) {
+    let d: any = {
+      collectionId: this.id,
+      collectionDataIds: this.cntntArr.map((f: any) => f.contentId)
+    };
+    this.colctnSrv.rearrCntntColl(d).subscribe((data: any) => {
+      if (data) {
+        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        this.toastr.success('Rearrange successfully', 'Success!');
+      } else {
+        this.toastr.error('Unable to rearrange', 'Error!');
+      }
+    }, (err: any) => {
+    });
   }
 
   openModal(content: any) {
