@@ -34,7 +34,6 @@ export class ShareLinkComponent implements OnInit {
   getLinkData() {
     this.shrLnkServ.getLinkData(this.id)
       .subscribe((data: any) => {
-        console.log(data, 'data');
         if (data && Array.isArray(data.result)) {
           this.lnkData = data.result;
         } else {
@@ -48,7 +47,6 @@ export class ShareLinkComponent implements OnInit {
 
   scroll(id: string){
     const element = document.getElementById(id); // id of the scroll to element
-    console.log(element, "element",id)
     if(element)
       element.scrollIntoView({behavior: 'smooth'});
   }

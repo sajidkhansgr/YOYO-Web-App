@@ -15,10 +15,10 @@
     <div class="pdf-view d-flex mx-0">
       <div class="bg-white text-center border-right" *ngIf="showLeft">
         <div class="text-left bg-light border-bottom">
+          <div class="p-2">All Files&#40;{{lnkData.length}}&#41;</div>
           <div class="float-right">
             <div class="btn" (click)="showLeft = false;"><i class="fas fa-times"></i></div>
           </div>
-          <div class="p-2">abc</div>
         </div>
         <div class="left-body">
           <div class="d-flex my-3 pl-3" *ngFor="let lD of lnkData;let i=index">
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="m-1" *ngIf="!showLeft">
-        <div class="btn btn-light border">
+        <div class="btn btn-light border" (click)="showLeft = true;">
           <i class="fas fa-th-large"></i>
         </div>
       </div>
