@@ -111,7 +111,7 @@ export class GroupComponent implements OnInit {
   }
 
   getHubs() {
-    this.hubService.hubList({ pageNo: 0 })
+    this.hubService.hubList({ pageNo: 0, isActive: true })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.divArr = data.result.results;

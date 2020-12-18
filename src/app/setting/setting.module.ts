@@ -10,7 +10,7 @@ import { ProfileModule } from './profile/profile.module';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'divisions/list',
+    redirectTo: 'hubs/list',
     pathMatch: 'full'
   },
   {
@@ -21,7 +21,7 @@ const routes: Routes = [
         loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule), data: { type: 0 }
       },
       {
-        path: 'divisions/list',
+        path: 'hubs/list',
         loadChildren: () => import('./division/division.module').then(m => m.DivisionModule), data: { type: 1 }
       }
     ]

@@ -94,9 +94,8 @@ export class ContentWorkspaceComponent implements OnInit {
     this.usrInfo = this.tokenDataServ.getUser();
     this.fileTypesArr = EnumHelper.enumToArray(this.fileTypes);
     this.initialiseState();
-    this.getTags();
-    this.getLangs();
-    this.cntntList();
+    this.getTags();this.getLangs();
+    this.setDefSort(); this.cntntList();
     this.processingCntnt(true);
     this.getIntervalId = setInterval(() => {
       this.processingCntnt(true);
@@ -138,7 +137,7 @@ export class ContentWorkspaceComponent implements OnInit {
     if (this.activeIndex == 1) {
       this.cols = [{ n: "Name", k: "name" }, { n: "Queued Time", k: "queuedAt" }];
     } else {
-      let cmnCols = [{ n: "Added", k: "createdDate", asc: false }, { n: "Size", k: "size", asc: false },
+      let cmnCols = [{ n: "Added", k: "createdDate", asc: true }, { n: "Size", k: "size", asc: false },
       { n: "Last Updated", k: "updatedDate", asc: false }];
       this.visbCols = [...cmnCols];
       this.hidCols = [{ n: "Likes", k: "likes", asc: false }, { n: "Languages", k: "contentLanguages", asc: false }];
@@ -180,7 +179,7 @@ export class ContentWorkspaceComponent implements OnInit {
         distinctUntilChanged(),
         tap(() => {
           this.pageNo = 1;
-          this.loadCntnts();
+          this.setDefSort(); this.loadCntnts();
           // this.cntntList();
         })
       )
@@ -189,6 +188,11 @@ export class ContentWorkspaceComponent implements OnInit {
     this.setFltrEmpty();
     this.mdlItems = []; this.mdlLoading = true; this.mdlNav = []; this.mdlSelected = undefined;
     this.hasIcon = true;
+  }
+
+
+  setDefSort(){
+    this.sort = { sortColumn: 'createdDate', isAscending: false };
   }
 
   procUplDef() {
@@ -1053,9 +1057,9 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   loadCntnts() {
-    if (this.activeIndex == 1) {
+    if (this.activeIndex == 1)
       this.processingCntnt(false);
-    } else
+    else
       this.cntntList();
   }
 
@@ -1070,8 +1074,8 @@ export class ContentWorkspaceComponent implements OnInit {
       colData.asc = !colData.asc;
       this.cols[index].asc = colData.asc;
       this.sort = {
-        SortColumn: col.k,
-        IsAscending: colData.asc,
+        sortColumn: col.k,
+        isAscending: colData.asc,
       }
       this.cntntList();
     }
@@ -1087,7 +1091,7 @@ export class ContentWorkspaceComponent implements OnInit {
       ...this.sort,
       hubId: parseInt(this.hubid),
       fltrL: this.filteredList,
-      ContentStatus: this.activeIndex == 2 ? 2 : 1
+      contentStatus: this.activeIndex == 2 ? 2 : 1
     };
     this.cntnts = [];
     this.totalCount = 0
@@ -1238,7 +1242,7 @@ export class ContentWorkspaceComponent implements OnInit {
       let contentIds = [];
       for (let k = 0; k < this.files.length; k++) {
         if (this.files[k].id)
-          contentIds.push(this.files[k].id)
+          contentIds.push(this.files[k].id);
       }
       let d: any = {
         hubId: parseInt(this.hubid),
@@ -1247,6 +1251,9 @@ export class ContentWorkspaceComponent implements OnInit {
       this.cwServ.procCntntStatus(d, isStart)
         .subscribe((data: any) => {
           this.setFilesDef();
+          if(isStart){
+            this.pageNo = 1;this.setDefSort();this.cntntList();
+          }
         }, (err: any) => {
           this.setFilesDef();
         });
@@ -1281,7 +1288,7 @@ export class ContentWorkspaceComponent implements OnInit {
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success('Content added successfully', 'Success!');
-            this.files = []; this.pageNo = 1;
+            this.files = []; this.pageNo = 1;this.setDefSort();
             this.cntntList();
             this.dismissModal();
           } else {

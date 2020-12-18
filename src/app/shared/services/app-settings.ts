@@ -21,6 +21,10 @@ export class AppSettings {
 
   public static GET_HUB = `api/Hub/GetById`;
 
+  public static ACT_HUB = `api/Hub/Activate`;
+
+  public static DEACT_HUB = `api/Hub/Deactivate`;
+
   // ---- GROUP ---- //
 
   public static LIST_GRP = `api/Group/GetAll`;

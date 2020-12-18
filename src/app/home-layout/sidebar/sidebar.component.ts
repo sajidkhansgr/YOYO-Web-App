@@ -30,7 +30,7 @@ export class SidebarComponent implements OnInit {
   }
 
   getHubs(){
-    this.hubServ.hubList({pageNo:0})
+    this.hubServ.hubList({pageNo:0,isActive: true})
     .subscribe((data: any) => {
       if(data && data.result && Array.isArray(data.result.results) && data.result.results.length>0){
         let res: any = [];
