@@ -34,9 +34,9 @@ export class FileComponent implements OnInit {
   frmType!: string; selFldrData!: any;
   fldrid!: string;
   selData!: any[]; //checkboxes
-  urlForm!: FormGroup;urlDisb!: boolean;
-  cols:any=[];navg!: any;fileExt = FILE_EXT;
-  getIntervalId: any;procFiles:any[]=[];isClose: boolean=false;showProcDetail: boolean = true;
+  urlForm!: FormGroup; urlDisb!: boolean;
+  cols: any = []; navg!: any; fileExt = FILE_EXT;
+  getIntervalId: any; procFiles: any[] = []; isClose: boolean = false; showProcDetail: boolean = true;
 
   constructor(
     private router: Router,
@@ -61,6 +61,7 @@ export class FileComponent implements OnInit {
       this.initialiseState(); // reset and set based on new parameter this time
       this.getFiles();
     });
+    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
   }
 
   initialiseState() {
@@ -86,6 +87,44 @@ export class FileComponent implements OnInit {
     this.urlDisb = false;
   }
 
+  // sort
+  sortChange(col: any, index: number) {
+    let colData = { ...col };
+    for (let i = 0; i < this.cols.length; i++) {
+      this.cols[i].asc = false;
+    }
+    colData.asc = !colData.asc;
+    this.cols[index].asc = colData.asc;
+    this.files = this.files.sort((a, b) => {
+      if (col.k === 'name') {
+        if ((a.name).toLowerCase() < (b.name).toLowerCase())
+          return colData.asc ? -1 : 1;
+        else
+          return colData.asc ? 1 : -1;
+      } else {
+        if ((a.updatedDate).toLowerCase() < (b.updatedDate).toLowerCase())
+          return colData.asc ? -1 : 1;
+        else
+          return colData.asc ? 1 : -1;
+      }
+    });
+    this.folders = this.folders.sort((a, b) => {
+      if (col.k === 'name') {
+        if ((a.name).toLowerCase() < (b.name).toLowerCase())
+          return colData.asc ? -1 : 1;
+        else
+          return colData.asc ? 1 : -1;
+      } else {
+        if ((a.updatedDate).toLowerCase() < (b.updatedDate).toLowerCase())
+          return colData.asc ? -1 : 1;
+        else
+          return colData.asc ? 1 : -1;
+      }
+    });
+    this.allFiles = [...this.folders, ...this.files];
+    console.log(this.allFiles);
+  }
+
   // open modals
   cmnModal(type: string, cntnt?: Content) {
     if (type == 'email') {
@@ -98,14 +137,19 @@ export class FileComponent implements OnInit {
       modalRef.componentInstance.type = 'content';
       modalRef.componentInstance.data = cntnt;
     }
-    else if (type == 'addToCollection')
-      this.openModal(AddToCollComponent);
+    else if (type == 'addToCollection') {
+      const modalRef: any = this.modalService.open(AddToCollComponent, { size: 'lg' });
+      modalRef.componentInstance.data = { ...cntnt, type: 'my-file' };
+      modalRef.result.then((result: any) => {
+
+      })
+    }
   }
 
   // on selecting a folder/content
   selMe(val: any, d: any) {
     if (val) {
-      this.selData.push({id: d.id});
+      this.selData.push({ id: d.id });
     } else {
       const index = this.selData.findIndex((ele: any) => ele.id == d.id);
       if (index >= 0) {
@@ -130,7 +174,7 @@ export class FileComponent implements OnInit {
     })
   }
 
-  clrSel(){
+  clrSel() {
     this.selData = [];
   }
 
@@ -195,7 +239,7 @@ export class FileComponent implements OnInit {
   }
 
   navgToFldr(fl: any) {
-    this.router.navigate(['/web-app/resource/my-files/'+(fl.id==0?'':fl.id)]);
+    this.router.navigate(['/web-app/resource/my-files/' + (fl.id == 0 ? '' : fl.id)]);
   }
 
   chkFolderAndAdd(fl: any) {
@@ -211,7 +255,7 @@ export class FileComponent implements OnInit {
 
   openModal(content: any, type: string = '') {
     this.frmType = type;
-    if (this.frmType == 'addFldr' || this.frmType == 'updFldr'|| this.frmType == 'url') {
+    if (this.frmType == 'addFldr' || this.frmType == 'updFldr' || this.frmType == 'url') {
       if (this.fldrLoad || this.urlDisb) {
         this.toastr.info("Please wait for previous request");
         return;
@@ -281,8 +325,8 @@ export class FileComponent implements OnInit {
           this.toastr.success(data.message || 'Folder rename successfully', 'Success!');
           // this.getFiles();
           //local updating
-          this.locUpd('allFiles',fldrData);
-          this.locUpd('folders',fldrData);
+          this.locUpd('allFiles', fldrData);
+          this.locUpd('folders', fldrData);
           // this.succEeditFldr('folderNav');
           // this.succEeditFldr('allFiles');
           // this.succEeditFldr('folders');
@@ -300,11 +344,11 @@ export class FileComponent implements OnInit {
       });
   }
 
-  locUpd(type: 'allFiles' | 'folders', data:any){
+  locUpd(type: 'allFiles' | 'folders', data: any) {
     const index = this[type].findIndex((ele: any) => ele.id == data.id && ele.isFldr);
-     if (index >= 0) {
-       this[type][index].name = data.name;
-     }
+    if (index >= 0) {
+      this[type][index].name = data.name;
+    }
   }
 
   //showing deleted but actually its deactive
@@ -353,21 +397,21 @@ export class FileComponent implements OnInit {
     uf?.click();
   }
   //"Only .jpeg, .png, .jpg ,.mp4, .xls, .xlsx, .ppt, .pptx, .doc, .docx and .pdf files are allowed."
-  uplCntnt($event: any){
-    if ($event.target && $event.target.files){
+  uplCntnt($event: any) {
+    if ($event.target && $event.target.files) {
       let mulFile = $event.target.files;
-      let size=0;
-      for(let k=0;k<mulFile.length;k++){
-        if(this.fileExt.filter(ext => mulFile[k].name.includes(ext)).length<=0){
+      let size = 0;
+      for (let k = 0; k < mulFile.length; k++) {
+        if (this.fileExt.filter(ext => mulFile[k].name.includes(ext)).length <= 0) {
           this.toastr.error("Not valid file, please try with other file", "File Type Error");
           return;
         }
         size += mulFile[k].size;
       }
-      if(FileHelper.bytestoOther(size,'gb')<1){
-        this.addCntnt({mulFile}, 'Content');
+      if (FileHelper.bytestoOther(size, 'gb') < 1) {
+        this.addCntnt({ mulFile }, 'Content');
         return;
-      }else{
+      } else {
         this.toastr.error("Size should be less than 1 GB", "File Size Error");
         return;
       }
@@ -378,7 +422,7 @@ export class FileComponent implements OnInit {
     }
   }
 
-  onUrlSubmit(){
+  onUrlSubmit() {
     if (this.urlForm.valid) {
       let urlData: any = {
         ...this.urlForm.value,
@@ -389,12 +433,12 @@ export class FileComponent implements OnInit {
     }
   }
 
-  addCntnt(cntntData: any, type: string){
-    cntntData.folderId= this.fldrid ? parseInt(this.fldrid) : null;
+  addCntnt(cntntData: any, type: string) {
+    cntntData.folderId = this.fldrid ? parseInt(this.fldrid) : null;
     this.fileServ.addMyCntnt(cntntData)
       .subscribe((data: any) => {
         if (data) {
-          this.toastr.success(data.message||`${type} added successfully`, 'Success!');
+          this.toastr.success(data.message || `${type} added successfully`, 'Success!');
         } else {
           this.toastr.error('Unable to add', 'Error!');
         }
@@ -404,8 +448,8 @@ export class FileComponent implements OnInit {
       });
   }
 
-  urlChk(type: string){
-    if(type=='Url'){
+  urlChk(type: string) {
+    if (type == 'Url') {
       this.urlDisb = false;
       this.dismissModal();
     }
@@ -416,13 +460,13 @@ export class FileComponent implements OnInit {
 
   brdcrmList() {
     let params = {
-      parentFolderId: this.fldrid?this.fldrid:null
+      parentFolderId: this.fldrid ? this.fldrid : null
     }
     this.brdcrmServ.getList(params, true)
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
           let arr = data.result;
-          arr.sort((a:any, b:any) => a.level - b.level);
+          arr.sort((a: any, b: any) => a.level - b.level);
           this.navg = arr;
         } else {
           //no data found

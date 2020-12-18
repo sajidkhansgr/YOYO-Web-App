@@ -56,6 +56,8 @@ export class AddToCollComponent implements OnInit {
       } else {
         data.contents = [this.data.contentId];
       }
+    } else if (this.data.type == 'my-file') {
+      data.contents = [this.data.id];
     }
     this.collLoad = true;
     this.collServ.addContentColctn(data).subscribe((data: any) => {

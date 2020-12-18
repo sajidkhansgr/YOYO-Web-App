@@ -14,7 +14,8 @@
         <div class="text-secondary text-center">
           3.3 MB of 2 GB used
           <div class="progress mt-2" style="height:10px;">
-            <div class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="3" aria-valuemin="0" aria-valuemax="2048"></div>
+            <div class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="3" aria-valuemin="0"
+              aria-valuemax="2048"></div>
           </div>
         </div>
       </div>
@@ -24,10 +25,13 @@
       <h3 class="mb-4 clearfix heading align-self-center">
         <!-- My Files -->
         <div class="float-right d-flex">
-          <i *ngIf="files.length>0 || folders.length>0 || allFiles.length>0" class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}" (click)="switchView()" matTooltip="{{view? 'List View' : 'Grid View'}}">
+          <i *ngIf="files.length>0 || folders.length>0 || allFiles.length>0" class="fa mr-3 curs-ptr align-self-center"
+            [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}" (click)="switchView()"
+            matTooltip="{{view? 'List View' : 'Grid View'}}">
           </i>
           <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="addBtnDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="addBtnDD" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
               Add
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="addBtnDD">
@@ -40,7 +44,7 @@
               <a class="dropdown-item curs-ptr" (click)="uploadBtn(uploadFile)"><i class="fa fa-upload mr-1"></i>
                 Upload from hard drive
                 <input type="file" style="display: none;" #uploadFile (change)="uplCntnt($event)"
-                accept="{{fileExt.toString()}}" multiple>
+                  accept="{{fileExt.toString()}}" multiple>
               </a>
             </div>
           </div>
@@ -60,9 +64,14 @@
         <app-loader [type]="'page'" *ngIf="loading"></app-loader>
         <div *ngIf="!loading">
           <div class="text-right" *ngIf="folders.length>0 || files.length>0">
-            Sort by:
+            <!-- Sort by:
             <span class="text-primary mr-2 curs-ptr">Name<i class="fa fa-sort-down align-top ml-1"></i></span>
-            <span class="text-primary curs-ptr">Date Modified<i class="fa fa-sort-down align-top ml-1"></i></span>
+            <span class="text-primary curs-ptr">Date Modified<i class="fa fa-sort-down align-top ml-1"></i></span> -->
+            Sort by:
+            <span class="text-primary ml-2 curs-ptr" *ngFor="let c of cols, let i = index" (click)="sortChange(c, i)">
+              {{c.n}}<i class="fa ml-1"
+                [ngClass]="{'fa-sort-up align-bottom': c.asc, 'fa-sort-down align-top': !c.asc}"></i>
+            </span>
           </div>
           <!-- folders -->
           <div class="text-secondary" *ngIf="folders.length>0">Folders</div>
@@ -73,12 +82,14 @@
                   <div class="name align-self-center px-0"><i class="fas fa-folder mr-1"></i>{{fl.name}}</div>
                   <div class="d-flex p-0 __options ml-auto">
                     <div class="_options">
-                      <div class="btn btn-light btn-sm mr-1" (click)="$event.stopPropagation();setSelRow(fldrModal,fl);"><i class="fas fa-edit"></i></div>
+                      <div class="btn btn-light btn-sm mr-1"
+                        (click)="$event.stopPropagation();setSelRow(fldrModal,fl);"><i class="fas fa-edit"></i></div>
                       <div class="btn btn-light btn-sm mr-1" (click)="$event.stopPropagation();delCntntOrFldr(fl,true)">
                         <i class="fas fa-trash-alt"></i>
                       </div>
                     </div>
-                    <mat-checkbox class="align-self-center" (change)="selMe($event.checked, fl)" (click)="$event.stopPropagation();"></mat-checkbox>
+                    <mat-checkbox class="align-self-center" (change)="selMe($event.checked, fl)"
+                      (click)="$event.stopPropagation();"></mat-checkbox>
                   </div>
                 </div>
               </div>
@@ -95,7 +106,8 @@
                   </div>
                   <div class="options rounded">
                     <div class="dropleft">
-                      <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
                         <i class="fas fa-share-square"></i>
                       </button>
                       <div class="dropdown-menu" aria-labelledby="shareDD">
@@ -113,7 +125,7 @@
                         </a>
                       </div>
                     </div>
-                    <div class="btn my-1" (click)="cmnModal('addToCollection')">
+                    <div class="btn my-1" (click)="cmnModal('addToCollection',f)">
                       <i class="fas fa-folder-plus"></i>
                     </div>
                     <div class="btn" (click)="delCntntOrFldr(f)">
@@ -173,7 +185,8 @@
                 <td class="align-middle options">
                   <div class="d-flex">
                     <div class="dropleft" *ngIf="!aF.isFldr">
-                      <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
                         <i class="fas fa-share-square"></i>
                       </button>
                       <div class="dropdown-menu" aria-labelledby="shareDD">
@@ -185,7 +198,7 @@
                         </a>
                       </div>
                     </div>
-                    <div *ngIf="!aF.isFldr" class="btn" (click)="cmnModal('addToCollection')">
+                    <div *ngIf="!aF.isFldr" class="btn" (click)="cmnModal('addToCollection',aF)">
                       <i class="fas fa-folder-plus"></i>
                     </div>
                     <div *ngIf="aF.isFldr" class="btn" (click)="setSelRow(fldrModal,aF);">
@@ -209,7 +222,8 @@
 </div>
 
 <!-- fixed sel item bootm div -->
-<app-sel-itm-fxd-div [selArr]="selData" (delContent)="delContent(undefined)" [content]="true" *ngIf="selData.length > 0" (clrSelData)="clrSel()">
+<app-sel-itm-fxd-div [selArr]="selData" (delContent)="delContent(undefined)" [content]="true" *ngIf="selData.length > 0"
+  (clrSelData)="clrSel()">
 </app-sel-itm-fxd-div>
 
 <!-- add folder -->
@@ -319,7 +333,8 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')" [disabled]="!sharingValue.checked">Share</button>
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')"
+      [disabled]="!sharingValue.checked">Share</button>
   </div>
 </ng-template>
 
@@ -339,8 +354,10 @@
       <div class="d-flex justify-content-between" *ngFor="let pF of procFiles">
         <div class="name align-self-center">{{pF.name}}</div>
         <div class="align-self-center">
-          <div class="progress"><!-- style - wdth bar perc -->
-            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+          <div class="progress">
+            <!-- style - wdth bar perc -->
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100"
+              aria-valuemin="0" aria-valuemax="100" style="width:100%">
             </div>
           </div>
         </div>
