@@ -113,7 +113,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.wrkspcLoading = true; this.folderLoading = true;
     this.addWrkspcForm = this.fb.group({
       name: ['', [Validators.required]],
-      assignMeToWorkspace:[]
+      assignMeToWorkspace: []
     });
     this.updWrkspcForm = this.fb.group({
       name: ['', [Validators.required]]
@@ -663,7 +663,7 @@ export class ContentWorkspaceComponent implements OnInit {
       this.disabled = true;
       let wrkspcD: any = {
         ...this.addWrkspcForm.value,
-        assignMeToWorkspace: this.addWrkspcForm.value.assignMeToWorkspace||false,
+        assignMeToWorkspace: this.addWrkspcForm.value.assignMeToWorkspace || false,
         hubId: parseInt(this.hubid)
       };
       this.cwServ.addWrkspc(wrkspcD)
@@ -681,7 +681,7 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  wrkspcSetDef(type:'addWrkspcForm'|'updWrkspcForm'='addWrkspcForm'){
+  wrkspcSetDef(type: 'addWrkspcForm' | 'updWrkspcForm' = 'addWrkspcForm') {
     this.dismissModal();
     this.disabled = false;
     this[type].reset();
@@ -1530,8 +1530,8 @@ export class ContentWorkspaceComponent implements OnInit {
     }
   }
 
-  newVersDef(type: string){
-    if(type==='newVer')
+  newVersDef(type: string) {
+    if (type === 'newVer')
       this.files = [];
   }
 
@@ -1584,7 +1584,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.toastr.error("Not valid file, please try with other file", "File Type Error");
         return;
       }
-      if(FileHelper.bytestoOther(item.size,'gb')<1){
+      if (FileHelper.bytestoOther(item.size, 'gb') < 1) {
         item.progress = 0; item.t = 0;
         this.files.push(item);
       } else {
