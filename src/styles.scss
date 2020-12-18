@@ -1176,7 +1176,7 @@ header {
           position: absolute;
           top: 50px;
           right: 10px;
-          background-color: rgba($hi-dark-grey, 0.5);
+          background-color: rgba($hi-dark-grey, 0.8);
           width: 50px;
           padding: 10px 5px;
 
@@ -1191,7 +1191,7 @@ header {
           }
 
           .dropdown-menu {
-            background-color: rgba($hi-dark-grey, 0.5);
+            background-color: rgba($hi-dark-grey, 0.8);
             margin-right: 5px;
 
             .dropdown-item {
@@ -1330,9 +1330,9 @@ header {
       opacity: 0;
       transition: opacity linear 0.5s;
       position: absolute;
-      top: 50px;
-      right: 110px;
-      background-color: rgba($hi-dark-grey, 0.5);
+      top: 77px;
+      right: 41px;
+      background-color: rgba($hi-dark-grey, 0.8);
       width: 50px;
       padding: 10px 5px;
 
@@ -1347,7 +1347,7 @@ header {
       }
 
       .dropdown-menu {
-        background-color: rgba($hi-dark-grey, 0.5);
+        background-color: rgba($hi-dark-grey, 0.8);
         margin-right: 5px;
 
         .dropdown-item {

@@ -117,3 +117,11 @@
     opacity: 1;
   }
 }
+
+.main-body img {
+  max-width: 720px;
+
+  @media (max-width: 992px) {
+    max-width: 480px;
+  }
+}
