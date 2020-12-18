@@ -21,7 +21,7 @@ export const navigation: Navigation[] = [
   },
   {
     id: 'hub',
-    title: 'Hub',
+    title: 'Hubs',
     type: 'collapsable',
     icon: 'fa-layer-group',
     children: []

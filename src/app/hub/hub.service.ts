@@ -28,12 +28,12 @@ export class HubService {
         );
     }
 
-    addHub(data: any) {
-      return this.http.post(`${AppSettings.ADD_HUB}`,data)
-    }
-    updateHub(data: any) {
-      return this.http.put(`${AppSettings.UPD_HUB}`,data)
-    }
+    // addHub(data: any) {
+    //   return this.http.post(`${AppSettings.ADD_HUB}`,data)
+    // }
+    // updateHub(data: any) {
+    //   return this.http.put(`${AppSettings.UPD_HUB}`,data)
+    // }
     viewHub(id: string) {
       return this.http.get(`${AppSettings.GET_HUB}`, {
         params: { id }

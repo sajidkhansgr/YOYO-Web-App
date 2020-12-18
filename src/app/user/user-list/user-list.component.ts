@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
@@ -42,16 +42,14 @@ export class UserListComponent implements OnInit {
   searchTxtChng: Subject<string> = new Subject<string>();
   private subscription!: Subscription;
 
-  visbCols: any[] = [{ n: "Role", k: "roleId", asc: false },{ n: "Latest Activity", k: "latestActivity", asc: false },{ n: "Date Created", k: "createdDate", asc: false }];
-  hidCols: any[] = [];
-  cols: any[] = [{ n: "Name", asc: false, k: "name" }];
+  visbCols: any[] = []; hidCols: any[] = []; cols: any[] = [];
   roles = ROLES; rolesArr!: any; lngs = LNGS; lngArr!: any;
   usrForm!: FormGroup; usrLoading: boolean = false; activeIndex: number = 0; docLoading!: boolean;
-  pageNo!: number; loading: boolean = false; pageSize!: number; usrs!: any[]; sort: any = {};
+  pageNo!: number; loading: boolean = false; pageSize!: number;
+  usrs!: any[]; sort: any = {};totalCount!: number;
   showRowInfo: boolean = false; rowInfo: any; isEdit: boolean = false;
   grps!: Group[];
   selectable = true; removable = true; selGrps: any = [];
-  totalCount!: number;
 
   constructor(
     private modalService: NgbModal,
@@ -65,6 +63,8 @@ export class UserListComponent implements OnInit {
   ngOnInit(): void {
     this.rolesArr = EnumHelper.enumToArray(this.roles);
     this.lngArr = EnumHelper.enumToArray(this.lngs);
+    this.visbCols = [{ n: "Role", k: "roleId", asc: false },{ n: "Latest Activity", k: "latestActivity", asc: false },{ n: "Date Created", k: "createdDate", asc: false }];
+    this.cols = [{ n: "Name", asc: false, k: "name" }];
     this.cols.push(...this.visbCols);
     this.initialiseState();
     this.initForm();
@@ -106,10 +106,7 @@ export class UserListComponent implements OnInit {
       roleId: ['', [Validators.required]],
       languageId: ['', [Validators.required]],
       group: [''],
-      isActive: [true],
-      // specifyPassword: [true],
-      // sendLoginInstructionEmail: [false],
-      // enforceEmployeePasswordReset: [false]
+      isActive: [true]
     });
     this.grpsList();
   }
@@ -126,8 +123,7 @@ export class UserListComponent implements OnInit {
       params.isActive = true;
     else if (this.activeIndex == 2)
       params.isActive = false;
-    this.usrs = [];
-    this.totalCount = 0
+    this.usrs = []; this.totalCount = 0;
     this.usrServ.emplList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
@@ -206,8 +202,7 @@ export class UserListComponent implements OnInit {
         this.rowInfo = usr;
         this.rowInfo.languageId = this.rowInfo.language && this.rowInfo.language.id ? this.rowInfo.language.id : '';
         this.docLoading = false;
-      }, 900)
-      // this.getUsr(usr)
+      }, 900);
     }
   }
 

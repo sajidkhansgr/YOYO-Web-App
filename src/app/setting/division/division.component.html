@@ -10,7 +10,7 @@
         </div>
         <div class="dropdown-menu" aria-labelledby="divisionsDD">
           <ng-container *ngIf="hubs[0]; else noHubs">
-            <a class="dropdown-item curs-ptr" *ngFor="let hub of hubs" (click)="hubChange(hub)">{{hub.name}}</a>
+            <a class="dropdown-item curs-ptr" *ngFor="let h of hubs" (click)="hubChange(h)">{{h.name}}</a>
           </ng-container>
           <ng-template #noHubs>
             <h6 class="dropdown-item text-secondary">No Hubs Found</h6>
@@ -18,12 +18,12 @@
           <div class="dropdown-divider"></div>
           <a class="dropdown-item text-primary curs-ptr" *ngIf="usrInfo && usrInfo.rid==1"
             (click)="openModal(addDivision,'add')">
-            Add New Division
+            Add New Hub
           </a>
         </div>
       </div>
     </div>
-    <div class="float-right" *ngIf="usrInfo && usrInfo.rid==1">
+    <div class="float-right" *ngIf="selHub && selHub.id && usrInfo && usrInfo.rid==1">
       <div class="dropdown">
         <button class="btn btn-light dropdown-toggle" type="button" id="cogDD" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
@@ -31,6 +31,11 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="cogDD">
           <a class="dropdown-item curs-ptr" (click)="openModal(addDivision,'edit')">Edit</a>
+          <a class="dropdown-item curs-ptr text-{{selHub.isActive ? 'primary' : 'success'}}"
+            (click)="actDeactHub()">
+            <i class="mr-1 fas" [ngClass]="{'fa-toggle-off': selHub.isActive, 'fa-toggle-on': !selHub.isActive}"></i>
+            {{selHub.isActive ? 'Deactivate' : 'Activate'}}
+          </a>
         </div>
       </div>
     </div>
@@ -116,7 +121,7 @@
 <!-- add division modal  -->
 <ng-template #addDivision let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">{{type=='add'?'Create New':'Edit'}} Division</h4>
+    <h4 class="modal-title">{{type=='add'?'Create New':'Edit'}} Hub</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -131,7 +136,7 @@
         </mat-error>
       </mat-form-field>
       <mat-checkbox class="ml-3 w-100">This division can share selected content globally. Global content can
-        be viewed (but not edited) by all other divisions.</mat-checkbox>
+        be viewed (but not edited) by all other hubs.</mat-checkbox>
       <hr>
       <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
       <mat-checkbox class="d-block ml-3">All Users</mat-checkbox>

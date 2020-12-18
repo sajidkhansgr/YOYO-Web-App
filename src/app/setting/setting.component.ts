@@ -47,7 +47,7 @@ export class SettingComponent implements OnInit {
     let url = 'account/';
     switch (event.index) {
       case 0: this.router.navigate([url + 'profile']); break;
-      case 1: this.router.navigate([url + 'divisions/list']); break;
+      case 1: this.router.navigate([url + 'hubs/list']); break;
     }
   }
 
