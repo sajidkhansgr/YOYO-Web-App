@@ -1,4 +1,4 @@
-import { DEF_IMG, DEF_ICON } from '../shared/constants';
+import { DEF_IMG, DEF_ICON, FLDR_ICON } from '../shared/constants';
 
 export class FileHelper {
 
@@ -15,6 +15,8 @@ export class FileHelper {
 
   public static getImg(d: any, type: string=''): string {
     if (d) {
+      if (d.folderIconPath)
+        return d.folderIconPath;
       if (d.imagePath)
         return d.imagePath;
       if (d.pdfImagePath)
@@ -30,6 +32,8 @@ export class FileHelper {
     }
     if(type=='icon')
       return DEF_ICON;
+    if(type=='fldr')
+      return FLDR_ICON;
     return DEF_IMG;
   }
 

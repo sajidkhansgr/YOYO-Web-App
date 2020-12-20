@@ -130,8 +130,8 @@ export class ExpInnerComponent implements OnInit {
   //   });
   // }
 
-  getImg(d: any): string {
-    return FileHelper.getImg(d);
+  getImg(d: any, type: string = ''): string {
+    return FileHelper.getImg(d, type);
   }
 
   navgToFldr(d: any) {

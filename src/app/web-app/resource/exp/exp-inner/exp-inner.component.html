@@ -58,7 +58,7 @@
           <ng-template #cntntFldr>
             <div class="view-items col-sm-6 col-md-4 col-lg-3 text-center folder curs-ptr my-2 p-2">
               <div class="icon" (click)="navgToFldr(wSC)">
-                <img [src]="wSC.folderIconPath?wSC.folderIconPath : fldrIcon">
+                <img [src]="getImg(wSC,'fldr')">
               </div>
               <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto" *ngIf="!wSC.hideLabelInWorkspace">
                 <div class="mx-auto text-truncate pr-1">{{wSC.name}}</div>
@@ -170,7 +170,7 @@
           <div class="folder d-flex bg-white rounded p-3 curs-ptr my-2">
             <mat-checkbox class="align-self-center"></mat-checkbox>
             <div class="icon align-self-center mx-4" (click)="navgToFldr(wSC)">
-              <img [src]="wSC.folderIconPath?wSC.folderIconPath:fldrIcon" style="max-width: 72px;">
+              <img [src]="getImg(wSC,'fldr')" style="max-width: 72px;">
             </div>
             <div class="info align-self-center" *ngIf="!wSC.hideLabelInWorkspace">
               <h5 class="mb-0" (click)="navgToFldr(wSC)">{{wSC.name}}</h5>

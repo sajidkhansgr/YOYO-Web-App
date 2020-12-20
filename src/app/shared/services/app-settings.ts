@@ -206,6 +206,10 @@ export class AppSettings {
 
   public static CANCEL_PROC_CNTNT = `api/Content/CancelContentProcessing`;
 
+  public static ACT_CNT_WRKSPC_FLDR = `api/Content/ActivateContentToWorkspaceFolder`;
+
+  public static DEACT_CNT_WRKSPC_FLDR = `api/Content/DeactivateContentToWorkspaceFolder`;
+
   // ---- LANGUAGE ---- //
 
   public static LIST_LNG = `api/Language/GetAll`;

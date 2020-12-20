@@ -277,11 +277,11 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   // activate/deactivate folder/smart folder
-  actDeactFolder(folder: any) {
-    if (folder.key == 'fldr') {
-      this.actDeactFldr(folder);
-    } else if (folder.key == 'smtFldr') {
-      this.actDeactSmtFldr(folder);
+  actDeactFolder(d: any) {
+    if (d.entityType == 1) {
+      this.actDeactFldr(d);
+    } else if (d.entityType == 2) {
+      this.actDeactSmtFldr(d);
     }
   }
 
@@ -305,8 +305,8 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // folder/smart folder open modal (add/update/duplicate)
   openFolderModal(modal: any, type: string, folder?: any) {
+    this.allTags = []; this.anyTags = []; this.noneTags = [];
     if (type == 'add') {
-      this.allTags = []; this.anyTags = []; this.noneTags = [];
       this.edit = false;
       this.openModal(modal);
     } else if (type == 'edit') {
@@ -346,43 +346,49 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // activate/deactivate smart folder
   actDeactSmtFldr(fldr: Folder) {
-    let actDeac: string = `${fldr.isActive ? 'deactivate' : 'activate'}`;
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to ${actDeac} this smart folder?`,
-        title: `${fldr.isActive ? 'Deactivate' : 'Activate'} smart folder`
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        this.cwServ.actDeactSmtFldr(fldr.id.toString(), fldr.isActive ? false : true).subscribe((data: any) => {
-          if (data) {
-            this.toastr.success(`Smart folder ${actDeac}d successfully`, 'Success!');
-            this.listFolders();
-          } else {
-            this.toastr.error(`Unable to ${actDeac} smart folder`, 'Error!');
-          }
-        }, (err: any) => {
-        });
-      }
-    })
+      let actDeac: string = `${fldr.isActive ? 'deactivate' : 'activate'}`;
+      this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          msg: `Are you sure you want to ${actDeac} this smart folder?`,
+          title: `${fldr.isActive ? 'Deactivate' : 'Activate'} smart folder`
+        },
+        autoFocus: false
+      }).afterClosed().subscribe(result => {
+        if (result) {
+          this.cwServ.actDeactSmtFldr(fldr.entityId?.toString(), fldr.isActive ? false : true).subscribe((data: any) => {
+            if (data) {
+              this.toastr.success(`Smart folder ${actDeac}d successfully`, 'Success!');
+              this.listFolders();
+            } else {
+              this.toastr.error(`Unable to ${actDeac} smart folder`, 'Error!');
+            }
+          }, (err: any) => {
+          });
+        }
+      })
   }
 
   // edit smart folder
   updSmartFolder() {
     if (this.smartFldrForm.valid) {
       this.disabled = true;
-      let folderData: any = {
+      let fldrData: any = {
         ...this.smartFldrForm.value,
         id: this.selFolder!.id,
-        smartFolderIcon: this.custIcon,
         workspaceId: this.selFolder!.workspaceId,
         folderId: this.selFolder!.folderId,
         isActive: this.selFolder!.isActive,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
-      folderData.tagIds = this.fldrTgs();
-      this.cwServ.updSmartFolder(folderData)
+      fldrData.tagIds = this.fldrTgs();
+      if(this.custIcon || this.iconUrl){
+        if(this.custIcon)
+          fldrData.smartFolderIcon = this.custIcon;
+        fldrData.hasIcon=  true;
+      }else{
+        fldrData.hasIcon=  false;
+      }
+      this.cwServ.updSmartFolder(fldrData)
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || 'Smart Folder updated successfully', 'Success!');
@@ -401,24 +407,30 @@ export class ContentWorkspaceComponent implements OnInit {
   addDuplSmartFolder() {
     if (this.smartFldrForm.valid) {
       this.disabled = true;
-      let folderData: any = {
+      let fldrData: any = {
         ...this.smartFldrForm.value,
-        smartFolderIcon: this.custIcon,
+        // smartFolderIcon: this.custIcon,
         isActive: true,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       }
-      if (this.edit === undefined) {
-        folderData.parentFolderIdForDuplicateSmartFolder = this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId;
-        folderData.workspaceIdForDuplicateSmartFolder = this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId;
-        folderData.originalSmartFolderId = this.selFolder!.id;
-        folderData.originalWorkspaceId = this.selFolder!.workspaceId;
-        folderData.hasIcon = this.hasIcon;
-      } else {
-        folderData.workspaceId = this.selWrkspc!.id;
-        folderData.folderId = this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0;
+      if(this.custIcon){
+        fldrData.smartFolderIcon = this.custIcon;
+        // fldrData.hasIcon = true;
+      }else{
+        // fldrData.hasIcon = false;
       }
-      folderData.tagIds = this.fldrTgs();
-      this.cwServ.addDuplSmartFolder(folderData, this.edit)
+      if (this.edit === undefined) {
+        fldrData.parentFolderIdForDuplicateSmartFolder = this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId;
+        fldrData.workspaceIdForDuplicateSmartFolder = this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId;
+        fldrData.originalSmartFolderId = this.selFolder!.id;
+        fldrData.originalWorkspaceId = this.selFolder!.workspaceId;
+        // fldrData.hasIcon = this.hasIcon;
+      } else {
+        fldrData.workspaceId = this.selWrkspc!.id;
+        fldrData.folderId = this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0;
+      }
+      fldrData.tagIds = this.fldrTgs();
+      this.cwServ.addDuplSmartFolder(fldrData, this.edit)
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || `Smart Folder ${this.edit === undefined ? 'duplicated' : 'added'} successfully`, 'Success!');
@@ -496,7 +508,7 @@ export class ContentWorkspaceComponent implements OnInit {
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.cwServ.actDeactFldr(fldr.id.toString(), fldr.isActive ? false : true).subscribe((data: any) => {
+        this.cwServ.actDeactFldr(fldr.entityId?.toString(), fldr.isActive ? false : true).subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Folder ${actDeac}d successfully`, 'Success!');
             this.listFolders();
@@ -513,7 +525,7 @@ export class ContentWorkspaceComponent implements OnInit {
   updFolder() {
     if (this.folderForm.valid) {
       this.disabled = true;
-      let folderData: any = {
+      let fldrData: any = {
         ...this.folderForm.value,
         id: this.selFolder!.id,
         folderIcon: this.custIcon,
@@ -521,13 +533,19 @@ export class ContentWorkspaceComponent implements OnInit {
         folderId: this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId,
         isActive: this.selFolder!.isActive
       };
-      // console.log(folderData);
-      this.cwServ.updFolder(folderData).subscribe((data: any) => {
+      if(this.custIcon || this.iconUrl){
+        if(this.custIcon)
+          fldrData.folderIcon = this.custIcon;
+        fldrData.hasIcon=  true;
+      }else{
+        fldrData.hasIcon=  false;
+      }
+      this.cwServ.updFolder(fldrData).subscribe((data: any) => {
         if (data) {
-          this.toastr.success(data.message || 'Folder added successfully', 'Success!');
+          this.toastr.success(data.message || 'Folder updated successfully', 'Success!');
           this.listFolders()
         } else {
-          this.toastr.error('Unable to add Folder', 'Error!');
+          this.toastr.error('Unable to update Folder', 'Error!');
         }
         this.setDefFldr();
       }, (err: any) => {
@@ -540,23 +558,27 @@ export class ContentWorkspaceComponent implements OnInit {
   addDuplFolder() {
     if (this.folderForm.valid) {
       this.disabled = true;
-      let folderData: any = {
+      let fldrData: any = {
         ...this.folderForm.value,
-        folderIcon: this.custIcon,
         isActive: true
       }
-      if (this.edit === undefined) {
-        folderData.parentFolderIdForDuplicateFolder = this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId;
-        folderData.workspaceIdForDuplicateFolder = this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId;
-        folderData.originalFolderId = this.selFolder!.id;
-        folderData.originalWorkspaceId = this.selFolder!.workspaceId;
-        folderData.hasIcon = this.hasIcon;
-      } else {
-        folderData.workspaceId = this.selWrkspc!.id;
-        folderData.folderId = this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0;
+      if(this.custIcon){
+        fldrData.folderIcon = this.custIcon;
+        // fldrData.hasIcon = true;
+      }else{
+        // fldrData.hasIcon = false;
       }
-      console.log(folderData);
-      this.cwServ.addDuplFolder(folderData, this.edit)
+      if (this.edit === undefined) {
+        fldrData.parentFolderIdForDuplicateFolder = this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId;
+        fldrData.workspaceIdForDuplicateFolder = this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId;
+        fldrData.originalFolderId = this.selFolder!.id;
+        fldrData.originalWorkspaceId = this.selFolder!.workspaceId;
+        fldrData.hasIcon = this.hasIcon;
+      } else {
+        fldrData.workspaceId = this.selWrkspc!.id;
+        fldrData.folderId = this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0;
+      }
+      this.cwServ.addDuplFolder(fldrData, this.edit)
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message || 'Folder added successfully', 'Success!');
@@ -1045,6 +1067,8 @@ export class ContentWorkspaceComponent implements OnInit {
         this.updWrkspcForm.reset();
         this.folderForm.reset();
         this.smartFldrForm.reset();
+        this.iconUrl = undefined;
+        this.addURLIcon = '';
       });
   }
 
@@ -1503,6 +1527,30 @@ export class ContentWorkspaceComponent implements OnInit {
       }
       this.cntntLoading = false;
     }
+  }
+
+  //delete content or folder from workspace, for now its activate/deactivate
+  delDataFromWrkspc(d:any){
+    let actDeac: string = `${d.isActive ? 'deactivate' : 'activate'}`;
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to ${actDeac} this content?`,
+        title: `${d.isActive ? 'Deactivate' : 'Activate'} content`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.cwServ.actDeactCntntInWrkspc(d.contentWorkspaceFolderId, d.isActive ? false : true).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(`Content ${actDeac}d successfully`, 'Success!');
+            this.listFolders();
+          } else {
+            this.toastr.error(`Unable to ${actDeac} content`, 'Error!');
+          }
+        }, (err: any) => {
+        });
+      }
+    })
   }
 
   dismissModal() {

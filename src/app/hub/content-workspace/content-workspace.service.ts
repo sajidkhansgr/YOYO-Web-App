@@ -17,7 +17,7 @@ export class ContentWorkspaceService {
   freezeFolderObj(data: any) {
     const formData: FormData = new FormData();
     for (let key in data) {
-      if (data[key] || key === 'IsUrl') {
+      if (data[key] || key === 'IsUrl' || key === 'hasIcon') {
         if (key === 'folderIcon' || key === 'content' || key === 'urlIcon' && data[key] && data[key].name) {
           formData.append(key, data[key], data[key].name);
         } else {
@@ -256,5 +256,12 @@ export class ContentWorkspaceService {
     let url: string = isStart ? AppSettings.START_PROC_CNTNT : AppSettings.CANCEL_PROC_CNTNT;
     return this.http.post(`${url}`, data);
   }
+
+  // activate/deactivate content
+  actDeactCntntInWrkspc(id: any, isAct: boolean) {
+    let url = isAct ? AppSettings.ACT_CNT_WRKSPC_FLDR : AppSettings.DEACT_CNT_WRKSPC_FLDR;
+    return this.http.post(`${url}?id=${id}`, {});
+  }
+
 
 }

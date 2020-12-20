@@ -42,6 +42,8 @@ export class SidebarComponent implements OnInit {
         if (index >= 0) {
           this.navigation[index].children = res;
         }
+      }else{
+        this.navigation[1].children = [];
       }
     }, (err: any) => {
         this.navigation[1].children = [];

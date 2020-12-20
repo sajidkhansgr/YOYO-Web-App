@@ -1,8 +1,7 @@
 <div class="content-workspace">
   <div class="buttons-row row mt-3 justify-content-between mx-2">
     <div class="dropdown">
-      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addContentDD" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addContentDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Add Content
       </button>
       <div class="dropdown-menu" aria-labelledby="addContentDD">
@@ -21,8 +20,7 @@
     </div>
   </div>
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav"
-      [ngClass]="{'col-md-12': !showRowInfo && !showWork, 'col-md-0 col-lg-6': showRowInfo || showWork}">
+    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo && !showWork, 'col-md-0 col-lg-6': showRowInfo || showWork}">
       <div class="card overflow-hidden">
         <div class="card-header border-0">
           <mat-tab-group (selectedTabChange)="onTabChange($event)">
@@ -73,8 +71,7 @@
           <div class="card-title d-flex bg-hi-grey p-2 border-bottom">
             <div class="btn btn-light btn-sm ml-auto mr-2"><i class="fas fa-chart-line mr-1"></i>Analytics</div>
             <div class="dropdown">
-              <button class="btn btn-light btn-sm" type="button" id="optDD" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
+              <button class="btn btn-light btn-sm" type="button" id="optDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-ellipsis-h"></i>
               </button>
               <div class="dropdown-menu" aria-labelledby="optDD">
@@ -111,8 +108,7 @@
                 </div>
                 <div class="edit" *ngIf="edits.d">
                   <div>
-                    <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                      [floatLabel]="'never'">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                       <input matInput placeholder="Description" [(ngModel)]="desc" name="desc" class="ml-0">
                     </mat-form-field>
                     <div class="form-group text-right">
@@ -139,8 +135,7 @@
                         </div>
                         <div class="view" *ngIf="!edits.t">
                           <div *ngIf="rowInfo.contentTags && rowInfo.contentTags.length>0 else noCntntTag">
-                            <span *ngFor="let tg of rowInfo.contentTags"
-                              class="badge badge-light text-success text-wrap m-1">{{tg.tagName}}</span>
+                            <span *ngFor="let tg of rowInfo.contentTags" class="badge badge-light text-success text-wrap m-1">{{tg.tagName}}</span>
                           </div>
                           <ng-template #noCntntTag>
                             <div class="text-hi-dark-grey">No Tags</div>
@@ -150,17 +145,13 @@
                           <div>
                             <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white">
                               <mat-chip-list aria-label="Select tags">
-                                <mat-chip *ngFor="let d of selTags2" [selectable]="selectable" [removable]="removable"
-                                  (removed)="remove(d,'selTags2')">
+                                <mat-chip *ngFor="let d of selTags2" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selTags2')">
                                   {{d.name}}
                                   <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
                                 </mat-chip>
-                                <input matInput #cntInfoInp [(ngModel)]="cntntInfoTag" name="cntntInfoTag"
-                                  placeholder="Select tags" [matAutocomplete]="autoT">
+                                <input matInput #cntInfoInp [(ngModel)]="cntntInfoTag" name="cntntInfoTag" placeholder="Select tags" [matAutocomplete]="autoT">
                               </mat-chip-list>
-                              <mat-autocomplete #autoT="matAutocomplete"
-                                (optionSelected)="selFromAutoComp($event.option.value,'selTags2',cntInfoInp)"
-                                [displayWith]="displayFn">
+                              <mat-autocomplete #autoT="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags2',cntInfoInp)" [displayWith]="displayFn">
                                 <mat-option *ngFor="let tg of tags|filterName: cntntInfoTag: 'name'" [value]="tg">
                                   {{tg.name}}
                                 </mat-option>
@@ -184,8 +175,7 @@
                         </div>
                         <div class="view" *ngIf="!edits.l">
                           <div *ngIf="rowInfo.contentLanguages && rowInfo.contentLanguages.length>0 else noCntntLng">
-                            <span *ngFor="let lng of rowInfo.contentLanguages"
-                              class="badge badge-light text-success">{{lng.languageName}}</span>
+                            <span *ngFor="let lng of rowInfo.contentLanguages" class="badge badge-light text-success">{{lng.languageName}}</span>
                           </div>
                           <ng-template #noCntntLng>
                             <div class="text-hi-dark-grey">No Languages</div>
@@ -195,17 +185,13 @@
                           <div>
                             <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white">
                               <mat-chip-list aria-label="Select Languages">
-                                <mat-chip *ngFor="let d of selLngs" [selectable]="selectable" [removable]="removable"
-                                  (removed)="remove(d,'selLngs')">
+                                <mat-chip *ngFor="let d of selLngs" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selLngs')">
                                   {{d.name}}
                                   <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
                                 </mat-chip>
-                                <input matInput #lngInp [(ngModel)]="cntntLng" name="cntntLng"
-                                  placeholder="Select Languages" [matAutocomplete]="autoL">
+                                <input matInput #lngInp [(ngModel)]="cntntLng" name="cntntLng" placeholder="Select Languages" [matAutocomplete]="autoL">
                               </mat-chip-list>
-                              <mat-autocomplete #autoL="matAutocomplete"
-                                (optionSelected)="selFromAutoComp($event.option.value,'selLngs',lngInp)"
-                                [displayWith]="displayFn">
+                              <mat-autocomplete #autoL="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selLngs',lngInp)" [displayWith]="displayFn">
                                 <mat-option *ngFor="let lng of lngs|filterName: cntntLng: 'name'" [value]="lng">
                                   {{lng.name}}
                                 </mat-option>
@@ -232,8 +218,7 @@
                         </div>
                         <div class="edit" *ngIf="edits.c">
                           <div>
-                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                              [floatLabel]="'never'">
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                               <input matInput placeholder="Country" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
@@ -257,8 +242,7 @@
                         </div>
                         <div class="edit" *ngIf="edits.a">
                           <div>
-                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                              [floatLabel]="'never'">
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                               <input matInput placeholder="Author" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
@@ -283,12 +267,10 @@
                         </div>
                         <div class="edit" *ngIf="edits.av">
                           <div>
-                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                              [floatLabel]="'never'">
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                               <input matInput placeholder="Released" class="ml-0">
                             </mat-form-field>
-                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                              [floatLabel]="'never'">
+                            <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                               <input matInput placeholder="Expired" class="ml-0">
                             </mat-form-field>
                             <div class="form-group text-right">
@@ -311,8 +293,7 @@
                           <div class="text-hi-dark-grey">
                             <ul class="list-unstyled">
                               <li>
-                                <i [ngClass]="{'fa-check': rowInfo.canBeShared,'fa-times': !rowInfo.canBeShared}"
-                                  class="mr-1 fas"></i>
+                                <i [ngClass]="{'fa-check': rowInfo.canBeShared,'fa-times': !rowInfo.canBeShared}" class="mr-1 fas"></i>
                                 Can be shared
                               </li>
                               <!-- <li><i class="fas fa-check mr-1"></i>Can be downloaded</li>
@@ -467,13 +448,11 @@
                           </div>
                           <div class="edit" *ngIf="edits.e">
                             <form>
-                              <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                                [floatLabel]="'never'">
+                              <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
                                 <input matInput placeholder="External ID" class="ml-0">
                               </mat-form-field>
                               <div class="form-group text-right">
-                                <button type="reset" class="btn btn-secondary btn-sm mr-2"
-                                  (click)="closeEdit('e')">Cancel</button>
+                                <button type="reset" class="btn btn-secondary btn-sm mr-2" (click)="closeEdit('e')">Cancel</button>
                                 <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                               </div>
                             </form>
@@ -508,15 +487,12 @@
                       </div>
                     </div>
                     <div class="add-comment mt-4">
-                      <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white"
-                        [floatLabel]="'never'">
-                        <input matInput placeholder="Write a comment..." [(ngModel)]="cmnt" name="cmnt" class="ml-0"
-                          maxlength="500" required />
+                      <mat-form-field appearance="outline" class="custom-mat-input w-100 my-2 bg-white" [floatLabel]="'never'">
+                        <input matInput placeholder="Write a comment..." [(ngModel)]="cmnt" name="cmnt" class="ml-0" maxlength="500" required />
                         <i matSuffix class="fa fa-angle-double-right curs-ptr"></i>
                       </mat-form-field>
                       <div class="form-group text-right">
-                        <button [disabled]="disb.cmnt || !cmnt" (click)="addCmnt('cmnt')"
-                          class="btn btn-primary text-white btn-sm">
+                        <button [disabled]="disb.cmnt || !cmnt" (click)="addCmnt('cmnt')" class="btn btn-primary text-white btn-sm">
                           <app-loader [type]="'btn'" *ngIf="disb.cmnt"></app-loader>Submit
                         </button>
                       </div>
@@ -532,14 +508,11 @@
         <div class="card">
           <div class="card-header row m-0">
             <div class="dropdown">
-              <button class="btn btn-light dropdown-toggle" type="button" id="wrkspcDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false" (click)="loadWrkspcs()">
+              <button class="btn btn-light dropdown-toggle" type="button" id="wrkspcDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="loadWrkspcs()">
                 {{selWrkspc ? selWrkspc.name : 'Select a Workspace'}}
               </button>
               <div class="dropdown-menu overflow-hidden" aria-labelledby="wrkspcDD">
-                <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeWrkspc"
-                  class="nav-tabs justify-content-end border-bottom mr-3 w-100 pr-2"
-                  (activeIdChange)="changeDispWrkspc()" (click)="$event.stopPropagation();">
+                <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeWrkspc" class="nav-tabs justify-content-end border-bottom mr-3 w-100 pr-2" (activeIdChange)="changeDispWrkspc()" (click)="$event.stopPropagation();">
                   <li [ngbNavItem]="1"><a ngbNavLink (click)="$event.stopPropagation();">Active</a></li>
                   <li [ngbNavItem]="2"><a ngbNavLink (click)="$event.stopPropagation();">Disabled</a></li>
                 </ul>
@@ -549,8 +522,7 @@
                 <ng-template #noLoading>
                   <ng-container *ngIf="wrkspcs.length>0; else noWrkspc">
                     <div class="overflow-auto" style="max-height:130px">
-                      <a class="dropdown-item curs-ptr" [ngClass]="{'active': selWrkspc == ws}"
-                        (click)="selectWrkspc(ws)" *ngFor="let ws of wrkspcs">
+                      <a class="dropdown-item curs-ptr" [ngClass]="{'active': selWrkspc == ws}" (click)="selectWrkspc(ws)" *ngFor="let ws of wrkspcs">
                         {{ws.name}}
                       </a>
                     </div>
@@ -573,63 +545,46 @@
           </div>
           <div class="card-header bg-hi-light-grey py-1 px-2 row m-0">
             <div class="dropdown rounded mr-2">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown"
-                [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown" [disabled]="!selWrkspc">
                 Add
               </button>
               <div class="dropdown-menu" aria-labelledby="btnAddDD">
-                <a class="dropdown-item curs-ptr" (click)="openFolderModal(folderModal, 'add')">Add
-                  Folder</a>
-                <a class="dropdown-item curs-ptr" (click)="openFolderModal(smartFolderModal, 'add')">Add Smart
-                  Folder</a>
+                <a class="dropdown-item curs-ptr" (click)="openFolderModal(folderModal, 'add')">Add Folder</a>
+                <a class="dropdown-item curs-ptr" (click)="openFolderModal(smartFolderModal, 'add')">Add Smart Folder</a>
               </div>
             </div>
             <div class="dropdown rounded">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown"
-                (click)="getUsrGrpsFormWrkspc();" [disabled]="!selWrkspc">
-                Users <span class="badge badge-light"
-                  *ngIf="!selUsrGrpLoad && selUsrGrpWrkspc">{{selUsrGrpWrkspc.length}}</span>
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown" (click)="getUsrGrpsFormWrkspc();" [disabled]="!selWrkspc">
+                Users <span class="badge badge-light" *ngIf="!selUsrGrpLoad && selUsrGrpWrkspc">{{selUsrGrpWrkspc.length}}</span>
               </button>
-              <div class="dropdown-menu large-dropdown-menu py-0 overflow-hidden" aria-labelledby="btnUsersDD"
-                (click)="$event.stopPropagation();">
+              <div class="dropdown-menu large-dropdown-menu py-0 overflow-hidden" aria-labelledby="btnUsersDD" (click)="$event.stopPropagation();">
                 <div class="bg-hi-dark-grey p-2">Assign Experience Users</div>
                 <div class="p-3">
                   <form>
-                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3"
-                      [floatLabel]="'never'">
+                    <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 px-3" [floatLabel]="'never'">
                       <mat-chip-list aria-label="Select tags">
-                        <mat-chip *ngFor="let d of selUsrGrps" [selectable]="selectable" [removable]="removable"
-                          (removed)="remove(d,'selUsrGrps')">
+                        <mat-chip *ngFor="let d of selUsrGrps" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selUsrGrps')">
                           {{d.name}}
                           <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
                         </mat-chip>
-                        <input matInput #unSelGrpInp [(ngModel)]="unSelUsrGrpTxt" name="unSelUsrGrpTxt"
-                          placeholder="Add User or Group" [matAutocomplete]="auto3">
+                        <input matInput #unSelGrpInp [(ngModel)]="unSelUsrGrpTxt" name="unSelUsrGrpTxt" placeholder="Add User or Group" [matAutocomplete]="auto3">
                       </mat-chip-list>
-                      <mat-autocomplete #auto3="matAutocomplete"
-                        (optionSelected)="selFromAutoComp($event.option.value,'selUsrGrps',unSelGrpInp);"
-                        [displayWith]="displayFn">
-                        <mat-option (click)="$event.stopPropagation();"
-                          *ngFor="let unUsrGpW of unSelUsrGrpWrkspc|filterName: unSelUsrGrpTxt: 'name'"
-                          [value]="unUsrGpW">
+                      <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selUsrGrps',unSelGrpInp);" [displayWith]="displayFn">
+                        <mat-option (click)="$event.stopPropagation();" *ngFor="let unUsrGpW of unSelUsrGrpWrkspc|filterName: unSelUsrGrpTxt: 'name'" [value]="unUsrGpW">
                           {{unUsrGpW.name}}
                         </mat-option>
                       </mat-autocomplete>
                     </mat-form-field>
                     <div class="form-group text-right">
-                      <button class="btn btn-success text-white btn-sm"
-                        [disabled]="selUsrGrps.length<=0 || usrGrpWrkSpcDisb"
-                        (click)="addUsrGrpInWrkspce();">Submit</button>
+                      <button class="btn btn-success text-white btn-sm" [disabled]="selUsrGrps.length<=0 || usrGrpWrkSpcDisb" (click)="addUsrGrpInWrkspce();">Submit</button>
                     </div>
                   </form>
                   <div class="border">
                     <div class="bg-hi-light-grey row m-0 py-1">
                       <div class="col-4 align-self-center">Name</div>
                       <div class="col-8">
-                        <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white"
-                          [floatLabel]="'never'">
-                          <input matInput placeholder="Search User or Group" class="ml-0" [(ngModel)]="selUsrGrpTxt"
-                            name="selUsrGrpTxt">
+                        <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2 bg-white" [floatLabel]="'never'">
+                          <input matInput placeholder="Search User or Group" class="ml-0" [(ngModel)]="selUsrGrpTxt" name="selUsrGrpTxt">
                           <i matPrefix class="fas fa-search"></i>
                         </mat-form-field>
                       </div>
@@ -638,10 +593,8 @@
                     <div *ngIf="!selUsrGrpLoad && selUsrGrpWrkspc" class="scroll-div">
                       <ul class="list-unstyled p-2 mb-0" *ngIf="selUsrGrpWrkspc.length>0 else noSelUsrGrp">
                         <li *ngFor="let usrGpW of selUsrGrpWrkspc | filterName : selUsrGrpTxt: 'name'">
-                          <i class="fas mr-1"
-                            [ngClass]="{'fa-user-friends': usrGpW.isGroup,'fa-user': !usrGpW.isGroup}"></i>{{usrGpW.name}}
-                          <a class="text-hi-dark float-right" (click)="remUsrGrpInWrkspce(usrGpW)"><i
-                              class="fas fa-times"></i></a>
+                          <i class="fas mr-1" [ngClass]="{'fa-user-friends': usrGpW.isGroup,'fa-user': !usrGpW.isGroup}"></i>{{usrGpW.name}}
+                          <a class="text-hi-dark float-right" (click)="remUsrGrpInWrkspce(usrGpW)"><i class="fas fa-times"></i></a>
                         </li>
                       </ul>
                       <ng-template #noSelUsrGrp>
@@ -653,8 +606,7 @@
               </div>
             </div>
             <div class="dropdown rounded ml-auto">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown"
-                [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="settingsDD" data-toggle="dropdown" [disabled]="!selWrkspc">
                 <i class="fas fa-cog"></i>
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDD">
@@ -663,10 +615,8 @@
                 <a class="dropdown-item curs-ptr">Lock</a>
                 <a class="dropdown-item curs-ptr">Hide from Workspace App Link</a>
                 <a class="dropdown-item curs-ptr">Tag Categories</a>
-                <a class="dropdown-item curs-ptr text-{{selWrkspc.isActive ? 'primary' : 'success'}}"
-                  (click)="actDeactWrkspc(selWrkspc)" *ngIf="selWrkspc">
-                  <i class="mr-1 fas"
-                    [ngClass]="{'fa-toggle-off': selWrkspc.isActive, 'fa-toggle-on': !selWrkspc.isActive}"></i>
+                <a class="dropdown-item curs-ptr text-{{selWrkspc.isActive ? 'primary' : 'success'}}" (click)="actDeactWrkspc(selWrkspc)" *ngIf="selWrkspc">
+                  <i class="mr-1 fas" [ngClass]="{'fa-toggle-off': selWrkspc.isActive, 'fa-toggle-on': !selWrkspc.isActive}"></i>
                   {{selWrkspc.isActive ? 'Deactivate' : 'Activate'}} Workspace
                 </a>
               </div>
@@ -676,24 +626,20 @@
             <div class="card-body">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-white mb-0 p-0">
-                  <li class="breadcrumb-item curs-ptr text-primary" (click)="backFolder()" style="font-size: 16px;"
-                    *ngIf="folderNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li>
+                  <li class="breadcrumb-item curs-ptr text-primary" (click)="backFolder()" style="font-size: 16px;" *ngIf="folderNav.length>0"><i class="fa fa-arrow-left align-self-center"></i></li>
                   <li class="breadcrumb-item no-before">{{selWrkspc.name}}</li>
                   <li class="breadcrumb-item" *ngFor="let folNav of folderNav">{{folNav.name}}</li>
                 </ol>
               </nav>
-              <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeFldrs"
-                class="nav-tabs justify-content-end border-bottom-0 mr-3 w-100" (activeIdChange)="changeDispFldrs()">
+              <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeFldrs" class="nav-tabs justify-content-end border-bottom-0 mr-3 w-100" (activeIdChange)="changeDispFldrs()">
                 <li [ngbNavItem]="1"><a ngbNavLink>Active</a></li>
                 <li [ngbNavItem]="2"><a ngbNavLink>Disabled</a></li>
               </ul>
               <hr class="mt-0">
               <app-loader [type]="'page'" *ngIf="folderLoading"></app-loader>
-              <div class="min-ht pl-0 mt-2 mb-0" cdkDropList id="fldrLists" [cdkDropListData]="wrkspcItems"
-                (cdkDropListDropped)="drop($event)" *ngIf="!folderLoading">
+              <div class="min-ht pl-0 mt-2 mb-0" cdkDropList id="fldrLists" [cdkDropListData]="wrkspcItems" (cdkDropListDropped)="drop($event)" *ngIf="!folderLoading">
                 <div class="main row py-4" *ngIf="wrkspcItems.length > 0">
-                  <div class="view-main curs-ptr my-2 p-2 col-xl-3 col-lg-4 col-md-3 col-sm-4 col-6"
-                    *ngFor="let wi of wrkspcItems" cdkDrag>
+                  <div class="view-main curs-ptr my-2 p-2 col-xl-3 col-lg-4 col-md-3 col-sm-4 col-6" *ngFor="let wi of wrkspcItems" cdkDrag>
                     <!-- <div *cdkDragPlaceholder class="example-custom-placeholder"></div> -->
                     <ng-container *ngIf="(wi.entityType === 1 || wi.entityType === 2) else onlyCntnt">
                       <div *cdkDragPreview>
@@ -702,33 +648,30 @@
                       <div class="image">
                         <img [src]="wi.imagePath?wi.imagePath:fldrIcon" (click)="changeFolder(wi)">
                         <div class="dropdown" style="z-index:1;">
-                          <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD"
-                            data-toggle="dropdown">
+                          <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="comInfoDD" data-toggle="dropdown">
                             <i class="fas fa-cog"></i>
                           </button>
                           <div class="dropdown-menu" aria-labelledby="comInfoDD">
-                            <a class="dropdown-item curs-ptr"
-                              (click)="openFolderModal(wi.entityType === 1 ? folderModal : smartFolderModal, 'edit', wi)">
-                              <i class="fas fa-edit mr-1"></i>Edit {{wi.entityType === 1 ? '' : 'Smart '}}Folder</a>
-                            <a class="dropdown-item curs-ptr"
-                              (click)="openFolderModal(wi.entityType === 1 ? folderModal : smartFolderModal, 'dupl', wi)">
-                              <i class="fas fa-clone mr-1"></i>Duplicate
-                              {{wi.entityType === 1 ? '' : 'Smart '}}Folder</a>
-                            <a class="dropdown-item" href="javascript:void(0)">
-                              <i class="fas fa-link mr-1"></i>App Link</a>
-                            <a class="dropdown-item text-{{wi.isActive ? 'primary' : 'success'}}"
-                              (click)="actDeactFolder(wi)">
-                              <i class="mr-1 fas"
-                                [ngClass]="{'fa-toggle-off': wi.isActive, 'fa-toggle-on': !wi.isActive}"></i>
+                            <a class="dropdown-item curs-ptr" (click)="openFolderModal(wi.entityType === 1 ? folderModal : smartFolderModal, 'edit', wi)">
+                              <i class="fas fa-edit mr-1"></i>Edit {{wi.entityType === 1 ? '' : 'Smart '}}Folder
+                            </a>
+                            <a class="dropdown-item curs-ptr" (click)="openFolderModal(wi.entityType === 1 ? folderModal : smartFolderModal, 'dupl', wi)">
+                              <i class="fas fa-clone mr-1"></i>Duplicate {{wi.entityType === 1 ? '' : 'Smart '}}Folder
+                            </a>
+                            <!-- <a class="dropdown-item" href="javascript:void(0)">
+                              <i class="fas fa-link mr-1"></i>App Link
+                            </a> -->
+                            <a class="dropdown-item text-{{wi.isActive ? 'primary' : 'success'}}" (click)="actDeactFolder(wi)">
+                              <i class="mr-1 fas" [ngClass]="{'fa-toggle-off': wi.isActive, 'fa-toggle-on': !wi.isActive}"></i>
                               {{wi.isActive?'Deactivate':'Activate'}} {{wi.entityType === 1 ? '':'Smart '}}Folder
                             </a>
-                            <a class="dropdown-item" href="javascript:void(0)">
-                              <i class="fas fa-folder-plus mr-1"></i>Create New Channel from Folder</a>
+                            <!-- <a class="dropdown-item" href="javascript:void(0)">
+                              <i class="fas fa-folder-plus mr-1"></i>Create New Channel from Folder
+                            </a> -->
                           </div>
                         </div>
                       </div>
-                      <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate"
-                        *ngIf="!wi.hideLabelInWorkspace" (click)="changeFolder(wi)">
+                      <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate" *ngIf="!wi.hideLabelInWorkspace" (click)="changeFolder(wi)">
                         {{wi.name}}
                       </div>
                     </ng-container>
@@ -736,15 +679,21 @@
                       <div *cdkDragPreview>
                         <img [src]="getImg(wi)" style="width:100px;height:100px">
                       </div>
-                      <div class="image"> <img [src]="getImg(wi)"></div>
+                      <div class="image">
+                        <img [src]="getImg(wi)">
+                        <div class="dropdown" style="z-index:1;">{{wi.isActive}}
+                          <button class="btn btn-light btn-sm dropdown-toggle" type="button" (click)="delDataFromWrkspc(wi)">
+                            <i class="mr-1 fas" [ngClass]="{'fa-toggle-off': wi.isActive, 'fa-toggle-on': !wi.isActive}"></i>
+                          </button>
+                        </div>
+                      </div>
                       <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate">
                         {{wi.name}}
                       </div>
                     </ng-template>
                   </div>
                 </div>
-                <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;"
-                  *ngIf="wrkspcItems.length == 0">
+                <div class="text-center text-secondary" style="min-height: 103px; padding-top:45px;" *ngIf="wrkspcItems.length == 0">
                   No data found
                 </div>
               </div>
@@ -769,12 +718,10 @@
           <button class="btn btn-light dropdown-toggle mr-2" id="fileDD" data-toggle="dropdown">
             <i class="fas fa-cog"></i>
           </button>
-          <div class="cog dropdown-menu dropdown-menu-right pt-0 overflow-hidden" aria-labelledby="fileDD"
-            (click)="$event.stopPropagation();">
+          <div class="cog dropdown-menu dropdown-menu-right pt-0 overflow-hidden" aria-labelledby="fileDD" (click)="$event.stopPropagation();">
             <div class="scrollable py-2">
               <span class="ml-2 heading">Visible Columns</span>
-              <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols"
-                class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]" (cdkDropListDropped)="drop($event)">
+              <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols" class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]" (cdkDropListDropped)="drop($event)">
                 <button class="dropdown-item pl-2" *ngFor="let col of visbCols;let i=index" cdkDrag>
                   <span class="ellipsis mr-2">
                     <i class="fa fa-ellipsis-v"></i>
@@ -787,8 +734,7 @@
                 </span>
               </ul>
               <span class="ml-2 heading">Hidden Columns</span>
-              <ul cdkDropList #hidList="cdkDropList" [cdkDropListData]="hidCols" class="min-ht pl-0 mt-2 mb-0"
-                [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
+              <ul cdkDropList #hidList="cdkDropList" [cdkDropListData]="hidCols" class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
                 <button class="dropdown-item pl-2" *ngFor="let col of hidCols;let i=index" cdkDrag>
                   <span class="ellipsis mr-2 mb-1">
                     <i class="fa fa-ellipsis-v"></i>
@@ -818,8 +764,7 @@
             File Type
           </button>
           <div class="dropdown-menu" style="width:12rem;" aria-labelledby="fileDD" (click)="$event.stopPropagation();">
-            <mat-checkbox class="dropdown-item" [checked]="ft.chk" *ngFor="let ft of cntntTypeFltr"
-              (change)="addFileType($event.checked, ft,true)">
+            <mat-checkbox class="dropdown-item" [checked]="ft.chk" *ngFor="let ft of cntntTypeFltr" (change)="addFileType($event.checked, ft,true)">
               {{ft.n}}
             </mat-checkbox>
           </div>
@@ -828,21 +773,17 @@
           <button class="btn btn-light dropdown-toggle" id="tagsDD" data-toggle="dropdown">
             Tags
           </button>
-          <div class="dropdown-menu px-2" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD"
-            (click)="$event.stopPropagation();">
+          <div class="dropdown-menu px-2" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD" (click)="$event.stopPropagation();">
             <mat-form-field appearance="outline" class="w-100">
               <mat-chip-list>
                 <mat-chip *ngFor="let tg of allTags1" selectable removable (removed)="remove(tg,'allTags1')">
                   {{tg.name}}
                   <i matChipRemove class="fas fa-times-circle"></i>
                 </mat-chip>
-                <input matInput #alTg1 placeholder="Match ALL of these tags" [(ngModel)]="alTgTxt1" name="alTgTxt1"
-                  [matAutocomplete]="autoAll1">
+                <input matInput #alTg1 placeholder="Match ALL of these tags" [(ngModel)]="alTgTxt1" name="alTgTxt1" [matAutocomplete]="autoAll1">
               </mat-chip-list>
-              <mat-autocomplete #autoAll1="matAutocomplete"
-                (optionSelected)="selFromAutoComp($event.option.value,'allTags1',alTg1)" [displayWith]="displayFn">
-                <mat-option *ngFor="let tg of tags|filterName: alTgTxt1: 'name'" [value]="tg"
-                  (click)="$event.stopPropagation();">
+              <mat-autocomplete #autoAll1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'allTags1',alTg1)" [displayWith]="displayFn">
+                <mat-option *ngFor="let tg of tags|filterName: alTgTxt1: 'name'" [value]="tg" (click)="$event.stopPropagation();">
                   {{tg.name}}
                 </mat-option>
               </mat-autocomplete>
@@ -853,13 +794,10 @@
                   {{tg.name}}
                   <i matChipRemove class="fas fa-times-circle"></i>
                 </mat-chip>
-                <input matInput #anTg1 placeholder="Match ANY of these tags" [(ngModel)]="anTgTxt1" name="anTgTxt1"
-                  [matAutocomplete]="autoAny1">
+                <input matInput #anTg1 placeholder="Match ANY of these tags" [(ngModel)]="anTgTxt1" name="anTgTxt1" [matAutocomplete]="autoAny1">
               </mat-chip-list>
-              <mat-autocomplete #autoAny1="matAutocomplete"
-                (optionSelected)="selFromAutoComp($event.option.value,'anyTags1',anTg1)" [displayWith]="displayFn">
-                <mat-option *ngFor="let tg of tags|filterName: anTgTxt1: 'name'" [value]="tg"
-                  (click)="$event.stopPropagation();">
+              <mat-autocomplete #autoAny1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'anyTags1',anTg1)" [displayWith]="displayFn">
+                <mat-option *ngFor="let tg of tags|filterName: anTgTxt1: 'name'" [value]="tg" (click)="$event.stopPropagation();">
                   {{tg.name}}
                 </mat-option>
               </mat-autocomplete>
@@ -870,13 +808,10 @@
                   {{tg.name}}
                   <i matChipRemove class="fas fa-times-circle"></i>
                 </mat-chip>
-                <input matInput #noTg1 placeholder="Match NONE of these tags" [(ngModel)]="noTgTxt1" name="noTgTxt1"
-                  [matAutocomplete]="autoNone1">
+                <input matInput #noTg1 placeholder="Match NONE of these tags" [(ngModel)]="noTgTxt1" name="noTgTxt1" [matAutocomplete]="autoNone1">
               </mat-chip-list>
-              <mat-autocomplete #autoNone1="matAutocomplete"
-                (optionSelected)="selFromAutoComp($event.option.value,'noneTags1',noTg1)" [displayWith]="displayFn">
-                <mat-option *ngFor="let tg of tags|filterName: noTgTxt1: 'name'" [value]="tg"
-                  (click)="$event.stopPropagation();">
+              <mat-autocomplete #autoNone1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'noneTags1',noTg1)" [displayWith]="displayFn">
+                <mat-option *ngFor="let tg of tags|filterName: noTgTxt1: 'name'" [value]="tg" (click)="$event.stopPropagation();">
                   {{tg.name}}
                 </mat-option>
               </mat-autocomplete>
@@ -918,8 +853,7 @@
       </div>
       <div class="card-title pl-2" *ngIf="filteredList.length>0">
         <span class="mr-2">Filtered by:</span>
-        <div class="btn btn-outline-primary btn-sm rounded-pill filter-btn mr-2 my-1"
-          *ngFor="let fltr of filteredList; let i=index">
+        <div class="btn btn-outline-primary btn-sm rounded-pill filter-btn mr-2 my-1" *ngFor="let fltr of filteredList; let i=index">
           {{fltr.n}}<i class="ml-1 fas fa-times" (click)="clearSingleFlter(fltr,i)"></i>
         </div>
         <div class="float-right">
@@ -930,8 +864,7 @@
       <div class="search">
         <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
           <i matPrefix class="fas fa-search"></i>
-          <input matInput placeholder="Search ..." autocomplete="disabled" [(ngModel)]="searchTxt"
-            (ngModelChange)='searchTxtChng.next($event)'>
+          <input matInput placeholder="Search ..." autocomplete="disabled" [(ngModel)]="searchTxt" (ngModelChange)='searchTxtChng.next($event)'>
         </mat-form-field>
       </div>
     </div>
@@ -945,16 +878,12 @@
         <thead>
           <tr>
             <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
-              {{col.n}}<i class="fas ml-1" *ngIf="col.hasOwnProperty('asc')"
-                [ngClass]="{'fa-sort-down align-top':!col.asc,'fa-sort-up align-bottom': col.asc}"></i>
+              {{col.n}}<i class="fas ml-1" *ngIf="col.hasOwnProperty('asc')" [ngClass]="{'fa-sort-down align-top':!col.asc,'fa-sort-up align-bottom': col.asc}"></i>
             </th>
           </tr>
         </thead>
-        <tbody cdkDropList id="cntntLists" [cdkDropListData]="cntnts" class="min-ht pl-0 mt-2"
-          [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)" *ngIf="cntnts.length > 0">
-          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)"
-            [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()"
-            cdkDrag>
+        <tbody cdkDropList id="cntntLists" [cdkDropListData]="cntnts" class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)" *ngIf="cntnts.length > 0">
+          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()" cdkDrag>
             <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail" style="height:100px;width:100px"></div>
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
@@ -976,8 +905,7 @@
                   {{getSize(cntnt.size)}}
                 </span>
                 <span *ngSwitchCase="'contentLanguages'">
-                  <span *ngFor="let cL of cntnt.contentLanguages"
-                    class="badge badge-light p-2 mt-2 mr-1 mt-sm-0">{{cL.name}}
+                  <span *ngFor="let cL of cntnt.contentLanguages" class="badge badge-light p-2 mt-2 mr-1 mt-sm-0">{{cL.name}}
                   </span>
                 </span>
                 <span *ngSwitchDefault>{{cntnt[col.k]}}</span>
@@ -989,20 +917,16 @@
       <div class="text-center text-secondary pt-5 mt-4" *ngIf="cntnts.length<= 0">
         No Content {{activeIndex==1?'is currently being processed':'found'}}
       </div>
-      <div class="row justify-content-between" *ngIf="!view" cdkDropList id="cntntLists" [cdkDropListData]="cntnts"
-        [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)">
-        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-2 p-3 rounded" *ngFor="let cntnt of cntnts"
-          (click)="toggleInfo(cntnt)" style="max-width:400px;"
-          [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()" cdkDrag>
-          <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail"
-              style="height:100px;width:100px">{{cntnt.name}}</div>
+      <div class="row justify-content-between" *ngIf="!view" cdkDropList id="cntntLists" [cdkDropListData]="cntnts" [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)">
+        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-2 p-3 rounded" *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)" style="max-width:400px;" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}"
+          [cdkDragDisabled]="canDrag()" cdkDrag>
+          <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail" style="height:100px;width:100px">{{cntnt.name}}</div>
           <img [src]="getImg(cntnt)" alt="Thumbnail" style="max-height:200px;">
           <div class="name bg-hi-grey rounded w-75 mx-auto px-2 my-2">{{cntnt.name}}</div>
         </div>
       </div>
     </div>
-    <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
-      (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
+    <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo" (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
   </div>
 </ng-template>
 
@@ -1053,16 +977,13 @@
         <div class="mt-2" *ngIf="dispPropsSec">
           <mat-form-field appearance="outline" class="w-100">
             <mat-chip-list aria-label="Select tags">
-              <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable"
-                (removed)="remove(d,'selTags')">
+              <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selTags')">
                 {{d.name}}
                 <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
               </mat-chip>
-              <input matInput #cntntTgInp [(ngModel)]="cntntTag" name="cntntTag" [ngModelOptions]="{standalone: true}"
-                placeholder="Select tags" [matAutocomplete]="auto2">
+              <input matInput #cntntTgInp [(ngModel)]="cntntTag" name="cntntTag" [ngModelOptions]="{standalone: true}" placeholder="Select tags" [matAutocomplete]="auto2">
             </mat-chip-list>
-            <mat-autocomplete #auto2="matAutocomplete"
-              (optionSelected)="selFromAutoComp($event.option.value,'selTags',cntntTgInp)" [displayWith]="displayFn">
+            <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags',cntntTgInp)" [displayWith]="displayFn">
               <mat-option *ngFor="let tg of tags|filterName: cntntTag: 'name'" [value]="tg">
                 {{tg.name}}
               </mat-option>
@@ -1144,8 +1065,7 @@
           Icon Type is required
         </mat-error>
       </mat-form-field>
-      <div class="custom-file-select" appFileDnd *ngIf="urlForm.controls.img && urlForm.value.iconType==2"
-        (fileDropped)="onFileDropped($event,true,'urlForm')">
+      <div class="custom-file-select" appFileDnd *ngIf="urlForm.controls.img && urlForm.value.iconType==2" (fileDropped)="onFileDropped($event,true,'urlForm')">
         <input type="file" id="uploadFileInput" (change)="fileBrowseHandler($event ,true,'urlForm')" accept="image/*">
         <input type="hidden" formControlName="img" /> <!-- Validation Field -->
         <div class="text-center my-5">
@@ -1166,8 +1086,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Description</mat-label>
-        <textarea rows="3" matInput placeholder="Add a Description" formControlName="description"
-          maxlength="300"></textarea>
+        <textarea rows="3" matInput placeholder="Add a Description" formControlName="description" maxlength="300"></textarea>
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>URL </mat-label>
@@ -1178,16 +1097,13 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="w-100">
         <mat-chip-list aria-label="Select tags">
-          <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable"
-            (removed)="remove(d,'selTags')">
+          <mat-chip *ngFor="let d of selTags" [selectable]="selectable" [removable]="removable" (removed)="remove(d,'selTags')">
             {{d.name}}
             <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
           </mat-chip>
-          <input matInput #urlTgInp [(ngModel)]="urlTag" name="urlTag" [ngModelOptions]="{standalone: true}"
-            placeholder="Select tags" [matAutocomplete]="auto1">
+          <input matInput #urlTgInp [(ngModel)]="urlTag" name="urlTag" [ngModelOptions]="{standalone: true}" placeholder="Select tags" [matAutocomplete]="auto1">
         </mat-chip-list>
-        <mat-autocomplete #auto1="matAutocomplete"
-          (optionSelected)="selFromAutoComp($event.option.value,'selTags',urlTgInp)" [displayWith]="displayFn">
+        <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selTags',urlTgInp)" [displayWith]="displayFn">
           <mat-option *ngFor="let tg of tags|filterName: urlTag: 'name'" [value]="tg">
             {{tg.name}}
           </mat-option>
@@ -1196,10 +1112,8 @@
       </mat-form-field>
       <div class="options">
         Options<br />
-        <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle"
-            matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br />
-        <mat-checkbox>Can be Shared <i class="fa fa-info-circle"
-            matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
+        <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle" matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br />
+        <mat-checkbox>Can be Shared <i class="fa fa-info-circle" matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
         <!-- <mat-checkbox>View in Showpad <i class="fa fa-info-circle"
             matTooltip="This permission only works for https links"></i></mat-checkbox><br /> -->
         <mat-checkbox>Hide name in Workspace</mat-checkbox>
@@ -1226,8 +1140,7 @@
   </div>
   <form name="folderForm" (ngSubmit)="folderSubmit()" [formGroup]="folderForm" novalidate>
     <div class="modal-body" ngbAutofocus>
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
-        [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed" [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
         General
         <div class="float-right">
           <ng-container *ngIf="!gnrlCollapsed; else elseIcon">
@@ -1250,9 +1163,7 @@
         </div>
         <div class="image border mt-2 mb-4">
           <img [src]="iconUrl && addURLIcon == 'cust-icon' ? iconUrl : defIcon">
-          <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg()"><i
-              class="fas fa-trash-alt"></i>
-          </div>
+          <div class="del-btn btn btn-light" *ngIf="iconUrl && addURLIcon=='cust-icon'" (click)="remImg()"><i class="fas fa-trash-alt"></i></div>
         </div>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Folder Label</mat-label>
@@ -1272,8 +1183,7 @@
         </div>
       </div>
       <hr *ngIf="edit || edit === undefined">
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed"
-        [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmrtFldr" *ngIf="edit || edit === undefined">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed" [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="editSmrtFldr" *ngIf="edit || edit === undefined">
         Edit Contained Smart Folders (0)
         <div class="float-right">
           <ng-container *ngIf="!editSmrtCollapsed; else elseIcon">
@@ -1317,9 +1227,7 @@
         </div>
       </div>
       <hr *ngIf="edit || edit === undefined">
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2"
-        (click)="locationCollapsed = !locationCollapsed; getWrkspcList(true);" [attr.aria-expanded]="!locationCollapsed"
-        aria-controls="locationFolder" *ngIf="edit || edit === undefined">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="locationCollapsed = !locationCollapsed; getWrkspcList(true);" [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder" *ngIf="edit || edit === undefined">
         Location
         <div class="float-right">
           <ng-container *ngIf="!locationCollapsed; else elseIcon">
@@ -1330,8 +1238,7 @@
           </ng-template>
         </div>
       </div>
-      <div class="location px-2" id="locationFolder" [ngbCollapse]="locationCollapsed"
-        *ngIf="edit || edit === undefined">
+      <div class="location px-2" id="locationFolder" [ngbCollapse]="locationCollapsed" *ngIf="edit || edit === undefined">
         <nav aria-label="breadcrumb" *ngIf="mdlNav.length>0">
           <ol class="breadcrumb bg-white mb-0 p-0 ml-3">
             <li class="curs-ptr text-primary mr-2" (click)="backFolder(true)">
@@ -1343,9 +1250,7 @@
         <div class="scrollMe">
           <app-loader [type]="'page'" *ngIf="mdlLoading"></app-loader>
           <div *ngIf="!mdlLoading && mdlItems.length > 0">
-            <div class="rounded d-flex m-2"
-              [ngClass]="{'bg-light border-left border-primary': mdlSelected && (item.entityId || mdlSelected.entityId ? mdlSelected.entityId == item.entityId : mdlSelected.id == item.id)}"
-              *ngFor="let item of mdlItems">
+            <div class="rounded d-flex m-2" [ngClass]="{'bg-light border-left border-primary': mdlSelected && (item.entityId || mdlSelected.entityId ? mdlSelected.entityId == item.entityId : mdlSelected.id == item.id)}" *ngFor="let item of mdlItems">
               <div class="btn btn-light mr-2" (click)="mdlListFolders(item)"><i class="fa fa-angle-right"></i></div>
               <div class="align-self-center curs-ptr w-100 py-2" (click)="mdlSelected = item;">{{item.name}}</div>
             </div>
@@ -1376,8 +1281,7 @@
   </div>
   <form name="smartFolderModalForm" (ngSubmit)="smartFolderSubmit()" [formGroup]="smartFldrForm" novalidate>
     <div class="modal-body" ngbAutofocus>
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed"
-        [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="gnrlCollapsed = !gnrlCollapsed" [attr.aria-expanded]="!gnrlCollapsed" aria-controls="generalFolder">
         General
         <div class="float-right">
           <ng-container *ngIf="!gnrlCollapsed; else elseIcon">
@@ -1421,8 +1325,7 @@
         </div>
       </div>
       <hr>
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed"
-        [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="collapseExample">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="editSmrtCollapsed = !editSmrtCollapsed" [attr.aria-expanded]="!editSmrtCollapsed" aria-controls="collapseExample">
         Smart Folder Settings
         <div class="float-right">
           <ng-container *ngIf="!editSmrtCollapsed; else elseIcon">
@@ -1437,36 +1340,29 @@
         <div class="card">
           <div class="card-header row mx-auto w-100">
             <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="fileTypeDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="fileTypeDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 File Type
               </button>
               <div class="dropdown-menu" aria-labelledby="fileTypeDD" (click)="$event.stopPropagation();">
-                <mat-checkbox class="dropdown-item" *ngFor="let ft of fileTypesArr"
-                  (change)="addFileType($event.checked, ft)">{{ft.n}}
+                <mat-checkbox class="dropdown-item" *ngFor="let ft of fileTypesArr" (change)="addFileType($event.checked, ft)">{{ft.n}}
                 </mat-checkbox>
               </div>
             </div>
             <div class="dropdown mr-2">
-              <button class="btn btn-light dropdown-toggle" type="button" id="tagsDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-light dropdown-toggle" type="button" id="tagsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Tags
               </button>
-              <div class="dropdown-menu overflow-auto px-2" aria-labelledby="tagsDD"
-                style="width:20rem; max-height: 65vh;" (click)="$event.stopPropagation();">
+              <div class="dropdown-menu overflow-auto px-2" aria-labelledby="tagsDD" style="width:20rem; max-height: 65vh;" (click)="$event.stopPropagation();">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-chip-list>
                     <mat-chip *ngFor="let tg of allTags" selectable removable (removed)="remove(tg,'allTags')">
                       {{tg.name}}
                       <i matChipRemove class="fas fa-times-circle"></i>
                     </mat-chip>
-                    <input matInput #alTg placeholder="Match ALL of these tags" [(ngModel)]="alTgTxt" name="alTgTxt"
-                      [ngModelOptions]="{standalone: true}" [matAutocomplete]="autoAll">
+                    <input matInput #alTg placeholder="Match ALL of these tags" [(ngModel)]="alTgTxt" name="alTgTxt" [ngModelOptions]="{standalone: true}" [matAutocomplete]="autoAll">
                   </mat-chip-list>
-                  <mat-autocomplete #autoAll="matAutocomplete"
-                    (optionSelected)="selFromAutoComp($event.option.value,'allTags',alTg)" [displayWith]="displayFn">
-                    <mat-option *ngFor="let tg of tags|filterName: alTgTxt: 'name'" [value]="tg"
-                      (click)="$event.stopPropagation();">
+                  <mat-autocomplete #autoAll="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'allTags',alTg)" [displayWith]="displayFn">
+                    <mat-option *ngFor="let tg of tags|filterName: alTgTxt: 'name'" [value]="tg" (click)="$event.stopPropagation();">
                       {{tg.name}}
                     </mat-option>
                   </mat-autocomplete>
@@ -1477,13 +1373,10 @@
                       {{tg.name}}
                       <i matChipRemove class="fas fa-times-circle"></i>
                     </mat-chip>
-                    <input matInput #anTg placeholder="Match ANY of these tags" [(ngModel)]="anTgTxt" name="anTgTxt"
-                      [ngModelOptions]="{standalone: true}" [matAutocomplete]="autoAny">
+                    <input matInput #anTg placeholder="Match ANY of these tags" [(ngModel)]="anTgTxt" name="anTgTxt" [ngModelOptions]="{standalone: true}" [matAutocomplete]="autoAny">
                   </mat-chip-list>
-                  <mat-autocomplete #autoAny="matAutocomplete"
-                    (optionSelected)="selFromAutoComp($event.option.value,'anyTags',anTg)" [displayWith]="displayFn">
-                    <mat-option *ngFor="let tg of tags|filterName: anTgTxt: 'name'" [value]="tg"
-                      (click)="$event.stopPropagation();">
+                  <mat-autocomplete #autoAny="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'anyTags',anTg)" [displayWith]="displayFn">
+                    <mat-option *ngFor="let tg of tags|filterName: anTgTxt: 'name'" [value]="tg" (click)="$event.stopPropagation();">
                       {{tg.name}}
                     </mat-option>
                   </mat-autocomplete>
@@ -1494,22 +1387,18 @@
                       {{tg.name}}
                       <i matChipRemove class="fas fa-times-circle"></i>
                     </mat-chip>
-                    <input matInput #noTg placeholder="Match NONE of these tags" [(ngModel)]="noTgTxt" name="noTgTxt"
-                      [ngModelOptions]="{standalone: true}" [matAutocomplete]="autoNone">
+                    <input matInput #noTg placeholder="Match NONE of these tags" [(ngModel)]="noTgTxt" name="noTgTxt" [ngModelOptions]="{standalone: true}" [matAutocomplete]="autoNone">
                   </mat-chip-list>
-                  <mat-autocomplete #autoNone="matAutocomplete"
-                    (optionSelected)="selFromAutoComp($event.option.value,'noneTags',noTg)" [displayWith]="displayFn">
-                    <mat-option *ngFor="let tg of tags|filterName: noTgTxt: 'name'" [value]="tg"
-                      (click)="$event.stopPropagation();">
+                  <mat-autocomplete #autoNone="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'noneTags',noTg)" [displayWith]="displayFn">
+                    <mat-option *ngFor="let tg of tags|filterName: noTgTxt: 'name'" [value]="tg" (click)="$event.stopPropagation();">
                       {{tg.name}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
             </div>
-            <div class="dropdown">
-              <button class="btn btn-light dropdown-toggle" type="button" id="authorDD" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+            <!-- <div class="dropdown">
+              <button class="btn btn-light dropdown-toggle" type="button" id="authorDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Author
               </button>
               <div class="dropdown-menu" aria-labelledby="authorDD" style="width:18rem;">
@@ -1533,7 +1422,7 @@
                   <mat-checkbox class="dropdown-item">def</mat-checkbox>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="card-body row mx-auto w-100">
             <div class="col-4">
@@ -1572,9 +1461,7 @@
         </div>
       </div>
       <hr *ngIf="edit || edit === undefined">
-      <div class="w-100 dark-bg-hover p-2 rounded mb-2"
-        (click)="locationCollapsed = !locationCollapsed; getWrkspcList(true);" [attr.aria-expanded]="!locationCollapsed"
-        aria-controls="locationFolder" *ngIf="edit || edit === undefined">
+      <div class="w-100 dark-bg-hover p-2 rounded mb-2" (click)="locationCollapsed = !locationCollapsed; getWrkspcList(true);" [attr.aria-expanded]="!locationCollapsed" aria-controls="locationFolder" *ngIf="edit || edit === undefined">
         Location
         <div class="float-right">
           <ng-container *ngIf="!locationCollapsed; else elseIcon">
@@ -1585,8 +1472,7 @@
           </ng-template>
         </div>
       </div>
-      <div class="location px-2" id="locationFolder" [ngbCollapse]="locationCollapsed"
-        *ngIf="edit || edit === undefined">
+      <div class="location px-2" id="locationFolder" [ngbCollapse]="locationCollapsed" *ngIf="edit || edit === undefined">
         <nav aria-label="breadcrumb" *ngIf="mdlNav.length>0">
           <ol class="breadcrumb bg-white mb-0 p-0 ml-3">
             <li class="curs-ptr text-primary mr-2" (click)="backFolder(true)">
@@ -1598,9 +1484,7 @@
         <div class="scrollMe">
           <app-loader [type]="'page'" *ngIf="mdlLoading"></app-loader>
           <div *ngIf="!mdlLoading && mdlItems.length > 0">
-            <div class="rounded d-flex m-2"
-              [ngClass]="{'bg-light border-left border-primary': mdlSelected && (item.entityId || mdlSelected.entityId ? mdlSelected.entityId == item.entityId : mdlSelected.id == item.id)}"
-              *ngFor="let item of mdlItems">
+            <div class="rounded d-flex m-2" [ngClass]="{'bg-light border-left border-primary': mdlSelected && (item.entityId || mdlSelected.entityId ? mdlSelected.entityId == item.entityId : mdlSelected.id == item.id)}" *ngFor="let item of mdlItems">
               <div class="btn btn-light mr-2" (click)="mdlListFolders(item)"><i class="fa fa-angle-right"></i></div>
               <div class="align-self-center curs-ptr w-100 py-2" (click)="mdlSelected = item;">{{item.name}}</div>
             </div>
@@ -1674,8 +1558,7 @@
         </div>
         <div class="mb-2">
           <mat-label>Content</mat-label>
-          <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle"
-              matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
+          <mat-checkbox class="d-block ml-3">Hide empty folders <i class="fa fa-info-circle" matTooltip="When enabled all (smart) folders without content will be hidden."></i></mat-checkbox>
         </div>
         <div>
           <mat-label>
