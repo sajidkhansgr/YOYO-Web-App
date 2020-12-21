@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { CreatePasswordComponent } from './create-password.component';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
+import { AuthSlidesModule } from '../../shared/components/auth-slides/auth-slides.module';
 import { AuthService } from '../auth.service';
 
 const routes: Routes = [
@@ -23,7 +24,7 @@ const routes: Routes = [
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    LoaderModule
+    LoaderModule, AuthSlidesModule
   ],
   providers: [AuthService]
 })

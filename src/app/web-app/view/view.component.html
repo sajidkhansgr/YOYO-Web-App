@@ -60,7 +60,7 @@
           </mat-checkbox>
           <div class="curs-ptr" (click)="goToPage(cPImg)">
             <div class="thumbnail">
-              <img [src]="cPImg.imagePath?cPImg.imagePath:defIcon" class="w-50" alt="Thumbnail" />
+              <img [src]="getImg(cPImg,'icon')" class="w-50" alt="Thumbnail" />
             </div>
             <div class="num py-1 px-2 mx-auto mt-1 rounded w-fit">{{cPImg.pageNo}}</div>
           </div>
@@ -78,11 +78,11 @@
             <div *ngIf="!cntnt.pdf" class="text-center pt-5">No pdf found</div>
           </div>
           <div class="text-center mt-5 mx-3" *ngSwitchCase="2">
-            <img [src]="cntnt.contentPath?cntnt.contentPath:defIcon" alt="Image" />
+            <img [src]="getImg(cntnt,'icon')" alt="Image" />
           </div>
           <div class="text-center mt-5 mx-3" *ngSwitchCase="3">
-            <div>Url : {{cntnt.url||'N/A'}}</div>
-            <img [src]="cntnt.urlIconPath?cntnt.urlIconPath:defIcon" alt="Url Icon" />
+            <a *ngIf="cntnt.url else noUrl" [href]="cntnt.url" target="_blank"><img [src]="getImg(cntnt,'icon')" alt="Url Icon"/></a>
+            <ng-template #noUrl>No url available</ng-template>
           </div>
           <div class="text-center mt-5" *ngSwitchCase="4">
             <video *ngIf="cntnt.contentPath" controls controlsList="nodownload" width="720">
@@ -217,7 +217,7 @@
     <div *ngIf="!collLoad">
       <div id="coll-div" class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let coll of colls">
         <div class="icon align-self-center mr-2">
-          <img [src]="coll.pdfImagePath?coll.pdfImagePath:fldrIcon" style="max-height:50px; width: 40px;">
+          <img [src]="getImg(coll,'fldr')" style="max-height:50px; width: 40px;">
         </div>
         <div class="name align-self-center">
           {{coll.name}}
