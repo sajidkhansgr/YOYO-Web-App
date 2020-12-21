@@ -206,9 +206,9 @@ export class ContentWorkspaceService {
   // delete content or upd status
   updCntntStatusOrDel(data: any) {
     if (data.status == 3)
-      return this.http.post(`${AppSettings.DEL_CNTNT}?id=${data.id}`, {});
+      return this.http.post(`${AppSettings.DEL_CNTNT}`, data);//?id=${data.id}
     else
-      return this.http.post(`${AppSettings.UPD_CNTNT_STATUS}?id=${data.id}&status=${data.status}`, {});
+      return this.http.post(`${AppSettings.UPD_CNTNT_STATUS}`, data); //?id=${data.id}&status=${data.status}
   }
 
   // get all users and groupd in workspace

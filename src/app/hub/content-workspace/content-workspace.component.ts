@@ -262,6 +262,7 @@ export class ContentWorkspaceComponent implements OnInit {
     };
     this.cwServ.getAllDataWrkspc(params).subscribe((data: any) => {
       if (data && Array.isArray(data.result) && data.result.length > 0) {
+        data.result.sort((a:any, b:any) => a.sequenceNumber - b.sequenceNumber);
         if (item) {
           for (let i = 0; i < data.result.length; i++) {
             data.result[i].entityType === 1 ? this.mdlItems.push(data.result[i]) : undefined;
@@ -879,6 +880,7 @@ export class ContentWorkspaceComponent implements OnInit {
           event.previousIndex,
           event.currentIndex
         );
+        data.result.sort((a:any, b:any) => a.sequenceNumber - b.sequenceNumber);
         this.wrkspcItems = data.result;
         // this.wrkspcItems[event.currentIndex] = data.result;
         this.toastr.success('Added successfully', 'Success!');
@@ -1406,7 +1408,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   updCntntStatus(isDel: boolean = false) {
-    let mdlMsg, mdlTtl, stsData: any = { id: this.rowInfo.id }, res: string;
+    let mdlMsg, mdlTtl, stsData: any = { ids: [this.rowInfo.id] }, res: string;
     if (isDel) {
       mdlMsg = `permanently delete ${this.rowInfo.name}`;
       mdlTtl = `Permanently delete`;

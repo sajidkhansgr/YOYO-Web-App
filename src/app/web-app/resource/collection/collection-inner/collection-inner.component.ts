@@ -242,7 +242,7 @@ export class CollectionInnerComponent implements OnInit {
         this.rearrDataInWrkspc(event);
       }
     } else {
-      console.log("dasadsadsads else ")
+      console.log("dasadsadsads else ");
     }
   }
 
@@ -251,12 +251,12 @@ export class CollectionInnerComponent implements OnInit {
       collectionId: this.id,
       collectionDataIds: this.cntntArr.map((f: any) => f.contentId)
     };
+    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     this.colctnSrv.rearrCntntColl(d).subscribe((data: any) => {
       if (data) {
-        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         this.toastr.success('Rearrange successfully', 'Success!');
       } else {
-        this.toastr.error('Unable to rearrange', 'Error!');
+        this.toastr.error('Unable to save rearrange', 'Error!');
       }
     }, (err: any) => {
     });

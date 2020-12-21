@@ -363,7 +363,7 @@ export class FileComponent implements OnInit {
 
   //showing deleted but actually its deactive
   delCntntOrFldr(d: any, isFldr: boolean = false) {
-    let mdlMsg, mdlTtl, stsData: any = { id: d.id }, res: string;
+    let mdlMsg, mdlTtl, stsData: any = { ids: [d.id] }, res: string;
     if (isFldr || d.isFldr) {
       mdlMsg = ` folder`; mdlTtl = `Delete Folder`;
       res = `Folder deleted`;
