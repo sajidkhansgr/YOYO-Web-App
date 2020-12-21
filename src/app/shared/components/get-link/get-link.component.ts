@@ -41,12 +41,21 @@ export class GetLinkComponent implements OnInit {
     this.viewMe = true;
     this.link = '';
     this.disabled = false;
-    if(this.data){
-      if (this.data.id &&this.type === 'collection') {
-        this.loading = true;
+    this.loading = true;
+    this.viewSel = [];
+    this.linkForm = this.fb.group({
+      name: ['abc', [Validators.required]]
+    });
+    if (this.data) {
+      if (this.type === 'collection') {
         this.getCntntByClctn(this.data.id);
       } else if (this.type === 'content') {
-        this.viewSel = [this.data];
+        this.loading = false;
+        this.viewSel = Array.isArray(this.data) ? [...this.data] : [this.data];
+      } else if (this.type === 'multi-collection') {
+        for (let i = 0; i < this.data.length; i++) {
+          this.getCntntByClctn(this.data[i]);
+        }
       }
     }
     this.linkForm = this.fb.group({
@@ -88,10 +97,10 @@ export class GetLinkComponent implements OnInit {
 
   // get content by collection id
   getCntntByClctn(id: number) {
-    this.viewSel = [];
     this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result)) {
         this.viewSel.push(...data.result);
+        console.log(this.viewSel);
       } else {
         this.toastr.error(data.message || 'Something went wrong', 'Error!');
         this.modalRef.dismiss();

@@ -53,11 +53,17 @@ export class ShareMailComponent implements OnInit {
     this.disabled = false; this.linkDisabled = false; this.emailAddresses = [];
     this.viewMe = true;
     this.link = undefined;
+    this.viewSel = [];
+    this.loading = true;
     if (this.type === 'collection') {
-      this.loading = true;
       this.getCntntByClctn(this.data.id);
     } else if (this.type === 'content') {
-      this.viewSel = [this.data];
+      this.loading = false;
+      this.viewSel = Array.isArray(this.data) ? [...this.data] : [this.data];
+    } else if (this.type === 'multi-collection') {
+      for (let i = 0; i < this.data.length; i++) {
+        this.getCntntByClctn(this.data[i]);
+      }
     }
   }
 
@@ -197,7 +203,6 @@ export class ShareMailComponent implements OnInit {
 
   // get content by collection id
   getCntntByClctn(id: number) {
-    this.viewSel = [];
     this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result)) {
         this.viewSel.push(...data.result);
