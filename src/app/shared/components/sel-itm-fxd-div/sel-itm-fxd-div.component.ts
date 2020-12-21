@@ -1,4 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ShareMailComponent } from '../share-mail/share-mail.component';
+import { GetLinkComponent } from '../get-link/get-link.component';
 
 @Component({
   selector: 'app-sel-itm-fxd-div',
@@ -9,19 +12,28 @@ export class SelItmFxdDivComponent implements OnInit {
   @Input() public selArr: any;
   @Input() public isActive?: boolean;
   @Input() public content?: boolean;
+  @Input() public type?: string;
   @Output() public actDeact = new EventEmitter();
   @Output() public delContent = new EventEmitter();
   @Output() public clrSelData = new EventEmitter();
 
   constructor(
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
-    console.log("sdsdsd")
   }
 
   cmnModal(type: string) {
-
+    if (type == 'email') {
+      const modalRef = this.modalService.open(ShareMailComponent, { size: 'lg' });
+      modalRef.componentInstance.type = this.type == 'collection' ? 'multi-collection' : 'content';
+      modalRef.componentInstance.data = this.selArr;
+    } else if (type == 'getLink') {
+      const modalRef = this.modalService.open(GetLinkComponent, { size: 'lg' });
+      modalRef.componentInstance.type = this.type == 'collection' ? 'multi-collection' : 'content';
+      modalRef.componentInstance.data = this.selArr;
+    }
   }
 
   actDeactFunc() {
@@ -32,7 +44,7 @@ export class SelItmFxdDivComponent implements OnInit {
     this.delContent.emit();
   }
 
-  cleanSelData(){
+  cleanSelData() {
     this.clrSelData.emit();
   }
 

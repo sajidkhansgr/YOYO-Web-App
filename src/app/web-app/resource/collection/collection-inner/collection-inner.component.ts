@@ -116,7 +116,7 @@ export class CollectionInnerComponent implements OnInit {
 
   // remove content from collection
   delContent(id?: number) {
-    let dataArr = id ? [id] : this.selCntntArr;
+    let dataArr = id ? [id] : this.selCntntArr.map((d: any) => d.contentId);
     let s = dataArr.length == 1 ? '' : 's';
     this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -146,9 +146,9 @@ export class CollectionInnerComponent implements OnInit {
   // on selecting a content
   selMe(val: any, content: Content) {
     if (val) {
-      this.selCntntArr.push(content.contentId);
+      this.selCntntArr.push(content);
     } else {
-      this.selCntntArr = this.selCntntArr.filter((data: any) => data != content.contentId);
+      this.selCntntArr = this.selCntntArr.filter((data: any) => (data.contentId != content.contentId) || (data.pageNo != content.pageNo));
     }
   }
 
