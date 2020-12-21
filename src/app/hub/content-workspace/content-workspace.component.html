@@ -681,7 +681,7 @@
                       </div>
                       <div class="image">
                         <img [src]="getImg(wi)">
-                        <div class="dropdown" style="z-index:1;">{{wi.isActive}}
+                        <div class="dropdown" style="z-index:1;" *ngIf="!dispFolder ||(dispFolder && (dispFolder.entityType==1 || dispFolder.entityType==3))">
                           <button class="btn btn-light btn-sm dropdown-toggle" type="button" (click)="delDataFromWrkspc(wi)">
                             <i class="mr-1 fas" [ngClass]="{'fa-toggle-off': wi.isActive, 'fa-toggle-on': !wi.isActive}"></i>
                           </button>
