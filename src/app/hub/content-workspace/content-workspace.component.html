@@ -571,7 +571,7 @@
                       </mat-chip-list>
                       <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="selFromAutoComp($event.option.value,'selUsrGrps',unSelGrpInp);" [displayWith]="displayFn">
                         <mat-option (click)="$event.stopPropagation();" *ngFor="let unUsrGpW of unSelUsrGrpWrkspc|filterName: unSelUsrGrpTxt: 'name'" [value]="unUsrGpW">
-                          {{unUsrGpW.name}}
+                          <i class="fas mr-1" [ngClass]="{'fa-user-friends': unUsrGpW.isGroup,'fa-user': !unUsrGpW.isGroup}"></i>{{unUsrGpW.name}}
                         </mat-option>
                       </mat-autocomplete>
                     </mat-form-field>
@@ -1112,7 +1112,7 @@
       </mat-form-field>
       <div class="options">
         Options<br />
-        <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle" matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br />
+        <!-- <mat-checkbox>Show in Kiosk Mode <i class="fa fa-info-circle" matTooltip="Will be displayed when a mobile device is in Kiosk Mode"></i></mat-checkbox><br /> -->
         <mat-checkbox>Can be Shared <i class="fa fa-info-circle" matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
         <!-- <mat-checkbox>View in Showpad <i class="fa fa-info-circle"
             matTooltip="This permission only works for https links"></i></mat-checkbox><br /> -->

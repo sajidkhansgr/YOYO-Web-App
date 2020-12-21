@@ -11,7 +11,7 @@ import { FileService } from '../../shared/services/file.service';
 import { TokenDataService } from '../../shared/services/token-data.service';
 import { Content } from '../../shared/models/content';
 import { Collection } from '../../shared/models/collection';
-import { DEF_ICON,FLDR_ICON } from '../../shared/constants';
+import { FileHelper } from '../../shared/file-helper';
 
 @Component({
   selector: 'app-view',
@@ -25,11 +25,10 @@ export class ViewComponent implements OnInit {
   leftSide!: boolean; rightSide!: boolean;
   infoToggle!: boolean; enggToggle!: boolean; tagsToggle!: boolean;
   testArr = [1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-  cmnt!: string;defIcon: any = DEF_ICON;cmntDisb!: boolean;
+  cmnt!: string;cmntDisb!: boolean;
   elem: any; isFullScreen!: boolean;isSelPage!:boolean;selPages!:any;actPage!:number
   colls!: Collection[];collLoad!:boolean;
   usrInfo: any | null;
-  fldrIcon: string = FLDR_ICON;
 
   constructor(
     @Inject(DOCUMENT) private document: any,
@@ -261,6 +260,10 @@ export class ViewComponent implements OnInit {
       this.colls = [];
       this.collLoad = false;
     });
+  }
+
+  getImg(d: any,type: string=''): string {
+    return FileHelper.getImg(d, type);
   }
 
   goBack(){

@@ -6,8 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { LoginComponent } from './login.component';
+import { LoaderModule } from '../../shared/components/loader/loader.module';
+import { AuthSlidesModule } from '../../shared/components/auth-slides/auth-slides.module';
 import { AuthService } from '../auth.service';
 
 const routes: Routes = [
@@ -23,7 +24,7 @@ const routes: Routes = [
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    LoaderModule
+    LoaderModule, AuthSlidesModule
   ],
   providers: [AuthService]
 })
