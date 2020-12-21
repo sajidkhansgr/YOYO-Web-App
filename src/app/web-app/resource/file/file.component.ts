@@ -140,18 +140,15 @@ export class FileComponent implements OnInit {
     else if (type == 'addToCollection') {
       const modalRef: any = this.modalService.open(AddToCollComponent, { size: 'lg' });
       modalRef.componentInstance.data = { ...cntnt, type: 'my-file' };
-      modalRef.result.then((result: any) => {
-
-      })
     }
   }
 
   // on selecting a folder/content
   selMe(val: any, d: any) {
     if (val) {
-      this.selData.push({ id: d.id });
+      this.selData.push(d);
     } else {
-      this.selData = this.selData.filter((data: any) => data != d.id);
+      this.selData = this.selData.filter((data: any) => data.id != d.id);
     }
   }
 
@@ -404,7 +401,7 @@ export class FileComponent implements OnInit {
 
   // upload button
   uploadBtn = (uf: any) => {
-    uf ?.click();
+    uf?.click();
   }
   //"Only .jpeg, .png, .jpg ,.mp4, .xls, .xlsx, .ppt, .pptx, .doc, .docx and .pdf files are allowed."
   uplCntnt($event: any) {

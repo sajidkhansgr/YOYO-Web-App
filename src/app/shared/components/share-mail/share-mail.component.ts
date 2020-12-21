@@ -110,8 +110,7 @@ export class ShareMailComponent implements OnInit {
       data.body += `
       <br />
       <br />
-      Attached Link:<br />
-      <a href="${this.link.link}">${this.link.name}</a>
+      Attached Link: <a href="${this.link.link}">${this.link.name}</a>
       `;
       this.mailSrv.sendMail(data).subscribe((data: any) => {
         if (data && data.result) {

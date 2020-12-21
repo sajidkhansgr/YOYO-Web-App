@@ -58,6 +58,17 @@ export class AddToCollComponent implements OnInit {
       }
     } else if (this.data.type == 'my-file') {
       data.contents = [this.data.id];
+    } else if (this.data.type == 'multi') {
+      for (let i = 0; i < this.data.data.length; i++) {
+        if (this.data.data[i].pageNo) {
+          data.pages.push({
+            pageNumbers: [this.data.data[i].pageNo],
+            contentId: this.data.data[i].contentId ? this.data.data[i].contentId : this.data.data[i].id
+          }); // it needs to be done on backend
+        } else {
+          data.contents.push(this.data.data[i].contentId ? this.data.data[i].contentId : this.data.data[i].id);
+        }
+      }
     }
     this.collLoad = true;
     this.collServ.addContentColctn(data).subscribe((data: any) => {

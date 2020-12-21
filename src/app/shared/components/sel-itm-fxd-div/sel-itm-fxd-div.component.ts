@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ShareMailComponent } from '../share-mail/share-mail.component';
 import { GetLinkComponent } from '../get-link/get-link.component';
+import { AddToCollComponent } from '../add-to-coll/add-to-coll.component';
 
 @Component({
   selector: 'app-sel-itm-fxd-div',
@@ -33,6 +34,9 @@ export class SelItmFxdDivComponent implements OnInit {
       const modalRef = this.modalService.open(GetLinkComponent, { size: 'lg' });
       modalRef.componentInstance.type = this.type == 'collection' ? 'multi-collection' : 'content';
       modalRef.componentInstance.data = this.selArr;
+    } else if (type == 'addToCollection') {
+      const modalRef: any = this.modalService.open(AddToCollComponent, { size: 'lg' });
+      modalRef.componentInstance.data = { data: this.selArr, type: 'multi' };
     }
   }
 
