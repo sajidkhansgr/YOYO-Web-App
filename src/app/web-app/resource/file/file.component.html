@@ -222,8 +222,8 @@
 </div>
 
 <!-- fixed sel item bootm div -->
-<app-sel-itm-fxd-div [selArr]="selData" [type]="'content'" (delContent)="delContent(undefined)" [content]="true"
-  *ngIf="selData.length > 0" (clrSelData)="clrSel()">
+<app-sel-itm-fxd-div [selArr]="selData" [type]="'content'" [disable]="disableBtns"
+  (delContent)="delCntntOrFldr(undefined)" [content]="true" *ngIf="selData.length > 0" (clrSelData)="clrSel()">
 </app-sel-itm-fxd-div>
 
 <!-- add folder -->

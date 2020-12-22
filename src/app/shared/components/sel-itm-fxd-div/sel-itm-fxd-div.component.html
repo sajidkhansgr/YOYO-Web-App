@@ -2,17 +2,19 @@
   <div class="selected-items text-secondary align-self-center">{{selArr.length}} item(s) selected</div>
   <div class="mr-1 ml-3 align-self-center">|</div>
   <div class="btn btn-outline-primary border-0 align-self-center" (click)="cleanSelData()">Clear</div>
-  <div class="btn btn-light align-self-center ml-auto bg-white mr-2" (click)="cmnModal('email')">
+  <button type="button" [disabled]="disable" class="btn btn-light align-self-center ml-auto bg-white mr-2"
+    (click)="cmnModal('email')">
     <i class="fa fa-envelope mr-1"></i>Email
-  </div>
-  <div class="btn btn-light align-self-center bg-white mr-2" (click)="cmnModal('getLink')">
-    <i class="fa fa-link mr-1"></i> Get a link</div>
+  </button>
+  <button type="button" [disabled]="disable" class="btn btn-light align-self-center bg-white mr-2"
+    (click)="cmnModal('getLink')">
+    <i class="fa fa-link mr-1"></i> Get a link</button>
   <div class="btn btn-outline-{{isActive ? 'primary' : 'success'}} align-self-center mr-2" (click)="actDeactFunc()"
     *ngIf="!content">
     <i class="mr-1 fas fa-toggle-{{isActive ? 'off' : 'on'}}"></i> {{isActive ? 'Deactivate' : 'Activate'}}
   </div>
-  <div class="btn btn-light align-self-center bg-white mr-2" *ngIf="content" (click)="cmnModal('addToCollection')"><i
-      class="fa fa-folder-plus mr-1"></i>Add to collection</div>
+  <button type="button" [disabled]="disable" class="btn btn-light align-self-center bg-white mr-2" *ngIf="content"
+    (click)="cmnModal('addToCollection')"><i class="fa fa-folder-plus mr-1"></i>Add to collection</button>
   <div class="btn btn-primary align-self-center" (click)="delContentFunc()" *ngIf="content"><i
       class="fas fa-trash-alt mr-1"></i>Remove</div>
 </div>

@@ -37,6 +37,7 @@ export class FileComponent implements OnInit {
   urlForm!: FormGroup; urlDisb!: boolean;
   cols: any = []; navg!: any; fileExt = FILE_EXT;
   getIntervalId: any; procFiles: any[] = []; isClose: boolean = false; showProcDetail: boolean = true;
+  disableBtns!: boolean;
 
   constructor(
     private router: Router,
@@ -62,6 +63,7 @@ export class FileComponent implements OnInit {
       this.getFiles();
     });
     this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
+    this.disableBtns = false;
   }
 
   initialiseState() {
@@ -147,8 +149,14 @@ export class FileComponent implements OnInit {
   selMe(val: any, d: any) {
     if (val) {
       this.selData.push(d);
+      if (d.isFldr) {
+        this.disableBtns = true;
+      }
     } else {
       this.selData = this.selData.filter((data: any) => data.id != d.id);
+      if (d.isFldr) {
+        this.disableBtns = false;
+      }
     }
   }
 
@@ -163,29 +171,15 @@ export class FileComponent implements OnInit {
   // selecting all
   selAll(val: boolean) {
     if (val) {
+      this.disableBtns = true;
       this.selData = this.allFiles;
       this.files = this.files.map((d: any) => ({ ...d, chk: true }));
       this.folders = this.folders.map((d: any) => ({ ...d, chk: true }));
       this.allFiles = [...this.folders, ...this.files];
     } else {
+      this.disableBtns = false;
       this.clrSel();
     }
-  }
-
-  // remove content from collection
-  delContent(id?: number) {
-    let dataArr = id ? [id] : this.selData;
-    let s = dataArr.length == 1 ? '' : 's';
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to remove ${dataArr.length == 1 ? 'this' : 'these'} content${s} from collection?`,
-        title: `Remove Content${s}`
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-      }
-    })
   }
 
   getFiles() {
@@ -360,19 +354,34 @@ export class FileComponent implements OnInit {
 
   //showing deleted but actually its deactive
   delCntntOrFldr(d: any, isFldr: boolean = false) {
-    let mdlMsg, mdlTtl, stsData: any = { ids: [d.id] }, res: string;
-    if (isFldr || d.isFldr) {
-      mdlMsg = ` folder`; mdlTtl = `Delete Folder`;
-      res = `Folder deleted`;
-      stsData.isFldr = true;
+    let mdlMsg, mdlTtl, stsData: any, res: string;
+    if (d) {
+      stsData = { ids: [d.id] };
+      if (isFldr || d.isFldr) {
+        mdlMsg = ` folder`; mdlTtl = `Delete Folder`;
+        res = `Folder deleted`;
+        stsData.isFldr = true;
+      } else {
+        mdlMsg = ``; mdlTtl = `Delete Content`;
+        res = `Content deleted`;
+        stsData.status = 2; //move to trash
+      }
     } else {
-      mdlMsg = ``; mdlTtl = `Delete Content`;
-      res = `Content deleted`;
-      stsData.status = 2; //move to trash
+      stsData = { ids: this.selData.map((d: any) => d.id) };
+      if (this.selData[0].isFldr) {
+        mdlMsg = ` folders`; mdlTtl = `Delete Folders`;
+        res = `Folders deleted`;
+        stsData.isFldr = true;
+      } else {
+        mdlMsg = ` contents`; mdlTtl = `Delete Contents`;
+        res = `Contents deleted`;
+        stsData.status = 2; //move to trash
+      }
     }
+    // console.log(stsData);
     this.dialog.open(ConfirmDialogComponent, {
       data: {
-        msg: `Are you sure you want to delete ${d.name}${mdlMsg}?`,
+        msg: `Are you sure you want to delete ${d ? d.name : 'these'} ${mdlMsg}?`,
         title: mdlTtl
       },
       autoFocus: false

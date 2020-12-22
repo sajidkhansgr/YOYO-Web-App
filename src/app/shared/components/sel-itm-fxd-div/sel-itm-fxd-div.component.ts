@@ -14,6 +14,7 @@ export class SelItmFxdDivComponent implements OnInit {
   @Input() public isActive?: boolean;
   @Input() public content?: boolean;
   @Input() public type?: string;
+  @Input() public disable?: boolean;
   @Output() public actDeact = new EventEmitter();
   @Output() public delContent = new EventEmitter();
   @Output() public clrSelData = new EventEmitter();
