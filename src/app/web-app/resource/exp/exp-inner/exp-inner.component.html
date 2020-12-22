@@ -32,7 +32,7 @@
             <div class="icon" (click)="viewContent(wSC)">
               <img [src]="getImg(wSC)">
             </div>
-            <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto">
+            <div class="info bg-hi-dark-grey rounded d-flex mt-2 py-1 w-75 mx-auto" *ngIf="!wSC.hideLabelInWorkspace">
               <i class="fa fa-file ml-3 align-self-center mr-1"></i>
               <div class="mx-auto text-truncate pr-1">{{wSC.name}}</div>
             </div>
@@ -145,7 +145,7 @@
             </div>
             <div class="row w-75">
               <div class="col-md-9 info align-self-center">
-                <h5 class="mb-0 text-truncate" (click)="viewContent(wSC)">{{wSC.name}}</h5>
+                <h5 class="mb-0 text-truncate" *ngIf="!wSC.hideLabelInWorkspace" (click)="viewContent(wSC)">{{wSC.name}}</h5>
                 <!-- <i class="fa fa-file mr-2"></i>Document in English -->
                 <div class="text-secondary" style="font-size: 12px;">Created {{(wSC.createdDate|date:'mediumDate')||'N/A'}}</div>
               </div>

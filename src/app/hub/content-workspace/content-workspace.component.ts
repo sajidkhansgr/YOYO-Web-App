@@ -455,13 +455,13 @@ export class ContentWorkspaceComponent implements OnInit {
       }
     }
     if (this.anyTags.length > 0) {
-      for (let i = 0; i < this.allTags.length; i++) {
-        tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 2 }));
+      for (let i = 0; i < this.anyTags.length; i++) {
+        tagIds.push(JSON.stringify({ TagId: this.anyTags[i].id, TagFilterGroupId: 2 }));
       }
     }
     if (this.noneTags.length > 0) {
-      for (let i = 0; i < this.allTags.length; i++) {
-        tagIds.push(JSON.stringify({ TagId: this.allTags[i].id, TagFilterGroupId: 3 }));
+      for (let i = 0; i < this.noneTags.length; i++) {
+        tagIds.push(JSON.stringify({ TagId: this.noneTags[i].id, TagFilterGroupId: 3 }));
       }
     }
     return '[' + tagIds.toString() + ']';
@@ -473,19 +473,19 @@ export class ContentWorkspaceComponent implements OnInit {
       if (data && data.result) {
         this.selFolder = data.result;
         this.smartFldrForm.patchValue({ ...this.selFolder });
-        // if (data.result.smartFolderTags.length > 0) {
-        //   let temp = this.tags;
-        //   this.allTags = []; this.anyTags = []; this.noneTags = [];
-        // for (let i = 0; i < data.result.smartFolderTags.length; i++) {
-        //   if (data.result.smartFolderTags[i].tagId === 1) {
-        //     this.allTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-        //   } else if (data.result.smartFolderTags[i].tagId === 2) {
-        //     this.anyTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-        //   } else if (data.result.smartFolderTags[i].tagId === 3) {
-        //     this.noneTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-        //   }
-        // }
-        // }
+        if (data.result.smartFolderTags.length > 0) {
+          let temp = this.tags;
+          this.allTags = []; this.anyTags = []; this.noneTags = [];
+          for (let i = 0; i < data.result.smartFolderTags.length; i++) {
+            if (data.result.smartFolderTags[i].tagId === 1) {
+              this.allTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
+            } else if (data.result.smartFolderTags[i].tagId === 2) {
+              this.anyTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
+            } else if (data.result.smartFolderTags[i].tagId === 3) {
+              this.noneTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
+            }
+          }
+        }
       } else {
         this.selFolder = undefined;
       }
