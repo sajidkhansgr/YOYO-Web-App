@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DEF_ICON } from '../../constants';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ShareService } from 'src/app/web-app/share/share.service';
+import { FileHelper } from '../../file-helper';
 
 @Component({
   selector: 'app-get-link',
@@ -64,6 +65,11 @@ export class GetLinkComponent implements OnInit {
     });
   }
 
+  // for images
+  getImg(d: any): string {
+    return FileHelper.getImg(d, 'icon');
+  }
+
   // add more resource
   openRsrcModal() {
     const modalRef = this.modalService.open(AddRsrcComponent, { size: 'lg' });
@@ -100,7 +106,6 @@ export class GetLinkComponent implements OnInit {
     this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
       if (data && data.result && Array.isArray(data.result)) {
         this.viewSel.push(...data.result);
-        console.log(this.viewSel);
       } else {
         this.toastr.error(data.message || 'Something went wrong', 'Error!');
         this.modalRef.dismiss();

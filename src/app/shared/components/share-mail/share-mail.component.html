@@ -62,8 +62,7 @@
           <div class="view-selected" *ngIf="!loading">
             <div class="d-flex bg-hi-grey border rounded px-3 py-1 my-2" *ngFor="let vs of viewSel">
               <div class="align-self-center">
-                <img
-                  src="{{vs.pdfImagePath ? vs.pdfImagePath : vs.pdfImage ? vs.pdfImage : vs.imagePath ? vs.imagePath : vs.urlIconPath ? vs.urlIconPath : vs.contentPath ? vs.contentPath : defImg}}">
+                <img [src]="getImg(vs)">
               </div>
               <div class="ml-2 align-self-center w-75">
                 <div class="text-truncate">{{vs.name}}</div>

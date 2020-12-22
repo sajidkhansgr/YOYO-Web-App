@@ -11,6 +11,7 @@ import { ShareMailService } from './share-mail.service';
 import { AddRsrcComponent } from '../add-rsrc/add-rsrc.component';
 import { DEF_ICON } from '../../constants';
 import { CommonValidations } from '../../validations/common-validations';
+import { FileHelper } from '../../file-helper';
 
 @Component({
   selector: 'app-share-mail',
@@ -65,6 +66,11 @@ export class ShareMailComponent implements OnInit {
         this.getCntntByClctn(this.data[i]);
       }
     }
+  }
+
+  // for images
+  getImg(d: any): string {
+    return FileHelper.getImg(d, 'icon');
   }
 
   // add more resource

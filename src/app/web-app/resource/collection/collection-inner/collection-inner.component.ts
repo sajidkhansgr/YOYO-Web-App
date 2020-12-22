@@ -116,7 +116,7 @@ export class CollectionInnerComponent implements OnInit {
 
   // remove content from collection
   delContent(id?: number) {
-    let dataArr = id ? [id] : this.selCntntArr.map((d: any) => d.contentId);
+    let dataArr = id ? [id] : this.selCntntArr.map((d: any) => d.id);
     let s = dataArr.length == 1 ? '' : 's';
     this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -128,7 +128,7 @@ export class CollectionInnerComponent implements OnInit {
       if (result) {
         let data: any = {
           collectionId: this.id,
-          contentIds: dataArr
+          collectionContentIds: dataArr
         }
         this.colctnSrv.delContentColctn(data).subscribe((data: any) => {
           if (data) {
@@ -174,6 +174,7 @@ export class CollectionInnerComponent implements OnInit {
     this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
       if (data && Array.isArray(data.result) && data.result.length > 0) {
         this.cntntArr = data.result.map((d: any) => ({ ...d, chk: false }));
+        console.log(this.cntntArr);
         // this.cntntArr = data.result;
       }
       this.loading = false;

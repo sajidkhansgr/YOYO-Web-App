@@ -13,7 +13,7 @@ export class FileHelper {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  public static getImg(d: any, type: string=''): string {
+  public static getImg(d: any, type: string = ''): string {
     if (d) {
       if (d.folderIconPath)
         return d.folderIconPath;
@@ -23,26 +23,26 @@ export class FileHelper {
         return d.pdfImagePath;
       if (d.urlIconPath)
         return d.urlIconPath;
-      else if (d.contentType === 2 && d.contentPath)
+      else if ((d.contentType === 2 || d.contentType === 1) && d.contentPath)
         return d.contentPath;
       else if (d.pdfImage)
         return d.pdfImage;
       else if (Array.isArray(d.pdfImages) && d.pdfImages.length > 0 && d.pdfImages[0].imagePath)
         return d.pdfImages[0].imagePath;
     }
-    if(type=='icon')
+    if (type == 'icon')
       return DEF_ICON;
-    if(type=='fldr')
+    if (type == 'fldr')
       return FLDR_ICON;
     return DEF_IMG;
   }
 
-  public static bytestoOther(bytes: any, type: string){
-    let i=0;
-    switch(type){
-      case 'kb': i=1;break;
-      case 'mb': i=2;break;
-      case 'gb': i=3;break;
+  public static bytestoOther(bytes: any, type: string) {
+    let i = 0;
+    switch (type) {
+      case 'kb': i = 1; break;
+      case 'mb': i = 2; break;
+      case 'gb': i = 3; break;
     }
     return parseFloat((bytes / Math.pow(1024, i)).toFixed(2));
   }
