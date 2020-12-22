@@ -81,7 +81,10 @@
             <img [src]="getImg(cntnt,'icon')" alt="Image" />
           </div>
           <div class="text-center mt-5 mx-3" *ngSwitchCase="3">
-            <a *ngIf="cntnt.url else noUrl" [href]="cntnt.url" target="_blank"><img [src]="getImg(cntnt,'icon')" alt="Url Icon"/></a>
+            <a *ngIf="cntnt.url else noUrl" [href]="cntnt.url" target="_blank">
+              <img [src]="getImg(cntnt,'icon')" alt="Url Icon"/>
+              <div *ngIf="!cntnt.hideLabelInWorkspace">{{cntnt.name}}</div>
+            </a>
             <ng-template #noUrl>No url available</ng-template>
           </div>
           <div class="text-center mt-5" *ngSwitchCase="4">
