@@ -296,6 +296,10 @@
                                 <i [ngClass]="{'fa-check': rowInfo.canBeShared,'fa-times': !rowInfo.canBeShared}" class="mr-1 fas"></i>
                                 Can be shared
                               </li>
+                              <li *ngIf="rowInfo.contentType==3">
+                                <i [ngClass]="{'fa-check': rowInfo.hideLabelInWorkspace,'fa-times': !rowInfo.hideLabelInWorkspace}" class="mr-1 fas"></i>
+                                Hide Label in Workspace
+                              </li>
                               <!-- <li><i class="fas fa-check mr-1"></i>Can be downloaded</li>
                               <ul class="list-unstyled ml-3">
                                 <li><i class="fas fa-check mr-1"></i>Internally</li>
@@ -312,6 +316,9 @@
                             <ul class="list-unstyled">
                               <li>
                                 <mat-checkbox [(ngModel)]="isShared" name="isShared">Can be shared</mat-checkbox>
+                              </li>
+                              <li *ngIf="rowInfo.contentType==3">
+                                <mat-checkbox [(ngModel)]="hLW" name="hLW">Hide Label in Workspace</mat-checkbox>
                               </li>
                               <!-- <li>
                                 <mat-checkbox>Can be downloaded</mat-checkbox>
@@ -545,7 +552,8 @@
           </div>
           <div class="card-header bg-hi-light-grey py-1 px-2 row m-0">
             <div class="dropdown rounded mr-2">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown" [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnAddDD" data-toggle="dropdown"
+                [disabled]="!selWrkspc || (dispFolder && dispFolder.entityType==2)">
                 Add
               </button>
               <div class="dropdown-menu" aria-labelledby="btnAddDD">
@@ -554,7 +562,7 @@
               </div>
             </div>
             <div class="dropdown rounded">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown" (click)="getUsrGrpsFormWrkspc();" [disabled]="!selWrkspc">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="btnUsersDD" data-toggle="dropdown" [disabled]="!selWrkspc">
                 Users <span class="badge badge-light" *ngIf="!selUsrGrpLoad && selUsrGrpWrkspc">{{selUsrGrpWrkspc.length}}</span>
               </button>
               <div class="dropdown-menu large-dropdown-menu py-0 overflow-hidden" aria-labelledby="btnUsersDD" (click)="$event.stopPropagation();">
@@ -687,7 +695,7 @@
                           </button>
                         </div>
                       </div>
-                      <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate">
+                      <div class="name bg-hi-dark-grey text-center rounded mt-2 px-2 text-truncate" *ngIf="!wi.hideLabelInWorkspace">
                         {{wi.name}}
                       </div>
                     </ng-template>
@@ -883,7 +891,7 @@
           </tr>
         </thead>
         <tbody cdkDropList id="cntntLists" [cdkDropListData]="cntnts" class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)" *ngIf="cntnts.length > 0">
-          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}" [cdkDragDisabled]="canDrag()" cdkDrag>
+          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!isNotDrag()}" [cdkDragDisabled]="isNotDrag()" cdkDrag>
             <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail" style="height:100px;width:100px"></div>
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
@@ -918,8 +926,8 @@
         No Content {{activeIndex==1?'is currently being processed':'found'}}
       </div>
       <div class="row justify-content-between" *ngIf="!view" cdkDropList id="cntntLists" [cdkDropListData]="cntnts" [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)">
-        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-2 p-3 rounded" *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)" style="max-width:400px;" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!canDrag()}"
-          [cdkDragDisabled]="canDrag()" cdkDrag>
+        <div class="col-md-4 text-center my-3 curs-ptr mx-auto mx-md-2 p-3 rounded" *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)" style="max-width:400px;" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!isNotDrag()}"
+          [cdkDragDisabled]="isNotDrag()" cdkDrag>
           <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail" style="height:100px;width:100px">{{cntnt.name}}</div>
           <img [src]="getImg(cntnt)" alt="Thumbnail" style="max-height:200px;">
           <div class="name bg-hi-grey rounded w-75 mx-auto px-2 my-2">{{cntnt.name}}</div>
@@ -1116,7 +1124,7 @@
         <mat-checkbox>Can be Shared <i class="fa fa-info-circle" matTooltip="Users can share this file via Email, Link,Shared Space or Plugin"></i></mat-checkbox><br />
         <!-- <mat-checkbox>View in Showpad <i class="fa fa-info-circle"
             matTooltip="This permission only works for https links"></i></mat-checkbox><br /> -->
-        <mat-checkbox>Hide name in Workspace</mat-checkbox>
+        <mat-checkbox formControlName="hideLabelInWorkspace">Hide name in Workspace</mat-checkbox>
       </div>
     </div>
     <div class="modal-footer">

@@ -58,7 +58,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   pageNo!: number; pageSize!: number; @Input() lmtPage: any;
   showRowInfo!: boolean; rowInfo!: any; docLoading!: boolean;
-  desc!: string; isShared!: boolean; cmnt!: string;
+  desc!: string; isShared!: boolean; hLW!: boolean; cmnt!: string;
   lngs!: Language[]; selLngs: Language[] = [];
   edits: any; disb: any; //disb and edits used in single edits
 
@@ -167,6 +167,7 @@ export class ContentWorkspaceComponent implements OnInit {
       name: ['', [Validators.required]],
       description: [''],
       url: ['', [Validators.required]],
+      hideLabelInWorkspace:[]
     });
     this.verForm = this.fb.group({
       KeepCurrentFileName: [false],
@@ -727,6 +728,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.unSelUsrGrpTxt = '';
     this.selUsrGrps = [];
     this.usrGrpWrkSpcDisb = false;
+    this.getUsrGrpsFormWrkspc();
   }
 
   // list of workspaces
@@ -856,6 +858,7 @@ export class ContentWorkspaceComponent implements OnInit {
         } else {
           moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         }
+        // moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       } else {
         transferArrayItem(event.previousContainer.data,
           event.container.data,
@@ -913,8 +916,8 @@ export class ContentWorkspaceComponent implements OnInit {
     });
   }
 
-  canDrag(): boolean {
-    if (this.activeIndex == 0 && this.selWrkspc && this.selWrkspc.id) {
+  isNotDrag(): boolean {
+    if (this.activeIndex == 0 && this.activeFldrs==1 && this.selWrkspc && this.selWrkspc.id ) {
       if (this.dispFolder && this.dispFolder.id && this.dispFolder.entityType == 2) {
         return true;
       }
@@ -999,6 +1002,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.desc = this.rowInfo.description;
     this.rowInfo.img = this.getImg(this.rowInfo);
     this.isShared = this.rowInfo.canBeShared;
+    this.hLW = this.rowInfo.hideLabelInWorkspace;
     if (Array.isArray(this.rowInfo.contentTags))
       this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId, name: tag.tagName }));
     else
@@ -1037,7 +1041,7 @@ export class ContentWorkspaceComponent implements OnInit {
         case 'd': this.desc = this.rowInfo.description; break;
         case 't': this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId })); break;
         case 'l': this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng, id: lng.languageId })); break;
-        case 'p': this.isShared = this.rowInfo.canBeShared; break;
+        case 'p': this.isShared = this.rowInfo.canBeShared; this.hLW = this.rowInfo.hideLabelInWorkspace;break;
       }
     }
     this.edits[type] = false;
@@ -1310,6 +1314,7 @@ export class ContentWorkspaceComponent implements OnInit {
         cntntData.ContentTagsString = this.selTags.map((tag: any) => ({ tagId: tag.id }));
         cntntData.ContentTagsString = JSON.stringify(cntntData.ContentTagsString)
       }
+      cntntData.hideLabelInWorkspace = cntntData.hideLabelInWorkspace?true:false;
       this.cwServ.addContent(cntntData)
         .subscribe((data: any) => {
           if (data) {
@@ -1352,7 +1357,8 @@ export class ContentWorkspaceComponent implements OnInit {
         break;
       case 'p': str = 'Permissions';
         cntntData = {
-          canBeShared: this.isShared, updateType: 2
+          canBeShared: this.isShared, updateType: 2,
+          hideLabelInWorkspace: this.hLW
         };
         break;
     }
@@ -1366,7 +1372,7 @@ export class ContentWorkspaceComponent implements OnInit {
             case 'd': this.rowInfo.description = this.desc; break;
             case 't': this.rowInfo.contentTags = this.selTags2.map((tag: any) => ({ ...tag, tagId: tag.id, tagName: tag.name })); break;
             case 'l': this.rowInfo.contentLanguages = this.selLngs.map((lng: any) => ({ ...lng, languageId: lng.id, languageName: lng.name })); break;
-            case 'p': this.rowInfo.canBeShared = this.isShared; break;
+            case 'p': this.rowInfo.canBeShared = this.isShared; this.rowInfo.hideLabelInWorkspace = this.hLW; break;
           }
           this.closeEdit(type, false);
         } else {

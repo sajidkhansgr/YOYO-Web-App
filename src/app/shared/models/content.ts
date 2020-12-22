@@ -3,6 +3,7 @@ export interface Content {
   name: string;
   isUrl: boolean;
   // urlIcon: binary;
+  hideLabelInWorkspace?: boolean;
   urlIconPath: boolean;
   url: string;
   description: boolean;
