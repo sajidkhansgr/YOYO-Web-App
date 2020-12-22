@@ -14,6 +14,8 @@ import { CommnService } from './commn.service'
 import { GroupService } from '../user/group/group.service';
 import { ContentWorkspaceService } from '../hub/content-workspace/content-workspace.service';
 
+import { QUILL } from '../shared/models/quill';
+
 @Component({
   selector: 'app-commn',
   templateUrl: './commn.component.html',
@@ -35,6 +37,7 @@ export class CommnComponent implements OnInit {
   cols: any[] = [];
   totalCount!: number;
   minDate!: any;
+  quillConfig=QUILL;htmlText:string='';
 
   constructor(
     private modalService: NgbModal,
@@ -283,7 +286,7 @@ export class CommnComponent implements OnInit {
     this.ancmntForm.reset();
     this.isEdit = type;
     this.setFormData();
-    this.modalService.open(content, { centered: true }).result
+    this.modalService.open(content, { centered: true, size: 'lg' }).result
       .then((result) => {
       }, (reason) => {
       });

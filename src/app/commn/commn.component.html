@@ -268,13 +268,12 @@
         </mat-error>
       </mat-form-field>
       <br />
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Announcement</mat-label>
-        <textarea matInput placeholder="Body" formControlName="body" rows="3" maxlength="1000" required></textarea>
-        <mat-error *ngIf="ancmntForm.get('body')!.hasError('required')">
-          Announcement is required
-        </mat-error>
-      </mat-form-field>
+      <mat-label>Announcement</mat-label>
+      <quill-editor class="quill-edt"  [(ngModel)]="htmlText" placeholder="Body" formControlName="body" [modules]="quillConfig"></quill-editor>
+      <!-- <textarea matInput placeholder="Body" formControlName="body" rows="3" maxlength="1000" required></textarea> -->
+      <mat-error *ngIf="(ancmntForm.get('body')!.touched ||ancmntForm.get('body')!.dirty) && ancmntForm.get('body')!.hasError('required')">
+        Announcement is required
+      </mat-error>
       <br />
       <mat-form-field appearance="outline">
         <mat-label>Send To</mat-label>

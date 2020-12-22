@@ -12,6 +12,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { QuillModule } from 'ngx-quill';
 
 import { LoaderModule } from '../shared/components/loader/loader.module';
 import { CommnComponent } from './commn.component';
@@ -34,6 +35,7 @@ const routes: Routes = [
     MatDatepickerModule, MatNativeDateModule, MatTabsModule,
     MatChipsModule, MatAutocompleteModule,
     NgbModule, LoaderModule, PaginationModule,
+    QuillModule.forRoot(),
     CustomPipeModule
   ],
   providers: [CommnService, GroupService, ContentWorkspaceService]
