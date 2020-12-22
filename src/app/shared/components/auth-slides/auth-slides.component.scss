@@ -1,0 +1,35 @@
+.carousel {
+  position: relative;
+
+  .text {
+    position: absolute;
+    top: 35%;
+    left: 0;
+  }
+
+  .carousel-inner {
+    .img-1 {
+      background: url('../../../../assets/images/carousel-1.jpg');
+    }
+
+    .img-2 {
+      background: url('../../../../assets/images/carousel-2.jpg');
+    }
+
+    .img-3 {
+      background: url('../../../../assets/images/carousel-3.jpg');
+    }
+
+    .img-4 {
+      background: url('../../../../assets/images/carousel-4.jpg');
+    }
+
+    .carousel-item {
+      height: 100vh;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      filter: brightness(0.6);
+    }
+  }
+}
