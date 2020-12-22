@@ -94,7 +94,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.usrInfo = this.tokenDataServ.getUser();
     this.fileTypesArr = EnumHelper.enumToArray(this.fileTypes);
     this.initialiseState();
-    this.getTags();this.getLangs();
+    this.getTags(); this.getLangs();
     this.setDefSort(); this.cntntList();
     this.processingCntnt(true);
     this.getIntervalId = setInterval(() => {
@@ -167,7 +167,7 @@ export class ContentWorkspaceComponent implements OnInit {
       name: ['', [Validators.required]],
       description: [''],
       url: ['', [Validators.required]],
-      hideLabelInWorkspace:[]
+      hideLabelInWorkspace: []
     });
     this.verForm = this.fb.group({
       KeepCurrentFileName: [false],
@@ -192,7 +192,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
 
-  setDefSort(){
+  setDefSort() {
     this.sort = { sortColumn: 'createdDate', isAscending: false };
   }
 
@@ -263,7 +263,7 @@ export class ContentWorkspaceComponent implements OnInit {
     };
     this.cwServ.getAllDataWrkspc(params).subscribe((data: any) => {
       if (data && Array.isArray(data.result) && data.result.length > 0) {
-        data.result.sort((a:any, b:any) => a.sequenceNumber - b.sequenceNumber);
+        data.result.sort((a: any, b: any) => a.sequenceNumber - b.sequenceNumber);
         if (item) {
           for (let i = 0; i < data.result.length; i++) {
             data.result[i].entityType === 1 ? this.mdlItems.push(data.result[i]) : undefined;
@@ -348,26 +348,26 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // activate/deactivate smart folder
   actDeactSmtFldr(fldr: Folder) {
-      let actDeac: string = `${fldr.isActive ? 'deactivate' : 'activate'}`;
-      this.dialog.open(ConfirmDialogComponent, {
-        data: {
-          msg: `Are you sure you want to ${actDeac} this smart folder?`,
-          title: `${fldr.isActive ? 'Deactivate' : 'Activate'} smart folder`
-        },
-        autoFocus: false
-      }).afterClosed().subscribe(result => {
-        if (result) {
-          this.cwServ.actDeactSmtFldr(fldr.entityId?.toString(), fldr.isActive ? false : true).subscribe((data: any) => {
-            if (data) {
-              this.toastr.success(`Smart folder ${actDeac}d successfully`, 'Success!');
-              this.listFolders();
-            } else {
-              this.toastr.error(`Unable to ${actDeac} smart folder`, 'Error!');
-            }
-          }, (err: any) => {
-          });
-        }
-      })
+    let actDeac: string = `${fldr.isActive ? 'deactivate' : 'activate'}`;
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to ${actDeac} this smart folder?`,
+        title: `${fldr.isActive ? 'Deactivate' : 'Activate'} smart folder`
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.cwServ.actDeactSmtFldr(fldr.entityId?.toString(), fldr.isActive ? false : true).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(`Smart folder ${actDeac}d successfully`, 'Success!');
+            this.listFolders();
+          } else {
+            this.toastr.error(`Unable to ${actDeac} smart folder`, 'Error!');
+          }
+        }, (err: any) => {
+        });
+      }
+    })
   }
 
   // edit smart folder
@@ -383,12 +383,12 @@ export class ContentWorkspaceComponent implements OnInit {
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
       fldrData.tagIds = this.fldrTgs();
-      if(this.custIcon || this.iconUrl){
-        if(this.custIcon)
+      if (this.custIcon || this.iconUrl) {
+        if (this.custIcon)
           fldrData.smartFolderIcon = this.custIcon;
-        fldrData.hasIcon=  true;
-      }else{
-        fldrData.hasIcon=  false;
+        fldrData.hasIcon = true;
+      } else {
+        fldrData.hasIcon = false;
       }
       this.cwServ.updSmartFolder(fldrData)
         .subscribe((data: any) => {
@@ -415,10 +415,10 @@ export class ContentWorkspaceComponent implements OnInit {
         isActive: true,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       }
-      if(this.custIcon){
+      if (this.custIcon) {
         fldrData.smartFolderIcon = this.custIcon;
         // fldrData.hasIcon = true;
-      }else{
+      } else {
         // fldrData.hasIcon = false;
       }
       if (this.edit === undefined) {
@@ -477,12 +477,12 @@ export class ContentWorkspaceComponent implements OnInit {
           let temp = this.tags;
           this.allTags = []; this.anyTags = []; this.noneTags = [];
           for (let i = 0; i < data.result.smartFolderTags.length; i++) {
-            if (data.result.smartFolderTags[i].tagId === 1) {
-              this.allTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-            } else if (data.result.smartFolderTags[i].tagId === 2) {
-              this.anyTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
-            } else if (data.result.smartFolderTags[i].tagId === 3) {
-              this.noneTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].id));
+            if (data.result.smartFolderTags[i].tagFilterGroupId === 1) {
+              this.allTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].tagId));
+            } else if (data.result.smartFolderTags[i].tagFilterGroupId === 2) {
+              this.anyTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].tagId));
+            } else if (data.result.smartFolderTags[i].tagFilterGroupId === 3) {
+              this.noneTags.push(...temp.filter(tag => tag.id == data.result.smartFolderTags[i].tagId));
             }
           }
         }
@@ -535,12 +535,12 @@ export class ContentWorkspaceComponent implements OnInit {
         folderId: this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId,
         isActive: this.selFolder!.isActive
       };
-      if(this.custIcon || this.iconUrl){
-        if(this.custIcon)
+      if (this.custIcon || this.iconUrl) {
+        if (this.custIcon)
           fldrData.folderIcon = this.custIcon;
-        fldrData.hasIcon=  true;
-      }else{
-        fldrData.hasIcon=  false;
+        fldrData.hasIcon = true;
+      } else {
+        fldrData.hasIcon = false;
       }
       this.cwServ.updFolder(fldrData).subscribe((data: any) => {
         if (data) {
@@ -564,10 +564,10 @@ export class ContentWorkspaceComponent implements OnInit {
         ...this.folderForm.value,
         isActive: true
       }
-      if(this.custIcon){
+      if (this.custIcon) {
         fldrData.folderIcon = this.custIcon;
         // fldrData.hasIcon = true;
-      }else{
+      } else {
         // fldrData.hasIcon = false;
       }
       if (this.edit === undefined) {
@@ -883,7 +883,7 @@ export class ContentWorkspaceComponent implements OnInit {
           event.previousIndex,
           event.currentIndex
         );
-        data.result.sort((a:any, b:any) => a.sequenceNumber - b.sequenceNumber);
+        data.result.sort((a: any, b: any) => a.sequenceNumber - b.sequenceNumber);
         this.wrkspcItems = data.result;
         // this.wrkspcItems[event.currentIndex] = data.result;
         this.toastr.success('Added successfully', 'Success!');
@@ -917,7 +917,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   isNotDrag(): boolean {
-    if (this.activeIndex == 0 && this.activeFldrs==1 && this.selWrkspc && this.selWrkspc.id ) {
+    if (this.activeIndex == 0 && this.activeFldrs == 1 && this.selWrkspc && this.selWrkspc.id) {
       if (this.dispFolder && this.dispFolder.id && this.dispFolder.entityType == 2) {
         return true;
       }
@@ -1041,7 +1041,7 @@ export class ContentWorkspaceComponent implements OnInit {
         case 'd': this.desc = this.rowInfo.description; break;
         case 't': this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId })); break;
         case 'l': this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng, id: lng.languageId })); break;
-        case 'p': this.isShared = this.rowInfo.canBeShared; this.hLW = this.rowInfo.hideLabelInWorkspace;break;
+        case 'p': this.isShared = this.rowInfo.canBeShared; this.hLW = this.rowInfo.hideLabelInWorkspace; break;
       }
     }
     this.edits[type] = false;
@@ -1281,8 +1281,8 @@ export class ContentWorkspaceComponent implements OnInit {
       this.cwServ.procCntntStatus(d, isStart)
         .subscribe((data: any) => {
           this.setFilesDef();
-          if(isStart){
-            this.pageNo = 1;this.setDefSort();this.cntntList();
+          if (isStart) {
+            this.pageNo = 1; this.setDefSort(); this.cntntList();
           }
         }, (err: any) => {
           this.setFilesDef();
@@ -1314,12 +1314,12 @@ export class ContentWorkspaceComponent implements OnInit {
         cntntData.ContentTagsString = this.selTags.map((tag: any) => ({ tagId: tag.id }));
         cntntData.ContentTagsString = JSON.stringify(cntntData.ContentTagsString)
       }
-      cntntData.hideLabelInWorkspace = cntntData.hideLabelInWorkspace?true:false;
+      cntntData.hideLabelInWorkspace = cntntData.hideLabelInWorkspace ? true : false;
       this.cwServ.addContent(cntntData)
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success('Content added successfully', 'Success!');
-            this.files = []; this.pageNo = 1;this.setDefSort();
+            this.files = []; this.pageNo = 1; this.setDefSort();
             this.cntntList();
             this.dismissModal();
           } else {
@@ -1538,7 +1538,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   //delete content or folder from workspace, for now its activate/deactivate
-  delDataFromWrkspc(d:any){
+  delDataFromWrkspc(d: any) {
     let actDeac: string = `${d.isActive ? 'deactivate' : 'activate'}`;
     this.dialog.open(ConfirmDialogComponent, {
       data: {
