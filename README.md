@@ -44,3 +44,33 @@ npm i pdf-annotate.js
 5659 in require('pdfjs-dist/web/pdf_viewer');
 if(this.viewer)
   this.viewer.textContent = "";
+
+
+##Quill Editor
+npm i ngx-quill@12.0.1 --save
+
+npm install quill@1.3.0 --save
+
+
+npm install @types/quill --save-dev
+
+styles
+"node_modules/quill/dist/quill.snow.css",
+"node_modules/quill/dist/quill.core.css"
+
+scripts
+"node_modules/quill/dist/quill.js"
+
+
+Need to do changes in quill node_modules
+
+
+import QuillType from 'quill';
+import Delta from 'quill';
+
+in node_modules\ngx-quill\lib\quill-editor.component.d.ts
+
+
+
+node_modules\@types\quill\node_modules\fast-diff\diff.d.ts
+export default diff;
