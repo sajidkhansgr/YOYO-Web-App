@@ -548,6 +548,15 @@ mat-checkbox {
     padding: 0 !important;
     margin: 0 !important;
   }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+  }
+}
+
+// use it for input below quil editor
+.mt-1-2 {
+  margin-top: 1.2rem;
 }
 
 // login page
