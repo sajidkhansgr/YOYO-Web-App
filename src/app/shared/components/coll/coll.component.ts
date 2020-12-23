@@ -59,7 +59,7 @@ export class CollComponent implements OnInit {
           if (this.cntntData.pageNo) {
 
           } else {
-            colctnData.contents = [this.cntntData.contentId];
+            colctnData.contents = [this.cntntData.contentId ? this.cntntData.contentId : this.cntntData.id];
           }
         }
       }
