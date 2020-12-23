@@ -242,6 +242,8 @@ export class AppSettings {
 
   public static REARR_CNTNT_COLCT = `api/Collection/ReArrangeCollectionData`;
 
+  public static ADD_COLCT_THEN_CNTNT = `api/Collection/CreateCollectionAndAddContent`;
+
   // ---- BREADCRUM ---- //
 
   public static BRD_CRM_LIST = `api/BreadCrum/GetBreadCrum`;
