@@ -278,14 +278,13 @@
       <mat-form-field appearance="outline" class="w-100 quill-editor-container" [floatLabel]="'always'">
         <mat-label>Announcement</mat-label>
         <input class="d-none" matInput />
-        <quill-editor class="quill-edt" placeholder="Body" formControlName="body" [modules]="quillConfig"></quill-editor>
+        <quill-editor class="quill-edt" placeholder="Body" formControlName="body" [modules]="quillConfig">
+        </quill-editor>
       </mat-form-field>
-      <small>
-        <mat-error class="ml-3 mb-0"
-          *ngIf="(ancmntForm.get('body')!.touched ||ancmntForm.get('body')!.dirty) && ancmntForm.get('body')!.hasError('required')">
-          Announcement is required
-        </mat-error>
-      </small>
+      <mat-error class="ml-0-9 mb-0"
+        *ngIf="(ancmntForm.get('body')!.touched ||ancmntForm.get('body')!.dirty) && ancmntForm.get('body')!.hasError('required')">
+        Announcement is required
+      </mat-error>
       <!-- <textarea matInput placeholder="Body" formControlName="body" rows="3" maxlength="1000" required></textarea> -->
       <mat-form-field appearance="outline"
         [ngClass]="{'mt-1-2': !((ancmntForm.get('body')!.touched ||ancmntForm.get('body')!.dirty) && ancmntForm.get('body')!.hasError('required'))}">
