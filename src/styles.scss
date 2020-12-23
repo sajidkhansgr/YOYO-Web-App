@@ -522,6 +522,32 @@ mat-checkbox {
   }
 }
 
+// quill editor
+.quill-editor-container {
+
+  .ql-toolbar,
+  .ql-container {
+    border: 0 !important;
+  }
+
+  .ql-container {
+    min-height: 80px;
+
+    .ql-editor {
+      padding-left: 0.5rem;
+    }
+  }
+
+  .ql-toolbar {
+    padding-left: 0 !important;
+  }
+
+  .mat-form-field-infix {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
 // login page
 .login-ui {
   min-height: 100vh;
