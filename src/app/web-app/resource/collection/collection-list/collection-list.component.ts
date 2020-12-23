@@ -61,14 +61,14 @@ export class CollectionListComponent implements OnInit {
     }
     colData.asc = !colData.asc;
     this.cols[index].asc = colData.asc;
-    this.colctnArr = this.colctnArr.sort((a, b) => {
+    this.colctnArr.sort((a, b) => {
       if (col.k === 'name') {
         if ((a.name).toLowerCase() < (b.name).toLowerCase())
           return colData.asc ? -1 : 1;
         else
           return colData.asc ? 1 : -1;
       } else {
-        if ((a.updatedDate).toLowerCase() < (b.updatedDate).toLowerCase())
+        if ((a.updatedDate) < (b.updatedDate))
           return colData.asc ? -1 : 1;
         else
           return colData.asc ? 1 : -1;

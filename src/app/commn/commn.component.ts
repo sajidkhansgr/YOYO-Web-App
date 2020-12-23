@@ -340,13 +340,13 @@ export class CommnComponent implements OnInit {
   addControls(names: Array<string>) {
     for (let i = 0; i < names.length; i++) {
       if (!this.ancmntForm.controls[names[i]])
-        this.ancmntForm.addControl(names[i], new FormControl(''))
+        this.ancmntForm.addControl(names[i], new FormControl(''));
     }
   }
 
   getGroups() {
     if (this.grps.length <= 0) {
-      this.grpServ.groupList({ pageNo: 0 })
+      this.grpServ.groupList({ pageNo: 0, isActive: true })
         .subscribe((data: any) => {
           if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
             this.grps = data.result.results;

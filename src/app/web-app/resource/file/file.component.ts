@@ -97,34 +97,33 @@ export class FileComponent implements OnInit {
     }
     colData.asc = !colData.asc;
     this.cols[index].asc = colData.asc;
-    this.files = this.files.sort((a, b) => {
-      if (col.k === 'name') {
-        if ((a.name).toLowerCase() < (b.name).toLowerCase())
-          return colData.asc ? -1 : 1;
+
+    function nameSort(a:any,b:any,colData:any){
+      if ((a.name).toLowerCase() < (b.name).toLowerCase())
+        return colData.asc ? -1 : 1;
+      else
+        return colData.asc ? 1 : -1;
+    }
+    function dateSort(a:any,b:any,colData:any){
+      if ((a.updatedDate) < (b.updatedDate))
+        return colData.asc ? -1 : 1;
+      else
+        return colData.asc ? 1 : -1;
+    }
+    const sortArray = (key:'files'|'folders'|'allFiles') =>{
+      this[key].sort((a, b) => {
+        if (col.k === 'name')
+          return nameSort(a,b,colData);
         else
-          return colData.asc ? 1 : -1;
-      } else {
-        if ((a.updatedDate).toLowerCase() < (b.updatedDate).toLowerCase())
-          return colData.asc ? -1 : 1;
-        else
-          return colData.asc ? 1 : -1;
-      }
-    });
-    this.folders = this.folders.sort((a, b) => {
-      if (col.k === 'name') {
-        if ((a.name).toLowerCase() < (b.name).toLowerCase())
-          return colData.asc ? -1 : 1;
-        else
-          return colData.asc ? 1 : -1;
-      } else {
-        if ((a.updatedDate).toLowerCase() < (b.updatedDate).toLowerCase())
-          return colData.asc ? -1 : 1;
-        else
-          return colData.asc ? 1 : -1;
-      }
-    });
-    this.allFiles = [...this.folders, ...this.files];
-    console.log(this.allFiles);
+          return dateSort(a,b,colData);
+      });
+    }
+    if(this.view){
+      sortArray('files');
+      sortArray('folders');
+    }else{
+      sortArray('allFiles');
+    }
   }
 
   // open modals
@@ -191,10 +190,10 @@ export class FileComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result) {
           if (Array.isArray(data.result.folders)) {
-            this.folders = data.result.folders.map((d: any) => ({ ...d, isFldr: true, chk: false }));
+            this.folders = data.result.folders.map((d: any) => ({ ...d, isFldr: true, chk: false,updatedDate:d.updatedDate?d.updatedDate:d.createdDate }));
           }
           if (Array.isArray(data.result.contents)) {
-            this.files = data.result.contents.map((d: any) => ({ ...d, chk: false }));
+            this.files = data.result.contents.map((d: any) => ({ ...d, chk: false,updatedDate:d.updatedDate?d.updatedDate:d.createdDate }));
           }
         }
         this.allFiles = [...this.folders, ...this.files];

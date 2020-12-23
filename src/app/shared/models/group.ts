@@ -5,4 +5,5 @@ export interface Group {
   isActive: boolean;
   createdDate: string;
   usersCount?: number;
+  chk?: boolean //local use only
 }

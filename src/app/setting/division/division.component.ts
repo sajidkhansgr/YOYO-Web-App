@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+// import { Subscription } from 'rxjs';
 import { HubService } from '../../hub/hub.service';
 import { DivisionService } from './division.service';
 import { Hub } from '../../shared/models/hub';
+import { Group } from '../../shared/models/group';
 import { DataService } from '../../shared/services/data.service';
 import { TokenDataService } from '../../shared/services/token-data.service';
+import { GroupService } from '../../user/group/group.service';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -22,6 +24,8 @@ export class DivisionComponent implements OnInit {
   loading: boolean = true;
   hubForm!: FormGroup; disabled: boolean = false;
   type!: string | undefined;
+  grps: Group[]=[];grpLoad!: boolean;hubLoad: boolean=false;
+
   // routerSubs: Subscription;
   constructor(
     private hubServ: HubService,
@@ -31,7 +35,8 @@ export class DivisionComponent implements OnInit {
     private toastr: ToastrService,
     private dataServ: DataService,
     private tokenDataServ: TokenDataService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private grpServ: GroupService
   ) {
     // this.routerSubs = this.dataServ.currentInfo
     //   .subscribe((data: any) => {
@@ -61,20 +66,28 @@ export class DivisionComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.hubs = data.result.results;
-          this.selHub = data.result.results[0];
+          this.getHub(this.hubs[0]);
+          // this.selHub = data.result.results[0];
         }
         this.loading = false;
       }, (err: any) => {
         this.loading = false;
+        this.hubLoad = false;
       });
   }
 
   hubChange(hub: Hub) {
-    this.selHub = hub;
+    // this.selHub = hub;
+    this.getHub(hub);
   }
 
-  openModal(content: any, formType?: string) {
+  openModal(content: any, formType: string) {
     this.type = formType;
+    if(this.type!=='prm'){
+      if(this.grps.length<=0)
+        this.grpsList();
+      this.chkUnchkGrp();
+    }
     if (this.type == 'add' || this.type == 'edit') {
       this.hubForm.reset();
       if (this.type == 'edit') {
@@ -107,6 +120,7 @@ export class DivisionComponent implements OnInit {
 
   // ADD Hub
   addHub(hubData: any) {
+    hubData.groupIds = this.getSelGrp();
     this.divServ.addHub(hubData)
       .subscribe((data: any) => {
         if (data) {
@@ -124,18 +138,24 @@ export class DivisionComponent implements OnInit {
   }
 
   // EDIT Hub
-  updHub(hubData: any) {
+  updHub(hubData: any,isUpdGrp: boolean=false) {
     hubData.id = this.selHub.id;
+    hubData.groupIds = this.getSelGrp();
     this.divServ.updHub(hubData)
       .subscribe((data: any) => {
         if (data) {
-          this.selHub.name = hubData.name;
-          this.localUpd();
-          this.dataServ.passDataSend('hub-upd');
-          this.toastr.success(data.message || 'Hub updated successfully', 'Success!');
+          this.selHub.groups = this.getSelGrp(true);
+          if(isUpdGrp){
+            this.toastr.success('Hub groups assigned successfully', 'Success!');
+          }else{
+            this.selHub.name = hubData.name;
+            this.localUpd();
+            this.dataServ.passDataSend('hub-upd');
+            this.toastr.success(data.message || 'Hub updated successfully', 'Success!');
+          }
           this.disMissMdodal();
         } else {
-          this.toastr.error(data.result.data || 'Unable to update Hub', 'Error!');
+          this.toastr.error('Please try after sometime', 'Error!');
         }
         this.disabled = false;
       }, (err: any) => {
@@ -177,6 +197,71 @@ export class DivisionComponent implements OnInit {
       this.hubs[index] = this.selHub;
     }
   }
+
+  getHub(hub: Hub) {
+    this.hubLoad = true;
+    this.hubServ.viewHub(hub.id.toString())
+      .subscribe((data: any) => {
+        if (data && data.result && data.result.id) {
+          this.selHub = data.result;
+        }else{
+          this.selHub = hub;
+        }
+        this.hubLoad = false;
+      }, (err: any) => {
+        this.selHub = hub;
+        this.hubLoad = false;
+      });
+  }
+
+  grpsList() {
+    this.grps = []; this.grpLoad = true;
+    this.grpServ.groupList({ pageNo: 0,isActive: true })
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          this.grps = data.result.results;
+          this.chkUnchkGrp();
+        }
+        this.grpLoad = false;
+      }, (err: any) => {
+        this.grpLoad = false;
+      });
+  }
+
+  chkUnchkGrp(){
+    for(let k=0;k<this.grps.length;k++){
+      this.grps[k].chk = false;
+      if((this.type=='edit' || this.type=='grp') && this.selHub && this.selHub.groups){
+        for(let l=0;l<this.selHub.groups.length;l++){
+          if(this.grps[k].id===this.selHub.groups[l].id)
+            this.grps[k].chk = true;
+        }
+      }
+    }
+  }
+
+  getSelGrp(isAll:boolean=false){
+    let grpIds = [];
+    for(let k=0;k<this.grps.length;k++){
+      if(this.grps[k].chk){
+        if(isAll)
+          grpIds.push(this.grps[k]);
+        else
+          grpIds.push(this.grps[k].id);
+      }
+    }
+    return grpIds;
+  }
+
+  chngGrpChk(val: boolean, g: any){
+    g.chk = val;
+  }
+
+  updGrp(){
+    this.disabled = true;
+    this.updHub({name: this.selHub.name},true);
+  }
+
 
   disMissMdodal() {
     if (this.modalService)

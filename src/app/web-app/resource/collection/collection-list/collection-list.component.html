@@ -3,20 +3,17 @@
   <h3 class="mb-2 clearfix heading align-self-center">
     Collections
     <div class="float-right">
-      <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}"
-        (click)="view = !view;" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
+      <i class="fa mr-3 curs-ptr align-self-center" [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}" (click)="view = !view;" matTooltip="{{view? 'List View' : 'Grid View'}}"></i>
       <button class="btn btn-primary mb-2" (click)="cmnModal('coll', 'add')">New Collection</button>
     </div>
   </h3>
-  <div class="text-right mb-2" *ngIf="view">
+  <div class="text-right mb-2" *ngIf="view && !loading">
     Sort by:
     <span class="text-primary ml-2 curs-ptr" *ngFor="let c of cols, let i = index" (click)="sortChange(c, i)">
       {{c.n}}<i class="fa ml-1" [ngClass]="{'fa-sort-up align-bottom': c.asc, 'fa-sort-down align-top': !c.asc}"></i>
     </span>
   </div>
-  <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeColctn"
-    class="nav-tabs justify-content-end border-bottom border-color-grey mr-3 w-100 pr-2"
-    (activeIdChange)="listColctn()">
+  <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeColctn" class="nav-tabs justify-content-end border-bottom border-color-grey mr-3 w-100 pr-2" (activeIdChange)="listColctn()">
     <li [ngbNavItem]="1">
       <a ngbNavLink>Active</a>
     </li>
@@ -45,15 +42,12 @@
             </div>
             <div class="options rounded">
               <div class="dropleft">
-                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, colctn)"><i
-                      class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, colctn)"><i
-                      class="fa fa-link mr-1"></i>Get a
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, colctn)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, colctn)"><i class="fa fa-link mr-1"></i>Get a
                     link</a>
                 </div>
               </div>
@@ -61,15 +55,12 @@
                 <i class="mr-1 fas fa-toggle-{{isActiveColctn ? 'off text-primary' : 'on text-success'}}"></i>
               </div>
               <div class="dropleft">
-                <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
+                <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-ellipsis-h"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="optionsDD">
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'dupl',colctn)"><i
-                      class="fas fa-copy mr-1"></i>Duplicate</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'ren',colctn)"><i
-                      class="fas fa-edit mr-1"></i>Rename</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'dupl',colctn)"><i class="fas fa-copy mr-1"></i>Duplicate</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'ren',colctn)"><i class="fas fa-edit mr-1"></i>Rename</a>
                   <a class="dropdown-item dd">
                     <i class="fa fa-download mr-1"></i>Download
                     <div class="dropdown-menu">
@@ -98,8 +89,7 @@
             <mat-checkbox (change)="selAll($event.checked)"></mat-checkbox>
           </th>
           <th class="border-top-0 curs-ptr" *ngFor="let c of cols, let i = index" (click)="sortChange(c, i)">
-            {{c.n}}<i class="fa ml-1"
-              [ngClass]="{'fa-sort-up align-bottom': c.asc, 'fa-sort-down align-top': !c.asc}"></i>
+            {{c.n}}<i class="fa ml-1" [ngClass]="{'fa-sort-up align-bottom': c.asc, 'fa-sort-down align-top': !c.asc}"></i>
           </th>
           <th class="border-top-0"></th>
         </tr>
@@ -121,15 +111,12 @@
           <td class="align-middle options">
             <div class="d-flex">
               <div class="dropleft">
-                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, colctn)"><i
-                      class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, colctn)"><i
-                      class="fa fa-link mr-1"></i>Get a
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, colctn)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, colctn)"><i class="fa fa-link mr-1"></i>Get a
                     link</a>
                 </div>
               </div>
@@ -137,15 +124,12 @@
                 <i class="mr-1 fas fa-toggle-{{isActiveColctn ? 'off text-primary' : 'on text-success'}}"></i>
               </div>
               <div class="dropleft">
-                <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
+                <button class="btn" type="button" id="optionsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-ellipsis-h"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="optionsDD">
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'dupl',colctn)"><i
-                      class="fas fa-copy mr-1"></i>Duplicate</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'ren',colctn)"><i
-                      class="fas fa-edit mr-1"></i>Rename</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'dupl',colctn)"><i class="fas fa-copy mr-1"></i>Duplicate</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'ren',colctn)"><i class="fas fa-edit mr-1"></i>Rename</a>
                   <a class="dropdown-item dd">
                     <i class="fa fa-download mr-1"></i>Download
                     <div class="dropdown-menu">
@@ -168,5 +152,4 @@
 </div>
 
 <!-- fixed div on selecting a collection -->
-<app-sel-itm-fxd-div [selArr]="selColctnArr" [isActive]="this.activeColctn == 1 ? true : false" [type]="'collection'"
-  (actDeact)="actDeactColctn(undefined)" (clrSelData)="clrSel()" *ngIf="selColctnArr.length > 0"></app-sel-itm-fxd-div>
+<app-sel-itm-fxd-div [selArr]="selColctnArr" [isActive]="this.activeColctn == 1 ? true : false" [type]="'collection'" (actDeact)="actDeactColctn(undefined)" (clrSelData)="clrSel()" *ngIf="selColctnArr.length > 0"></app-sel-itm-fxd-div>

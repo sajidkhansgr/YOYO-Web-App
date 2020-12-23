@@ -15,6 +15,7 @@ import { EnumHelper } from '../../shared/enum-helper';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { UserService } from '../user.service';
 import { GroupService } from '../group/group.service';
+import { TokenDataService } from '../../shared/services/token-data.service';
 
 @Component({
   selector: 'app-user-list',
@@ -50,14 +51,15 @@ export class UserListComponent implements OnInit {
   showRowInfo: boolean = false; rowInfo: any; isEdit: boolean = false;
   grps!: Group[];
   selectable = true; removable = true; selGrps: any = [];
-
+  usrInfo!: any;
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
     private usrServ: UserService,
     private toastr: ToastrService,
     private dialog: MatDialog,
-    private grpServ: GroupService
+    private grpServ: GroupService,
+    private tokenDataServ: TokenDataService
   ) { }
 
   ngOnInit(): void {
@@ -66,6 +68,7 @@ export class UserListComponent implements OnInit {
     this.visbCols = [{ n: "Role", k: "roleId", asc: false },{ n: "Latest Activity", k: "latestActivity", asc: false },{ n: "Date Created", k: "createdDate", asc: false }];
     this.cols = [{ n: "Name", asc: false, k: "name" }];
     this.cols.push(...this.visbCols);
+    this.usrInfo = this.tokenDataServ.getUser();
     this.initialiseState();
     this.initForm();
     this.userList();
@@ -319,7 +322,7 @@ export class UserListComponent implements OnInit {
 
   grpsList() {
     this.grps = [];
-    this.grpServ.groupList({ pageNo: 0 })
+    this.grpServ.groupList({ pageNo: 0, isActive: true })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.grps = data.result.results;
@@ -393,7 +396,14 @@ export class UserListComponent implements OnInit {
           ...this.rowInfo,
           roleId: this.rowInfo.role && this.rowInfo.role.id ? this.rowInfo.role.id : ''
         })
-        this.usrForm.controls['isActive'].enable();
+        if(this.usrInfo && this.usrInfo.id==this.rowInfo.id){
+          this.usrForm.controls['isActive'].disable();
+          this.usrForm.controls['roleId'].disable();
+        }else{
+          this.usrForm.controls['isActive'].enable();
+          this.usrForm.controls['roleId'].enable();
+        }
+
         if (this.rowInfo && this.rowInfo.employeeGroups && this.rowInfo.employeeGroups.length > 0) {
           this.selGrps = this.rowInfo.employeeGroups.map((grp: any) => ({ id: grp.groupId, name: grp.groupName }));
         }
