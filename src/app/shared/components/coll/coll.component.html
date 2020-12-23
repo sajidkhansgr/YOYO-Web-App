@@ -1,24 +1,24 @@
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{multiForm == 1 ? 'Add' : multiForm == 2 ? 'Rename' : 'Duplicate'}}
-      Collection</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modalRef.dismiss();">
-      <span aria-hidden="true">&times;</span>
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">{{multiForm == 1 ? 'Add' : multiForm == 2 ? 'Rename' : 'Duplicate'}}
+    Collection</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modalRef.dismiss();">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form name="colctnForm" (ngSubmit)="submitColctn()" [formGroup]="colctnForm">
+  <div class="modal-body" ngbAutofocus>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" placeholder="New Collection Name" formControlName="name" maxlength="100" required />
+      <mat-error *ngIf="colctnForm.get('name')!.hasError('required')">
+        Name is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary" [disabled]="colctnForm!.invalid || disabled">
+      <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
+      Save
     </button>
   </div>
-  <form name="colctnForm" (ngSubmit)="submitColctn()" [formGroup]="colctnForm">
-    <div class="modal-body" ngbAutofocus>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Name</mat-label>
-        <input matInput type="text" placeholder="New Collection Name" formControlName="name" maxlength="100" required />
-        <mat-error *ngIf="colctnForm.get('name')!.hasError('required')">
-          Name is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" [disabled]="colctnForm!.invalid || disabled">
-        <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
-        Save
-      </button>
-    </div>
-  </form>
+</form>

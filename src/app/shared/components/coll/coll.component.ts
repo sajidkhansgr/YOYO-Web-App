@@ -56,10 +56,14 @@ export class CollComponent implements OnInit {
         if (Array.isArray(this.cntntData)) {
 
         } else {
+          let cntntId = this.cntntData.contentId ? this.cntntData.contentId : this.cntntData.id;
           if (this.cntntData.pageNo) {
-
+            colctnData.pages = {
+              pageNumbers: [this.cntntData.pageNo],
+              contentId: cntntId
+            }
           } else {
-            colctnData.contents = [this.cntntData.contentId ? this.cntntData.contentId : this.cntntData.id];
+            colctnData.contents = [cntntId];
           }
         }
       }

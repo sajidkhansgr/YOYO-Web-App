@@ -278,8 +278,7 @@
       <mat-form-field appearance="outline" class="w-100 quill-editor-container" [floatLabel]="'always'">
         <mat-label>Announcement</mat-label>
         <input class="d-none" matInput />
-        <quill-editor class="quill-edt" [(ngModel)]="htmlText" placeholder="Body" formControlName="body"
-          [modules]="quillConfig"></quill-editor>
+        <quill-editor class="quill-edt" placeholder="Body" formControlName="body" [modules]="quillConfig"></quill-editor>
       </mat-form-field>
       <small>
         <mat-error class="ml-3 mb-0"

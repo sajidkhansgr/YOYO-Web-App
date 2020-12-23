@@ -34,10 +34,8 @@ export class CommnComponent implements OnInit {
   grps: Group[] = []; selGrps: Group[] = [];
   wrkSpcs: Workspace[] = []; selWrkSpcs: Workspace[] = [];
   showRowInfo: boolean = false; rowInfo: any; sort: any = {};
-  cols: any[] = [];
-  totalCount!: number;
-  minDate!: any;
-  quillConfig=QUILL;htmlText:string='';
+  cols: any[] = []; totalCount!: number; minDate!: any;
+  quillConfig = QUILL;
 
   constructor(
     private modalService: NgbModal,
