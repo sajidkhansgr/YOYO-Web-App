@@ -7,22 +7,22 @@
       <button class="btn btn-primary mb-2" (click)="cmnModal('coll', 'add')">New Collection</button>
     </div>
   </h3>
+  <div class="text-right mb-2" *ngIf="view && !loading">
+    Sort by:
+    <span class="text-primary ml-2 curs-ptr" *ngFor="let c of cols, let i = index" (click)="sortChange(c, i)">
+      {{c.n}}<i class="fa ml-1" [ngClass]="{'fa-sort-up align-bottom': c.asc, 'fa-sort-down align-top': !c.asc}"></i>
+    </span>
+  </div>
+  <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeColctn" class="nav-tabs justify-content-end border-bottom border-color-grey mr-3 w-100 pr-2" (activeIdChange)="listColctn()">
+    <li [ngbNavItem]="1">
+      <a ngbNavLink>Active</a>
+    </li>
+    <li [ngbNavItem]="2">
+      <a ngbNavLink>Disabled</a>
+    </li>
+  </ul>
   <ng-container *ngIf="view && !loading">
     <ng-container *ngIf="colctnArr && colctnArr.length>0 else noColctn">
-      <div class="text-right mb-2">
-        Sort by:
-        <span class="text-primary ml-2 curs-ptr" *ngFor="let c of cols, let i = index" (click)="sortChange(c, i)">
-          {{c.n}}<i class="fa ml-1" [ngClass]="{'fa-sort-up align-bottom': c.asc, 'fa-sort-down align-top': !c.asc}"></i>
-        </span>
-      </div>
-      <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeColctn" class="nav-tabs justify-content-end border-bottom border-color-grey mr-3 w-100 pr-2" (activeIdChange)="listColctn()">
-        <li [ngbNavItem]="1">
-          <a ngbNavLink>Active</a>
-        </li>
-        <li [ngbNavItem]="2">
-          <a ngbNavLink>Disabled</a>
-        </li>
-      </ul>
       <div class="mt-2 row collections">
         <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3" *ngFor="let colctn of colctnArr">
           <div class="card mx-auto">
