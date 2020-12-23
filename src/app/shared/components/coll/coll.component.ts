@@ -12,6 +12,7 @@ import { CollService } from './coll.service';
 export class CollComponent implements OnInit {
   @Input() public colctn!: any;
   @Input() public type!: string;
+  @Input() public cntntData!: any;
   disabled!: boolean;
   colctnForm!: FormGroup;
   multiForm!: number;
@@ -31,7 +32,7 @@ export class CollComponent implements OnInit {
     this.colctnForm = this.fb.group({
       name: ['', [Validators.required]]
     });
-    if (this.type == 'add') {
+    if (this.type == 'add' || this.type == 'add-content') {
       this.multiForm = 1;
     } else if (this.type == 'ren') {
       this.multiForm = 2;
@@ -51,6 +52,17 @@ export class CollComponent implements OnInit {
       let colctnData: any = {
         ...this.colctnForm.value
       };
+      if (this.type == 'add-content') {
+        if (Array.isArray(this.cntntData)) {
+
+        } else {
+          if (this.cntntData.pageNo) {
+
+          } else {
+            colctnData.contents = [this.cntntData.contentId];
+          }
+        }
+      }
       if (this.multiForm == 1) {
         this.addColctn(colctnData);
       } else if (this.multiForm == 2) {
@@ -96,7 +108,7 @@ export class CollComponent implements OnInit {
 
   // add collection
   addColctn(colctnData: any) {
-    this.collServ.addColctn(colctnData).subscribe((data: any) => {
+    this.collServ.addColctn(colctnData, this.type).subscribe((data: any) => {
       if (data) {
         this.toastr.success(data.message || 'Collection added successfully', 'Success!');
         this.modalRef.close(true);

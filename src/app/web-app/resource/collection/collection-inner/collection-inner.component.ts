@@ -174,7 +174,7 @@ export class CollectionInnerComponent implements OnInit {
     this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
       if (data && Array.isArray(data.result) && data.result.length > 0) {
         this.cntntArr = data.result.map((d: any) => ({ ...d, chk: false }));
-        console.log(this.cntntArr);
+        // console.log(this.cntntArr);
         // this.cntntArr = data.result;
       }
       this.loading = false;

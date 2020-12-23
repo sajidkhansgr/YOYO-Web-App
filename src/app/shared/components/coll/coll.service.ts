@@ -11,8 +11,9 @@ export class CollService {
   constructor(private http: HttpClient) { }
 
   // add collection
-  addColctn(data: any) {
-    return this.http.post(`${AppSettings.ADD_COLCT}`, data);
+  addColctn(data: any, t?: string) {
+    let url = t == 'add-content' ? AppSettings.ADD_COLCT_THEN_CNTNT : AppSettings.ADD_COLCT;
+    return this.http.post(`${url}`, data);
   }
 
   // rename collection
