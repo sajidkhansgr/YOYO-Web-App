@@ -426,7 +426,8 @@ export class ContentWorkspaceComponent implements OnInit {
         fldrData.workspaceIdForDuplicateSmartFolder = this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId;
         fldrData.originalSmartFolderId = this.selFolder!.id;
         fldrData.originalWorkspaceId = this.selFolder!.workspaceId;
-        // fldrData.hasIcon = this.hasIcon;
+        if (this.iconUrl)
+          fldrData.hasIcon = true;
       } else {
         fldrData.workspaceId = this.selWrkspc!.id;
         fldrData.folderId = this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0;
@@ -575,7 +576,9 @@ export class ContentWorkspaceComponent implements OnInit {
         fldrData.workspaceIdForDuplicateFolder = this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId;
         fldrData.originalFolderId = this.selFolder!.id;
         fldrData.originalWorkspaceId = this.selFolder!.workspaceId;
-        fldrData.hasIcon = this.hasIcon;
+        // fldrData.hasIcon = this.hasIcon;
+        if (this.iconUrl)
+          fldrData.hasIcon = true;
       } else {
         fldrData.workspaceId = this.selWrkspc!.id;
         fldrData.folderId = this.folderNav.length > 0 ? this.folderNav[this.folderNav.length - 1].entityId : 0;

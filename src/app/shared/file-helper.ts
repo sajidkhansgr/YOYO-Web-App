@@ -23,7 +23,7 @@ export class FileHelper {
         return d.pdfImagePath;
       if (d.urlIconPath)
         return d.urlIconPath;
-      else if ((d.contentType === 2 || d.contentType === 1) && d.contentPath)
+      else if ((d.contentType === 2) && d.contentPath)
         return d.contentPath;
       else if (d.pdfImage)
         return d.pdfImage;
