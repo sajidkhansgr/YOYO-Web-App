@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { DivisionComponent } from './division.component';
 import { DivisionService } from './division.service';
 import { HubService } from '../../hub/hub.service';
+import { GroupService } from '../../user/group/group.service';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { ConfirmDialogModule } from '../../shared/components/confirm-dialog/confirm-dialog.module';
 
@@ -28,7 +29,7 @@ const routes = [
     MatInputModule, MatCheckboxModule, MatSelectModule,
     LoaderModule, ConfirmDialogModule
   ],
-  providers: [DivisionService, HubService],
+  providers: [DivisionService, HubService, GroupService],
   exports: [DivisionComponent]
 })
 export class DivisionModule { }

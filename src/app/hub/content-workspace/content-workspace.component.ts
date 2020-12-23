@@ -1519,14 +1519,18 @@ export class ContentWorkspaceComponent implements OnInit {
       .subscribe((data: any) => {
         this.isProcCount(isCount, data);
       }, (err: any) => {
-        this.isProcCount(isCount, {})
+        this.isProcCount(isCount, {});
         this.procCnt = 0;
       });
   }
 
   isProcCount(isCount: boolean, data: any) {
     if (isCount) {
-      this.procCnt = data && data.result && data.result.count ? data.result.count : 0
+      let count: number = data && data.result && data.result.count ? data.result.count : 0;
+      if(this.activeIndex===1 && count!=this.procCnt){
+        this.processingCntnt(false);
+      }
+      this.procCnt = count;
     } else {
       if (data && Array.isArray(data.result)) {
         this.cntnts = data.result;

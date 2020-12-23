@@ -1,6 +1,6 @@
-<app-loader [type]="'page'" *ngIf="loading"></app-loader> <!-- loader -->
+<app-loader [type]="'page'" *ngIf="loading || hubLoad"></app-loader> <!-- loader -->
 
-<div class="main main-hub p-3" *ngIf="!loading">
+<div class="main main-hub p-3" *ngIf="!loading && !hubLoad">
   <h3 class="mb-4 clearfix heading">
     <div class="float-left">
       <div class="dropdown">
@@ -40,44 +40,26 @@
       </div>
     </div>
   </h3>
-  <div class="mt-2 row">
+  <div class="mt-2 row" *ngIf="!hubLoad">
     <div class="col-xl-4">
       <div class="card">
         <div class="card-header">
           Assigned Groups
           <div class="float-right">
-            <i class="fas fa-edit curs-ptr" (click)=openModal(updateGroups)></i>
+            <i class="fas fa-edit curs-ptr" (click)="openModal(updateGroups,'grp')"></i>
           </div>
         </div>
         <div class="card-body">
-          <div class="assigned-group my-1">
-            All Users
-            <div class="float-right">
-              <span class="badge badge-primary mr-2">359</span>
-              <i class="fas fa-user-friends"></i>
+          <ng-container *ngIf="selHub.groups && selHub.groups.length>0 else noGrp">
+            <div class="assigned-group my-1" *ngFor="let g of selHub.groups">
+              {{g.name}}
+              <div class="float-right">
+                <!-- <span class="badge badge-primary mr-2">359</span> -->
+                <i class="fas fa-user-friends"></i>
+              </div>
             </div>
-          </div>
-          <div class="assigned-group my-1">
-            All Users
-            <div class="float-right">
-              <span class="badge badge-primary mr-2">359</span>
-              <i class="fas fa-user-friends"></i>
-            </div>
-          </div>
-          <div class="assigned-group my-1">
-            All Users
-            <div class="float-right">
-              <span class="badge badge-primary mr-2">359</span>
-              <i class="fas fa-user-friends"></i>
-            </div>
-          </div>
-          <div class="assigned-group my-1">
-            All Users
-            <div class="float-right">
-              <span class="badge badge-primary mr-2">359</span>
-              <i class="fas fa-user-friends"></i>
-            </div>
-          </div>
+          </ng-container>
+          <ng-template #noGrp><div class="text-center">No assigned groups</div></ng-template>
         </div>
       </div>
     </div>
@@ -86,7 +68,7 @@
         <div class="card-header">
           Promoted Members
           <div class="float-right">
-            <div class="btn btn-primary btn-sm" (click)=openModal(promoteMember)>Promote a Member</div>
+            <div class="btn btn-primary btn-sm" (click)="openModal(promoteMember,'prm')">Promote a Member</div>
           </div>
         </div>
         <div class="card-body">
@@ -139,11 +121,8 @@
         be viewed (but not edited) by all other hubs.</mat-checkbox>
       <hr>
       <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
-      <mat-checkbox class="d-block ml-3">All Users</mat-checkbox>
-      <mat-checkbox class="d-block ml-3">HES & Hi-Force</mat-checkbox>
-      <mat-checkbox class="d-block ml-3">Hi-Force</mat-checkbox>
-      <mat-checkbox class="d-block ml-3">Hi-Force Distributors</mat-checkbox>
-      <mat-checkbox class="d-block ml-3">Protec & Hi-Force</mat-checkbox>
+      <app-loader [type]="'div'" *ngIf="grpLoad"></app-loader>
+      <mat-checkbox class="d-block ml-3" [checked]="g.chk" (change)="chngGrpChk($event.checked, g)" *ngFor="let g of grps">{{g.name}}</mat-checkbox>
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" [disabled]="hubForm!.invalid || disabled">
@@ -163,14 +142,13 @@
   </div>
   <div class="modal-body" ngbAutofocus>
     <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
-    <mat-checkbox class="d-block ml-3">All Users</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">HES & Hi-Force</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">Hi-Force</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">Hi-Force Distributors</mat-checkbox>
-    <mat-checkbox class="d-block ml-3">Protec & Hi-Force</mat-checkbox>
+    <app-loader [type]="'div'" *ngIf="grpLoad"></app-loader>
+    <mat-checkbox class="d-block ml-3" [checked]="g.chk" (change)="chngGrpChk($event.checked, g)" *ngFor="let g of grps">{{g.name}}</mat-checkbox>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-primary" [disabled]="disabled" (click)="updGrp()">
+      <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>Save
+    </button>
   </div>
 </ng-template>
 
