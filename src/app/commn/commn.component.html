@@ -280,13 +280,16 @@
         <input class="d-none" matInput />
         <quill-editor class="quill-edt" [(ngModel)]="htmlText" placeholder="Body" formControlName="body"
           [modules]="quillConfig"></quill-editor>
-        <mat-error
+      </mat-form-field>
+      <small>
+        <mat-error class="ml-3 mb-0"
           *ngIf="(ancmntForm.get('body')!.touched ||ancmntForm.get('body')!.dirty) && ancmntForm.get('body')!.hasError('required')">
           Announcement is required
         </mat-error>
-      </mat-form-field>
+      </small>
       <!-- <textarea matInput placeholder="Body" formControlName="body" rows="3" maxlength="1000" required></textarea> -->
-      <mat-form-field appearance="outline" class="mt-3">
+      <mat-form-field appearance="outline"
+        [ngClass]="{'mt-1-2': !((ancmntForm.get('body')!.touched ||ancmntForm.get('body')!.dirty) && ancmntForm.get('body')!.hasError('required'))}">
         <mat-label>Send To</mat-label>
         <mat-select formControlName="sendToGroup" (selectionChange)="changeGrp($event)" required>
           <mat-option *ngFor="let gT of grpType" [value]="gT.v">{{gT.n}}</mat-option>
