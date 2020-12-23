@@ -377,11 +377,12 @@ export class ContentWorkspaceComponent implements OnInit {
       let fldrData: any = {
         ...this.smartFldrForm.value,
         id: this.selFolder!.id,
-        workspaceId: this.selFolder!.workspaceId,
-        folderId: this.selFolder!.folderId,
+        workspaceId: this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId,
+        folderId: this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId,
         isActive: this.selFolder!.isActive,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       };
+
       fldrData.tagIds = this.fldrTgs();
       if (this.custIcon || this.iconUrl) {
         if (this.custIcon)
