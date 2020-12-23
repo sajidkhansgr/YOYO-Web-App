@@ -525,21 +525,23 @@ mat-checkbox {
 // quill editor
 .quill-editor-container {
 
-  .ql-toolbar,
   .ql-container {
     border: 0 !important;
-  }
-
-  .ql-container {
-    min-height: 80px;
+    min-height: 100px;
+    font: inherit !important;
 
     .ql-editor {
       padding-left: 0.5rem;
+      margin-left: -8px;
     }
   }
 
   .ql-toolbar {
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
     padding-left: 0 !important;
+    margin-left: -2px !important;
   }
 
   .mat-form-field-infix {
