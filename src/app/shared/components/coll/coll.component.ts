@@ -29,6 +29,7 @@ export class CollComponent implements OnInit {
     if (this.cntntData && !Array.isArray(this.cntntData)) {
       this.cntntData = [this.cntntData];
     }
+    console.log(this.cntntData);
   }
 
   initialiseState() {
@@ -58,9 +59,9 @@ export class CollComponent implements OnInit {
       if (this.type == 'add-content') {
         colctnData.contents = []; colctnData.contentPages = [];
         for (let i = 0; i < this.cntntData.length; i++) {
-          if (this.cntntData[i].pageNo) {
+          if (this.cntntData[i].pageNo && ((Array.isArray(this.cntntData[i].pageNo) && this.cntntData[i].pageNo.length > 0) || !Array.isArray(this.cntntData[i].pageNo))) {
             colctnData.contentPages.push({
-              pageNumbers: [this.cntntData[i].pageNo],
+              pageNumbers: Array.isArray(this.cntntData[i].pageNo) ? [...this.cntntData[i].pageNo] : [this.cntntData[i].pageNo],
               contentId: this.cntntData[i].contentId ? this.cntntData[i].contentId : this.cntntData[i].id
             });
           } else {
