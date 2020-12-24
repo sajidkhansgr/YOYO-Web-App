@@ -23,7 +23,7 @@
             <i class="fas fa-plus-circle"></i>
           </button>
           <div class="dropdown-menu" aria-labelledby="addCol">
-            <button class="dropdown-item curs-ptr" (click)="openModal(addColl,'full')">Entire Document</button>
+            <button class="dropdown-item curs-ptr" (click)="cmnModal('addToCollection')">Entire Document</button>
             <button class="dropdown-item curs-ptr" (click)="leftSide=true;isSelPage=true">Select Pages</button>
           </div>
         </div>
@@ -47,7 +47,7 @@
       </div>
       <div class="col-4 align-self-center d-flex justify-content-center">{{cntnt.name}}</div>
       <div class="col-4 align-self-center text-right">
-        <button class="btn btn-primary text-white btn-sm" (click)="openModal(addColl,'pages')"
+        <button class="btn btn-primary text-white btn-sm" (click)="cmnModal('addToCollection')"
           [disabled]="!selPages || (selPages && selPages.length<=0)">Add</button>
       </div>
     </div>
@@ -82,7 +82,7 @@
           </div>
           <div class="text-center mt-5 mx-3" *ngSwitchCase="3">
             <a *ngIf="cntnt.url else noUrl" [href]="cntnt.url" target="_blank">
-              <img [src]="getImg(cntnt,'icon')" alt="Url Icon"/>
+              <img [src]="getImg(cntnt,'icon')" alt="Url Icon" />
               <div *ngIf="!cntnt.hideLabelInWorkspace">{{cntnt.name}}</div>
             </a>
             <ng-template #noUrl>No url available</ng-template>
@@ -206,29 +206,3 @@
     No Content found
   </ng-template>
 </div>
-
-<!-- add resource modal -->
-<ng-template #addColl let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">Add to Collection</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body min-height-val" ngbAutofocus>
-    <app-loader [type]="'div'" *ngIf="collLoad"></app-loader>
-    <div *ngIf="!collLoad">
-      <div id="coll-div" class="d-flex border-bottom p-2 dark-bg-hover" *ngFor="let coll of colls">
-        <div class="icon align-self-center mr-2">
-          <img [src]="getImg(coll,'fldr')" style="max-height:50px; width: 40px;">
-        </div>
-        <div class="name align-self-center">
-          {{coll.name}}
-        </div>
-        <div class="hover-coll ml-auto mr-3">
-          <button class="btn btn-primary btn-sm" (click)="addCntntToColl(coll)">Add</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>

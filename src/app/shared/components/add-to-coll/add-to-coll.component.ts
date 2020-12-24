@@ -43,7 +43,7 @@ export class AddToCollComponent implements OnInit {
   }
 
   // create collection and add content to it
-  addCntntColl() {
+  addCollThenCntnt() {
     const modalRef = this.modalService.open(CollComponent, { size: 'lg' });
     modalRef.componentInstance.type = 'add-content';
     modalRef.componentInstance.cntntData = this.data.type && this.data.type == 'multi' ? this.data.data : this.data;
@@ -60,16 +60,18 @@ export class AddToCollComponent implements OnInit {
       id: coll.id, contents: [],
       contentPages: []
     }
-    if (this.data.type == 'wrkspc' || this.data.type == 'my-file') {
+    if (this.data.type == 'wrkspc') {
+      data.contents = [this.data.entityId];
+    } else if (this.data.type == 'my-file') {
       data.contents = [this.data.id];
-    } else if (this.data.type == 'coll-inr') {
-      if (this.data.pageNo) {
+    } else if (this.data.type == 'coll-inr' || this.data.type == 'view') {
+      if (this.data.pageNo && ((Array.isArray(this.data.pageNo) && this.data.pageNo.length > 0) || !Array.isArray(this.data.pageNo))) {
         data.contentPages = [{
-          pageNumbers: [this.data.pageNo],
-          contentId: this.data.contentId
+          pageNumbers: Array.isArray(this.data.pageNo) ? [...this.data.pageNo] : [this.data.pageNo],
+          contentId: this.data.type == 'view' ? this.data.id : this.data.contentId
         }];
       } else {
-        data.contents = [this.data.contentId];
+        data.contents = [this.data.type == 'view' ? this.data.id : this.data.contentId];
       }
     } else if (this.data.type == 'multi') {
       for (let i = 0; i < this.data.data.length; i++) {

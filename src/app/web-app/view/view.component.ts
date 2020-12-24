@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DOCUMENT,Location } from '@angular/common';
+import { DOCUMENT, Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +12,7 @@ import { TokenDataService } from '../../shared/services/token-data.service';
 import { Content } from '../../shared/models/content';
 import { Collection } from '../../shared/models/collection';
 import { FileHelper } from '../../shared/file-helper';
+import { AddToCollComponent } from 'src/app/shared/components/add-to-coll/add-to-coll.component';
 
 @Component({
   selector: 'app-view',
@@ -25,9 +26,8 @@ export class ViewComponent implements OnInit {
   leftSide!: boolean; rightSide!: boolean;
   infoToggle!: boolean; enggToggle!: boolean; tagsToggle!: boolean;
   testArr = [1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-  cmnt!: string;cmntDisb!: boolean;
-  elem: any; isFullScreen!: boolean;isSelPage!:boolean;selPages!:any;actPage!:number
-  colls!: Collection[];collLoad!:boolean;
+  cmnt!: string; cmntDisb!: boolean;
+  elem: any; isFullScreen!: boolean; isSelPage!: boolean; selPages!: any; actPage!: number
   usrInfo: any | null;
 
   constructor(
@@ -55,11 +55,18 @@ export class ViewComponent implements OnInit {
 
   initialiseState() {
     if (this.id != '0') {
-      this.loading = true;this.isSelPage=false;this.selPages=[];this.actPage = 1;
-      this.leftSide = false; this.rightSide = false;this.isFullScreen = false;
+      this.loading = true; this.isSelPage = false; this.selPages = []; this.actPage = 1;
+      this.leftSide = false; this.rightSide = false; this.isFullScreen = false;
       this.infoToggle = true; this.enggToggle = true; this.tagsToggle = true;
-      this.colls=[];this.collLoad= false;this.cmntDisb = false;
+      this.cmntDisb = false;
       this.getCntnt();
+    }
+  }
+
+  cmnModal(type: string) {
+    if (type == 'addToCollection') {
+      const modalRef: any = this.modalServ.open(AddToCollComponent, { size: 'lg' });
+      modalRef.componentInstance.data = { ...this.cntnt, type: 'view', pageNo: this.selPages };
     }
   }
 
@@ -68,23 +75,23 @@ export class ViewComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && data.result.id) {
           this.cntnt = data.result;
-          switch(this.cntnt!.contentType){
+          switch (this.cntnt!.contentType) {
             case 1:
-              if(Array.isArray(this.cntnt!.pdfImages)){
-                this.cntnt!.pdfImages.sort((a:any, b:any) => a.pageNo - b.pageNo);
-              }else{
+              if (Array.isArray(this.cntnt!.pdfImages)) {
+                this.cntnt!.pdfImages.sort((a: any, b: any) => a.pageNo - b.pageNo);
+              } else {
                 this.cntnt!.pdfImages = [];
               }
-              this.cntnt!.pdf = this.cntnt!.documentType==4?this.cntnt!.contentPath:this.cntnt!.pdfContentPath;
+              this.cntnt!.pdf = this.cntnt!.documentType == 4 ? this.cntnt!.contentPath : this.cntnt!.pdfContentPath;
               this.loading = false;
               // pdfImages
-              setTimeout(()=>{
+              setTimeout(() => {
                 this.renderPDf();
-              },1000)
+              }, 1000)
               break;
-            case 2:break;
-            case 3:break;
-            case 4:break;
+            case 2: break;
+            case 3: break;
+            case 4: break;
           }
         } else {
           this.cntnt = null;
@@ -96,14 +103,14 @@ export class ViewComponent implements OnInit {
       })
   }
 
-  renderPDf(){
-    if(this.cntnt!.pdf){
+  renderPDf() {
+    if (this.cntnt!.pdf) {
       this.viewSDKClient.ready().then(() => {
         /* By default the embed mode will be Full Window */
-        let data ={
+        let data = {
           defConfg: {
-            enableAnnotationAPIs: false,showDownloadPDF: false,
-            showLeftHandPanel:false,showPrintPDF: false,
+            enableAnnotationAPIs: false, showDownloadPDF: false,
+            showLeftHandPanel: false, showPrintPDF: false,
             // includePDFAnnotations:true, // for the save button
             showAnnotationTools: false,
             // defaultViewMode: "FIT_WIDTH",showPageControls:true,
@@ -118,7 +125,7 @@ export class ViewComponent implements OnInit {
     }
   }
 
-  goToPage(cPimg: any){
+  goToPage(cPimg: any) {
     this.actPage = cPimg.pageNo;
     this.viewSDKClient.goToPage(parseInt(cPimg.pageNo))
   }
@@ -132,7 +139,7 @@ export class ViewComponent implements OnInit {
     this.cwServ.addCmntToContent(cmntData)
       .subscribe((data: any) => {
         if (data) {
-          this.toastr.success(data.message ||`Comment added successfully`, 'Success!');
+          this.toastr.success(data.message || `Comment added successfully`, 'Success!');
           this.cntnt!.comments!.push({
             createdByFullName: this.usrInfo && this.usrInfo.fN ? this.usrInfo.fN : 'User',
             createdDate: new Date(),
@@ -149,23 +156,23 @@ export class ViewComponent implements OnInit {
   }
 
   downloadFile() {
-    this.fileServ.downloadFile(this.cntnt!.contentPath,this.cntnt!.name);
+    this.fileServ.downloadFile(this.cntnt!.contentPath, this.cntnt!.name);
   }
 
   @HostListener('document:fullscreenchange', ['$event'])
-	@HostListener('document:webkitfullscreenchange', ['$event'])
-	@HostListener('document:mozfullscreenchange', ['$event'])
-	@HostListener('document:MSFullscreenChange', ['$event'])
+  @HostListener('document:webkitfullscreenchange', ['$event'])
+  @HostListener('document:mozfullscreenchange', ['$event'])
+  @HostListener('document:MSFullscreenChange', ['$event'])
 
-  fullscreenmodes(event: any){
+  fullscreenmodes(event: any) {
     this.chkScreenMode();
   }
 
-  chkScreenMode(){
-    if(document.fullscreenElement){
+  chkScreenMode() {
+    if (document.fullscreenElement) {
       //fullscreen
       this.isFullScreen = true;
-    }else{
+    } else {
       //not in full screen
       this.isFullScreen = false;
     }
@@ -202,10 +209,10 @@ export class ViewComponent implements OnInit {
     }
   }
 
-  addRemPages(event:any, cPimg:any){
-    if(event.checked){
+  addRemPages(event: any, cPimg: any) {
+    if (event.checked) {
       this.selPages.push(cPimg.pageNo);
-    }else{
+    } else {
       const index = this.selPages.findIndex((ele: any) => ele == cPimg.pageNo);
       if (index >= 0) {
         this.selPages.splice(index, 1);
@@ -213,71 +220,19 @@ export class ViewComponent implements OnInit {
     }
   }
 
-  addCntntToColl(coll: Collection){
-    let data:any = {
-      id: coll.id, contents: [],
-      pages: { pageNumbers: [] }
-    }
-    if(this.isSelPage){
-      this.selPages.sort((a:any, b:any) => a - b);
-      data.pages = {
-        pageNumbers: this.selPages,
-        contentId: parseInt(this.id)
-      }
-    }else{
-      data.contents.push(parseInt(this.id))
-    }
-    this.collLoad = true;
-    this.closeLeftSel();
-    this.colctnSrv.addContentColctn(data).subscribe((data: any) => {
-      if (data) {
-        this.toastr.success(data.message || 'Content added successfully to collection', 'Success!');
-      }
-      this.dismissModal();
-      this.collLoad = false;
-    }, (err: any) => {
-      this.dismissModal();
-      this.collLoad = false;
-    });
+  closeLeftSel() {
+    this.selPages = []; this.actPage = 1;
+    this.leftSide = false; this.isSelPage = false;
   }
 
-  closeLeftSel(){
-    this.selPages = [];this.actPage=1;
-    this.leftSide=false;this.isSelPage=false;
-  }
-
-  // get collection list
-  listColct() {
-    this.collLoad = true;
-    this.colctnSrv.colctnList({ pageNo: 0 }).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
-        this.colls = data.result.results;
-      } else {
-        this.colls = [];
-      }
-      this.collLoad = false;
-    }, (err: any) => {
-      this.colls = [];
-      this.collLoad = false;
-    });
-  }
-
-  getImg(d: any,type: string=''): string {
+  getImg(d: any, type: string = ''): string {
     return FileHelper.getImg(d, type);
   }
 
-  goBack(){
+  goBack() {
     this.loc.back();
   }
 
-  openModal(content: any, type: string) {
-    this.listColct();
-    this.modalServ.open(content, { size: 'lg' }).result.then((result) => {
-
-    }, (reason) => {
-
-    });
-  }
 
   dismissModal() {
     if (this.modalServ)
