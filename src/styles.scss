@@ -946,7 +946,7 @@ header {
   // tr>*:nth-child(2),
   // tr>*:nth-child(3),
   // tr>*:nth-child(4),
-  tr>*:not(:nth-child(1)) {
+  tr>*:not(:nth-child(-n + 2)) {
     display: none;
   }
 }
