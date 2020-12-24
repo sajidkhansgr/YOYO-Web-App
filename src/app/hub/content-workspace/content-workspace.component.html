@@ -78,12 +78,14 @@
                 <i class="fas fa-ellipsis-h"></i>
               </button>
               <div class="dropdown-menu" aria-labelledby="optDD">
-                <a class="dropdown-item curs-ptr" (click)="openModal(uplNewVer, 'newVer')" *ngIf="activeIndex==0">
-                  <i class="fas fa-upload mr-1"></i>Upload new version
-                </a>
-                <a class="dropdown-item curs-ptr" *ngIf="rowInfo.contentPath" (click)="downloadFile()">
-                  <i class="fas fa-download mr-1"></i>Download
-                </a>
+                <ng-container *ngIf="activeIndex==0">
+                  <a class="dropdown-item curs-ptr" (click)="openModal(uplNewVer, 'newVer')">
+                    <i class="fas fa-upload mr-1"></i>Upload new version
+                  </a>
+                  <a class="dropdown-item curs-ptr" *ngIf="rowInfo.contentPath" (click)="downloadFile()">
+                    <i class="fas fa-download mr-1"></i>Download
+                  </a>
+                </ng-container>
                 <a class="dropdown-item curs-ptr" (click)="updCntntStatus();">
                   <span *ngIf="activeIndex==0"><i class="fas fa-trash mr-1"></i>Move to trash</span>
                   <span *ngIf="activeIndex==2"><i class="fas fa-trash-restore mr-1"></i>Restore</span>
@@ -963,9 +965,21 @@
 <ng-template #cntntTable>
   <div *ngIf="!cntntLoading">
     <div class="card-text px-3 min-height">
+      <div class="pl-0 mb-2" *ngIf="selItems>0">
+        {{selItems}} of {{cntnts.length}} items selected
+        <div class="btn btn-primary btn-sm" (click)="clrUnClrSel(false)">Clear Selection</div>
+        <div class="float-right">
+          <div class="btn btn-primary btn-sm curs-ptr" (click)="multiCntntChng(0)" *ngIf="activeIndex==0">Move to Trash</div>
+          <ng-container *ngIf="activeIndex==2">
+            <div class="btn btn-primary btn-sm curs-ptr" (click)="multiCntntChng(1)">Restore</div>
+            <div class="btn btn-primary btn-sm curs-ptr ml-3" (click)="multiCntntChng(2)">Delete</div>
+          </ng-container>
+        </div>
+      </div>
       <table class="table table-hover text-dark w-100" [class.hide-rows]="showRowInfo || showWork" *ngIf="view">
         <thead>
           <tr>
+            <th><mat-checkbox [indeterminate]="chkBoxStatus==1" [checked]="chkBoxStatus==2" (change)="clrUnClrSel($event.checked)"></mat-checkbox></th>
             <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
               {{col.n}}<i class="fas ml-1" *ngIf="col.hasOwnProperty('asc')"
                 [ngClass]="{'fa-sort-down align-top':!col.asc,'fa-sort-up align-bottom': col.asc}"></i>
@@ -978,6 +992,7 @@
             [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!isNotDrag()}" [cdkDragDisabled]="isNotDrag()"
             cdkDrag>
             <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail" style="height:100px;width:100px"></div>
+            <td><mat-checkbox [checked]="cntnt.chk" (change)="chngChkBox($event, cntnt)"  (click)="$event.stopPropagation();"></mat-checkbox></td>
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
                 <span *ngSwitchCase="'name'">
