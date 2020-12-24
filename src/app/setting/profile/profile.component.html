@@ -27,10 +27,10 @@
               <div class="col font-weight-bold">Language</div>
               <div class="col">{{usrInfo.languageId && lngs[usrInfo.languageId]?lngs[usrInfo.languageId]:'N/A'}}</div>
             </div>
-            <div class="row px-4 my-1">
+            <!-- <div class="row px-4 my-1">
               <div class="col font-weight-bold">Time Zone</div>
               <div class="col">{{usrInfo.timeZone||'N/A'}}</div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -98,12 +98,12 @@
           Language is required
         </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="outline" class="w-100">
+      <!-- <mat-form-field appearance="outline" class="w-100">
         <mat-label>Time Zone</mat-label>
         <mat-select formControlName="timeZone">
           <mat-option value="abc">abc</mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" [disabled]="profForm!.invalid || profLoading">

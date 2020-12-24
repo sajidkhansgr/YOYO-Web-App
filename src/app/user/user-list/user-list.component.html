@@ -103,12 +103,12 @@
                   {{rowInfo.languageId && lngs[rowInfo.languageId]?lngs[rowInfo.languageId]:'N/A'}}
                 </div>
               </div>
-              <div class="time-zone">
+              <!-- <div class="time-zone">
                 <label class="text-hi-dark-grey mb-0 mt-2">Time Zone</label>
                 <div class="value">
                   Europe / London
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="doc-details status border-bottom mb-3 pb-3">
               <div class="heading text-hi-dark-grey font-weight-bold">Status</div>
@@ -414,8 +414,6 @@
             </mat-error>
           </mat-form-field>
         </div>
-      </div>
-      <div class="row justify-content-between">
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Language</mat-label>
@@ -427,14 +425,17 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-6">
+      </div>
+      <div class="row justify-content-between">
+
+        <!-- <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Time Zone</mat-label>
             <mat-select>
               <mat-option value="company-timezone">Company Timezone</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+        </div> -->
       </div>
       <div class="border w-100 mb-4"></div>
       <div class="row justify-content-between">

@@ -168,6 +168,8 @@ export class AppSettings {
 
   public static RESEND_INV = `api/Employee/ResendInvitation`;
 
+  public static UPD_PRFL = `api/Employee/UpdateProfile`;
+
   // ---- CONTENT ---- //
 
   public static LIST_CNTNT = `api/Content/GetAll`;
