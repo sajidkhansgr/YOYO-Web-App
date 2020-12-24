@@ -120,7 +120,6 @@ export class ShareMailComponent implements OnInit {
       <br />
       Attached Link: <a href="${this.link.link}">${this.link.name}</a>
       `;
-      console.log(data);
       this.mailSrv.sendMail(data).subscribe((data: any) => {
         if (data && data.result) {
           this.toastr.success(data.result || 'Email sent successfully', 'Success!');
