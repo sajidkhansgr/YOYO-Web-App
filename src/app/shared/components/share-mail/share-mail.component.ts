@@ -12,6 +12,7 @@ import { AddRsrcComponent } from '../add-rsrc/add-rsrc.component';
 import { DEF_ICON } from '../../constants';
 import { CommonValidations } from '../../validations/common-validations';
 import { FileHelper } from '../../file-helper';
+import { QUILL } from '../../models/quill';
 
 @Component({
   selector: 'app-share-mail',
@@ -28,6 +29,7 @@ export class ShareMailComponent implements OnInit {
   @Input() private type!: string;
   @Input() private data!: any;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  quillConfig = QUILL;
 
   constructor(
     public modalRef: NgbActiveModal,
@@ -118,6 +120,7 @@ export class ShareMailComponent implements OnInit {
       <br />
       Attached Link: <a href="${this.link.link}">${this.link.name}</a>
       `;
+      console.log(data);
       this.mailSrv.sendMail(data).subscribe((data: any) => {
         if (data && data.result) {
           this.toastr.success(data.result || 'Email sent successfully', 'Success!');

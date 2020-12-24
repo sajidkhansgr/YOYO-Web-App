@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
+import { QuillModule } from 'ngx-quill';
 
 import { ShareMailComponent } from './share-mail.component';
 import { ShareMailService } from './share-mail.service';
@@ -19,7 +20,8 @@ import { CollectionService } from 'src/app/web-app/resource/collection/collectio
     FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatInputModule, MatCheckboxModule,
     MatChipsModule, // not working here, so added in app-module
-    LoaderModule
+    LoaderModule,
+    QuillModule.forRoot()
   ],
   entryComponents: [
     ShareMailComponent
