@@ -26,6 +26,9 @@ export class CollComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialiseState();
+    if (this.cntntData && !Array.isArray(this.cntntData)) {
+      this.cntntData = [this.cntntData];
+    }
   }
 
   initialiseState() {
@@ -53,17 +56,15 @@ export class CollComponent implements OnInit {
         ...this.colctnForm.value
       };
       if (this.type == 'add-content') {
-        if (Array.isArray(this.cntntData)) {
-
-        } else {
-          let cntntId = this.cntntData.contentId ? this.cntntData.contentId : this.cntntData.id;
-          if (this.cntntData.pageNo) {
-            colctnData.pages = {
-              pageNumbers: [this.cntntData.pageNo],
-              contentId: cntntId
-            }
+        colctnData.contents = []; colctnData.contentPages = [];
+        for (let i = 0; i < this.cntntData.length; i++) {
+          if (this.cntntData[i].pageNo) {
+            colctnData.contentPages.push({
+              pageNumbers: [this.cntntData[i].pageNo],
+              contentId: this.cntntData[i].contentId ? this.cntntData[i].contentId : this.cntntData[i].id
+            });
           } else {
-            colctnData.contents = [cntntId];
+            colctnData.contents.push(this.cntntData[i].contentId ? this.cntntData[i].contentId : this.cntntData[i].id);
           }
         }
       }
