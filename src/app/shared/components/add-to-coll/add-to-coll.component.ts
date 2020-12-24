@@ -58,28 +58,26 @@ export class AddToCollComponent implements OnInit {
   addCntntToColl(coll: Collection) {
     let data: any = {
       id: coll.id, contents: [],
-      pages: { pageNumbers: [] }
+      contentPages: []
     }
-    if (this.data.type == 'wrkspc') {
+    if (this.data.type == 'wrkspc' || this.data.type == 'my-file') {
       data.contents = [this.data.id];
     } else if (this.data.type == 'coll-inr') {
       if (this.data.pageNo) {
-        data.pages = {
+        data.contentPages = [{
           pageNumbers: [this.data.pageNo],
           contentId: this.data.contentId
-        }
+        }];
       } else {
         data.contents = [this.data.contentId];
       }
-    } else if (this.data.type == 'my-file') {
-      data.contents = [this.data.id];
     } else if (this.data.type == 'multi') {
       for (let i = 0; i < this.data.data.length; i++) {
         if (this.data.data[i].pageNo) {
-          data.pages.push({
+          data.contentPages.push({
             pageNumbers: [this.data.data[i].pageNo],
             contentId: this.data.data[i].contentId ? this.data.data[i].contentId : this.data.data[i].id
-          }); // it needs to be done on backend
+          });
         } else {
           data.contents.push(this.data.data[i].contentId ? this.data.data[i].contentId : this.data.data[i].id);
         }
