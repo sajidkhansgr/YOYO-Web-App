@@ -77,6 +77,8 @@ export class ContentWorkspaceComponent implements OnInit {
 
   mdlItems!: any[]; mdlLoading!: boolean; mdlNav!: any[]; mdlSelected: any;
   hasIcon!: boolean; fileExt = FILE_EXT;
+  chkBoxStatus:number=0;//0 means no, 1 means inderminate,2 means checked
+  selItems:number=0;
 
   constructor(
     private modalService: NgbModal,
@@ -100,7 +102,6 @@ export class ContentWorkspaceComponent implements OnInit {
     this.getIntervalId = setInterval(() => {
       this.processingCntnt(true);
     }, 13000) //13 seconds
-
   }
 
   initialiseState() {
@@ -1129,6 +1130,7 @@ export class ContentWorkspaceComponent implements OnInit {
     };
     this.cntnts = [];
     this.totalCount = 0
+    this.clrUnClrSel(false);
     this.cwServ.contentList(params)
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
@@ -1139,6 +1141,39 @@ export class ContentWorkspaceComponent implements OnInit {
       }, (err: any) => {
         this.cntntLoading = false;
       });
+  }
+
+  chngChkBox(event:any, c: any){
+    c.chk = event.checked;
+    let isSome=false,type=0;
+    let items = 0;
+    for(let k=0;k<this.cntnts.length;k++){
+      if(this.cntnts[k].chk){
+        items++;
+        isSome = true;
+        if(type!=1)
+          type=2
+      }else{
+        type = 1;
+      }
+    }
+    this.selItems = items;
+    this.chkBoxStatus = type==2?2:isSome?1:0;
+    if(items>1)
+      this.closeDoc();
+  }
+
+  clrUnClrSel(val:boolean){
+    for(let k=0;k<this.cntnts.length;k++){
+      this.cntnts[k].chk = val;
+    }
+    if(val){
+      this.selItems = this.cntnts.length;
+      this.chkBoxStatus = 2;
+    }else{
+      this.selItems = 0;
+      this.chkBoxStatus = 0;
+    }
   }
 
   // list of tags
@@ -1564,6 +1599,51 @@ export class ContentWorkspaceComponent implements OnInit {
             this.toastr.error(`Unable to ${actDeac} content`, 'Error!');
           }
         }, (err: any) => {
+        });
+      }
+    })
+  }
+
+  multiCntntChng(t: number) {
+    let mdlMsg, mdlTtl, status,ids=[], res: string;
+    for(let k=0;k<this.cntnts.length;k++){
+      if(this.cntnts[k].chk)
+        ids.push(this.cntnts[k].id)
+    }
+    if (t==0) {
+      mdlMsg = `move ${ids.length} assets to the trash`;
+      mdlTtl = `Move to trash`;
+      res = `Assets move to tash`;
+      status = 2;
+    }else if (t==1) {
+      mdlMsg = `restore ${ids.length} assets from trash`;
+      mdlTtl = `Restore from Tash`;
+      res = `Assets restore from trash`;
+      status = 1;
+    } else if (this.activeIndex == 2) {
+      mdlMsg = `permanently delete ${ids.length} assets?`;
+      mdlTtl = `Permanently delete`;
+      res = `Assets permanently deleted`;
+      status = 3;
+    }
+    let stsData = {ids,status};
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to ${mdlMsg}?`,
+        title: mdlTtl
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.cwServ.updCntntStatusOrDel(stsData).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(`${res} successfully.`, 'Success!');
+            this.cntntList();
+          } else {
+            this.toastr.error(`Please try after some time`, 'Error!');
+          }
+        }, (err: any) => {
+
         });
       }
     })
