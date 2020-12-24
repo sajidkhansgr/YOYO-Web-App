@@ -852,7 +852,7 @@
           <button class="btn btn-light dropdown-toggle" id="tagsDD" data-toggle="dropdown">
             Tags
           </button>
-          <div class="dropdown-menu px-2" #tagsDropDown style="width:18rem;" aria-labelledby="tagsDD"
+          <div class="dropdown-menu overflow-auto px-2 tags-dd" #tagsDropDown aria-labelledby="tagsDD"
             (click)="$event.stopPropagation();">
             <mat-form-field appearance="outline" class="w-100">
               <mat-chip-list>
@@ -969,7 +969,8 @@
         {{selItems}} of {{cntnts.length}} items selected
         <div class="btn btn-primary btn-sm" (click)="clrUnClrSel(false)">Clear Selection</div>
         <div class="float-right">
-          <div class="btn btn-primary btn-sm curs-ptr" (click)="multiCntntChng(0)" *ngIf="activeIndex==0">Move to Trash</div>
+          <div class="btn btn-primary btn-sm curs-ptr" (click)="multiCntntChng(0)" *ngIf="activeIndex==0">Move to Trash
+          </div>
           <ng-container *ngIf="activeIndex==2">
             <div class="btn btn-primary btn-sm curs-ptr" (click)="multiCntntChng(1)">Restore</div>
             <div class="btn btn-primary btn-sm curs-ptr ml-3" (click)="multiCntntChng(2)">Delete</div>
@@ -979,7 +980,10 @@
       <table class="table table-hover text-dark w-100" [class.hide-rows]="showRowInfo || showWork" *ngIf="view">
         <thead>
           <tr>
-            <th><mat-checkbox [indeterminate]="chkBoxStatus==1" [checked]="chkBoxStatus==2" (change)="clrUnClrSel($event.checked)"></mat-checkbox></th>
+            <th>
+              <mat-checkbox [indeterminate]="chkBoxStatus==1" [checked]="chkBoxStatus==2"
+                (change)="clrUnClrSel($event.checked)"></mat-checkbox>
+            </th>
             <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
               {{col.n}}<i class="fas ml-1" *ngIf="col.hasOwnProperty('asc')"
                 [ngClass]="{'fa-sort-down align-top':!col.asc,'fa-sort-up align-bottom': col.asc}"></i>
@@ -992,7 +996,10 @@
             [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!isNotDrag()}" [cdkDragDisabled]="isNotDrag()"
             cdkDrag>
             <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail" style="height:100px;width:100px"></div>
-            <td><mat-checkbox [checked]="cntnt.chk" (change)="chngChkBox($event, cntnt)"  (click)="$event.stopPropagation();"></mat-checkbox></td>
+            <td>
+              <mat-checkbox [checked]="cntnt.chk" (change)="chngChkBox($event, cntnt)"
+                (click)="$event.stopPropagation();"></mat-checkbox>
+            </td>
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
                 <span *ngSwitchCase="'name'">
@@ -1490,8 +1497,8 @@
                 aria-haspopup="true" aria-expanded="false">
                 Tags
               </button>
-              <div class="dropdown-menu overflow-auto px-2" aria-labelledby="tagsDD"
-                style="width:20rem; max-height: 65vh;" (click)="$event.stopPropagation();">
+              <div class="dropdown-menu overflow-auto px-2 tags-dd" aria-labelledby="tagsDD"
+                (click)="$event.stopPropagation();">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-chip-list>
                     <mat-chip *ngFor="let tg of allTags" selectable removable (removed)="remove(tg,'allTags')">
