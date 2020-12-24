@@ -74,7 +74,7 @@
             </div>
           </div>
         </div>
-        <mat-form-field appearance="outline" class="w-100 quill-editor-container" [floatLabel]="'always'">
+        <mat-form-field appearance="outline" class="w-100 quill-editor-container mt-3" [floatLabel]="'always'">
           <mat-label>Message</mat-label>
           <input class="d-none" matInput />
           <quill-editor class="quill-edt" placeholder="Message" formControlName="body" [modules]="quillConfig">
@@ -103,7 +103,7 @@
     <button type="submit" class="btn btn-primary"
       [disabled]="emailForm!.invalid || disabled || viewMe || viewSel.length == 0">
       <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
-      Save
+      Send
     </button>
   </div>
 </form>
