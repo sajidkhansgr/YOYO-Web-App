@@ -74,13 +74,23 @@
             </div>
           </div>
         </div>
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 quill-editor-container" [floatLabel]="'always'">
+          <mat-label>Message</mat-label>
+          <input class="d-none" matInput />
+          <quill-editor class="quill-edt" placeholder="Message" formControlName="body" [modules]="quillConfig">
+          </quill-editor>
+        </mat-form-field>
+        <mat-error class="ml-0-9 mb-0"
+          *ngIf="(emailForm.get('body')!.touched ||emailForm.get('body')!.dirty) && emailForm.get('body')!.hasError('required')">
+          Message is required
+        </mat-error>
+        <!-- <mat-form-field appearance="outline" class="w-100">
           <mat-label>Message</mat-label>
           <textarea matInput type="text" placeholder="Message" formControlName="body"></textarea>
           <mat-error *ngIf="emailForm.get('body')!.hasError('required')">
             Message is required
           </mat-error>
-        </mat-form-field>
+        </mat-form-field> -->
       </div>
       <div class="col-3">
         <h5>Sharing Settings</h5>
