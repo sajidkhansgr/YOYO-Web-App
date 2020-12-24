@@ -1,23 +1,19 @@
-<div id="hiforceCarousel" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#hiforceCarousel" data-slide-to="0" class="active"></li>
-    <li data-target="#hiforceCarousel" data-slide-to="1"></li>
-    <li data-target="#hiforceCarousel" data-slide-to="2"></li>
-    <li data-target="#hiforceCarousel" data-slide-to="3"></li>
-  </ol>
-  <div class="carousel-inner">
-    <div class="carousel-item img-1 active" data-interval="3000">
-    </div>
-    <div class="carousel-item img-2" data-interval="3000">
-    </div>
-    <div class="carousel-item img-3" data-interval="3000">
-    </div>
-    <div class="carousel-item img-4" data-interval="3000">
-    </div>
-  </div>
-  <div class="text mx-5 text-white">
-    <h2>Welcome</h2>
-    <p class="text-justify">The official Hi-Force app gives you instant access to important Hi-Force product
-      and service information including catalogue pages, product animations and marketing content.</p>
-  </div>
+<ngb-carousel [interval]="3000" [showNavigationArrows]="false">
+  <ng-template ngbSlide>
+    <div class="carousel-img img-1"></div>
+  </ng-template>
+  <ng-template ngbSlide>
+    <div class="carousel-img img-2"></div>
+  </ng-template>
+  <ng-template ngbSlide>
+    <div class="carousel-img img-3"></div>
+  </ng-template>
+  <ng-template ngbSlide>
+    <div class="carousel-img img-4"></div>
+  </ng-template>
+</ngb-carousel>
+<div class="text mx-5 text-white">
+  <h2>Welcome</h2>
+  <p class="text-justify">The official Hi-Force app gives you instant access to important Hi-Force product
+    and service information including catalogue pages, product animations and marketing content.</p>
 </div>
