@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { FileService } from './file.service';
-import { ContentWorkspaceService } from '../../../hub/content-workspace/content-workspace.service';
 import { BreadcrumbService } from '../../../shared/services/breadcrumb.service';
 import { Content } from '../../../shared/models/content';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -25,10 +24,7 @@ export class FileComponent implements OnInit {
   routerSubs!: Subscription;
   view: boolean = true; fldrLoad!: boolean;
   files!: any[]; loading!: boolean; folders!: any[];
-  // folderNav!: any[];
-  // selFolder: any = {};
   allFiles: any[] = [];
-  // selFiles: any[] = []; selFolders: any[] = [];
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   folderForm!: FormGroup;
   frmType!: string; selFldrData!: any;
@@ -47,7 +43,6 @@ export class FileComponent implements OnInit {
     private toastr: ToastrService,
     private dialog: MatDialog,
     private fileServ: FileService,
-    private cwServ: ContentWorkspaceService,
     private brdcrmServ: BreadcrumbService
   ) { }
 
@@ -59,7 +54,7 @@ export class FileComponent implements OnInit {
     }, 13000) //13 seconds
     this.routerSubs = this.route.params.subscribe(params => {
       this.fldrid = params['fldrid'] || '';
-      this.initialiseState(); // reset and set based on new parameter this time
+      this.initialiseState();
       this.getFiles();
     });
     this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
@@ -68,7 +63,6 @@ export class FileComponent implements OnInit {
 
   initialiseState() {
     this.loading = true;
-    // this.folderNav = [];
     this.files = [];
     this.folders = [];
     this.selData = [];
@@ -233,10 +227,6 @@ export class FileComponent implements OnInit {
   //   }
   //   this.loading = false;
   // }
-
-  switchView = () => {
-    this.view = !this.view;
-  }
 
   navgToFldr(fl: any) {
     this.router.navigate(['/web-app/resource/my-files/' + (fl.id == 0 ? '' : fl.id)]);
@@ -517,9 +507,7 @@ export class FileComponent implements OnInit {
             this.getFiles();
           }
         }, (err: any) => {
-
         });
-
       }
     })
   }

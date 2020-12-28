@@ -26,7 +26,7 @@
         <!-- My Files -->
         <div class="float-right d-flex">
           <i *ngIf="files.length>0 || folders.length>0 || allFiles.length>0" class="fa mr-3 curs-ptr align-self-center"
-            [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}" (click)="switchView()"
+            [ngClass]="{'fa-list-ul': view, 'fa-th-large': !view}" (click)="view = !view;"
             matTooltip="{{view? 'List View' : 'Grid View'}}">
           </i>
           <div class="dropdown">
