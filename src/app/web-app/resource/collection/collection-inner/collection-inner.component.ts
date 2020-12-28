@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+// import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { CollectionService } from '../collection.service';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -16,6 +16,8 @@ import { AddToCollComponent } from '../../../../shared/components/add-to-coll/ad
 import { CollComponent } from '../../../../shared/components/coll/coll.component';
 import { AddRsrcComponent } from '../../../../shared/components/add-rsrc/add-rsrc.component';
 import { FileHelper } from '../../../../shared/file-helper';
+
+import { DragulaService } from "ng2-dragula";
 
 @Component({
   selector: 'app-collection-inner',
@@ -29,6 +31,7 @@ export class CollectionInnerComponent implements OnInit {
   multiForm!: number;
   cntntArr!: any[]; selCntntArr!: any[];
   addContentArr!: Content[];
+  subs = new Subscription(); BAG = "coll-inner";
 
   constructor(
     private modalService: NgbModal,
@@ -36,7 +39,8 @@ export class CollectionInnerComponent implements OnInit {
     private colctnSrv: CollectionService,
     private toastr: ToastrService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dragulaService: DragulaService
   ) { }
 
   ngOnInit(): void {
@@ -45,6 +49,57 @@ export class CollectionInnerComponent implements OnInit {
       this.initialiseState();
       this.getColctn();
     });
+  }
+
+  dragInit(){
+    const bag: any = this.dragulaService.find(this.BAG);
+    if (bag !== undefined ) {
+      // this.dragulaService.find('catg-data').drake.remove();
+      this.dragulaService.destroy(this.BAG);
+      // drake.remove()
+    }
+    this.dragulaService.createGroup(this.BAG, {
+      revertOnSpill: true,
+      moves: function (el:any, container:any, handle:any):any {
+        if (el.classList.contains('abc')) {
+             return false;
+         }
+        // console.log(el, container);
+        return true;
+      }
+    });
+
+    // this.subs.add(this.dragulaService.drag(this.BAG)
+    //    .subscribe(({ el }) => {
+    //      console.log("drag")
+    //      // this.removeClass(el, 'ex-moved');
+    //    })
+    //  );
+    //  this.subs.add(this.dragulaService.drop(this.BAG)
+    //    .subscribe(({ el }) => {
+    //      console.log("drop")
+    //      // this.addClass(el, 'ex-moved');
+    //    })
+    //  );
+    //  this.subs.add(this.dragulaService.over(this.BAG)
+    //    .subscribe(({ el, container }) => {
+    //      console.log('over', container);
+    //      // this.addClass(container, 'ex-over');
+    //    })
+    //  );
+    //  this.subs.add(this.dragulaService.out(this.BAG)
+    //    .subscribe(({ el, container }) => {
+    //      console.log('out', container);
+    //      // this.removeClass(container, 'ex-over');
+    //    })
+    //  );
+     this.subs.add(this.dragulaService.dropModel().subscribe((value) => {
+            // prints the item's id
+            // console.log(value.item);
+            this.rearrDataInWrkspc(value)
+         })
+      )
+
   }
 
   initialiseState() {
@@ -174,6 +229,8 @@ export class CollectionInnerComponent implements OnInit {
     this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
       if (data && Array.isArray(data.result) && data.result.length > 0) {
         this.cntntArr = data.result.map((d: any) => ({ ...d, chk: false }));
+        this.cntntArr.sort((a: any, b: any) => a.sequenceNumber - b.sequenceNumber);
+        this.dragInit();
         // console.log(this.cntntArr);
         // this.cntntArr = data.result;
       }
@@ -237,29 +294,40 @@ export class CollectionInnerComponent implements OnInit {
     return FileHelper.getImg(d, 'icon');
   }
 
-  drop = (event: CdkDragDrop<string[]>) => {
-    if (event.previousContainer === event.container) {
-      if (event.previousContainer.data[event.previousIndex] != event.container.data[event.currentIndex]) {
-        this.rearrDataInWrkspc(event);
-      }
-    } else {
-      console.log("dasadsadsads else ");
-    }
-  }
+  // drop = (event: CdkDragDrop<string[]>) => {
+  //   if (event.previousContainer === event.container) {
+  //     if (event.previousContainer.data[event.previousIndex] != event.container.data[event.currentIndex]) {
+  //       this.rearrDataInWrkspc(event);
+  //     }
+  //   } else {
+  //     console.log("dasadsadsads else ");
+  //   }
+  // }
+
+  moveElement = (array:any, from:number, to:number) => {
+      const copy = [...array];
+      copy.splice(from, 1);
+      copy.splice(to, 0, array[from]);
+      return copy;
+  };
 
   rearrDataInWrkspc(event: any) {
+    this.cntntArr = this.moveElement(this.cntntArr,event.sourceIndex,event.targetIndex)
+    this.loading = true;
     let d: any = {
       collectionId: this.id,
-      collectionDataIds: this.cntntArr.map((f: any) => f.contentId)
+      collectionDataIds: this.cntntArr.map((f: any) => f.id)
     };
-    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    // moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     this.colctnSrv.rearrCntntColl(d).subscribe((data: any) => {
       if (data) {
         this.toastr.success('Rearrange successfully', 'Success!');
       } else {
-        this.toastr.error('Unable to save rearrange', 'Error!');
+        // this.toastr.error('Unable to save rearrange', 'Error!');
       }
+      this.loading = false;
     }, (err: any) => {
+      this.loading = false;
     });
   }
 
@@ -276,6 +344,7 @@ export class CollectionInnerComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.dismissModal();
+    this.subs.unsubscribe();
   }
 
 }
