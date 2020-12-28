@@ -351,55 +351,6 @@ export class FileComponent implements OnInit {
     }
   }
 
-  //showing deleted but actually its deactive
-  // delCntntOrFldr(d: any, isFldr: boolean = false) {
-  //   let mdlMsg, mdlTtl, stsData: any, res: string;
-  //   if (d) {
-  //     stsData = { ids: [d.id] };
-  //     if (isFldr || d.isFldr) {
-  //       mdlMsg = ` folder`; mdlTtl = `Delete Folder`;
-  //       res = `Folder deleted`;
-  //       stsData.isFldr = true;
-  //     } else {
-  //       mdlMsg = ``; mdlTtl = `Delete Content`;
-  //       res = `Content deleted`;
-  //       stsData.status = 2; //move to trash
-  //     }
-  //   } else {
-  //     stsData = { ids: this.selData.map((d: any) => d.id) };
-  //     if (this.selData[0].isFldr) {
-  //       mdlMsg = ` folders`; mdlTtl = `Delete Folders`;
-  //       res = `Folders deleted`;
-  //       stsData.isFldr = true;
-  //     } else {
-  //       mdlMsg = ` contents`; mdlTtl = `Delete Contents`;
-  //       res = `Contents deleted`;
-  //       stsData.status = 2; //move to trash
-  //     }
-  //   }
-  //   // console.log(stsData);
-  //   this.dialog.open(ConfirmDialogComponent, {
-  //     data: {
-  //       msg: `Are you sure you want to delete ${d ? d.name : 'these'} ${mdlMsg}?`,
-  //       title: mdlTtl
-  //     },
-  //     autoFocus: false
-  //   }).afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.cwServ.deactCtntOrFldr(stsData).subscribe((data: any) => {
-  //         if (data) {
-  //           this.toastr.success(`${res} successfully.`, 'Success!');
-  //           this.getFiles();
-  //         } else {
-  //           this.toastr.error(`Please try after some time`, 'Error!');
-  //         }
-  //       }, (err: any) => {
-
-  //       });
-  //     }
-  //   })
-  // }
-
   // succEeditFldr(type: 'folderNav' | 'allFiles' | 'folders' | 'files' | 'selFolders' | 'selFiles') {
   //   const index = this[type].findIndex((ele: any) => ele.id == this.selFldrData.id);
   //   if (index >= 0) {

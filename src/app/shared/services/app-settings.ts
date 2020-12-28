@@ -83,11 +83,7 @@ export class AppSettings {
 
   // ---- FOLDER ---- //
 
-  public static LIST_FLDR_WRKSPC = `api/Folder/GetAllByWorkspace`;
-
   public static ADD_FLDR = `api/Folder/Add`;
-
-  public static ADD_CONT_FLDR = `api/Folder/AddContentToFolder`;
 
   public static UPD_FLDR = `api/Folder/Update`;
 
@@ -104,8 +100,6 @@ export class AppSettings {
   public static DUPL_FLDR = `api/Folder/Duplicate`;
 
   // ---- SMART FOLDER ---- //
-
-  public static LIST_SMT_FLDR_WRKSPC = `api/SmartFolder/GetAllByWorkspace`;
 
   public static ADD_SMT_FLDR = `api/SmartFolder/Add`;
 
@@ -188,8 +182,6 @@ export class AppSettings {
 
   public static MY_FILES = `api/Content/GetMyContent`;
 
-  public static GET_CNTNT_FLDR = `api/Content/GetContentByWorkspaceFolder`;
-
   public static GET_CNTNT_SMT_FLDR = `api/Content/GetContentBySmartFolder`;
 
   public static UPL_VER_CNTNT = `api/Content/UploadNewVersion`;
@@ -228,10 +220,6 @@ export class AppSettings {
 
   public static DUPL_COLCT = `api/Collection/Duplicate`;
 
-  public static DEL_COLCT = `api/Collection/Delete`;
-
-  public static BULK_DEL_COLCT = `api/Collection/DeleteCollections`;
-
   public static GET_COLCT = `api/Collection/GetById`;
 
   public static ACT_COLCT = `api/Collection/Activate`;
@@ -253,11 +241,12 @@ export class AppSettings {
   public static BRD_CRM_LIST = `api/BreadCrum/GetBreadCrum`;
 
   public static MY_BRD_CRM_LIST = `api/BreadCrum/GetBreadCrumForMyContent`; //my files
+
   // ---- COMMON ---- //
 
   public static SEND_MAIL = `api/Common/SendEmail`;
 
-  // ---- COMMON ---- //
+  // ---- SHARE ---- //
 
   public static ADD_SHARE = `api/Share/Add`;
 

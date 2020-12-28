@@ -119,19 +119,6 @@ export class ContentWorkspaceService {
   }
 
   // ---- content ---- //
-  // get content by folder
-  contentByFolder(params: any): Observable<any[]> {
-    let queryParams = new HttpParams();
-    for (let key in params) {
-      if (params[key]) {
-        queryParams = queryParams.set(key, params[key]);
-      }
-    }
-    return this.http.get(`${AppSettings.GET_CNTNT_FLDR}`, {
-      params: queryParams
-    }).pipe(map((res: any) => res));
-  }
-
   // get content by smart folder
   contentBySmartFolder(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
