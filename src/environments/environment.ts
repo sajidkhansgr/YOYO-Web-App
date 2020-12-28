@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   API_ENDPOINT: "http://hiforceapi.imobisoft.eu/",
   SGNL_R: "http://hiforceapi.imobisoft.eu/notification",
-  CLNT_ID: "8c0cd670273d451cbc9b351b11d22318"
+  CLNT_ID: "40ddc14419fc4c7dba215bf740dc34b5"
 };
 //https://localhost:44314/
 /*
