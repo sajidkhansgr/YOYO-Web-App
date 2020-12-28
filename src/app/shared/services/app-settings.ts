@@ -212,6 +212,8 @@ export class AppSettings {
 
   public static DEACT_CNT_WRKSPC_FLDR = `api/Content/DeactivateContentToWorkspaceFolder`;
 
+  public static DEL_MY_CNTNT = `api/Content/DeleteMyContent`;
+
   // ---- LANGUAGE ---- //
 
   public static LIST_LNG = `api/Language/GetAll`;

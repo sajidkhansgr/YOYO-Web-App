@@ -98,30 +98,30 @@ export class FileComponent implements OnInit {
     colData.asc = !colData.asc;
     this.cols[index].asc = colData.asc;
 
-    function nameSort(a:any,b:any,colData:any){
+    function nameSort(a: any, b: any, colData: any) {
       if ((a.name).toLowerCase() < (b.name).toLowerCase())
         return colData.asc ? -1 : 1;
       else
         return colData.asc ? 1 : -1;
     }
-    function dateSort(a:any,b:any,colData:any){
+    function dateSort(a: any, b: any, colData: any) {
       if ((a.updatedDate) < (b.updatedDate))
         return colData.asc ? -1 : 1;
       else
         return colData.asc ? 1 : -1;
     }
-    const sortArray = (key:'files'|'folders'|'allFiles') =>{
+    const sortArray = (key: 'files' | 'folders' | 'allFiles') => {
       this[key].sort((a, b) => {
         if (col.k === 'name')
-          return nameSort(a,b,colData);
+          return nameSort(a, b, colData);
         else
-          return dateSort(a,b,colData);
+          return dateSort(a, b, colData);
       });
     }
-    if(this.view){
+    if (this.view) {
       sortArray('files');
       sortArray('folders');
-    }else{
+    } else {
       sortArray('allFiles');
     }
   }
@@ -190,10 +190,10 @@ export class FileComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result) {
           if (Array.isArray(data.result.folders)) {
-            this.folders = data.result.folders.map((d: any) => ({ ...d, isFldr: true, chk: false,updatedDate:d.updatedDate?d.updatedDate:d.createdDate }));
+            this.folders = data.result.folders.map((d: any) => ({ ...d, isFldr: true, chk: false, updatedDate: d.updatedDate ? d.updatedDate : d.createdDate }));
           }
           if (Array.isArray(data.result.contents)) {
-            this.files = data.result.contents.map((d: any) => ({ ...d, chk: false,updatedDate:d.updatedDate?d.updatedDate:d.createdDate }));
+            this.files = data.result.contents.map((d: any) => ({ ...d, chk: false, updatedDate: d.updatedDate ? d.updatedDate : d.createdDate }));
           }
         }
         this.allFiles = [...this.folders, ...this.files];
@@ -352,53 +352,53 @@ export class FileComponent implements OnInit {
   }
 
   //showing deleted but actually its deactive
-  delCntntOrFldr(d: any, isFldr: boolean = false) {
-    let mdlMsg, mdlTtl, stsData: any, res: string;
-    if (d) {
-      stsData = { ids: [d.id] };
-      if (isFldr || d.isFldr) {
-        mdlMsg = ` folder`; mdlTtl = `Delete Folder`;
-        res = `Folder deleted`;
-        stsData.isFldr = true;
-      } else {
-        mdlMsg = ``; mdlTtl = `Delete Content`;
-        res = `Content deleted`;
-        stsData.status = 2; //move to trash
-      }
-    } else {
-      stsData = { ids: this.selData.map((d: any) => d.id) };
-      if (this.selData[0].isFldr) {
-        mdlMsg = ` folders`; mdlTtl = `Delete Folders`;
-        res = `Folders deleted`;
-        stsData.isFldr = true;
-      } else {
-        mdlMsg = ` contents`; mdlTtl = `Delete Contents`;
-        res = `Contents deleted`;
-        stsData.status = 2; //move to trash
-      }
-    }
-    // console.log(stsData);
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: `Are you sure you want to delete ${d ? d.name : 'these'} ${mdlMsg}?`,
-        title: mdlTtl
-      },
-      autoFocus: false
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        this.cwServ.deactCtntOrFldr(stsData).subscribe((data: any) => {
-          if (data) {
-            this.toastr.success(`${res} successfully.`, 'Success!');
-            this.getFiles();
-          } else {
-            this.toastr.error(`Please try after some time`, 'Error!');
-          }
-        }, (err: any) => {
+  // delCntntOrFldr(d: any, isFldr: boolean = false) {
+  //   let mdlMsg, mdlTtl, stsData: any, res: string;
+  //   if (d) {
+  //     stsData = { ids: [d.id] };
+  //     if (isFldr || d.isFldr) {
+  //       mdlMsg = ` folder`; mdlTtl = `Delete Folder`;
+  //       res = `Folder deleted`;
+  //       stsData.isFldr = true;
+  //     } else {
+  //       mdlMsg = ``; mdlTtl = `Delete Content`;
+  //       res = `Content deleted`;
+  //       stsData.status = 2; //move to trash
+  //     }
+  //   } else {
+  //     stsData = { ids: this.selData.map((d: any) => d.id) };
+  //     if (this.selData[0].isFldr) {
+  //       mdlMsg = ` folders`; mdlTtl = `Delete Folders`;
+  //       res = `Folders deleted`;
+  //       stsData.isFldr = true;
+  //     } else {
+  //       mdlMsg = ` contents`; mdlTtl = `Delete Contents`;
+  //       res = `Contents deleted`;
+  //       stsData.status = 2; //move to trash
+  //     }
+  //   }
+  //   // console.log(stsData);
+  //   this.dialog.open(ConfirmDialogComponent, {
+  //     data: {
+  //       msg: `Are you sure you want to delete ${d ? d.name : 'these'} ${mdlMsg}?`,
+  //       title: mdlTtl
+  //     },
+  //     autoFocus: false
+  //   }).afterClosed().subscribe(result => {
+  //     if (result) {
+  //       this.cwServ.deactCtntOrFldr(stsData).subscribe((data: any) => {
+  //         if (data) {
+  //           this.toastr.success(`${res} successfully.`, 'Success!');
+  //           this.getFiles();
+  //         } else {
+  //           this.toastr.error(`Please try after some time`, 'Error!');
+  //         }
+  //       }, (err: any) => {
 
-        });
-      }
-    })
-  }
+  //       });
+  //     }
+  //   })
+  // }
 
   // succEeditFldr(type: 'folderNav' | 'allFiles' | 'folders' | 'files' | 'selFolders' | 'selFiles') {
   //   const index = this[type].findIndex((ele: any) => ele.id == this.selFldrData.id);
@@ -522,6 +522,55 @@ export class FileComponent implements OnInit {
       clearInterval(this.getIntervalId);
     }
     this.dismissModal();
+  }
+
+  // delete content and deact folder
+  delMyContent(item?: any) {
+    let mdlMsg, mdlTtl, stsData: any, res: string;
+    let data: any = {
+      myContentIds: [],
+      myFolderIds: []
+    }
+    if (item) {
+      if (item.isFldr) {
+        data.myFolderIds = [item.id];
+        mdlMsg = ` folder`; mdlTtl = `Delete Folder`;
+        res = `Folder deleted`;
+      } else {
+        data.myContentIds = [item.id];
+        mdlMsg = ``; mdlTtl = `Delete Content`;
+        res = `Content deleted`;
+      }
+    } else {
+      mdlMsg = ` items`; mdlTtl = `Delete Items`;
+      res = `Items deleted`;
+      for (let i = 0; i < this.selData.length; i++) {
+        if (this.selData[i].isFldr) {
+          data.myFolderIds.push(this.selData[i].id);
+        } else {
+          data.myContentIds.push(this.selData[i].id);
+        }
+      }
+    }
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: `Are you sure you want to delete ${item ? item.name : 'these'} ${mdlMsg}?`,
+        title: mdlTtl
+      },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.fileServ.delMyCntnt(data).subscribe((data: any) => {
+          if (data) {
+            this.toastr.success(data.message || `${res} successfully.`, 'Success!');
+            this.getFiles();
+          }
+        }, (err: any) => {
+
+        });
+
+      }
+    })
   }
 
 }

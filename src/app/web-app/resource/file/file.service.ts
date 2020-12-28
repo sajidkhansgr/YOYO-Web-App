@@ -23,7 +23,7 @@ export class FileService {
               formData.append('Contents', data[key][k], data[key][k].name);
             }
           }
-        }else{
+        } else {
           formData.append(key, data[key]);
         }
       }
@@ -57,6 +57,10 @@ export class FileService {
 
   procesMyData() {
     return this.http.get(`${AppSettings.PROC_CNTNT_EMPL}`);
+  }
+
+  delMyCntnt(data: any) {
+    return this.http.post(`${AppSettings.DEL_MY_CNTNT}`, data);
   }
 
 }
