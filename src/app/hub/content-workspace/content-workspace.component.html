@@ -693,11 +693,12 @@
                 </ol>
               </nav>
               <ul ngbNav #fldrNav="ngbNav" [(activeId)]="activeFldrs"
-                class="nav-tabs justify-content-end border-bottom-0 mr-3 w-100" (activeIdChange)="changeDispFldrs()">
+                class="nav-tabs justify-content-end border-bottom-0 mr-3 w-100" (activeIdChange)="changeDispFldrs()"
+                *ngIf="!dispFolder || dispFolder && dispFolder.entityType !== 2">
                 <li [ngbNavItem]="1"><a ngbNavLink>Active</a></li>
                 <li [ngbNavItem]="2"><a ngbNavLink>Disabled</a></li>
               </ul>
-              <hr class="mt-0">
+              <hr class="{{dispFolder && dispFolder.entityType === 2 ? 'mt-1-85' : 'mt-0'}}">
               <app-loader [type]="'page'" *ngIf="folderLoading"></app-loader>
               <div class="min-ht pl-0 mt-2 mb-0" cdkDropList id="fldrLists" [cdkDropListData]="wrkspcItems"
                 (cdkDropListDropped)="drop($event)" *ngIf="!folderLoading">

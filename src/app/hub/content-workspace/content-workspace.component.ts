@@ -77,8 +77,8 @@ export class ContentWorkspaceComponent implements OnInit {
 
   mdlItems!: any[]; mdlLoading!: boolean; mdlNav!: any[]; mdlSelected: any;
   hasIcon!: boolean; fileExt = FILE_EXT;
-  chkBoxStatus:number=0;//0 means no, 1 means inderminate,2 means checked
-  selItems:number=0;
+  chkBoxStatus: number = 0;//0 means no, 1 means inderminate,2 means checked
+  selItems: number = 0;
 
   constructor(
     private modalService: NgbModal,
@@ -233,7 +233,7 @@ export class ContentWorkspaceComponent implements OnInit {
   changeFolder(folder: any) {
     this.dispFolder = folder;
     this.folderNav.push(folder);
-    this.listFolders()
+    this.listFolders();
   }
 
   // show sub folders in modal (edit folder)
@@ -267,7 +267,8 @@ export class ContentWorkspaceComponent implements OnInit {
         data.result.sort((a: any, b: any) => a.sequenceNumber - b.sequenceNumber);
         if (item) {
           for (let i = 0; i < data.result.length; i++) {
-            data.result[i].entityType === 1 ? this.mdlItems.push(data.result[i]) : undefined;
+            if (data.result[i].entityType === 1)
+              this.mdlItems.push(data.result[i]);
           }
         } else {
           this.wrkspcItems = data.result;
@@ -1143,34 +1144,34 @@ export class ContentWorkspaceComponent implements OnInit {
       });
   }
 
-  chngChkBox(event:any, c: any){
+  chngChkBox(event: any, c: any) {
     c.chk = event.checked;
-    let isSome=false,type=0;
+    let isSome = false, type = 0;
     let items = 0;
-    for(let k=0;k<this.cntnts.length;k++){
-      if(this.cntnts[k].chk){
+    for (let k = 0; k < this.cntnts.length; k++) {
+      if (this.cntnts[k].chk) {
         items++;
         isSome = true;
-        if(type!=1)
-          type=2
-      }else{
+        if (type != 1)
+          type = 2
+      } else {
         type = 1;
       }
     }
     this.selItems = items;
-    this.chkBoxStatus = type==2?2:isSome?1:0;
-    if(items>1)
+    this.chkBoxStatus = type == 2 ? 2 : isSome ? 1 : 0;
+    if (items > 1)
       this.closeDoc();
   }
 
-  clrUnClrSel(val:boolean){
-    for(let k=0;k<this.cntnts.length;k++){
+  clrUnClrSel(val: boolean) {
+    for (let k = 0; k < this.cntnts.length; k++) {
       this.cntnts[k].chk = val;
     }
-    if(val){
+    if (val) {
       this.selItems = this.cntnts.length;
       this.chkBoxStatus = 2;
-    }else{
+    } else {
       this.selItems = 0;
       this.chkBoxStatus = 0;
     }
@@ -1566,7 +1567,7 @@ export class ContentWorkspaceComponent implements OnInit {
   isProcCount(isCount: boolean, data: any) {
     if (isCount) {
       let count: number = data && data.result && data.result.count ? data.result.count : 0;
-      if(this.activeIndex===1 && count!=this.procCnt){
+      if (this.activeIndex === 1 && count != this.procCnt) {
         this.processingCntnt(false);
       }
       this.procCnt = count;
@@ -1605,17 +1606,17 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   multiCntntChng(t: number) {
-    let mdlMsg, mdlTtl, status,ids=[], res: string;
-    for(let k=0;k<this.cntnts.length;k++){
-      if(this.cntnts[k].chk)
+    let mdlMsg, mdlTtl, status, ids = [], res: string;
+    for (let k = 0; k < this.cntnts.length; k++) {
+      if (this.cntnts[k].chk)
         ids.push(this.cntnts[k].id)
     }
-    if (t==0) {
+    if (t == 0) {
       mdlMsg = `move ${ids.length} assets to the trash`;
       mdlTtl = `Move to trash`;
       res = `Assets move to tash`;
       status = 2;
-    }else if (t==1) {
+    } else if (t == 1) {
       mdlMsg = `restore ${ids.length} assets from trash`;
       mdlTtl = `Restore from Tash`;
       res = `Assets restore from trash`;
@@ -1626,7 +1627,7 @@ export class ContentWorkspaceComponent implements OnInit {
       res = `Assets permanently deleted`;
       status = 3;
     }
-    let stsData = {ids,status};
+    let stsData = { ids, status };
     this.dialog.open(ConfirmDialogComponent, {
       data: {
         msg: `Are you sure you want to ${mdlMsg}?`,
