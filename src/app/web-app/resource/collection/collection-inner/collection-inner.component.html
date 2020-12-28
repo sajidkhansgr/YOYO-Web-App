@@ -1,7 +1,3 @@
-
-
-
-
 <app-loader [type]="'page'" *ngIf="loading"></app-loader>
 <div class="main main-employee p-3 container mt-3" *ngIf="!loading">
   <h3 class="mb-4 clearfix heading align-self-center">
@@ -49,7 +45,7 @@
         <div class="card curs-ptr">
           <div class="card-body">
             <div class="imagePreview text-center" (click)="navgToCntnt(cntnt)">
-              <img [src]="getImg(cntnt)" style="max-height:200px;max-width:300px">
+              <img [src]="getImg(cntnt)">
             </div>
             <div class="options rounded">
               <div class="dropleft">

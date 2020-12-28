@@ -75,7 +75,7 @@
           </div>
           <!-- folders -->
           <div class="text-secondary" *ngIf="folders.length>0">Folders</div>
-          <div class="mt-2 row my-files mx-0">
+          <div class="mt-2 row my-files mx-0" dragula="my-files" [(dragulaModel)]="folders">
             <div class="folder-container col-xl-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let fl of folders">
               <div class="card curs-ptr mx-auto">
                 <div class="card-body d-flex" (click)="navgToFldr(fl)">

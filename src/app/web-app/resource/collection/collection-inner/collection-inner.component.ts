@@ -51,19 +51,19 @@ export class CollectionInnerComponent implements OnInit {
     });
   }
 
-  dragInit(){
+  dragInit() {
     const bag: any = this.dragulaService.find(this.BAG);
-    if (bag !== undefined ) {
+    if (bag !== undefined) {
       // this.dragulaService.find('catg-data').drake.remove();
       this.dragulaService.destroy(this.BAG);
       // drake.remove()
     }
     this.dragulaService.createGroup(this.BAG, {
       revertOnSpill: true,
-      moves: function (el:any, container:any, handle:any):any {
+      moves: function (el: any, container: any, handle: any): any {
         if (el.classList.contains('abc')) {
-             return false;
-         }
+          return false;
+        }
         // console.log(el, container);
         return true;
       }
@@ -93,12 +93,12 @@ export class CollectionInnerComponent implements OnInit {
     //      // this.removeClass(container, 'ex-over');
     //    })
     //  );
-     this.subs.add(this.dragulaService.dropModel().subscribe((value) => {
-            // prints the item's id
-            // console.log(value.item);
-            this.rearrDataInWrkspc(value)
-         })
-      )
+    this.subs.add(this.dragulaService.dropModel().subscribe((value) => {
+      // prints the item's id
+      // console.log(value.item);
+      this.rearrDataInWrkspc(value)
+    })
+    )
 
   }
 
@@ -304,15 +304,15 @@ export class CollectionInnerComponent implements OnInit {
   //   }
   // }
 
-  moveElement = (array:any, from:number, to:number) => {
-      const copy = [...array];
-      copy.splice(from, 1);
-      copy.splice(to, 0, array[from]);
-      return copy;
+  moveElement = (array: any, from: number, to: number) => {
+    const copy = [...array];
+    copy.splice(from, 1);
+    copy.splice(to, 0, array[from]);
+    return copy;
   };
 
   rearrDataInWrkspc(event: any) {
-    this.cntntArr = this.moveElement(this.cntntArr,event.sourceIndex,event.targetIndex)
+    this.cntntArr = this.moveElement(this.cntntArr, event.sourceIndex, event.targetIndex)
     this.loading = true;
     let d: any = {
       collectionId: this.id,
