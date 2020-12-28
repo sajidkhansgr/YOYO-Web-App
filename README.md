@@ -74,3 +74,14 @@ in node_modules\ngx-quill\lib\quill-editor.component.d.ts
 
 node_modules\@types\quill\node_modules\fast-diff\diff.d.ts
 export default diff;
+
+
+Dragulla
+
+install dragulla along with types
+
+Make sure adding type npm
+ @types/dragula
+
+Add below in polyfill file
+(window as any).global = window;

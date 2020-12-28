@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+// import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { CollectionInnerComponent } from './collection-inner.component';
 import { LoaderModule } from '../../../../shared/components/loader/loader.module';
@@ -17,6 +17,7 @@ import { GetLinkModule } from '../../../../shared/components/get-link/get-link.m
 import { SelItmFxdDivModule } from '../../../../shared/components/sel-itm-fxd-div/sel-itm-fxd-div.module';
 import { AddRsrcModule } from '../../../../shared/components/add-rsrc/add-rsrc.module';
 
+import { DragulaModule } from 'ng2-dragula';
 
 const routes: Routes = [
   { path: '', component: CollectionInnerComponent }
@@ -28,9 +29,11 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     MatFormFieldModule, MatInputModule, MatCheckboxModule,
-    MatDialogModule, MatChipsModule, DragDropModule,
+    MatDialogModule, MatChipsModule,
+    // DragDropModule,
     LoaderModule,
-    AddToCollModule, ShareMailModule, GetLinkModule, SelItmFxdDivModule, AddRsrcModule
+    AddToCollModule, ShareMailModule, GetLinkModule, SelItmFxdDivModule, AddRsrcModule,
+    DragulaModule.forRoot()
   ],
   providers: [CollectionService]
 })

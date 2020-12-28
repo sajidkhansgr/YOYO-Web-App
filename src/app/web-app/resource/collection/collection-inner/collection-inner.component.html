@@ -1,3 +1,7 @@
+
+
+
+
 <app-loader [type]="'page'" *ngIf="loading"></app-loader>
 <div class="main main-employee p-3 container mt-3" *ngIf="!loading">
   <h3 class="mb-4 clearfix heading align-self-center">
@@ -40,15 +44,12 @@
     </div>
   </h3>
   <ng-container *ngIf="view">
-    <div class="mt-2 row my-files" *ngIf="cntntArr.length>0" cdkDropList id="cntntLists" [cdkDropListData]="cntntArr"
-      (cdkDropListDropped)="drop($event)">
-      <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let cntnt of cntntArr"
-        cdkDrag>
-        <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail" style="max-height:180px;max-width:100px"></div>
+    <div class="mt-2 row my-files" *ngIf="cntntArr.length>0" dragula="coll-inner" [(dragulaModel)]="cntntArr">
+      <div class="card-container col-lg-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let cntnt of cntntArr">
         <div class="card curs-ptr">
           <div class="card-body">
             <div class="imagePreview text-center" (click)="navgToCntnt(cntnt)">
-              <img [src]="getImg(cntnt)">
+              <img [src]="getImg(cntnt)" style="max-height:200px;max-width:300px">
             </div>
             <div class="options rounded">
               <div class="dropleft">
@@ -106,16 +107,15 @@
           <th></th>
         </tr>
       </thead>
-      <tbody *ngIf="cntntArr.length > 0" cdkDropList id="cntntLists" [cdkDropListData]="cntntArr"
-        (cdkDropListDropped)="drop($event)">
-        <tr *ngFor="let cntnt of cntntArr" cdkDrag>
+      <tbody *ngIf="cntntArr.length > 0" dragula="coll-inner" [(dragulaModel)]="cntntArr">
+        <tr *ngFor="let cntnt of cntntArr">
           <td class="align-middle">
             <mat-checkbox [checked]="cntnt.chk" (change)="selMe($event.checked, cntnt)"></mat-checkbox>
           </td>
           <td class="align-middle">
             <div class="d-flex" (click)="navgToCntnt(cntnt)">
               <div class="imagePreview border mr-2">
-                <img [src]="getImg(cntnt)">
+                <img [src]="getImg(cntnt)" style="max-height:50px;max-width:140px">
               </div>
               <div class="name align-self-center">{{cntnt.name}}</div>
             </div>
