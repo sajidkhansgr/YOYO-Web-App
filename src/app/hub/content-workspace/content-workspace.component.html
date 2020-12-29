@@ -142,7 +142,7 @@
                         <div class="view" *ngIf="!edits.t">
                           <div *ngIf="rowInfo.contentTags && rowInfo.contentTags.length>0 else noCntntTag">
                             <span *ngFor="let tg of rowInfo.contentTags"
-                              class="badge badge-light text-success text-wrap m-1">{{tg.tagName}}</span>
+                              class="badge badge-light text-success text-wrap m-1 text-break">{{tg.tagName}}</span>
                           </div>
                           <ng-template #noCntntTag>
                             <div class="text-hi-dark-grey">No Tags</div>
@@ -1006,7 +1006,7 @@
               <span [ngSwitch]="col.k">
                 <span *ngSwitchCase="'name'">
                   {{cntnt.name}}<br />
-                  <span *ngFor="let tg of cntnt.contentTags" class="badge badge-light p-2 mt-2 mr-1 mt-sm-0">{{tg.name}}
+                  <span *ngFor="let tg of cntnt.contentTags" class="badge badge-light p-2 mt-2 mr-1">{{tg.name}}
                   </span>
                 </span>
                 <span *ngSwitchCase="'createdDate'">
