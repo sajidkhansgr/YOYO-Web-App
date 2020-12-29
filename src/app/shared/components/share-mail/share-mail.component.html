@@ -4,7 +4,7 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<form name="emailForm" (ngSubmit)="sendMail()" [formGroup]="emailForm">
+<form name="emailForm" (ngSubmit)="getContentLink()" [formGroup]="emailForm">
   <div class="modal-body" ngbAutofocus>
     <div class="row">
       <div class="col-9 border-right">
@@ -34,18 +34,8 @@
             Subject is required
           </mat-error>
         </mat-form-field>
-        <div class="bg-hi-grey p-2 rounded d-flex">
-          <div class="ml-3 align-self-center">Resources</div>
-          <div class="ml-auto">
-            <button type="button" class="btn btn-primary btn-sm" [disabled]="linkDisabled || disabled || loading"
-              (click)="rsrcBtn(viewMe ? 'done' : 'change')">
-              <app-loader [type]="'btn'" *ngIf="linkDisabled"></app-loader>
-              {{viewMe || linkDisabled ? 'Done' : 'Change Resources'}}
-            </button>
-          </div>
-        </div>
         <div class="rounded border m-2 p-2">
-          <div class="row mt-2" *ngIf="viewMe">
+          <div class="row mt-2">
             <div class="col-8">
               <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
                 <i matPrefix class="fas fa-search"></i>
@@ -68,7 +58,7 @@
                 <div class="text-truncate">{{vs.name}}</div>
                 <div class="text-secondary" *ngIf="vs.pageNo">Page {{vs.pageNo}}</div>
               </div>
-              <div class="ml-auto align-self-center" *ngIf="viewMe">
+              <div class="ml-auto align-self-center">
                 <i class="fas fa-trash-alt curs-ptr" (click)="removeMe(vs)"></i>
               </div>
             </div>
@@ -84,13 +74,6 @@
           *ngIf="(emailForm.get('body')!.touched ||emailForm.get('body')!.dirty) && emailForm.get('body')!.hasError('required')">
           Message is required
         </mat-error>
-        <!-- <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Message</mat-label>
-          <textarea matInput type="text" placeholder="Message" formControlName="body"></textarea>
-          <mat-error *ngIf="emailForm.get('body')!.hasError('required')">
-            Message is required
-          </mat-error>
-        </mat-form-field> -->
       </div>
       <div class="col-3">
         <h5>Sharing Settings</h5>
@@ -100,8 +83,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary"
-      [disabled]="emailForm!.invalid || disabled || viewMe || viewSel.length == 0">
+    <button type="submit" class="btn btn-primary" [disabled]="emailForm!.invalid || disabled || viewSel.length == 0">
       <app-loader [type]="'btn'" *ngIf="disabled"></app-loader>
       Send
     </button>

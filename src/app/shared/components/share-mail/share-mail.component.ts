@@ -21,10 +21,9 @@ import { QUILL } from '../../models/quill';
 })
 export class ShareMailComponent implements OnInit {
   emailForm!: FormGroup; link!: any; emailAddresses!: string[];
-  disabled!: boolean; linkDisabled!: boolean
+  disabled!: boolean;
   viewSel!: any[];
   defImg: string = DEF_ICON;
-  viewMe!: boolean;
   loading!: boolean;
   @Input() private type!: string;
   @Input() private data!: any;
@@ -53,8 +52,7 @@ export class ShareMailComponent implements OnInit {
       sendMeCopy: [false],
       allowDownload: [true]
     });
-    this.disabled = false; this.linkDisabled = false; this.emailAddresses = [];
-    this.viewMe = true;
+    this.disabled = false; this.emailAddresses = [];
     this.link = undefined;
     this.viewSel = [];
     this.loading = true;
@@ -170,14 +168,11 @@ export class ShareMailComponent implements OnInit {
     this.shareSrv.addShare(data).subscribe((data: any) => {
       if (data && data.result) {
         this.link = { name: this.data.name, link: data.result };
+        this.sendMail();
       } else {
         this.toastr.error(data.message || 'Something went wrong', 'Error!');
-        this.viewMe = true;
       }
-      this.linkDisabled = false;
     }, (err: any) => {
-      this.viewMe = true;
-      this.linkDisabled = false;
     });
   }
 
@@ -194,18 +189,6 @@ export class ShareMailComponent implements OnInit {
     }, (err: any) => {
       this.link = undefined;
     });
-  }
-
-  // resource button (done/change)
-  rsrcBtn(type: string) {
-    if (type == 'done') {
-      this.viewMe = false;
-      this.linkDisabled = true;
-      this.getContentLink();
-    } else if (type == 'change') {
-      this.removeLink();
-      this.viewMe = true;
-    }
   }
 
   // get content by collection id
