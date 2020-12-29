@@ -5,7 +5,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { DragulaService } from "ng2-dragula";
 
 import { FileService } from './file.service';
 import { BreadcrumbService } from '../../../shared/services/breadcrumb.service';
@@ -36,7 +35,7 @@ export class FileComponent implements OnInit {
   cols: any = []; navg!: any; fileExt = FILE_EXT;
   getIntervalId: any; procFiles: any[] = []; isClose: boolean = false; showProcDetail: boolean = true;
   disableBtns!: boolean;
-  subs = new Subscription(); BAG = "my-files";
+  dragMe: any;
 
   constructor(
     private router: Router,
@@ -47,7 +46,6 @@ export class FileComponent implements OnInit {
     private dialog: MatDialog,
     private fileServ: FileService,
     private brdcrmServ: BreadcrumbService,
-    private dragulaService: DragulaService
   ) { }
 
   ngOnInit(): void {
@@ -74,7 +72,6 @@ export class FileComponent implements OnInit {
     this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
     this.brdcrmList();
     this.initForm();
-    this.dragInit();
   }
 
   initForm() {
@@ -88,57 +85,39 @@ export class FileComponent implements OnInit {
     this.urlDisb = false;
   }
 
-  // drag drop - dracula
-  dragInit() {
-    const bag: any = this.dragulaService.find(this.BAG);
-    if (bag !== undefined) {
-      // this.dragulaService.find('catg-data').drake.remove();
-      this.dragulaService.destroy(this.BAG);
-      // drake.remove()
-    }
-    this.dragulaService.createGroup(this.BAG, {
-      revertOnSpill: true,
-      moves: function (el: any, container: any, handle: any): any {
-        if (el.classList.contains('abc')) {
-          return false;
-        }
-        // console.log(el, container);
-        return true;
+  // drag and drop content/folder into another folder
+  allowDrop(ev: any) {
+    ev.preventDefault();
+  }
+  drag(f: any) {
+    this.dragMe = f;
+  }
+  drop(ev: any, fl: any) {
+    ev.preventDefault();
+    if (fl !== this.dragMe && fl.isFldr) {
+      if (this.dragMe.isFldr) {
+        this.folders = this.folders.filter(f => f.id !== this.dragMe.id);
+      } else {
+        this.files = this.files.filter(f => f.id !== this.dragMe.id);
       }
-    });
+      this.allFiles = [...this.folders, ...this.files];
+      this.relocMyFiles(fl.id);
+    }
+  }
 
-    // this.subs.add(this.dragulaService.drag(this.BAG)
-    //   .subscribe(({ el }) => {
-    //     console.log("drag")
-    //     // this.removeClass(el, 'ex-moved');
-    //   })
-    // );
-    // this.subs.add(this.dragulaService.drop(this.BAG)
-    //   .subscribe((val) => {
-    //     console.log(val)
-    //     // this.addClass(el);
-    //   })
-    // );
-    this.subs.add(this.dragulaService.over(this.BAG)
-      .subscribe((val) => {
-        console.log(val);
-        // console.log('over', container);
-        // console.log(el);
-        // this.addClass(container, 'ex-over');
-      })
-    );
-    //  this.subs.add(this.dragulaService.out(this.BAG)
-    //    .subscribe(({ el, container }) => {
-    //      console.log('out', container);
-    //      // this.removeClass(container, 'ex-over');
-    //    })
-    //  );
-    // this.subs.add(this.dragulaService.dropModel().subscribe((value) => {
-    //   // prints the item's id
-    //   console.log(value);
-    //   // this.rearrDataInWrkspc(value)
-    // })
-    // );
+  // relocate my files
+  relocMyFiles(flId: number) {
+    let data: any = {
+      entityId: this.dragMe.id,
+      relocateObjectType: this.dragMe.isFldr ? 1 : 2,
+      folderId: flId
+    };
+    this.fileServ.relocMyFiles(data).subscribe((data: any) => {
+      if (data) {
+        this.toastr.success(data.message || 'Location changed successfully', 'Success!');
+      }
+    }, (err: any) => {
+    });
   }
 
   // sort

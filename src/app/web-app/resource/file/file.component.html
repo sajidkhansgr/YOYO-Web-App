@@ -75,8 +75,9 @@
           </div>
           <!-- folders -->
           <div class="text-secondary" *ngIf="folders.length>0">Folders</div>
-          <div class="mt-2 row my-files mx-0" dragula="my-files" [(dragulaModel)]="folders">
-            <div class="folder-container col-xl-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let fl of folders">
+          <div class="mt-2 row my-files mx-0">
+            <div class="folder-container col-xl-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" (drop)="drop($event, fl)"
+              (dragover)="allowDrop($event)" draggable="true" (dragstart)="drag(fl)" *ngFor="let fl of folders">
               <div class="card curs-ptr mx-auto">
                 <div class="card-body d-flex" (click)="navgToFldr(fl)">
                   <div class="name align-self-center px-0"><i class="fas fa-folder mr-1"></i>{{fl.name}}</div>
@@ -98,7 +99,8 @@
           <!-- files -->
           <div class="text-secondary" *ngIf="!loading && files.length>0">Files</div>
           <div class="mt-2 row my-files mx-0">
-            <div class="card-container col-xl-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" *ngFor="let f of files">
+            <div class="card-container col-xl-3 col-md-4 col-sm-6 my-3 mx-auto mx-sm-0" draggable="true"
+              (dragstart)="drag(f)" *ngFor="let f of files">
               <div class="card curs-ptr mx-auto">
                 <div class="card-body">
                   <div class="imagePreview text-center" (click)="chkFolderAndAdd(f)">
@@ -169,7 +171,8 @@
               </tr>
             </thead>
             <tbody *ngIf="allFiles.length>0">
-              <tr *ngFor="let aF of allFiles">
+              <tr *ngFor="let aF of allFiles" (drop)="drop($event, aF)" (dragover)="allowDrop($event)" draggable="true"
+                (dragstart)="drag(aF)">
                 <td class="align-middle">
                   <mat-checkbox [checked]="aF.chk" (change)="selMe($event.checked, aF)"></mat-checkbox>
                 </td>

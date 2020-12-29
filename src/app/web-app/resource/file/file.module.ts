@@ -8,7 +8,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
-import { DragulaModule } from 'ng2-dragula';
 
 import { FileComponent } from './file.component';
 import { FileService } from './file.service';
@@ -36,8 +35,7 @@ const routes: Routes = [
     MatCheckboxModule, MatFormFieldModule, MatInputModule,
     MatTooltipModule, MatSlideToggleModule, MatRadioModule,
     LoaderModule, ConfirmDialogModule,
-    AddToCollModule, ShareMailModule, GetLinkModule, SelItmFxdDivModule,
-    DragulaModule.forRoot()
+    AddToCollModule, ShareMailModule, GetLinkModule, SelItmFxdDivModule
   ],
   providers: [FileService, ContentWorkspaceService, BreadcrumbService]
 })

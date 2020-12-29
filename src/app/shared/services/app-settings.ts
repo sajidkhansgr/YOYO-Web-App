@@ -206,6 +206,8 @@ export class AppSettings {
 
   public static DEL_MY_CNTNT = `api/Content/DeleteMyContent`;
 
+  public static RELOC_MY_CNTNT = `api/Content/RelocateMyFiles`;
+
   // ---- LANGUAGE ---- //
 
   public static LIST_LNG = `api/Language/GetAll`;

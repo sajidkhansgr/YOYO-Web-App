@@ -59,8 +59,14 @@ export class FileService {
     return this.http.get(`${AppSettings.PROC_CNTNT_EMPL}`);
   }
 
+  // delete content and deact folder
   delMyCntnt(data: any) {
     return this.http.post(`${AppSettings.DEL_MY_CNTNT}`, data);
+  }
+
+  // realocate my files
+  relocMyFiles(data: any) {
+    return this.http.post(`${AppSettings.RELOC_MY_CNTNT}`, data);
   }
 
 }
