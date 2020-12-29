@@ -357,6 +357,7 @@ mat-checkbox {
   line-height: 1.5 !important;
   font-size: 1rem !important;
   padding: 0.25rem 1.5rem !important;
+  white-space: inherit !important;
 }
 
 .mat-option:hover:not(.mat-option.mat-active) {
@@ -427,9 +428,10 @@ mat-checkbox {
   }
 
   mat-chip {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
+    // margin-top: 0 !important;
+    // margin-bottom: 0 !important;
     min-height: 25px !important;
+    height: fit-content !important;
     // background-color: $primary !important;
 
     .mat-chip-remove {

@@ -144,6 +144,33 @@
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
   filter: alpha(opacity=80);
   pointer-events: none;
+
+  .image {
+    position: relative;
+    min-height: 179px;
+
+    @media (max-width: 1400px) {
+      min-height: 127px;
+    }
+
+    @media (max-width: 1200px) {
+      min-height: 134px;
+    }
+
+
+    img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-height: 100%;
+      max-width: 100%;
+    }
+
+    .dropdown {
+      display: none;
+    }
+  }
 }
 
 /* high-performance display:none; helper */
