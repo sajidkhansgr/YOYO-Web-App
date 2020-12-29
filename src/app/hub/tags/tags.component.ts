@@ -365,9 +365,8 @@ export class TagsComponent implements OnInit {
           if (data) {
             this.toastr.success(data.message || 'Category added successfully', 'Success!');
             this.getCatgs();
-            this.showCatgIn = false;
           } else {
-            this.toastr.error('Unable to add Category', 'Error!');
+            this.toastr.error('Unable to add category', 'Error!');
           }
           this.catgForm.reset();
           this.catgAddDisabled = false;
@@ -409,7 +408,7 @@ export class TagsComponent implements OnInit {
             this.toastr.success(data.message || 'Category updated successfully', 'Success!');
             this.getCatgs();
           } else {
-            this.toastr.error('Unable to update Category', 'Error!');
+            this.toastr.error('Unable to update category', 'Error!');
           }
           this.updCatgForm.reset();
           this.dismissModal();

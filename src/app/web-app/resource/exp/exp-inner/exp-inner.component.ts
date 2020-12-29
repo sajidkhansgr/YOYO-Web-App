@@ -99,6 +99,7 @@ export class ExpInnerComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
           this.wrkspcCntnts = data.result;
+          this.wrkspcCntnts.sort((a: any, b: any) => a.sequenceNumber - b.sequenceNumber);
           // if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0)
           //   this.wrkspcCntnts = data.result[0].contents;
           // if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0)

@@ -31,6 +31,7 @@ export class ExpListComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
           this.wrkSpcs = data.result;
+          this.wrkSpcs.sort((a: any, b: any) => a.name.toLowerCase() < b.name.toLowerCase()?-1 : 0);
         } else {
           this.wrkSpcs = [];
         }

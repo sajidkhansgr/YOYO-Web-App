@@ -99,7 +99,7 @@ export class ContentWorkspaceService {
   wrkspcList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
-      if (params[key] || key == 'isActive') {
+      if (params[key] || key == 'isActive'|| key == 'pageNo') {
         queryParams = queryParams.set(key, params[key]);
       }
     }
