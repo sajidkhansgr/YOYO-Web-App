@@ -59,7 +59,7 @@ export class FileComponent implements OnInit {
       this.initialiseState();
       this.getFiles();
     });
-    this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
+    // this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
     this.disableBtns = false;
   }
 

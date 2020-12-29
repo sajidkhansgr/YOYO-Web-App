@@ -71,15 +71,13 @@ export class ContentWorkspaceComponent implements OnInit {
   unSelUsrGrpWrkspc!: any[]; unSelUsrGrpLoad!: boolean; unSelUsrGrpTxt!: ''; selUsrGrps: any[] = [];
   cntntTag!: any; urlTag!: any; cntntInfoTag!: any; cntntLng!: any; usrGrpWrkSpcDisb: boolean = false;
 
-  allTags!: any[]; anyTags!: any[]; noneTags!: any[];
-  alTgTxt!: string; anTgTxt!: string; noTgTxt!: string;
-  allTags1!: any[]; anyTags1!: any[]; noneTags1!: any[];
-  alTgTxt1!: string; anTgTxt1!: string; noTgTxt1!: string;
+  allTags!: any[]; anyTags!: any[]; noneTags!: any[]; alTgTxt!: string; anTgTxt!: string; noTgTxt!: string;
+  allTags1!: any[]; anyTags1!: any[]; noneTags1!: any[]; alTgTxt1!: string; anTgTxt1!: string; noTgTxt1!: string;
 
   getIntervalId: any; procCnt: number = 0;
 
   mdlItems!: any[]; mdlLoading!: boolean; mdlNav!: any[]; mdlSelected: any;
-  hasIcon!: boolean; fileExt = FILE_EXT;
+  fileExt = FILE_EXT;
   chkBoxStatus: number = 0;//0 means no, 1 means inderminate,2 means checked
   selItems: number = 0;
 
@@ -111,10 +109,9 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   initialiseState() {
-    this.files = []; this.addURLIcon = ''; this.iconUrl = '';
+    this.files = []; this.addURLIcon = ''; this.remImg();
     this.dispGnrl = true; this.dispSettings = true; this.dispSmart = false;
-    this.dispPropsSec = true; this.dispSmFolderSec = true;
-    this.custIcon = undefined; this.showWork = false;
+    this.dispPropsSec = true; this.dispSmFolderSec = true; this.showWork = false;
     this.wrkspcs = []; this.selWrkspc = undefined;
     this.wrkspcLoading = true; this.folderLoading = true;
     this.addWrkspcForm = this.fb.group({
@@ -195,7 +192,6 @@ export class ContentWorkspaceComponent implements OnInit {
     this.allTags = []; this.anyTags = []; this.noneTags = [];
     this.setFltrEmpty();
     this.mdlItems = []; this.mdlLoading = true; this.mdlNav = []; this.mdlSelected = undefined;
-    this.hasIcon = true;
   }
 
 
@@ -210,9 +206,7 @@ export class ContentWorkspaceComponent implements OnInit {
   // ---- folder and smart folder ---- //
   // remove image in Modals
   remImg() {
-    this.iconUrl = '';
-    this.custIcon = undefined;
-    this.hasIcon = false;
+    this.iconUrl = ''; this.custIcon = undefined;
   }
 
   // change displayed folders and smart folders (isActive)
@@ -281,10 +275,10 @@ export class ContentWorkspaceComponent implements OnInit {
         }
       }
       item ? this.mdlLoading = false : this.folderLoading = false;
-      this.dragInit()
+      this.dragInit();
     }, (err: any) => {
       item ? this.mdlLoading = false : this.folderLoading = false;
-      this.dragInit()
+      this.dragInit();
     });
   }
 
@@ -305,7 +299,6 @@ export class ContentWorkspaceComponent implements OnInit {
     if (folder.imagePath) {
       this.addURLIcon = 'cust-icon';
       this.iconUrl = folder.imagePath;
-      this.hasIcon = true;
     }
     if (folder.entityType === 1) {
       this.getFolder(folder.entityId);
@@ -587,7 +580,6 @@ export class ContentWorkspaceComponent implements OnInit {
         fldrData.workspaceIdForDuplicateFolder = this.mdlSelected ? this.mdlSelected.entityId ? this.mdlSelected.workspaceId : this.mdlSelected.id : this.selFolder!.workspaceId;
         fldrData.originalFolderId = this.selFolder!.id;
         fldrData.originalWorkspaceId = this.selFolder!.workspaceId;
-        // fldrData.hasIcon = this.hasIcon;
         if (this.iconUrl)
           fldrData.hasIcon = true;
       } else {
@@ -749,7 +741,7 @@ export class ContentWorkspaceComponent implements OnInit {
   getWrkspcList(mdl?: boolean) {
     let query = {
       hubid: this.hubid,
-      isActive: true
+      isActive: true, pageNo: 0
     }
     if (mdl) {
       this.mdlItems = [];
@@ -772,9 +764,8 @@ export class ContentWorkspaceComponent implements OnInit {
 
   // show workspaces list
   loadWrkspcs() {
-    if (this.wrkspcs.length == 0) {
+    if (this.wrkspcs.length == 0)
       this.getWrkspcList();
-    }
   }
 
   getUsrGrpsFormWrkspc() {
@@ -786,10 +777,10 @@ export class ContentWorkspaceComponent implements OnInit {
     this.isUrGrpLoad = true;
   }
 
-  usrGrpInWrkspce(isLinked: boolean, var1: 'selUsrGrpLoad' | 'unSelUsrGrpLoad', var2: 'selUsrGrpWrkspc' | 'unSelUsrGrpWrkspc') {
+  usrGrpInWrkspce(inLnkd: boolean, var1: 'selUsrGrpLoad' | 'unSelUsrGrpLoad', var2: 'selUsrGrpWrkspc' | 'unSelUsrGrpWrkspc') {
     this[var1] = true;
     this[var2] = [];
-    this.cwServ.usrGrpWrkspcList({ hubid: this.hubid, workspaceId: this.selWrkspc!.id, LinkedData: isLinked })
+    this.cwServ.usrGrpWrkspcList({ hubid: this.hubid, workspaceId: this.selWrkspc!.id, LinkedData: inLnkd })
       .subscribe((data: any) => {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
           this[var2] = data.result;
@@ -824,18 +815,18 @@ export class ContentWorkspaceComponent implements OnInit {
   addUsrGrpInWrkspce() {
     if (this.selUsrGrps.length > 0) {
       this.usrGrpWrkSpcDisb = true;
-      let data: any = {
+      let d: any = {
         hubid: parseInt(this.hubid),
         workspaceId: this.selWrkspc!.id,
         groupIds: [], employeeIds: []
       }
       for (let k = 0; k < this.selUsrGrps.length; k++) {
         if (this.selUsrGrps[k].isGroup)
-          data.groupIds.push(this.selUsrGrps[k].id)
+          d.groupIds.push(this.selUsrGrps[k].id)
         else
-          data.employeeIds.push(this.selUsrGrps[k].id)
+          d.employeeIds.push(this.selUsrGrps[k].id)
       }
-      this.cwServ.addUsrGrpWrkspc(data)
+      this.cwServ.addUsrGrpWrkspc(d)
         .subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Added successfully`);
@@ -924,7 +915,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.dragulaService.createGroup(this.BAG, {
       revertOnSpill: true,
       moves: function (el: any, container: any, handle: any): any {
-        if (el.classList.contains('abc')) {
+        if (el.classList.contains('no-drag')) {
           return false;
         }
         return true;
@@ -952,8 +943,6 @@ export class ContentWorkspaceComponent implements OnInit {
     this.cwServ.rearrWrkspcData(d).subscribe((data: any) => {
       if (data) {
         this.toastr.success('Rearrange successfully', 'Success!');
-      } else {
-        // this.toastr.error('Unable to rearrange', 'Error!');
       }
       this.folderLoading = false;
     }, (err: any) => {
@@ -1005,14 +994,10 @@ export class ContentWorkspaceComponent implements OnInit {
         this.closeDoc();
       } else {
         this.showWork = false;
-        this.rowInfo = {};
-        this.showRowInfo = true;
-        this.edits = {};
-        this.disb = {};
-        this.desc = '';
-        this.cmnt = '';
-        this.selTags2 = [];
-        this.selLngs = [];
+        this.rowInfo = {}; this.showRowInfo = true;
+        this.edits = {}; this.disb = {};
+        this.desc = ''; this.cmnt = '';
+        this.selTags2 = []; this.selLngs = [];
         this.getCntnt(row);
       }
     }
@@ -1109,26 +1094,20 @@ export class ContentWorkspaceComponent implements OnInit {
       this.getTags();
     }
     this.verForm.reset(); this.urlForm.reset(); this.cntntForm.reset();
-    // this.cntntDisb = false;
     this.procUplDef();
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
       .then((result) => {
       }, (reason) => {
-        this.addWrkspcForm.reset();
-        this.updWrkspcForm.reset();
-        this.folderForm.reset();
-        this.smartFldrForm.reset();
-        this.iconUrl = undefined;
-        this.addURLIcon = '';
+        this.addWrkspcForm.reset(); this.updWrkspcForm.reset();
+        this.folderForm.reset(); this.smartFldrForm.reset();
+        this.iconUrl = undefined; this.addURLIcon = '';
       });
   }
 
   onTabChange = (event: any) => {
     this.activeIndex = event.index;
-    this.unsubSubs();
-    this.searchTxt = "";
-    this.initialiseState();
-    this.loadCntnts();
+    this.unsubSubs(); this.searchTxt = "";
+    this.initialiseState(); this.loadCntnts();
   }
 
   loadCntnts() {
@@ -1311,9 +1290,7 @@ export class ContentWorkspaceComponent implements OnInit {
         cntntData.ContentTagsString = this.selTags.map((tag: any) => ({ tagId: tag.id }));
         cntntData.ContentTagsString = JSON.stringify(cntntData.ContentTagsString)
       }
-      // this.files = this.files.map((f: any) => ({ ...f, load: true }));
       this.procUpld = true;
-      // setTimeout(()=>{
       for (let i = 0; i < this.files.length; i++) {
         cntntData.content = this.files[i];
         const data: any = await this.cwServ.addContentProms(cntntData);
@@ -1325,23 +1302,6 @@ export class ContentWorkspaceComponent implements OnInit {
         }
       }
       this.cntntDisb = false;
-      // },9000)
-      // this.cwServ.addContent(cntntData)
-      //   .subscribe((data: any) => {
-      //     console.log(data, 'data')
-      //     if (data && data.result && data.result.id) {
-      //       this.procUpldData.push({id:data.result.id,name: cntntData})
-      //       this.toastr.success('Content added successfully', 'Success!');
-      //       // this.files = []; this.pageNo = 1;
-      //       // this.cntntList();
-      //       // this.dismissModal();
-      //     } else {
-      //       this.toastr.error('Unable to add content', 'Error!');
-      //     }
-      //     // this.cntntDisb = false;
-      //   }, (err: any) => {
-      //     // this.cntntDisb = false;
-      //   });
     }
   }
 
@@ -1384,9 +1344,8 @@ export class ContentWorkspaceComponent implements OnInit {
       //need to check icon type for default icon, for now its skip
       let cntntData: any = {
         ...this.urlForm.value,
-        urlIcon: this.custIcon,
+        urlIcon: this.custIcon, isUrl: true,
         hubId: parseInt(this.hubid),
-        isUrl: true
       }
       delete cntntData.img;
       if (this.selTags && this.selTags.length > 0) {
@@ -1399,8 +1358,7 @@ export class ContentWorkspaceComponent implements OnInit {
           if (data) {
             this.toastr.success('Content added successfully', 'Success!');
             this.files = []; this.pageNo = 1; this.setDefSort();
-            this.cntntList();
-            this.dismissModal();
+            this.cntntList(); this.dismissModal();
           } else {
             this.toastr.error('Unable to add content', 'Error!');
           }
@@ -1478,8 +1436,7 @@ export class ContentWorkspaceComponent implements OnInit {
         if (data) {
           this.rowInfo.comments.push({
             createdByFullName: this.usrInfo && this.usrInfo.fN ? this.usrInfo.fN : 'User',
-            createdDate: new Date(),
-            commentText: this.cmnt
+            createdDate: new Date(), ommentText: this.cmnt
           })
           this.cmnt = '';
           this.toastr.success(data.message || `Comment added successfully`, 'Success!');
@@ -1503,11 +1460,11 @@ export class ContentWorkspaceComponent implements OnInit {
       if (this.activeIndex == 0) {
         mdlMsg = `move ${this.rowInfo.name} to the trash`;
         mdlTtl = `Move to trash`;
-        res = `Content move to tash`;
+        res = `Content move to trash`;
         stsData.status = 2;
       } else if (this.activeIndex == 2) {
         mdlMsg = `restore ${this.rowInfo.name} from trash`;
-        mdlTtl = `Restore from Tash`;
+        mdlTtl = `Restore from Trash`;
         res = `Content restore from trash`;
         stsData.status = 1;
       }
@@ -1653,11 +1610,11 @@ export class ContentWorkspaceComponent implements OnInit {
     if (t == 0) {
       mdlMsg = `move ${ids.length} assets to the trash`;
       mdlTtl = `Move to trash`;
-      res = `Assets move to tash`;
+      res = `Assets move to trash`;
       status = 2;
     } else if (t == 1) {
       mdlMsg = `restore ${ids.length} assets from trash`;
-      mdlTtl = `Restore from Tash`;
+      mdlTtl = `Restore from Trash`;
       res = `Assets restore from trash`;
       status = 1;
     } else if (this.activeIndex == 2) {
@@ -1683,7 +1640,6 @@ export class ContentWorkspaceComponent implements OnInit {
             this.toastr.error(`Please try after some time`, 'Error!');
           }
         }, (err: any) => {
-
         });
       }
     })
@@ -1733,7 +1689,6 @@ export class ContentWorkspaceComponent implements OnInit {
         this.iconUrl = event.target.result;
       };
       this.custIcon = file;
-      this.hasIcon = true;
       if (type === 'urlForm')
         this.urlForm.controls['img'].setValue(this.custIcon);
       reader.readAsDataURL(file);

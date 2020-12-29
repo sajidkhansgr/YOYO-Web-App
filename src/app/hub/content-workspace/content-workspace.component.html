@@ -1041,8 +1041,7 @@
           (click)="toggleInfo(cntnt)" style="max-width:300px;"
           [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!isNotDrag()}" [cdkDragDisabled]="isNotDrag()"
           cdkDrag>
-          <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail"
-              style="height:100px;width:100px">{{cntnt.name}}</div>
+          <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail" style="height:100px;width:100px"></div>
           <div class="grid-image">
             <img [src]="getImg(cntnt)" alt="{{cntnt.name}}">
           </div>
