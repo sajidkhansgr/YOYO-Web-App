@@ -20,6 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["dragula", "ng2-pdf-viewer"],
             "outputPath": "dist/HiForceAdminUI",
             "index": "src/index.html",
             "main": "src/main.ts",

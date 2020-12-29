@@ -22,6 +22,9 @@ import { LanguageService } from '../../shared/services/language.service';
 import { TokenDataService } from '../../shared/services/token-data.service';
 import { FileService } from '../../shared/services/file.service';
 
+import { DragulaService } from "ng2-dragula";
+import { ArrayHelper } from '../../shared/array-helper';
+
 @Component({
   selector: 'app-content-workspace',
   templateUrl: './content-workspace.component.html',
@@ -80,6 +83,8 @@ export class ContentWorkspaceComponent implements OnInit {
   chkBoxStatus: number = 0;//0 means no, 1 means inderminate,2 means checked
   selItems: number = 0;
 
+  subs = new Subscription(); BAG = "wrkspc-items";
+
   constructor(
     private modalService: NgbModal,
     private cwServ: ContentWorkspaceService,
@@ -89,7 +94,8 @@ export class ContentWorkspaceComponent implements OnInit {
     private tagServ: TagsService,
     private lngServ: LanguageService,
     private tokenDataServ: TokenDataService,
-    private fileServ: FileService
+    private fileServ: FileService,
+    private dragulaService: DragulaService
   ) { }
 
   ngOnInit(): void {
@@ -275,8 +281,10 @@ export class ContentWorkspaceComponent implements OnInit {
         }
       }
       item ? this.mdlLoading = false : this.folderLoading = false;
+      this.dragInit()
     }, (err: any) => {
       item ? this.mdlLoading = false : this.folderLoading = false;
+      this.dragInit()
     });
   }
 
@@ -857,20 +865,20 @@ export class ContentWorkspaceComponent implements OnInit {
         }
       }
     } else {
-      if (event.previousContainer === event.container) {
-        if (event.container.id == "fldrLists") {
-          if (event.previousContainer.data[event.previousIndex] != event.container.data[event.currentIndex])
-            this.rearrDataInWrkspc(event);
-        } else {
-          moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-        }
+      // if (event.previousContainer === event.container) {
+      //   if (event.container.id == "fldrLists") {
+      //     if (event.previousContainer.data[event.previousIndex] != event.container.data[event.currentIndex])
+      //       this.rearrDataInWrkspc(event);
+      //   } else {
+      //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      //   }
         // moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      } else {
+      // } else {
         transferArrayItem(event.previousContainer.data,
           event.container.data,
           event.previousIndex,
           event.currentIndex);
-      }
+      // }
     }
   }
 
@@ -878,8 +886,8 @@ export class ContentWorkspaceComponent implements OnInit {
     let d: any = {
       contentId: event.previousContainer.data[event.previousIndex].id,
       workspaceId: this.selWrkspc!.id,
-      sequenceNumber: event.currentIndex + 1,
-      folderId: this.dispFolder ? this.dispFolder!.entityId : null
+      folderId: this.dispFolder ? this.dispFolder!.entityId : null,
+      sequenceNumber: this.wrkspcItems.length+1
     }
     this.cwServ.addCntntToWrkspcFldr(d).subscribe((data: any) => {
       if (data && Array.isArray(data.result)) {
@@ -900,25 +908,56 @@ export class ContentWorkspaceComponent implements OnInit {
     });
   }
 
+  subsUnsubDrag(){
+    if(!!this.subs){
+      this.subs.unsubscribe();
+    }
+    this.subs = new Subscription();
+  }
+
+  dragInit() {
+    const bag: any = this.dragulaService.find(this.BAG);
+    if (bag !== undefined) {
+      this.dragulaService.destroy(this.BAG);
+      this.subsUnsubDrag();
+    }
+    this.dragulaService.createGroup(this.BAG, {
+      revertOnSpill: true,
+      moves: function (el: any, container: any, handle: any): any {
+        if (el.classList.contains('abc')) {
+          return false;
+        }
+        return true;
+      }
+    });
+    this.subs.add(this.dragulaService.dropModel().subscribe((value) => {
+        this.rearrDataInWrkspc(value)
+      })
+    )
+  }
+
   rearrDataInWrkspc(event: any) {
+    this.folderLoading = true;
+    this.wrkspcItems = ArrayHelper.moveItem(this.wrkspcItems, event.sourceIndex, event.targetIndex);
     let d: any = {
       workspaceId: this.selWrkspc!.id,
       parentId: this.dispFolder ? this.dispFolder!.id : null,
       workspaceObjects: [
         {
-          id: event.previousContainer.data[event.previousIndex].id,
-          sequenceNumber: event.currentIndex + 1
+          id: event.item.id,
+          sequenceNumber: event.targetIndex + 1
         }
       ]
     };
     this.cwServ.rearrWrkspcData(d).subscribe((data: any) => {
       if (data) {
-        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         this.toastr.success('Rearrange successfully', 'Success!');
       } else {
-        this.toastr.error('Unable to rearrange', 'Error!');
+        // this.toastr.error('Unable to rearrange', 'Error!');
       }
+      this.folderLoading = false;
     }, (err: any) => {
+      this.folderLoading = false;
     });
   }
 
@@ -1753,6 +1792,8 @@ export class ContentWorkspaceComponent implements OnInit {
   unsubSubs() {
     if (!!this.subscription)
       this.subscription.unsubscribe();
+    if (!!this.subs)
+      this.subs.unsubscribe();
   }
 
   ngOnDestroy(): void {
