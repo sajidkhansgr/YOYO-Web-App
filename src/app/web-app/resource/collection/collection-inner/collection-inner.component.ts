@@ -16,6 +16,7 @@ import { AddToCollComponent } from '../../../../shared/components/add-to-coll/ad
 import { CollComponent } from '../../../../shared/components/coll/coll.component';
 import { AddRsrcComponent } from '../../../../shared/components/add-rsrc/add-rsrc.component';
 import { FileHelper } from '../../../../shared/file-helper';
+import { ArrayHelper } from '../../../../shared/array-helper';
 
 import { DragulaService } from "ng2-dragula";
 
@@ -304,16 +305,10 @@ export class CollectionInnerComponent implements OnInit {
   //   }
   // }
 
-  moveElement = (array: any, from: number, to: number) => {
-    const copy = [...array];
-    copy.splice(from, 1);
-    copy.splice(to, 0, array[from]);
-    return copy;
-  };
 
   rearrDataInWrkspc(event: any) {
-    this.cntntArr = this.moveElement(this.cntntArr, event.sourceIndex, event.targetIndex)
     this.loading = true;
+    this.cntntArr = ArrayHelper.moveItem(this.cntntArr, event.sourceIndex, event.targetIndex);
     let d: any = {
       collectionId: this.id,
       collectionDataIds: this.cntntArr.map((f: any) => f.id)

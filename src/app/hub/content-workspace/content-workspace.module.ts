@@ -26,6 +26,8 @@ import { LanguageService } from '../../shared/services/language.service';
 import { FileService } from '../../shared/services/file.service';
 import { CustomPipeModule } from '../../shared/pipes/custom-pipe.module';
 
+import { DragulaModule } from 'ng2-dragula';
+
 @NgModule({
   declarations: [ContentWorkspaceComponent],
   imports: [
@@ -39,7 +41,8 @@ import { CustomPipeModule } from '../../shared/pipes/custom-pipe.module';
     FormsModule, ReactiveFormsModule,
     NgbCollapseModule, NgbDropdownModule, NgbNavModule, NgbTypeaheadModule,
     DragDropModule,
-    CustomPipeModule
+    CustomPipeModule,
+    DragulaModule.forRoot()
   ],
   exports: [
     ContentWorkspaceComponent
