@@ -19,10 +19,8 @@ import { TokenDataService } from '../../shared/services/token-data.service';
 })
 export class ResetPasswordComponent implements OnInit {
   resetPassForm!: FormGroup;
-  loading = false;token!: string | null;email!: string | null;isEnforce!: string| null;
+  loading = false; token!: string | null; email!: string | null; isEnforce!: string | null;
   hidePass = true; hideCPass = true;
-
-  // Private
   private _unsubscribeAll: Subject<any>;
 
   constructor(
@@ -33,8 +31,7 @@ export class ResetPasswordComponent implements OnInit {
     private tokenDataServ: TokenDataService,
     private router: Router
   ) {
-      // Set the private defaults
-      this._unsubscribeAll = new Subject();
+    this._unsubscribeAll = new Subject();
   }
 
   ngOnInit(): void {
@@ -48,7 +45,7 @@ export class ResetPasswordComponent implements OnInit {
     this.resetPassForm.get('pswd')!.valueChanges
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(() => {
-          this.resetPassForm.get('confirmPswd')!.updateValueAndValidity();
+        this.resetPassForm.get('confirmPswd')!.updateValueAndValidity();
       });
   }
 
@@ -63,11 +60,11 @@ export class ResetPasswordComponent implements OnInit {
       };
       this.authSer.resetPass(passData)
         .subscribe((data: any) => {
-          if(data){
+          if (data) {
             this.toastr.success("Password reset successfully", 'Success');
             this.tokenDataServ.removeAll();
             this.router.navigate(['/auth/login']);
-          }else{
+          } else {
             this.toastr.error("Unable to send email, please try after sometime", 'Error');
           }
           this.loading = false;
@@ -78,9 +75,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-      // Unsubscribe from all subscriptions
-      this._unsubscribeAll.next();
-      this._unsubscribeAll.complete();
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
-
 }

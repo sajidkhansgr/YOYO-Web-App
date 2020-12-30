@@ -46,21 +46,20 @@ export class LoginComponent implements OnInit {
       this.authSer.login(this.loginForm.value)
         .subscribe((data: any) => {
           if (data && data.result && data.result.token && data.result.id) {
-            if(data.result.enforceEmployeePasswordReset){
+            if (data.result.enforceEmployeePasswordReset) {
               this.toastr.success('Please reset your password first', 'Success');
-              this.router.navigate(['/auth/reset-password'], { queryParams: { token: data.result.token,email:this.loginForm.value.email,enforce:1 } });
-              //enforce
-            }else{
+              this.router.navigate(['/auth/reset-password'], { queryParams: { token: data.result.token, email: this.loginForm.value.email, enforce: 1 } });
+            } else {
               this.tokenDataServ.setTokenAndUser(data.result);
               this.toastr.success('Login successfully', 'Success');
               this.dataServ.passDataSend('login');
-              if(data.result.roleId==1 || data.result.roleId==2){
-                let nav= HttpHelper.redirectToUrl(this.redirectUrl);
+              if (data.result.roleId == 1 || data.result.roleId == 2) {
+                let nav = HttpHelper.redirectToUrl(this.redirectUrl);
                 this.router.navigate([nav]);
               }
-              else{
-                if(this.redirectUrl && this.redirectUrl.includes('/web-app')){
-                  let nav= HttpHelper.redirectToUrl(this.redirectUrl);
+              else {
+                if (this.redirectUrl && this.redirectUrl.includes('/web-app')) {
+                  let nav = HttpHelper.redirectToUrl(this.redirectUrl);
                   this.router.navigate([nav]);
                 }
                 else
@@ -72,7 +71,6 @@ export class LoginComponent implements OnInit {
             this.disabled = false;
           }
         }, (err: any) => {
-          // console.log(err, 'err');
           this.disabled = false;
         })
     }

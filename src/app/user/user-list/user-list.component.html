@@ -1,7 +1,8 @@
 <div class="users-section">
   <div class="buttons-row row mt-3 justify-content-between mx-2">
     <div class="dropdown">
-      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addCOntentDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="addCOntentDD" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
         Add
       </button>
       <div class="dropdown-menu" aria-labelledby="addCOntentDD">
@@ -16,7 +17,8 @@
   </div>
 
   <div class="row mt-4 mx-0">
-    <div class="sub-tab-nav" [ngClass]="{'col-md-12': !showRowInfo, 'col-sm-0 col-md-6 col-lg-7 col-xl-8': showRowInfo}">
+    <div class="sub-tab-nav"
+      [ngClass]="{'col-md-12': !showRowInfo, 'col-sm-0 col-md-6 col-lg-7 col-xl-8': showRowInfo}">
       <div class="card overflow-hidden">
         <div class="card-header border-0">
           <mat-tab-group [selectedIndex]="activeIndex" (selectedTabChange)="onTabChange($event)">
@@ -131,7 +133,8 @@
             <div class="doc-details in-groups border-bottom mb-3 pb-3">
               <div class="heading text-hi-dark-grey font-weight-bold">In Groups</div>
               <div class="value mt-2">
-                <ul class="list-unstyled mb-0" *ngIf="rowInfo.employeeGroups && rowInfo.employeeGroups.length>0 else noGrp">
+                <ul class="list-unstyled mb-0"
+                  *ngIf="rowInfo.employeeGroups && rowInfo.employeeGroups.length>0 else noGrp">
                   <li *ngFor="let empGrp of rowInfo.employeeGroups">{{empGrp.groupName}}</li>
                 </ul>
                 <ng-template #noGrp>No Group</ng-template>
@@ -209,7 +212,8 @@
       <div class="search col-lg-8 col-sm-7">
         <mat-form-field appearance="outline" class="custom-mat-input w-100 mb-2" [floatLabel]="'never'">
           <i matPrefix class="fas fa-search"></i>
-          <input matInput placeholder="Search ..." autocomplete="disabled" [(ngModel)]="searchTxt" (ngModelChange)='searchTxtChng.next($event)'>
+          <input matInput placeholder="Search ..." autocomplete="disabled" [(ngModel)]="searchTxt"
+            (ngModelChange)='searchTxtChng.next($event)'>
           <div matSuffix class="curs-ptr">
             <i class="fas fa-sliders-h"></i>
           </div>
@@ -226,10 +230,12 @@
             <button class="btn btn-light dropdown-toggle" id="cogDD" data-toggle="dropdown">
               <i class="fas fa-cog"></i>
             </button>
-            <div class="cog dropdown-menu dropdown-menu-right" aria-labelledby="cogDD" (click)="$event.stopPropagation();">
+            <div class="cog dropdown-menu dropdown-menu-right" aria-labelledby="cogDD"
+              (click)="$event.stopPropagation();">
               <div class="scrollable">
                 <span class="ml-2 heading">Visible Columns</span>
-                <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols" class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]" (cdkDropListDropped)="drop($event)">
+                <ul cdkDropList id="cdk-vis-items" #visbList="cdkDropList" [cdkDropListData]="visbCols"
+                  class="min-ht pl-0 mt-2" [cdkDropListConnectedTo]="[hidList]" (cdkDropListDropped)="drop($event)">
                   <button class="dropdown-item pl-2" *ngFor="let col of visbCols;let i=index" cdkDrag>
                     <span class="ellipsis mr-2">
                       <i class="fa fa-ellipsis-v"></i>
@@ -242,7 +248,9 @@
                   </span>
                 </ul>
                 <span class="ml-2 heading">Hidden Columns</span>
-                <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList" [cdkDropListData]="hidCols" class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]" (cdkDropListDropped)="drop($event)">
+                <ul cdkDropList id="cdk-hid-items" #hidList="cdkDropList" [cdkDropListData]="hidCols"
+                  class="min-ht pl-0 mt-2 mb-0" [cdkDropListConnectedTo]="[visbList]"
+                  (cdkDropListDropped)="drop($event)">
                   <button class="dropdown-item pl-2" *ngFor="let col of hidCols;let i=index" cdkDrag>
                     <span class="ellipsis mr-2 mb-1">
                       <i class="fa fa-ellipsis-v"></i>
@@ -270,18 +278,20 @@
 
 <ng-template #usrTable>
   <div *ngIf="!loading">
-    <div class="card-text px-3">
+    <div class="card-text px-3 min-height">
       <table class="table table-hover text-dark w-100" [ngClass]="{'hide-rows': showRowInfo}">
         <thead>
           <tr>
             <th class="curs-ptr" *ngFor="let col of cols;let i =index" (click)="sortChange(col,i)">
               {{col.n}}
-              <i class="ml-1 fas" [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
+              <i class="ml-1 fas"
+                [ngClass]="{'fa-sort-down align-top': !col.asc, 'fa-sort-up align-bottom': col.asc}"></i>
             </th>
           </tr>
         </thead>
         <tbody *ngIf="!loading && usrs.length > 0">
-          <tr *ngFor="let usr of usrs" (click)="toggleInfo(usr)" [ngClass]="{'deact':!usr.isActive,'sel-row':(rowInfo.id === usr.id)}">
+          <tr *ngFor="let usr of usrs" (click)="toggleInfo(usr)"
+            [ngClass]="{'deact':!usr.isActive,'sel-row':(rowInfo.id === usr.id)}">
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
                 <span *ngSwitchCase="'name'">
@@ -293,7 +303,8 @@
                 <span *ngSwitchCase="'latestActivity'">
                   <span *ngIf="usr.status==3">
                     {{(usr.invitedOn|date:'dd MMM, yyyy')||'N/A'}}<br />
-                    <button class="btn btn-primary btn-sm" (click)="$event.stopPropagation();resendLink(usr)">Resend</button>
+                    <button class="btn btn-primary btn-sm"
+                      (click)="$event.stopPropagation();resendLink(usr)">Resend</button>
                   </span>
                   <span *ngIf="usr.status!=3">
                     {{(usr.latestActivity|date:'dd MMM, yyyy')||'N/A'}}
@@ -312,7 +323,8 @@
         No User found
       </div>
     </div>
-    <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo" (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
+    <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
+      (pageSizeChange)="pageSizeChange($event)" (paginationNum)="changePageNo($event)"></app-pagination>
     <!-- <div class="card-footer row justify-content-between mx-0">
       <div class="pages">
         <mat-form-field appearance="outline" class="mr-2">
@@ -409,7 +421,8 @@
             <mat-error *ngIf="usrForm.get('email')!.hasError('required')">
               Email is required
             </mat-error>
-            <mat-error *ngIf="!usrForm.get('email')!.hasError('required') && usrForm.get('email')!.hasError('invalidEmail')">
+            <mat-error
+              *ngIf="!usrForm.get('email')!.hasError('required') && usrForm.get('email')!.hasError('invalidEmail')">
               Please enter a valid email address
             </mat-error>
           </mat-form-field>
@@ -453,14 +466,16 @@
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-chip-list #chipList aria-label="User's Groups *">
-              <mat-chip *ngFor="let d of selGrps" [selectable]="selectable" [removable]="removable" (removed)="remove(d)">
+              <mat-chip *ngFor="let d of selGrps" [selectable]="selectable" [removable]="removable"
+                (removed)="remove(d)">
                 {{d.name}}
                 <i matChipRemove class="fas fa-times-circle" *ngIf="removable"></i>
               </mat-chip>
               <input #usrGrp matInput formControlName="group" placeholder="Add User Group *" [matAutocomplete]="auto">
               <!-- (matChipInputTokenEnd)="add($event)" -->
             </mat-chip-list>
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selGrpIds($event.option.value)" [displayWith]="displayFn">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selGrpIds($event.option.value)"
+              [displayWith]="displayFn">
               <mat-option *ngFor="let grp of grps" [value]="grp">
                 {{grp.name}}
               </mat-option>
@@ -478,7 +493,8 @@
       </div>
       <div *ngIf="!isEdit">
         <mat-label>Password</mat-label>
-        <mat-radio-group class="d-block ml-3" aria-label="Select an option" formControlName="specifyPassword" (change)="togglePassword($event)">
+        <mat-radio-group class="d-block ml-3" aria-label="Select an option" formControlName="specifyPassword"
+          (change)="togglePassword($event)">
           <mat-radio-button [value]="false" class="mr-3"> Let user choose password upon account confirmation
           </mat-radio-button>
           <mat-radio-button [value]="true">Specify password</mat-radio-button>
@@ -493,7 +509,8 @@
         <div class="ml-3">
           <mat-checkbox class="ml-3 d-block" formControlName="sendLoginInstructionEmail">Send me email with login
             instructions</mat-checkbox>
-          <mat-checkbox class="ml-3 d-block" formControlName="enforceEmployeePasswordReset" *ngIf="usrForm.value.specifyPassword">Enforce user to reset
+          <mat-checkbox class="ml-3 d-block" formControlName="enforceEmployeePasswordReset"
+            *ngIf="usrForm.value.specifyPassword">Enforce user to reset
             password on first login</mat-checkbox>
         </div>
       </div>

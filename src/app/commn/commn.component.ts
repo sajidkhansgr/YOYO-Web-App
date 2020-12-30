@@ -13,7 +13,6 @@ import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/conf
 import { CommnService } from './commn.service'
 import { GroupService } from '../user/group/group.service';
 import { ContentWorkspaceService } from '../hub/content-workspace/content-workspace.service';
-
 import { QUILL } from '../shared/models/quill';
 
 @Component({
@@ -93,8 +92,6 @@ export class CommnComponent implements OnInit {
       sendLater: [false],
       sendToGroup: [''],
       recipients: [''],
-      // usrGrps: [''],
-      // usrWrkSpcs: [''],
       date: [''],
       time: ['']
     });
@@ -252,7 +249,6 @@ export class CommnComponent implements OnInit {
           this.toastr.success(data.message || 'Annoucement added successfully', 'Success!');
           this.pageNo = 1; this.getAncmnts();
           this.dismissModal();
-          //get all annoucem
         } else {
           this.toastr.error(data.result.data || 'Unable to add Annoucement', 'Error!');
         }
@@ -270,7 +266,6 @@ export class CommnComponent implements OnInit {
           this.toastr.success(data.message || 'Annoucement updated successfully', 'Success!');
           this.pageNo = 1; this.getAncmnts();
           this.dismissModal();
-          //get all annoucem
         } else {
           this.toastr.error(data.result.data || 'Unable to update Annoucement', 'Error!');
         }
@@ -314,7 +309,6 @@ export class CommnComponent implements OnInit {
 
   changeGrp($event: any) {
     if ($event.value == 1) {
-      // usrGrps usrWrkSpcs
       this.removeControl(['usrGrps', 'usrWrkSpcs']);
     } else if ($event.value == 2) {
       this.removeControl(['usrGrps']);
@@ -348,7 +342,6 @@ export class CommnComponent implements OnInit {
         .subscribe((data: any) => {
           if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
             this.grps = data.result.results;
-          } else {
           }
         }, (err: any) => {
         });
@@ -361,7 +354,6 @@ export class CommnComponent implements OnInit {
         .subscribe((data: any) => {
           if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
             this.wrkSpcs = data.result.results;
-          } else {
           }
         }, (err: any) => {
         });
@@ -408,7 +400,6 @@ export class CommnComponent implements OnInit {
             this.toastr.error('Unable to arhive announcement', 'Error!');
           }
         }, (err: any) => {
-
         });
       }
     })

@@ -30,22 +30,21 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   // forgot password
-	forgotPassword() {
-		if (this.forgPassForm.valid) {
+  forgotPassword() {
+    if (this.forgPassForm.valid) {
       this.disabled = true;
       this.authSer.forgotPass(this.forgPassForm.value)
         .subscribe((data: any) => {
           this.disabled = false;
-          if(data){
-            this.toastr.success(data.message||"Email sent successfully if registered", 'Success');
+          if (data) {
+            this.toastr.success(data.message || "Email sent successfully if registered", 'Success');
             this.router.navigate(['/auth/login'])
-          }else{
+          } else {
             this.toastr.error("Unable to send email, please try after sometime", 'Error');
           }
         }, (err: any) => {
           this.disabled = false;
         });
-		}
-	}
-
+    }
+  }
 }

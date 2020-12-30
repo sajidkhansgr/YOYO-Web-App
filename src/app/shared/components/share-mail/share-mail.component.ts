@@ -48,7 +48,7 @@ export class ShareMailComponent implements OnInit {
     this.emailForm = this.fb.group({
       emailAddresses: ['', [Validators.required, CommonValidations.emailValidator]],
       title: ['', [Validators.required]],
-      body: ['', [Validators.required]],
+      body: [''],
       sendMeCopy: [false],
       allowDownload: [true]
     });

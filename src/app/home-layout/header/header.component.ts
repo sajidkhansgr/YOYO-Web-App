@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenDataService } from '../../shared/services/token-data.service';
-// import { DataService } from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-header',
@@ -11,42 +10,33 @@ import { TokenDataService } from '../../shared/services/token-data.service';
 export class HeaderComponent implements OnInit {
   isToken: boolean = false; isVisb: boolean = false;
   @Input() userInfo: any | null;
-  // sidebar variables
   temp: string = 'close';
-  // header variables
   nav!: any;
 
   constructor(
     private tokenDataServ: TokenDataService,
-    // private dataServ: DataService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     this.nav = document.querySelector('.toggle-navbar');
-    // on resizing the screen
     window.addEventListener('resize', () => {
-      // sidebar
       if (window.screen.width <= 768) {
         this.closeSidebar();
       } else {
         this.openSidebar();
       }
-      // header
       this.navbarHandler();
     })
-    // for smaller screens (sidebar)
     if (window.screen.width <= 768) {
       this.closeSidebar();
     }
-    // navbar
     this.navbarHandler();
   }
 
   logout() {
     this.tokenDataServ.removeAll();
     this.nav = null;
-    // this.dataServ.passDataSend('change');
   }
 
   // header
@@ -143,5 +133,4 @@ export class HeaderComponent implements OnInit {
       this.closeSidebar();
     }
   }
-
 }

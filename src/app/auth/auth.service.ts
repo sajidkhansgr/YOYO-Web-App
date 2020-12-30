@@ -4,7 +4,6 @@ import { AppSettings } from '../shared/services/app-settings';
 
 @Injectable()
 export class AuthService {
-
   constructor(
     private http: HttpClient
   ) { }

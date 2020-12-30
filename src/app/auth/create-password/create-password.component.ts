@@ -19,10 +19,8 @@ import { TokenDataService } from '../../shared/services/token-data.service';
 })
 export class CreatePasswordComponent implements OnInit {
   createPassForm!: FormGroup;
-  loading = false;token!: string | null;email!: string | null;
+  loading = false; token!: string | null; email!: string | null;
   hidePass = true; hideCPass = true;
-
-  // Private
   private _unsubscribeAll: Subject<any>;
 
   constructor(
@@ -33,8 +31,7 @@ export class CreatePasswordComponent implements OnInit {
     private tokenDataServ: TokenDataService,
     private router: Router
   ) {
-      // Set the private defaults
-      this._unsubscribeAll = new Subject();
+    this._unsubscribeAll = new Subject();
   }
 
   ngOnInit(): void {
@@ -47,7 +44,7 @@ export class CreatePasswordComponent implements OnInit {
     this.createPassForm.get('pswd')!.valueChanges
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(() => {
-          this.createPassForm.get('confirmPswd')!.updateValueAndValidity();
+        this.createPassForm.get('confirmPswd')!.updateValueAndValidity();
       });
   }
 
@@ -62,11 +59,11 @@ export class CreatePasswordComponent implements OnInit {
       };
       this.authSer.createPass(passData)
         .subscribe((data: any) => {
-          if(data){
+          if (data) {
             this.toastr.success("Password created successfully", 'Success');
             this.tokenDataServ.removeAll();
             this.router.navigate(['/auth/login']);
-          }else{
+          } else {
             this.toastr.error("Unable to create password, please try after sometime", 'Error');
           }
           this.loading = false;
@@ -77,9 +74,7 @@ export class CreatePasswordComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-      // Unsubscribe from all subscriptions
-      this._unsubscribeAll.next();
-      this._unsubscribeAll.complete();
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
-
 }

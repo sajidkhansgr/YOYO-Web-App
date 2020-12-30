@@ -70,10 +70,6 @@
           <quill-editor class="quill-edt" placeholder="Message" formControlName="body" [modules]="quillConfig">
           </quill-editor>
         </mat-form-field>
-        <mat-error class="ml-0-9 mb-0"
-          *ngIf="(emailForm.get('body')!.touched ||emailForm.get('body')!.dirty) && emailForm.get('body')!.hasError('required')">
-          Message is required
-        </mat-error>
       </div>
       <div class="col-3">
         <h5>Sharing Settings</h5>

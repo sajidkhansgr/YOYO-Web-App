@@ -38,7 +38,8 @@
             </div>
             <div class="options rounded">
               <div class="dropleft">
-                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
@@ -67,8 +68,8 @@
           </ng-template>
         </ng-container>
       </ng-container>
-      <div class="mx-auto pt-5" *ngIf="wrkspcCntnts.length<=0">
-        No data found
+      <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;" *ngIf="wrkspcCntnts.length<=0">
+        No Data Found
       </div>
     </ng-container>
   </div>
@@ -76,7 +77,6 @@
 
 <!-- list view -->
 <div class="row mx-0 expid-list" *ngIf="!view">
-  <!-- <app-loader [type]="'page'" *ngIf="loading"></app-loader> -->
   <ng-container *ngIf="!loading">
     <div class="col-md-3">
       <mat-accordion>
@@ -145,18 +145,23 @@
             </div>
             <div class="row w-75">
               <div class="col-md-9 info align-self-center">
-                <h5 class="mb-0 text-truncate" *ngIf="!wSC.hideLabelInWorkspace" (click)="viewContent(wSC)">{{wSC.name}}</h5>
+                <h5 class="mb-0 text-truncate" *ngIf="!wSC.hideLabelInWorkspace" (click)="viewContent(wSC)">{{wSC.name}}
+                </h5>
                 <!-- <i class="fa fa-file mr-2"></i>Document in English -->
-                <div class="text-secondary" style="font-size: 12px;">Created {{(wSC.createdDate|date:'mediumDate')||'N/A'}}</div>
+                <div class="text-secondary" style="font-size: 12px;">Created
+                  {{(wSC.createdDate|date:'mediumDate')||'N/A'}}</div>
               </div>
               <div class="col-md-3 options d-flex align-self-center">
                 <div class="dropleft mr-2">
-                  <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn btn-light" type="button" id="shareDD" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
                     <i class="fas fa-share-square"></i>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="shareDD">
-                    <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'email')"><i class="fa fa-envelope mr-1"></i>Email</a>
-                    <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'getLink')"><i class="fa fa-link mr-1"></i>Get a link</a>
+                    <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'email')"><i
+                        class="fa fa-envelope mr-1"></i>Email</a>
+                    <a class="dropdown-item curs-ptr" (click)="cmnModal(wSC,'getLink')"><i
+                        class="fa fa-link mr-1"></i>Get a link</a>
                   </div>
                 </div>
                 <div class="btn btn-light" (click)="cmnModal(wSC,'addToColl')">
@@ -179,8 +184,8 @@
           </div>
         </ng-template>
       </ng-container>
-      <div class="text-center pt-5" *ngIf="wrkspcCntnts.length<=0">
-        No data found
+      <div class="text-center mt-5 text-secondary" *ngIf="wrkspcCntnts.length<=0">
+        No Data Found
       </div>
       <hr>
     </div>
