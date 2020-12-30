@@ -129,9 +129,9 @@ export class UserListComponent implements OnInit {
     this.usrs = []; this.totalCount = 0;
     this.usrServ.emplList(params)
       .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        if (data && data.result && Array.isArray(data.result.results)) {
           this.usrs = data.result.results;
-          this.totalCount = data.result.totalCount;
+          this.totalCount = data.result.totalCount||0;
         }
         this.loading = false;
       }, (err: any) => {
@@ -363,7 +363,6 @@ export class UserListComponent implements OnInit {
       autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result) {
-        // console.log(catg);
         this.usrServ.resendInv(usr.id.toString()).subscribe((data: any) => {
           if (data) {
             this.toastr.success(data.message||'Resend invite successfully', 'Success!');
@@ -403,7 +402,6 @@ export class UserListComponent implements OnInit {
           this.usrForm.controls['isActive'].enable();
           this.usrForm.controls['roleId'].enable();
         }
-
         if (this.rowInfo && this.rowInfo.employeeGroups && this.rowInfo.employeeGroups.length > 0) {
           this.selGrps = this.rowInfo.employeeGroups.map((grp: any) => ({ id: grp.groupId, name: grp.groupName }));
         }

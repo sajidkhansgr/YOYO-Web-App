@@ -144,8 +144,7 @@
               </div>
             </div>
           </div>
-          <div class="text-center mt-5 text-secondary" style="font-size: 20px;"
-            *ngIf="!loading && files.length<=0 && folders.length<=0">
+          <div class="text-center mt-5 text-secondary font-20" *ngIf="!loading && files.length<=0 && folders.length<=0">
             No Data Found
           </div>
         </div>
@@ -172,7 +171,7 @@
                 <td class="align-middle">
                   <mat-checkbox [checked]="aF.chk" (change)="selMe($event.checked, aF)"></mat-checkbox>
                 </td>
-                <td class="align-middle" (click)="chkFolderAndAdd(aF)">
+                <td class="align-middle curs-ptr" (click)="chkFolderAndAdd(aF)">
                   <div class="d-flex" *ngIf="aF.isFldr">
                     <i class="fas fa-folder mr-2" style="font-size: 3rem;"></i>
                     <div class="name align-self-center">{{aF.name}}</div>
@@ -215,7 +214,7 @@
               </tr>
             </tbody>
           </table>
-          <div class="text-center text-secondary mt-5" style="font-size: 20px;" *ngIf="allFiles.length == 0">
+          <div class="text-center text-secondary mt-5 font-20" *ngIf="allFiles.length == 0">
             No Data Found
           </div>
         </div>

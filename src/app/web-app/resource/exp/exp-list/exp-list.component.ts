@@ -27,17 +27,15 @@ export class ExpListComponent implements OnInit {
   }
 
   wrkSpcList() {
+    this.wrkSpcs = [];
     this.expServ.wrkspcListEmp()
       .subscribe((data: any) => {
-        if (data && Array.isArray(data.result) && data.result.length > 0) {
+        if (data && Array.isArray(data.result)) {
           this.wrkSpcs = data.result;
           this.wrkSpcs.sort((a: any, b: any) => a.name.toLowerCase() < b.name.toLowerCase()?-1 : 0);
-        } else {
-          this.wrkSpcs = [];
         }
         this.loading = false;
       }, (err: any) => {
-        this.wrkSpcs = [];
         this.loading = false;
       })
   }

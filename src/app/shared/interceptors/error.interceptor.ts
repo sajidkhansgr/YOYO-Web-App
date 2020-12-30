@@ -35,7 +35,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       // errorMessage = `Error: ${error.error.message}`;
     } else {
       // server-side error
-        console.log("server side",error);
+        // console.log("server side",error);
         if(error.status==401){
           this.toastr.clear();
           this.toastr.error('You are not authorized, please login.', 'Unauthorized Access.');

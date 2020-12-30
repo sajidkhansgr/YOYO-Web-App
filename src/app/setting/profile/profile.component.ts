@@ -62,13 +62,11 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfile() {
-    console.log("dsa")
     this.usrServ.viewEmpl(this.usrInfo.id.toString())
       .subscribe((data: any) => {
         if (data && data.result && data.result.id) {
           this.usrInfo = data.result;
           this.setUsrData();
-        } else {
         }
         this.loading = false;
       }, (err: any) => {

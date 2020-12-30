@@ -225,23 +225,18 @@ export class TagsComponent implements OnInit {
     this.tagLoading = true;
     this.closeDoc();
     let query = {
-      hubId: parseInt(this.hubid),
-      LoadDetails: true,
-      pageNo: this.pageNo,
-      pageSize: this.pageSize,
-      searchText: this.searchTxt,
+      hubId: parseInt(this.hubid), loadDetails: true,
+      pageNo: this.pageNo, pageSize: this.pageSize, searchText: this.searchTxt,
       isActive: this.activeTags == 1 ? true : false,
-      categoryId: this.categoryId,
-      unCategorized: this.unCategorized,
+      categoryId: this.categoryId, unCategorized: this.unCategorized,
       ...this.sort
     }
-    this.tags = [];
-    this.totalCount = 0;
+    this.tags = []; this.totalCount = 0;
     this.tagServ.tagList(query)
       .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        if (data && data.result && Array.isArray(data.result.results)) {
           this.tags = data.result.results;
-          this.totalCount = data.result.totalCount;
+          this.totalCount = data.result.totalCount||0;
         }
         this.tagLoading = false;
       }, (err: any) => {

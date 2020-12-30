@@ -29,7 +29,6 @@ export class CollComponent implements OnInit {
     if (this.cntntData && !Array.isArray(this.cntntData)) {
       this.cntntData = [this.cntntData];
     }
-    console.log(this.cntntData);
   }
 
   initialiseState() {

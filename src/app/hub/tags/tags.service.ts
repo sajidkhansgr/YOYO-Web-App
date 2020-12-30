@@ -25,7 +25,7 @@ export class TagsService {
   tagList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
     for (let key in params) {
-      if (params[key] || key == 'IsAscending' || key == 'isActive') {
+      if (params[key] || key == 'IsAscending' || key == 'isActive'|| key == 'pageNo') {
         queryParams = queryParams.set(key, params[key]);
       }
     }

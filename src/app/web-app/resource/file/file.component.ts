@@ -24,8 +24,7 @@ import { FILE_EXT } from '../../../shared/constants';
 export class FileComponent implements OnInit {
   routerSubs!: Subscription;
   view: boolean = true; fldrLoad!: boolean;
-  files!: any[]; loading!: boolean; folders!: any[];
-  allFiles: any[] = [];
+  files!: any[]; loading!: boolean; folders!: any[]; allFiles!: any[];
   testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   folderForm!: FormGroup;
   frmType!: string; selFldrData!: any;
@@ -63,10 +62,7 @@ export class FileComponent implements OnInit {
 
   initialiseState() {
     this.loading = true;
-    this.files = [];
-    this.folders = [];
-    this.selData = [];
-    this.navg = [];
+    this.files = []; this.folders = []; this.selData = []; this.navg = [];this.allFiles = [];
     this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
     this.brdcrmList();
     this.initForm();
@@ -430,18 +426,6 @@ export class FileComponent implements OnInit {
     document.execCommand("copy");
   }
 
-  dismissModal() {
-    if (this.modalService)
-      this.modalService.dismissAll();
-  }
-
-  ngOnDestroy(): void {
-    if (this.getIntervalId) {
-      clearInterval(this.getIntervalId);
-    }
-    this.dismissModal();
-  }
-
   // delete content and deact folder
   delMyContent(item?: any) {
     let mdlMsg, mdlTtl, stsData: any, res: string;
@@ -488,4 +472,18 @@ export class FileComponent implements OnInit {
       }
     })
   }
+
+  dismissModal() {
+    if (this.modalService)
+      this.modalService.dismissAll();
+  }
+
+  ngOnDestroy(): void {
+    if (this.getIntervalId)
+      clearInterval(this.getIntervalId);
+    if (!!this.routerSubs)
+      this.routerSubs.unsubscribe();
+    this.dismissModal();
+  }
+
 }

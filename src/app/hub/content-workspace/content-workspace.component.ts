@@ -738,7 +738,7 @@ export class ContentWorkspaceComponent implements OnInit {
     }
     this.cwServ.wrkspcList(query)
       .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        if (data && data.result && Array.isArray(data.result.results)) {
           mdl ? this.mdlItems = data.result.results : this.wrkspcs = data.result.results;
         }
         mdl ? this.mdlLoading = false : this.wrkspcLoading = false;
@@ -763,11 +763,10 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   usrGrpInWrkspce(inLnkd: boolean, var1: 'selUsrGrpLoad' | 'unSelUsrGrpLoad', var2: 'selUsrGrpWrkspc' | 'unSelUsrGrpWrkspc') {
-    this[var1] = true;
-    this[var2] = [];
+    this[var1] = true; this[var2] = [];
     this.cwServ.usrGrpWrkspcList({ hubid: this.hubid, workspaceId: this.selWrkspc!.id, LinkedData: inLnkd })
       .subscribe((data: any) => {
-        if (data && Array.isArray(data.result) && data.result.length > 0) {
+        if (data && Array.isArray(data.result)) {
           this[var2] = data.result;
         }
         this[var1] = false;
@@ -863,16 +862,10 @@ export class ContentWorkspaceComponent implements OnInit {
       contentId: event.previousContainer.data[event.previousIndex].id,
       workspaceId: this.selWrkspc!.id,
       folderId: this.dispFolder ? this.dispFolder!.entityId : null,
-      sequenceNumber: this.wrkspcItems.length + 1
+      sequenceNumber: 1
     }
     this.cwServ.addCntntToWrkspcFldr(d).subscribe((data: any) => {
       if (data && Array.isArray(data.result)) {
-        copyArrayItem(
-          event.previousContainer.data,
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex
-        );
         data.result.sort((a: any, b: any) => a.sequenceNumber - b.sequenceNumber);
         this.wrkspcItems = data.result;
         this.toastr.success('Added successfully', 'Success!');
@@ -917,12 +910,7 @@ export class ContentWorkspaceComponent implements OnInit {
     let d: any = {
       workspaceId: this.selWrkspc!.id,
       parentId: this.dispFolder ? this.dispFolder!.id : null,
-      workspaceObjects: [
-        {
-          id: event.item.id,
-          sequenceNumber: event.targetIndex + 1
-        }
-      ]
+      workspaceObjects: this.wrkspcItems.map((f: any, index) => {return {id: f.id,sequenceNumber:index+1}})
     };
     this.cwServ.rearrWrkspcData(d).subscribe((data: any) => {
       if (data) {
@@ -935,7 +923,7 @@ export class ContentWorkspaceComponent implements OnInit {
   }
 
   isNotDrag(): boolean {
-    if (this.activeIndex == 0 && this.activeFldrs == 1 && this.selWrkspc && this.selWrkspc.id) {
+    if (this.activeIndex == 0 && !this.showRowInfo && this.activeFldrs == 1 && this.selWrkspc && this.selWrkspc.id) {
       if (this.dispFolder && this.dispFolder.id && this.dispFolder.entityType == 2) {
         return true;
       }
@@ -1167,12 +1155,11 @@ export class ContentWorkspaceComponent implements OnInit {
   getTags() {
     this.tags = []; this.selTags = []; this.custIcon = '';
     let query = {
-      hubId: parseInt(this.hubid),
-      pageNo: 1, pageSize: 1000
+      hubId: parseInt(this.hubid), pageNo: 0
     }
     this.tagServ.tagList(query)
       .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        if (data && data.result && Array.isArray(data.result.results)) {
           this.tags = data.result.results;
         }
       }, (err: any) => {
@@ -1184,7 +1171,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.lngs = []; this.selLngs = [];
     this.lngServ.lngList({})
       .subscribe((data: any) => {
-        if (data && Array.isArray(data.result) && data.result.length > 0) {
+        if (data && Array.isArray(data.result)) {
           this.lngs = data.result;
         }
       }, (err: any) => {

@@ -51,7 +51,6 @@ export class CollectionListComponent implements OnInit {
     this.router.navigate(['/web-app/resource/collections/' + id]);
   }
 
-  // ------ collection ------
   // sort
   sortChange(col: any, index: number) {
     let colData = { ...col };
@@ -75,6 +74,7 @@ export class CollectionListComponent implements OnInit {
     });
   }
 
+  // ------ collection ------
   // on selecting a collection
   selMe(val: boolean, id: number) {
     if (val) {
@@ -116,8 +116,7 @@ export class CollectionListComponent implements OnInit {
         this.colctnSrv.actDeactColctn(data, this.activeColctn == 1 ? false : true).subscribe((data: any) => {
           if (data) {
             this.toastr.success(`Collection${s} ${actDeac}d successfully`, 'Success!');
-            this.selColctnArr = [];
-            this.listColctn();
+            this.selColctnArr = []; this.listColctn();
           } else {
             this.toastr.error(`Unable to ${actDeac} collection${s}`, 'Error!');
           }
@@ -129,23 +128,17 @@ export class CollectionListComponent implements OnInit {
 
   // get collection list
   listColctn() {
-    this.loading = true;
-    this.selColctnArr = [];
+    this.loading = true; this.selColctnArr = [];this.colctnArr = [];
     let query = {
-      pageNo: 0,
-      sortColumn: 'updatedDate',
-      isAscending: false,
-      isActive: this.activeColctn == 1 ? true : false
+      pageNo: 0, sortColumn: 'updatedDate',
+      isAscending: false, isActive: this.activeColctn == 1 ? true : false
     }
     this.colctnSrv.colctnList(query).subscribe((data: any) => {
-      if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+      if (data && data.result && Array.isArray(data.result.results)) {
         this.colctnArr = data.result.results.map((d: any) => ({ ...d, chk: false }));
-      } else {
-        this.colctnArr = [];
       }
       this.loading = false;
     }, (err: any) => {
-      this.colctnArr = [];
       this.loading = false;
     });
   }

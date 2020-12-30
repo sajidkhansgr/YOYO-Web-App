@@ -161,8 +161,7 @@ export class AddRsrcComponent implements OnInit {
   backNav() {
     this.contentNav.pop();
     this.selFldr = this.contentNav.length > 1 ? this.contentNav[this.contentNav.length - 1] : undefined;
-    this.fldrArr = [];
-    this.mdlCntntArr = [];
+    this.fldrArr = []; this.mdlCntntArr = [];
     if (this.contentNav.length == 0) {
       this.selFldr = undefined;
       this.showAll = true;
@@ -180,7 +179,6 @@ export class AddRsrcComponent implements OnInit {
     this.contentNav = [colctn];
     this.cntntLoading = true;
     this.colctnSrv.getContentColctn(id).subscribe((data: any) => {
-      console.log(data);
       if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
         this.mdlCntntArr = data.result;
       } else if (data && data.result && Array.isArray(data.result) && data.result.length == 0) {

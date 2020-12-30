@@ -50,11 +50,8 @@
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, colctn)"><i
-                      class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, colctn)"><i
-                      class="fa fa-link mr-1"></i>Get a
-                    link</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, colctn)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, colctn)"><i class="fa fa-link mr-1"></i>Get a link</a>
                 </div>
               </div>
               <div class="btn my-1" (click)="actDeactColctn(colctn.id)">
@@ -85,7 +82,7 @@
       </div>
     </ng-container>
     <ng-template #noColctn>
-      <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;">
+      <div class="mx-auto mt-5 text-secondary text-center font-20">
         No Data Found
       </div>
     </ng-template>
@@ -126,11 +123,8 @@
                   <i class="fas fa-share-square"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="shareDD">
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, colctn)"><i
-                      class="fa fa-envelope mr-1"></i>Email</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, colctn)"><i
-                      class="fa fa-link mr-1"></i>Get a
-                    link</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('email', undefined, colctn)"><i class="fa fa-envelope mr-1"></i>Email</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('getLink', undefined, colctn)"><i   class="fa fa-link mr-1"></i>Get a link</a>
                 </div>
               </div>
               <div class="btn" (click)="actDeactColctn(colctn.id)">
@@ -142,10 +136,8 @@
                   <i class="fas fa-ellipsis-h"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="optionsDD">
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'dupl',colctn)"><i
-                      class="fas fa-copy mr-1"></i>Duplicate</a>
-                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'ren',colctn)"><i
-                      class="fas fa-edit mr-1"></i>Rename</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'dupl',colctn)"><i class="fas fa-copy mr-1"></i>Duplicate</a>
+                  <a class="dropdown-item curs-ptr" (click)="cmnModal('coll', 'ren',colctn)"><i class="fas fa-edit mr-1"></i>Rename</a>
                   <a class="dropdown-item dd">
                     <i class="fa fa-download mr-1"></i>Download
                     <div class="dropdown-menu">
@@ -160,7 +152,7 @@
         </tr>
       </tbody>
     </table>
-    <div class="mx-auto mt-5 text-secondary" style="font-size: 20px;" *ngIf="colctnArr.length == 0 && !loading">
+    <div class="mx-auto mt-5 text-secondary text-center font-20" *ngIf="colctnArr.length == 0 && !loading">
       No Data Found
     </div>
   </div>

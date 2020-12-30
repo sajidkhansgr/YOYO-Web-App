@@ -100,9 +100,9 @@ export class GroupComponent implements OnInit {
     this.grps = [];this.totalCount = 0;
     this.grpServ.groupList(params)
       .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        if (data && data.result && Array.isArray(data.result.results)) {
           this.grps = data.result.results;
-          this.totalCount = data.result.totalCount;
+          this.totalCount = data.result.totalCount||0;
         }
         this.loading = false;
       }, (err: any) => {
@@ -111,9 +111,10 @@ export class GroupComponent implements OnInit {
   }
 
   getHubs() {
+    this.divArr = [];
     this.hubService.hubList({ pageNo: 0, isActive: true })
       .subscribe((data: any) => {
-        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+        if (data && data.result && Array.isArray(data.result.results)) {
           this.divArr = data.result.results;
         }
       }, (err: any) => {

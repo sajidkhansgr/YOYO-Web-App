@@ -198,12 +198,10 @@ export class CollectionInnerComponent implements OnInit {
   getCntntColl() {
     this.loading = true; this.cntntArr = [];
     this.colctnSrv.getContentColctn(this.id).subscribe((data: any) => {
-      if (data && Array.isArray(data.result) && data.result.length > 0) {
+      if (data && Array.isArray(data.result)) {
         this.cntntArr = data.result.map((d: any) => ({ ...d, chk: false }));
         this.cntntArr.sort((a: any, b: any) => a.sequenceNumber - b.sequenceNumber);
         this.dragInit();
-        // console.log(this.cntntArr);
-        // this.cntntArr = data.result;
       }
       this.loading = false;
     }, (err: any) => {
@@ -265,7 +263,6 @@ export class CollectionInnerComponent implements OnInit {
     return FileHelper.getImg(d, 'icon');
   }
 
-
   rearrDataInWrkspc(event: any) {
     this.loading = true;
     this.cntntArr = ArrayHelper.moveItem(this.cntntArr, event.sourceIndex, event.targetIndex);
@@ -276,7 +273,6 @@ export class CollectionInnerComponent implements OnInit {
     this.colctnSrv.rearrCntntColl(d).subscribe((data: any) => {
       if (data) {
         this.toastr.success('Rearrange successfully', 'Success!');
-      } else {
       }
       this.loading = false;
     }, (err: any) => {
@@ -298,5 +294,7 @@ export class CollectionInnerComponent implements OnInit {
   ngOnDestroy(): void {
     this.dismissModal();
     this.subs.unsubscribe();
+    if (!!this.routerSubs)
+      this.routerSubs.unsubscribe();
   }
 }

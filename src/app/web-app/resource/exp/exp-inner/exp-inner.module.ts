@@ -13,7 +13,6 @@ import { AddToCollModule } from '../../../../shared/components/add-to-coll/add-t
 import { ShareMailModule } from '../../../../shared/components/share-mail/share-mail.module';
 import { GetLinkModule } from '../../../../shared/components/get-link/get-link.module';
 import { BreadcrumbService } from '../../../../shared/services/breadcrumb.service';
-import { ContentWorkspaceService } from 'src/app/hub/content-workspace/content-workspace.service';
 
 const routes: Routes = [
   { path: '', component: ExpInnerComponent }
@@ -31,6 +30,6 @@ const routes: Routes = [
     LoaderModule,
     AddToCollModule, ShareMailModule, GetLinkModule
   ],
-  providers: [ExpService, BreadcrumbService, ContentWorkspaceService]
+  providers: [ExpService, BreadcrumbService]
 })
 export class ExpInnerModule { }

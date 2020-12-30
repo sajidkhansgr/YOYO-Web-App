@@ -9,7 +9,6 @@ import { BreadcrumbService } from '../../../../shared/services/breadcrumb.servic
 import { ShareMailComponent } from '../../../../shared/components/share-mail/share-mail.component';
 import { GetLinkComponent } from '../../../../shared/components/get-link/get-link.component';
 import { AddToCollComponent } from '../../../../shared/components/add-to-coll/add-to-coll.component';
-import { ContentWorkspaceService } from '../../../../hub/content-workspace/content-workspace.service';
 import { FileHelper } from '../../../../shared/file-helper';
 
 @Component({
@@ -34,14 +33,14 @@ export class ExpInnerComponent implements OnInit {
     private router: Router,
     private expServ: ExpService,
     private toastr: ToastrService,
-    private brdcrmServ: BreadcrumbService,
-    private cwServ: ContentWorkspaceService
+    private brdcrmServ: BreadcrumbService
   ) { }
 
   ngOnInit(): void {
     this.routerSubs = this.route.params.subscribe(params => {
       this.id = params['expid'] || '0';
       this.fldrid = params['fldrid'] || '';
+      this.initialiseState();
     });
   }
 
