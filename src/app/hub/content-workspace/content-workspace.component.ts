@@ -61,7 +61,7 @@ export class ContentWorkspaceComponent implements OnInit {
 
   pageNo!: number; pageSize!: number; @Input() lmtPage: any;
   showRowInfo!: boolean; rowInfo!: any; docLoading!: boolean;
-  desc!: string; isShared!: boolean; hLW!: boolean; cmnt!: string;
+  desc!: string; isShared!: boolean; hLW!: boolean; cmnt!: string;nm!:string;
   lngs!: Language[]; selLngs: Language[] = [];
   edits: any; disb: any;
 
@@ -968,7 +968,7 @@ export class ContentWorkspaceComponent implements OnInit {
         this.showWork = false;
         this.rowInfo = {}; this.showRowInfo = true;
         this.edits = {}; this.disb = {};
-        this.desc = ''; this.cmnt = '';
+        this.desc = ''; this.cmnt = '';this.nm = '';
         this.selTags2 = []; this.selLngs = [];
         this.getCntnt(row);
       }
@@ -1016,8 +1016,24 @@ export class ContentWorkspaceComponent implements OnInit {
     this.docLoading = false;
   }
 
+  setName(){
+    let nmWthExt = this.rowInfo.name.split(/\.(?=[^\.]+$)/);
+    if(Array.isArray(nmWthExt)){
+      this.nm = nmWthExt[0]||'';
+      if(nmWthExt[1])
+        this.rowInfo.ext = '.'+nmWthExt[1];
+      else
+        this.rowInfo.ext = '';
+    }else{
+      this.nm = '';
+      this.rowInfo.ext = '';
+    }
+  }
+
   // edit options in documents (workspace)
   openEdit = (type: any) => {
+    if(type=='n')
+      this.setName();
     this.edits[type] = true;
   }
 
@@ -1028,6 +1044,7 @@ export class ContentWorkspaceComponent implements OnInit {
         case 't': this.selTags2 = this.rowInfo.contentTags.map((tag: any) => ({ ...tag, id: tag.tagId })); break;
         case 'l': this.selLngs = this.rowInfo.contentLanguages.map((lng: any) => ({ ...lng, id: lng.languageId })); break;
         case 'p': this.isShared = this.rowInfo.canBeShared; this.hLW = this.rowInfo.hideLabelInWorkspace; break;
+        case 'n': break;//no need as doing in openEdit
       }
     }
     this.edits[type] = false;
@@ -1352,6 +1369,11 @@ export class ContentWorkspaceComponent implements OnInit {
           hideLabelInWorkspace: this.hLW
         };
         break;
+      case 'n': str = 'Name';
+        cntntData = {
+          name: this.nm+this.rowInfo.ext, updateType: 5
+        };
+        break;
     }
     cntntData.id = this.rowInfo.id;
     this.disb[type] = true;
@@ -1364,6 +1386,7 @@ export class ContentWorkspaceComponent implements OnInit {
             case 't': this.rowInfo.contentTags = this.selTags2.map((tag: any) => ({ ...tag, tagId: tag.id, tagName: tag.name })); break;
             case 'l': this.rowInfo.contentLanguages = this.selLngs.map((lng: any) => ({ ...lng, languageId: lng.id, languageName: lng.name })); break;
             case 'p': this.rowInfo.canBeShared = this.isShared; this.rowInfo.hideLabelInWorkspace = this.hLW; break;
+            case 'n': this.rowInfo.name = cntntData.name; break;
           }
           this.closeEdit(type, false);
         } else {

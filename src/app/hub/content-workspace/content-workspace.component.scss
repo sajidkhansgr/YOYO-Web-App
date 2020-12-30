@@ -128,6 +128,21 @@
   width: 34rem;
 }
 
+.workspace-container {
+  .document {
+    .card-header {
+      a.float-right.text-hi-dark-grey {
+        opacity: 0;
+        font-size: 16px;
+      }
+    }
+    .card-header:hover {
+      a.float-right.text-hi-dark-grey {
+        opacity: 1;
+      }
+    }
+  }
+}
 
 /* Dragula css */
 /* in-flight clone */
