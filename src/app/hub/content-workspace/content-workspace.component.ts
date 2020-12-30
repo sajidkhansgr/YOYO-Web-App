@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { CdkDragDrop, moveItemInArray, transferArrayItem, copyArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, transferArrayItem, copyArrayItem } from '@angular/cdk/drag-drop';
 
 import { DEF_ICON, FILE_TYPES, FLDR_ICON, FILE_EXT } from '../../shared/constants';
 import { EnumHelper } from '../../shared/enum-helper';
@@ -49,7 +49,7 @@ export class ContentWorkspaceComponent implements OnInit {
   view!: boolean; edit!: boolean | undefined;
   activeFldrs!: number; isActiveFldrs!: boolean; activeWrkspc!: number;
 
-  tags!: Tag[]; selTags: Tag[] = []; selTags2: Tag[] = [];//using in selTags add and selTags2 form
+  tags!: Tag[]; selTags: Tag[] = []; selTags2: Tag[] = [];
   cntnts!: any[]; totalCount!: number; sort: any = {}; searchTxt!: string;
   searchTxtChng: Subject<string> = new Subject<string>(); filteredList: any = [];
   cntntTypeFltr: any = [];
@@ -63,7 +63,7 @@ export class ContentWorkspaceComponent implements OnInit {
   showRowInfo!: boolean; rowInfo!: any; docLoading!: boolean;
   desc!: string; isShared!: boolean; hLW!: boolean; cmnt!: string;
   lngs!: Language[]; selLngs: Language[] = [];
-  edits: any; disb: any; //disb and edits used in single edits
+  edits: any; disb: any;
 
   usrInfo: any | null;
   fileTypes: any = FILE_TYPES; fileTypesArr: any = []; fileTypeArr: any = [];
@@ -105,7 +105,7 @@ export class ContentWorkspaceComponent implements OnInit {
     this.processingCntnt(true);
     this.getIntervalId = setInterval(() => {
       this.processingCntnt(true);
-    }, 13000) //13 seconds
+    }, 13000)
   }
 
   initialiseState() {
@@ -120,20 +120,17 @@ export class ContentWorkspaceComponent implements OnInit {
     });
     this.updWrkspcForm = this.fb.group({
       name: ['', [Validators.required]]
-      // more fields need to be added when done in api
     });
     this.folderForm = this.fb.group({
       name: ['', [Validators.required]],
       description: [''],
       hideLabelInWorkspace: ['true']
-      // more fields need to be added
     });
     this.smartFldrForm = this.fb.group({
       name: ['', [Validators.required]],
       description: [''],
       hideLabelInWorkspace: ['true'],
       limitNoOfFiles: ['']
-      // more fields need to be added
     });
     this.disabled = false;
     this.wrkspcItems = []; this.selFolder = undefined; this.dispFolder = undefined; this.folderNav = [];
@@ -156,18 +153,16 @@ export class ContentWorkspaceComponent implements OnInit {
     this.cntntDisb = false;
     this.procUplDef();
     this.totalCount = 0;
-    this.cntntLoading = true; //use in cntnt listing
+    this.cntntLoading = true;
     this.urlDisb = false;
     this.edits = {};
     this.disb = {};
     this.cntntForm = this.fb.group({
       img: [''],
-      // tags: ['']
     });
     this.urlForm = this.fb.group({
       iconType: ['', [Validators.required]],
       img: ['', [Validators.required]],
-      // tags: [''], using ngModel
       name: ['', [Validators.required]],
       description: [''],
       url: ['', [Validators.required]],
@@ -185,7 +180,6 @@ export class ContentWorkspaceComponent implements OnInit {
         tap(() => {
           this.pageNo = 1;
           this.setDefSort(); this.loadCntnts();
-          // this.cntntList();
         })
       )
       .subscribe();
@@ -252,7 +246,6 @@ export class ContentWorkspaceComponent implements OnInit {
       this.wrkspcItems = [];
     }
     this.getAllDataWrkspc(item);
-    // this.dispFolder ? this.dispFolder.entityType === 2 ? this.getContentSmtFldr() : this.getAllDataWrkspc() : this.getAllDataWrkspc();
   }
 
   // get folder and smart folder from wrkspace; content from workpspace and folder
@@ -415,15 +408,11 @@ export class ContentWorkspaceComponent implements OnInit {
       this.disabled = true;
       let fldrData: any = {
         ...this.smartFldrForm.value,
-        // smartFolderIcon: this.custIcon,
         isActive: true,
         fileTypeIds: this.fileTypeArr.length > 0 ? (this.fileTypeArr).toString() : undefined
       }
       if (this.custIcon) {
         fldrData.smartFolderIcon = this.custIcon;
-        // fldrData.hasIcon = true;
-      } else {
-        // fldrData.hasIcon = false;
       }
       if (this.edit === undefined) {
         fldrData.parentFolderIdForDuplicateSmartFolder = this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId;
@@ -571,9 +560,6 @@ export class ContentWorkspaceComponent implements OnInit {
       }
       if (this.custIcon) {
         fldrData.folderIcon = this.custIcon;
-        // fldrData.hasIcon = true;
-      } else {
-        // fldrData.hasIcon = false;
       }
       if (this.edit === undefined) {
         fldrData.parentFolderIdForDuplicateFolder = this.mdlSelected ? this.mdlSelected.entityId : this.selFolder!.folderId;
@@ -656,7 +642,6 @@ export class ContentWorkspaceComponent implements OnInit {
   // update workspace
   updWrkspc() {
     if (this.updWrkspcForm.valid && !this.edit) {
-      // this.addWorkSpc();
       this.toastr.info('Not implemented yet', 'Info!');
     } else if (this.updWrkspcForm.valid && this.edit) {
       this.disabled = true;
@@ -863,12 +848,12 @@ export class ContentWorkspaceComponent implements OnInit {
       //   } else {
       //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       //   }
-        // moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      // moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       // } else {
-        transferArrayItem(event.previousContainer.data,
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex);
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
       // }
     }
   }
@@ -878,7 +863,7 @@ export class ContentWorkspaceComponent implements OnInit {
       contentId: event.previousContainer.data[event.previousIndex].id,
       workspaceId: this.selWrkspc!.id,
       folderId: this.dispFolder ? this.dispFolder!.entityId : null,
-      sequenceNumber: this.wrkspcItems.length+1
+      sequenceNumber: this.wrkspcItems.length + 1
     }
     this.cwServ.addCntntToWrkspcFldr(d).subscribe((data: any) => {
       if (data && Array.isArray(data.result)) {
@@ -890,7 +875,6 @@ export class ContentWorkspaceComponent implements OnInit {
         );
         data.result.sort((a: any, b: any) => a.sequenceNumber - b.sequenceNumber);
         this.wrkspcItems = data.result;
-        // this.wrkspcItems[event.currentIndex] = data.result;
         this.toastr.success('Added successfully', 'Success!');
       } else {
         this.toastr.error('Unable to add', 'Error!');
@@ -899,8 +883,8 @@ export class ContentWorkspaceComponent implements OnInit {
     });
   }
 
-  subsUnsubDrag(){
-    if(!!this.subs){
+  subsUnsubDrag() {
+    if (!!this.subs) {
       this.subs.unsubscribe();
     }
     this.subs = new Subscription();
@@ -922,8 +906,8 @@ export class ContentWorkspaceComponent implements OnInit {
       }
     });
     this.subs.add(this.dragulaService.dropModel().subscribe((value) => {
-        this.rearrDataInWrkspc(value)
-      })
+      this.rearrDataInWrkspc(value)
+    })
     )
   }
 
@@ -1048,22 +1032,6 @@ export class ContentWorkspaceComponent implements OnInit {
   openEdit = (type: any) => {
     this.edits[type] = true;
   }
-
-  // get content by smart folder -> now no need as manage iu get all data by workspace
-  // getContentSmtFldr() {
-  //   this.folderLoading = true;
-  //   let query: any = {
-  //     smartFolderId: this.dispFolder ? this.dispFolder!.entityId : undefined
-  //   };
-  //   this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
-  //     if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-  //       this.wrkspcItems.push(...data.result);
-  //     }
-  //     this.folderLoading = false;
-  //   }, (err: any) => {
-  //     this.folderLoading = false;
-  //   });
-  // }
 
   closeEdit(type: string, isUpd: boolean = true) {
     if (type && isUpd) {
@@ -1282,7 +1250,6 @@ export class ContentWorkspaceComponent implements OnInit {
     if (this.files.length > 0) {
       this.cntntDisb = true;
       let cntntData: any = {
-        // content: this.files[0],
         hubId: parseInt(this.hubid),
         isUrl: false
       }
@@ -1485,7 +1452,6 @@ export class ContentWorkspaceComponent implements OnInit {
             this.toastr.error(`Please try after some time`, 'Error!');
           }
         }, (err: any) => {
-
         });
       }
     })

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-// import { Subscription } from 'rxjs';
+
 import { HubService } from '../../hub/hub.service';
 import { DivisionService } from './division.service';
 import { Hub } from '../../shared/models/hub';
@@ -19,14 +19,13 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
   styleUrls: ['./division.component.scss']
 })
 export class DivisionComponent implements OnInit {
-  selHub!: Hub;usrInfo: any | null;
+  selHub!: Hub; usrInfo: any | null;
   hubs: Hub[] = [];
   loading: boolean = true;
   hubForm!: FormGroup; disabled: boolean = false;
   type!: string | undefined;
-  grps: Group[]=[];grpLoad!: boolean;hubLoad: boolean=false;
+  grps: Group[] = []; grpLoad!: boolean; hubLoad: boolean = false;
 
-  // routerSubs: Subscription;
   constructor(
     private hubServ: HubService,
     private divServ: DivisionService,
@@ -37,20 +36,7 @@ export class DivisionComponent implements OnInit {
     private tokenDataServ: TokenDataService,
     private dialog: MatDialog,
     private grpServ: GroupService
-  ) {
-    // this.routerSubs = this.dataServ.currentInfo
-    //   .subscribe((data: any) => {
-    //     if (this.hubs.length >= 0 && Array.isArray(data) && data.length > 0) {
-    //       this.hubs = data;
-    //       if(this.selHub){
-    //         const index = this.hubs.findIndex(ele => ele.id == this.selHub.id);
-    //         if (index >= 0) {
-    //           this.selHub = this.hubs[index];
-    //         }
-    //       }
-    //     }
-    //   })
-  }
+  ) { }
 
   ngOnInit(): void {
     this.getHubs();
@@ -61,13 +47,12 @@ export class DivisionComponent implements OnInit {
   }
 
   getHubs() {
-    this.loading=true;this.hubs = [];
+    this.loading = true; this.hubs = [];
     this.hubServ.hubList({ pageNo: 0 })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.hubs = data.result.results;
           this.getHub(this.hubs[0]);
-          // this.selHub = data.result.results[0];
         }
         this.loading = false;
       }, (err: any) => {
@@ -77,14 +62,13 @@ export class DivisionComponent implements OnInit {
   }
 
   hubChange(hub: Hub) {
-    // this.selHub = hub;
     this.getHub(hub);
   }
 
   openModal(content: any, formType: string) {
     this.type = formType;
-    if(this.type!=='prm'){
-      if(this.grps.length<=0)
+    if (this.type !== 'prm') {
+      if (this.grps.length <= 0)
         this.grpsList();
       this.chkUnchkGrp();
     }
@@ -138,16 +122,16 @@ export class DivisionComponent implements OnInit {
   }
 
   // EDIT Hub
-  updHub(hubData: any,isUpdGrp: boolean=false) {
+  updHub(hubData: any, isUpdGrp: boolean = false) {
     hubData.id = this.selHub.id;
     hubData.groupIds = this.getSelGrp();
     this.divServ.updHub(hubData)
       .subscribe((data: any) => {
         if (data) {
           this.selHub.groups = this.getSelGrp(true);
-          if(isUpdGrp){
+          if (isUpdGrp) {
             this.toastr.success('Hub groups assigned successfully', 'Success!');
-          }else{
+          } else {
             this.selHub.name = hubData.name;
             this.localUpd();
             this.dataServ.passDataSend('hub-upd');
@@ -163,8 +147,7 @@ export class DivisionComponent implements OnInit {
       });
   }
 
-  actDeactHub(){
-    // selHub
+  actDeactHub() {
     let actDeac: string = `${this.selHub.isActive ? 'deactivate' : 'activate'}`;
     let isAct: boolean = this.selHub.isActive ? false : true;
     this.dialog.open(ConfirmDialogComponent, {
@@ -185,13 +168,12 @@ export class DivisionComponent implements OnInit {
             this.toastr.error(`Unable to ${actDeac} hub`, 'Error!');
           }
         }, (err: any) => {
-
         });
       }
     })
   }
 
-  localUpd(){
+  localUpd() {
     const index = this.hubs.findIndex((ele: any) => ele.id == this.selHub.id);
     if (index >= 0) {
       this.hubs[index] = this.selHub;
@@ -204,7 +186,7 @@ export class DivisionComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.result && data.result.id) {
           this.selHub = data.result;
-        }else{
+        } else {
           this.selHub = hub;
         }
         this.hubLoad = false;
@@ -216,7 +198,7 @@ export class DivisionComponent implements OnInit {
 
   grpsList() {
     this.grps = []; this.grpLoad = true;
-    this.grpServ.groupList({ pageNo: 0,isActive: true })
+    this.grpServ.groupList({ pageNo: 0, isActive: true })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.grps = data.result.results;
@@ -228,23 +210,23 @@ export class DivisionComponent implements OnInit {
       });
   }
 
-  chkUnchkGrp(){
-    for(let k=0;k<this.grps.length;k++){
+  chkUnchkGrp() {
+    for (let k = 0; k < this.grps.length; k++) {
       this.grps[k].chk = false;
-      if((this.type=='edit' || this.type=='grp') && this.selHub && this.selHub.groups){
-        for(let l=0;l<this.selHub.groups.length;l++){
-          if(this.grps[k].id===this.selHub.groups[l].id)
+      if ((this.type == 'edit' || this.type == 'grp') && this.selHub && this.selHub.groups) {
+        for (let l = 0; l < this.selHub.groups.length; l++) {
+          if (this.grps[k].id === this.selHub.groups[l].id)
             this.grps[k].chk = true;
         }
       }
     }
   }
 
-  getSelGrp(isAll:boolean=false){
+  getSelGrp(isAll: boolean = false) {
     let grpIds = [];
-    for(let k=0;k<this.grps.length;k++){
-      if(this.grps[k].chk){
-        if(isAll)
+    for (let k = 0; k < this.grps.length; k++) {
+      if (this.grps[k].chk) {
+        if (isAll)
           grpIds.push(this.grps[k]);
         else
           grpIds.push(this.grps[k].id);
@@ -253,13 +235,13 @@ export class DivisionComponent implements OnInit {
     return grpIds;
   }
 
-  chngGrpChk(val: boolean, g: any){
+  chngGrpChk(val: boolean, g: any) {
     g.chk = val;
   }
 
-  updGrp(){
+  updGrp() {
     this.disabled = true;
-    this.updHub({name: this.selHub.name},true);
+    this.updHub({ name: this.selHub.name }, true);
   }
 
 
@@ -269,11 +251,6 @@ export class DivisionComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     this.disMissMdodal();
-    // if (!!this.routerSubs) {
-    //   this.routerSubs.unsubscribe();
-    // }
   }
-
 }

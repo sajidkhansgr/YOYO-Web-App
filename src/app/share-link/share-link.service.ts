@@ -13,8 +13,7 @@ export class ShareLinkService {
     private http: HttpClient
   ) { }
 
-  getLinkData(id: string){
+  getLinkData(id: string) {
     return this.http.get(`${AppSettings.GET_SHARE_LNK}?identifier=${id}`)
   }
-
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+
 import { navigation, Navigation } from '../../shared/navigation';
 import { HubService } from '../../hub/hub.service';
 import { DataService } from '../../shared/services/data.service';
@@ -20,7 +21,7 @@ export class SidebarComponent implements OnInit {
     this.navigation = navigation
     this.routerSubs = this.dataServ.currentInfo
       .subscribe((msg: any) => {
-        if((msg==='hub-add' || msg==='hub-upd'))
+        if ((msg === 'hub-add' || msg === 'hub-upd'))
           this.getHubs();
       })
   }
@@ -29,30 +30,29 @@ export class SidebarComponent implements OnInit {
     this.getHubs();
   }
 
-  getHubs(){
-    this.hubServ.hubList({pageNo:0,isActive: true})
-    .subscribe((data: any) => {
-      if(data && data.result && Array.isArray(data.result.results) && data.result.results.length>0){
-        let res: any = [];
-        this.dataServ.passDataSend(data.result.results);
-        for(let k=0;k<data.result.results.length;k++){
-          res.push({ id:data.result.results[k].id.toString(), title: data.result.results[k].name, type: 'item',url: '/hub/'+data.result.results[k].id+'/list'});
+  getHubs() {
+    this.hubServ.hubList({ pageNo: 0, isActive: true })
+      .subscribe((data: any) => {
+        if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
+          let res: any = [];
+          this.dataServ.passDataSend(data.result.results);
+          for (let k = 0; k < data.result.results.length; k++) {
+            res.push({ id: data.result.results[k].id.toString(), title: data.result.results[k].name, type: 'item', url: '/hub/' + data.result.results[k].id + '/list' });
+          }
+          const index = this.navigation.findIndex((ele: any) => ele.id == "hub");
+          if (index >= 0) {
+            this.navigation[index].children = res;
+          }
+        } else {
+          this.navigation[1].children = [];
         }
-        const index = this.navigation.findIndex((ele: any) => ele.id == "hub");
-        if (index >= 0) {
-          this.navigation[index].children = res;
-        }
-      }else{
+      }, (err: any) => {
         this.navigation[1].children = [];
-      }
-    }, (err: any) => {
-        this.navigation[1].children = [];
-    });
+      });
   }
 
-  ngOnDestroy(): void{
-    // Unsubscribe from all subscriptions
-    if(!!this.routerSubs)
+  ngOnDestroy(): void {
+    if (!!this.routerSubs)
       this.routerSubs.unsubscribe();
   }
 }

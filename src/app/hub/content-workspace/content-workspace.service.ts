@@ -8,7 +8,6 @@ import { AppSettings } from '../../shared/services/app-settings';
   providedIn: 'root'
 })
 export class ContentWorkspaceService {
-
   constructor(
     private http: HttpClient
   ) { }
@@ -59,7 +58,6 @@ export class ContentWorkspaceService {
     return this.http.post(`${url}`, this.freezeFolderObj(data));
   }
 
-
   // get smart folder by id
   getSmtFolder(id: any) {
     return this.http.get(`${AppSettings.GET_SMT_FLDR}?id=${id}`);
@@ -99,7 +97,7 @@ export class ContentWorkspaceService {
   wrkspcList(params: any): Observable<any[]> {
     let queryParams = new HttpParams();
     for (let key in params) {
-      if (params[key] || key == 'isActive'|| key == 'pageNo') {
+      if (params[key] || key == 'isActive' || key == 'pageNo') {
         queryParams = queryParams.set(key, params[key]);
       }
     }
@@ -249,6 +247,4 @@ export class ContentWorkspaceService {
     let url = isAct ? AppSettings.ACT_CNT_WRKSPC_FLDR : AppSettings.DEACT_CNT_WRKSPC_FLDR;
     return this.http.post(`${url}?id=${id}`, {});
   }
-
-
 }

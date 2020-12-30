@@ -42,8 +42,6 @@ export class ExpInnerComponent implements OnInit {
     this.routerSubs = this.route.params.subscribe(params => {
       this.id = params['expid'] || '0';
       this.fldrid = params['fldrid'] || '';
-      // this.smtFldrid = params['smtFldrid'] || '';
-      this.initialiseState(); // reset and set based on new parameter this time
     });
   }
 
@@ -53,7 +51,6 @@ export class ExpInnerComponent implements OnInit {
       this.navg = [];
       this.brdcrmList();
       this.getAllFromWrkspc();
-      // this.smtFldrid ? this.getContentSmtFldr() : this.getAllFromWrkspc();
     } else {
       this.toastr.error("Not a valid Workspace", "Error");
       this.router.navigate(['/web-app/experiences']);
@@ -82,9 +79,6 @@ export class ExpInnerComponent implements OnInit {
 
   // view content
   viewContent(d: any) {
-    // let id = d.id;
-    // if(this.smtFldrid)
-    //   id = data.contentId;
     this.router.navigate(['/web-app/view/' + d.entityId]);
   }
 
@@ -100,36 +94,12 @@ export class ExpInnerComponent implements OnInit {
         if (data && Array.isArray(data.result) && data.result.length > 0) {
           this.wrkspcCntnts = data.result;
           this.wrkspcCntnts.sort((a: any, b: any) => a.sequenceNumber - b.sequenceNumber);
-          // if (Array.isArray(data.result[0].contents) && data.result[0].contents.length > 0)
-          //   this.wrkspcCntnts = data.result[0].contents;
-          // if (Array.isArray(data.result[0].folders) && data.result[0].folders.length > 0)
-          //   this.wrkspcCntnts.push(...data.result[0].folders.map((fldr: any) => ({ ...fldr, key: 'fldr' })));
-          // if (Array.isArray(data.result[0].smartFolders) && data.result[0].smartFolders.length > 0)
-          //   this.wrkspcCntnts.push(...data.result[0].smartFolders.map((fldr: any) => ({ ...fldr, key: 'smtFldr' })));
-        } else {
-          //no data found
         }
         this.loading = false;
       }, (err: any) => {
         this.loading = false;
       })
   }
-
-  // get content by smart folder -> now no need as manage iu get all data by workspace
-  // getContentSmtFldr() {
-  //   let query: any = {
-  //     smartFolderId: this.smtFldrid
-  //   };
-  //   this.wrkspcCntnts = [];
-  //   this.cwServ.contentBySmartFolder(query).subscribe((data: any) => {
-  //     if (data && data.result && Array.isArray(data.result) && data.result.length > 0) {
-  //       this.wrkspcCntnts.push(...data.result);
-  //     }
-  //     this.loading = false;
-  //   }, (err: any) => {
-  //     this.loading = false;
-  //   });
-  // }
 
   getImg(d: any, type: string = ''): string {
     return FileHelper.getImg(d, type);
@@ -142,7 +112,6 @@ export class ExpInnerComponent implements OnInit {
   brdcrmList() {
     let params = {
       entityWorkspaceID: this.id,
-      // parentId: this.fldrid?this.fldrid:this.smtFldrid?this.smtFldrid:null
       parentId: this.fldrid ? this.fldrid : null
     }
     this.brdcrmServ.getList(params)
@@ -151,8 +120,6 @@ export class ExpInnerComponent implements OnInit {
           let arr = data.result;
           arr.sort((a: any, b: any) => a.level - b.level);
           this.navg = arr;
-        } else {
-          //no data found
         }
       }, (err: any) => {
       })
@@ -168,16 +135,11 @@ export class ExpInnerComponent implements OnInit {
 
   openModal(content: any) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
-
-    }, (reason) => {
-
-    });
+    }, (reason) => { });
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     if (!!this.routerSubs)
       this.routerSubs.unsubscribe();
   }
-
 }

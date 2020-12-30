@@ -7,7 +7,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { CollectionService } from '../collection.service';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { FLDR_ICON } from '../../../../shared/constants';
-
 import { ShareMailComponent } from '../../../../shared/components/share-mail/share-mail.component';
 import { GetLinkComponent } from '../../../../shared/components/get-link/get-link.component';
 import { CollComponent } from 'src/app/shared/components/coll/coll.component';

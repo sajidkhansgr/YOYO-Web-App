@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
-// import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { CollectionInnerComponent } from './collection-inner.component';
 import { LoaderModule } from '../../../../shared/components/loader/loader.module';
@@ -30,7 +29,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MatFormFieldModule, MatInputModule, MatCheckboxModule,
     MatDialogModule, MatChipsModule,
-    // DragDropModule,
     LoaderModule,
     AddToCollModule, ShareMailModule, GetLinkModule, SelItmFxdDivModule, AddRsrcModule,
     DragulaModule.forRoot()

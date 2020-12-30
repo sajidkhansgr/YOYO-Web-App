@@ -6,7 +6,6 @@
       </span>
       <span *ngIf="l">{{n.workspaceObjectName}}</span>
     </li>
-    <!-- <li class="breadcrumb-item active align-self-center" aria-current="page">English</li> -->
     <span class="ml-auto" *ngIf="!loading">
       <div class="curs-ptr" (click)="view = !view;">
         <i class="fa" [ngClass]="{'fa-list-ul' : view, 'fa-th-large': !view}" style="font-size:1.75rem;"></i>

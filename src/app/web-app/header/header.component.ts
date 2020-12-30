@@ -9,7 +9,7 @@ import { TokenDataService } from '../../shared/services/token-data.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  nav!: any; // for header
+  nav!: any;
   @Input() userInfo: any | null;
 
   constructor(
@@ -28,7 +28,6 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.tokenDataServ.removeAll();
     this.nav = null;
-    // this.dataServ.passDataSend('change');
   }
 
   // header
@@ -80,5 +79,4 @@ export class HeaderComponent implements OnInit {
   ngOnDestroy(): void {
     this.disMissMdodal();
   }
-
 }

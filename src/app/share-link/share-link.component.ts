@@ -15,8 +15,8 @@ import { DEF_ICON } from '../shared/constants';
 })
 export class ShareLinkComponent implements OnInit {
   id!: string; routerSubs!: Subscription;
-  lnkData:any=[];loading:boolean=true;defIcon: any = DEF_ICON;
-  showLeft:boolean = true;
+  lnkData: any = []; loading: boolean = true; defIcon: any = DEF_ICON;
+  showLeft: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,7 +27,7 @@ export class ShareLinkComponent implements OnInit {
   ngOnInit(): void {
     this.routerSubs = this.route.params.subscribe(params => {
       this.id = params['id'];
-      this.getLinkData(); // reset and set based on new parameter this time
+      this.getLinkData();
     });
   }
 
@@ -41,18 +41,16 @@ export class ShareLinkComponent implements OnInit {
         this.loading = false;
       }, (err: any) => {
         this.loading = false;
-        // this.toastr.error("Unable to fetch hub, so please try after some time")
       });
   }
 
-  scroll(id: string){
-    const element = document.getElementById(id); // id of the scroll to element
-    if(element)
-      element.scrollIntoView({behavior: 'smooth'});
+  scroll(id: string) {
+    const element = document.getElementById(id);
+    if (element)
+      element.scrollIntoView({ behavior: 'smooth' });
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     if (!!this.routerSubs)
       this.routerSubs.unsubscribe();
   }

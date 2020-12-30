@@ -50,16 +50,14 @@ export class FileComponent implements OnInit {
 
   ngOnInit(): void {
     this.processingData();
-    // this.fileExt.toString();
     this.getIntervalId = setInterval(() => {
       this.processingData();
-    }, 13000) //13 seconds
+    }, 13000)
     this.routerSubs = this.route.params.subscribe(params => {
       this.fldrid = params['fldrid'] || '';
       this.initialiseState();
       this.getFiles();
     });
-    // this.cols = [{ n: "Name", asc: false, k: "name" }, { n: "Date Modified", asc: false, k: "updatedDate" }];
     this.disableBtns = false;
   }
 
@@ -228,42 +226,11 @@ export class FileComponent implements OnInit {
           }
         }
         this.allFiles = [...this.folders, ...this.files];
-        // this.setSelFoldFiles();
         this.loading = false;
       }, (err: any) => {
-        // this.setSelFoldFiles();
         this.loading = false;
       })
   }
-
-  // setSelFoldFiles(fl: any = { id: null }) {
-  //   this.loading = true;
-  //   this.selFolders = [];
-  //   this.selFiles = [];
-  //   this.allFiles = [];
-  //   for (let k = 0; k < this.folders.length; k++) {
-  //     if (this.folders[k].folderId === fl.id)
-  //       this.selFolders.push({ ...this.folders[k], isFldr: true });
-  //   }
-  //   for (let k = 0; k < this.files.length; k++) {
-  //     if (this.files[k].folderId === fl.id)
-  //       this.selFiles.push({ ...this.files[k] });
-  //   }
-  //   this.allFiles = [...this.selFolders, ...this.selFiles];
-  //   this.selFolder = fl;
-  //   if (fl.id) {
-  //     const index = this.folderNav.findIndex((ele: any) => ele.id == fl.id);
-  //     if (index >= 0) {
-  //       this.folderNav.splice(index + 1);
-  //     } else {
-  //       this.folderNav.push(fl);
-  //     }
-  //   } else {
-  //     this.folderNav = [];
-  //     this.folderNav.push({ name: 'My Files', id: null });
-  //   }
-  //   this.loading = false;
-  // }
 
   navgToFldr(fl: any) {
     this.router.navigate(['/web-app/resource/my-files/' + (fl.id == 0 ? '' : fl.id)]);
@@ -272,10 +239,8 @@ export class FileComponent implements OnInit {
   chkFolderAndAdd(fl: any) {
     if (fl.isFldr) {
       this.navgToFldr(fl);
-      // this.setSelFoldFiles(fl);
     }
     else {
-      // console.log("file click")
       this.router.navigate(['/web-app/view/' + fl.id]);
     }
   }
@@ -293,9 +258,7 @@ export class FileComponent implements OnInit {
         this.folderForm.patchValue({ ...this.selFldrData });
     }
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
-
     }, (reason) => {
-
     });
   }
 
@@ -315,7 +278,6 @@ export class FileComponent implements OnInit {
         ...this.folderForm.value,
         workspaceId: null,
         folderId: this.fldrid ? parseInt(this.fldrid) : null
-        // folderId: this.selFolder.id ? this.selFolder.id : null
       }
       if (this.frmType == 'updFldr') {
         this.editFolder(fldrData);
@@ -350,16 +312,8 @@ export class FileComponent implements OnInit {
       .subscribe((data: any) => {
         if (data) {
           this.toastr.success(data.message || 'Folder rename successfully', 'Success!');
-          // this.getFiles();
-          //local updating
           this.locUpd('allFiles', fldrData);
           this.locUpd('folders', fldrData);
-          // this.succEeditFldr('folderNav');
-          // this.succEeditFldr('allFiles');
-          // this.succEeditFldr('folders');
-          // this.succEeditFldr('files');
-          // this.succEeditFldr('selFolders');
-          // this.succEeditFldr('selFiles');
         } else {
           this.toastr.error('Unable to rename Folder', 'Error!');
         }
@@ -377,13 +331,6 @@ export class FileComponent implements OnInit {
       this[type][index].name = data.name;
     }
   }
-
-  // succEeditFldr(type: 'folderNav' | 'allFiles' | 'folders' | 'files' | 'selFolders' | 'selFiles') {
-  //   const index = this[type].findIndex((ele: any) => ele.id == this.selFldrData.id);
-  //   if (index >= 0) {
-  //     this[type][index].name = this.folderForm.value.name;
-  //   }
-  // }
 
   // upload button
   uploadBtn = (uf: any) => {
@@ -408,10 +355,6 @@ export class FileComponent implements OnInit {
         this.toastr.error("Size should be less than 1 GB", "File Size Error");
         return;
       }
-      // let d = {
-      //   mulFile: $event.target.files
-      // }
-      // this.addCntnt({mulFile}, 'Content');
     }
   }
 
@@ -461,8 +404,6 @@ export class FileComponent implements OnInit {
           let arr = data.result;
           arr.sort((a: any, b: any) => a.level - b.level);
           this.navg = arr;
-        } else {
-          //no data found
         }
       }, (err: any) => {
       })
@@ -495,7 +436,6 @@ export class FileComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     if (this.getIntervalId) {
       clearInterval(this.getIntervalId);
     }
@@ -548,5 +488,4 @@ export class FileComponent implements OnInit {
       }
     })
   }
-
 }

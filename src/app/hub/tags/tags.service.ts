@@ -6,7 +6,6 @@ import { AppSettings } from '../../shared/services/app-settings';
 
 @Injectable()
 export class TagsService {
-
   constructor(
     private http: HttpClient
   ) { }

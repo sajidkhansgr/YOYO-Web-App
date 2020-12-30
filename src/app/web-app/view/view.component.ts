@@ -4,6 +4,7 @@ import { DOCUMENT, Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { ContentWorkspaceService } from '../../hub/content-workspace/content-workspace.service';
 import { CollectionService } from '../resource/collection/collection.service';
 import { ViewSDKClient } from '../../shared/services/view-sdk.service';
@@ -49,7 +50,7 @@ export class ViewComponent implements OnInit {
       this.chkScreenMode();
       this.elem = document.documentElement;
       this.id = params['id'];
-      this.initialiseState(); // reset and set based on new parameter this time
+      this.initialiseState();
     });
   }
 
@@ -84,7 +85,6 @@ export class ViewComponent implements OnInit {
               }
               this.cntnt!.pdf = this.cntnt!.documentType == 4 ? this.cntnt!.contentPath : this.cntnt!.pdfContentPath;
               this.loading = false;
-              // pdfImages
               setTimeout(() => {
                 this.renderPDf();
               }, 1000)
@@ -106,7 +106,6 @@ export class ViewComponent implements OnInit {
   renderPDf() {
     if (this.cntnt!.pdf) {
       this.viewSDKClient.ready().then(() => {
-        /* By default the embed mode will be Full Window */
         let data = {
           defConfg: {
             enableAnnotationAPIs: false, showDownloadPDF: false,
@@ -244,5 +243,4 @@ export class ViewComponent implements OnInit {
       this.routerSubs.unsubscribe();
     this.dismissModal();
   }
-
 }

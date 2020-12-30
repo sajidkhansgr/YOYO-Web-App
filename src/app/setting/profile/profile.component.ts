@@ -19,9 +19,9 @@ import { User } from '../../shared/models/user';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  profForm!: FormGroup; profLoading: boolean = false;usrInfo!: User;
+  profForm!: FormGroup; profLoading: boolean = false; usrInfo!: User;
   hidePass = true; hideCPass = true; hideCurPass = true;
-  lngs = LNGS;lngArr!: any;loading: boolean = false;
+  lngs = LNGS; lngArr!: any; loading: boolean = false;
 
   constructor(
     private router: Router,
@@ -41,17 +41,17 @@ export class ProfileComponent implements OnInit {
       this.router.navigate(['account/profile']);
     }
     this.usrInfo = this.tokenDataServ.getUser();
-    if(this.usrInfo && this.usrInfo.id){
+    if (this.usrInfo && this.usrInfo.id) {
       this.initForm();
       this.getProfile();
-    }else{
+    } else {
       this.tokenDataServ.remTkn();
       this.toastr.error('Please login again', 'Error!');
-      this.router.navigate(['auth/login'],{queryParams:{redirect_uri: window.location.href}});
+      this.router.navigate(['auth/login'], { queryParams: { redirect_uri: window.location.href } });
     }
   }
 
-  initForm(){
+  initForm() {
     this.profForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', [Validators.required]],
@@ -61,24 +61,24 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  getProfile(){
+  getProfile() {
     console.log("dsa")
     this.usrServ.viewEmpl(this.usrInfo.id.toString())
-    .subscribe((data: any) => {
-      if (data && data.result && data.result.id) {
-        this.usrInfo = data.result;
-        this.setUsrData();
-      } else {
-      }
-      this.loading = false;
-    }, (err: any) => {
-      this.loading = false;
-    });
+      .subscribe((data: any) => {
+        if (data && data.result && data.result.id) {
+          this.usrInfo = data.result;
+          this.setUsrData();
+        } else {
+        }
+        this.loading = false;
+      }, (err: any) => {
+        this.loading = false;
+      });
   }
 
-  setUsrData(isUpd:boolean=false){
-    this.usrInfo.name = this.usrInfo.firstName?this.usrInfo.lastName?this.usrInfo.firstName+' '+this.usrInfo.lastName:this.usrInfo.firstName:'N/A';
-    if(!isUpd){
+  setUsrData(isUpd: boolean = false) {
+    this.usrInfo.name = this.usrInfo.firstName ? this.usrInfo.lastName ? this.usrInfo.firstName + ' ' + this.usrInfo.lastName : this.usrInfo.firstName : 'N/A';
+    if (!isUpd) {
       this.usrInfo.languageId = this.usrInfo.language && this.usrInfo.language.id ? this.usrInfo.language.id : '';
       this.profForm.patchValue({ ...this.usrInfo });
     }
@@ -95,22 +95,22 @@ export class ProfileComponent implements OnInit {
       this.profServ.updProfile(profData)
         .subscribe((data: any) => {
           if (data) {
-            this.usrInfo = {...this.usrInfo,...profData};this.setUsrData(true);
+            this.usrInfo = { ...this.usrInfo, ...profData }; this.setUsrData(true);
             this.toastr.success(data.message || 'Profile updated successfully', 'Success!');
             this.disMissMdodal();
           }
           this.profLoading = false
         }, (err: any) => {
-        this.profLoading = false
+          this.profLoading = false
         })
     }
   }
 
-  openModal(content: any, isChange?:any) {
-    this.modalService.open(isChange?ChngPassComponent:content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
-    .then((result: any) => {
-    }, (reason: any) => {
-    });
+  openModal(content: any, isChange?: any) {
+    this.modalService.open(isChange ? ChngPassComponent : content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result
+      .then((result: any) => {
+      }, (reason: any) => {
+      });
   }
 
   disMissMdodal() {
@@ -121,5 +121,4 @@ export class ProfileComponent implements OnInit {
   ngOnDestroy(): void {
     this.disMissMdodal();
   }
-
 }

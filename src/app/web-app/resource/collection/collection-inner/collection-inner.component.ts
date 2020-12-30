@@ -55,9 +55,7 @@ export class CollectionInnerComponent implements OnInit {
   dragInit() {
     const bag: any = this.dragulaService.find(this.BAG);
     if (bag !== undefined) {
-      // this.dragulaService.find('catg-data').drake.remove();
       this.dragulaService.destroy(this.BAG);
-      // drake.remove()
     }
     this.dragulaService.createGroup(this.BAG, {
       revertOnSpill: true,
@@ -65,42 +63,14 @@ export class CollectionInnerComponent implements OnInit {
         if (el.classList.contains('abc')) {
           return false;
         }
-        // console.log(el, container);
         return true;
       }
     });
 
-    // this.subs.add(this.dragulaService.drag(this.BAG)
-    //    .subscribe(({ el }) => {
-    //      console.log("drag")
-    //      // this.removeClass(el, 'ex-moved');
-    //    })
-    //  );
-    //  this.subs.add(this.dragulaService.drop(this.BAG)
-    //    .subscribe(({ el }) => {
-    //      console.log("drop")
-    //      // this.addClass(el, 'ex-moved');
-    //    })
-    //  );
-    //  this.subs.add(this.dragulaService.over(this.BAG)
-    //    .subscribe(({ el, container }) => {
-    //      console.log('over', container);
-    //      // this.addClass(container, 'ex-over');
-    //    })
-    //  );
-    //  this.subs.add(this.dragulaService.out(this.BAG)
-    //    .subscribe(({ el, container }) => {
-    //      console.log('out', container);
-    //      // this.removeClass(container, 'ex-over');
-    //    })
-    //  );
     this.subs.add(this.dragulaService.dropModel().subscribe((value) => {
-      // prints the item's id
-      // console.log(value.item);
       this.rearrDataInWrkspc(value)
     })
     )
-
   }
 
   initialiseState() {
@@ -295,16 +265,6 @@ export class CollectionInnerComponent implements OnInit {
     return FileHelper.getImg(d, 'icon');
   }
 
-  // drop = (event: CdkDragDrop<string[]>) => {
-  //   if (event.previousContainer === event.container) {
-  //     if (event.previousContainer.data[event.previousIndex] != event.container.data[event.currentIndex]) {
-  //       this.rearrDataInWrkspc(event);
-  //     }
-  //   } else {
-  //     console.log("dasadsadsads else ");
-  //   }
-  // }
-
 
   rearrDataInWrkspc(event: any) {
     this.loading = true;
@@ -313,12 +273,10 @@ export class CollectionInnerComponent implements OnInit {
       collectionId: this.id,
       collectionDataIds: this.cntntArr.map((f: any) => f.id)
     };
-    // moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     this.colctnSrv.rearrCntntColl(d).subscribe((data: any) => {
       if (data) {
         this.toastr.success('Rearrange successfully', 'Success!');
       } else {
-        // this.toastr.error('Unable to save rearrange', 'Error!');
       }
       this.loading = false;
     }, (err: any) => {
@@ -341,5 +299,4 @@ export class CollectionInnerComponent implements OnInit {
     this.dismissModal();
     this.subs.unsubscribe();
   }
-
 }

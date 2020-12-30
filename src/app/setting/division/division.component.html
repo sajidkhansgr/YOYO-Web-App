@@ -1,4 +1,4 @@
-<app-loader [type]="'page'" *ngIf="loading || hubLoad"></app-loader> <!-- loader -->
+<app-loader [type]="'page'" *ngIf="loading || hubLoad"></app-loader>
 
 <div class="main main-hub p-3" *ngIf="!loading && !hubLoad">
   <h3 class="mb-4 clearfix heading">
@@ -31,8 +31,7 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="cogDD">
           <a class="dropdown-item curs-ptr" (click)="openModal(addDivision,'edit')">Edit</a>
-          <a class="dropdown-item curs-ptr text-{{selHub.isActive ? 'primary' : 'success'}}"
-            (click)="actDeactHub()">
+          <a class="dropdown-item curs-ptr text-{{selHub.isActive ? 'primary' : 'success'}}" (click)="actDeactHub()">
             <i class="mr-1 fas" [ngClass]="{'fa-toggle-off': selHub.isActive, 'fa-toggle-on': !selHub.isActive}"></i>
             {{selHub.isActive ? 'Deactivate' : 'Activate'}}
           </a>
@@ -59,7 +58,9 @@
               </div>
             </div>
           </ng-container>
-          <ng-template #noGrp><div class="text-center">No assigned groups</div></ng-template>
+          <ng-template #noGrp>
+            <div class="text-center">No assigned groups</div>
+          </ng-template>
         </div>
       </div>
     </div>
@@ -122,7 +123,8 @@
       <hr>
       <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
       <app-loader [type]="'div'" *ngIf="grpLoad"></app-loader>
-      <mat-checkbox class="d-block ml-3" [checked]="g.chk" (change)="chngGrpChk($event.checked, g)" *ngFor="let g of grps">{{g.name}}</mat-checkbox>
+      <mat-checkbox class="d-block ml-3" [checked]="g.chk" (change)="chngGrpChk($event.checked, g)"
+        *ngFor="let g of grps">{{g.name}}</mat-checkbox>
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" [disabled]="hubForm!.invalid || disabled">
@@ -143,7 +145,8 @@
   <div class="modal-body" ngbAutofocus>
     <mat-label class="font-weight-bold mb-2">Groups assigned to this division</mat-label>
     <app-loader [type]="'div'" *ngIf="grpLoad"></app-loader>
-    <mat-checkbox class="d-block ml-3" [checked]="g.chk" (change)="chngGrpChk($event.checked, g)" *ngFor="let g of grps">{{g.name}}</mat-checkbox>
+    <mat-checkbox class="d-block ml-3" [checked]="g.chk" (change)="chngGrpChk($event.checked, g)"
+      *ngFor="let g of grps">{{g.name}}</mat-checkbox>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" [disabled]="disabled" (click)="updGrp()">

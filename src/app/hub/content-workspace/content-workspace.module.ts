@@ -14,19 +14,17 @@ import { NgbCollapseModule, NgbDropdownModule, NgbTypeaheadModule } from '@ng-bo
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { DragulaModule } from 'ng2-dragula';
 
 import { FileProgessModule } from '../../shared/components/file-progess/file-progess.module';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { PaginationModule } from '../../shared/components/pagination/pagination.module';
-
 import { ContentWorkspaceComponent } from './content-workspace.component';
 import { ContentWorkspaceService } from './content-workspace.service';
 import { TagsService } from '../tags/tags.service';
 import { LanguageService } from '../../shared/services/language.service';
 import { FileService } from '../../shared/services/file.service';
 import { CustomPipeModule } from '../../shared/pipes/custom-pipe.module';
-
-import { DragulaModule } from 'ng2-dragula';
 
 @NgModule({
   declarations: [ContentWorkspaceComponent],

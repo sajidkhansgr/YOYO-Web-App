@@ -64,9 +64,6 @@
         <app-loader [type]="'page'" *ngIf="loading"></app-loader>
         <div *ngIf="!loading">
           <div class="text-right" *ngIf="folders.length>0 || files.length>0">
-            <!-- Sort by:
-            <span class="text-primary mr-2 curs-ptr">Name<i class="fa fa-sort-down align-top ml-1"></i></span>
-            <span class="text-primary curs-ptr">Date Modified<i class="fa fa-sort-down align-top ml-1"></i></span> -->
             Sort by:
             <span class="text-primary ml-2 curs-ptr" *ngFor="let c of cols, let i = index" (click)="sortChange(c, i)">
               {{c.n}}<i class="fa ml-1"
@@ -166,8 +163,6 @@
                   {{c.n}}<i class="fa ml-1"
                     [ngClass]="{'fa-sort-up align-bottom': c.asc, 'fa-sort-down align-top': !c.asc}"></i>
                 </th>
-                <!-- <th>Name<i class="fas fa-sort-down ml-1 align-top"></i></th>
-                <th>Date Modified<i class="fas fa-sort-down ml-1 align-top"></i></th> -->
                 <th></th>
               </tr>
             </thead>

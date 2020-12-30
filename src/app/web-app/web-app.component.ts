@@ -11,7 +11,7 @@ import { TokenDataService } from '../shared/services/token-data.service';
   }
 })
 export class WebAppComponent implements OnInit {
-  nav!: any; // for header
+  nav!: any;
   usrInfo: any | null;
   excUrls = ['view'];
   constructor(
@@ -20,7 +20,6 @@ export class WebAppComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // header
     this.getToken();
   }
 
@@ -29,7 +28,6 @@ export class WebAppComponent implements OnInit {
   }
 
   isViewPage(): boolean {
-    return (this.excUrls.filter(sUrl => this.loc.path().indexOf(sUrl)!== -1).length>0)?true:false;
+    return (this.excUrls.filter(sUrl => this.loc.path().indexOf(sUrl) !== -1).length > 0) ? true : false;
   }
-
 }
