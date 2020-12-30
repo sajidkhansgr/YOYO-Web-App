@@ -31,12 +31,7 @@ export class TagsService {
     }
     return this.http.get(`${AppSettings.LIST_TAG}`, {
       params: queryParams
-    }
-    ).pipe(
-      map((res: any) =>
-        res
-      )
-    );
+    }).pipe(map((res: any) => res));
   }
 
   // add tag
@@ -55,18 +50,13 @@ export class TagsService {
   catgList(params: any): Observable<any[]> {
     let queryParams = new HttpParams(), url: string;
     for (let key in params) {
-      if (params[key] || key == 'isActive') {
+      if (params[key] || key == 'isActive'|| key == 'pageNo') {
         queryParams = queryParams.set(key, params[key]);
       }
     }
     return this.http.get(`${AppSettings.LIST_CATG}`, {
       params: queryParams
-    }
-    ).pipe(
-      map((res: any) =>
-        res
-      )
-    );
+    }).pipe(map((res: any) => res));
   }
 
   // add category

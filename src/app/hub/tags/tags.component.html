@@ -64,7 +64,7 @@
                             <i class="fa fa-ellipsis-h"></i>
                           </div>
                           <div class="dropdown-menu" aria-labelledby="catEllipsis">
-                            <a class="dropdown-item" (click)="updCatgModal(editCategory, catg)">
+                            <a class="dropdown-item" (click)="updCatgModal(editCatg, catg)">
                               <i class="fas fa-edit mr-1"></i>Edit
                             </a>
                             <a class="dropdown-item text-{{catg.isActive ? 'primary' : 'success'}}"
@@ -80,7 +80,7 @@
                   </ng-container>
                   <ng-template #noCatg>
                     <div class="text-secondary text-center mt-2">
-                      No catgories found
+                      No Catgories Found
                     </div>
                   </ng-template>
                 </ng-template>
@@ -150,7 +150,7 @@
                   </tbody>
                 </table>
                 <div class="text-center text-secondary pt-5 mt-5" *ngIf="tags.length == 0">
-                  No Data Found
+                  No Tag Found
                 </div>
               </div>
               <app-pagination [pageSize]="pageSize" [totalCount]="totalCount" [page]="pageNo"
@@ -238,7 +238,7 @@
 </ng-template>
 
 <!-- edit category modal  -->
-<ng-template #editCategory let-modal>
+<ng-template #editCatg let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Edit Category</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">

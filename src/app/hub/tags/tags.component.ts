@@ -117,8 +117,8 @@ export class TagsComponent implements OnInit {
   }
 
   // change page number
-  changePageNo(num: number) {
-    this.pageNo = num;
+  changePageNo(no: number) {
+    this.pageNo = no;
     this.getTags();
   }
 
@@ -128,7 +128,7 @@ export class TagsComponent implements OnInit {
     this.dialog.open(ConfirmDialogComponent, {
       data: {
         msg: `Are you sure you want to ${actDeac} this tag?`,
-        title: `${this.rowInfo.isActive ? 'Deactivate' : 'Activate'} tag`
+        title: `${this.rowInfo.isActive ? 'Deactivate' : 'Activate'} Tag`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
@@ -312,7 +312,7 @@ export class TagsComponent implements OnInit {
     this.dialog.open(ConfirmDialogComponent, {
       data: {
         msg: `Are you sure you want to ${actDeac} this category?`,
-        title: `${catg.isActive ? 'Deactivate' : 'Activate'} category`
+        title: `${catg.isActive ? 'Deactivate' : 'Activate'} Category`
       },
       autoFocus: false
     }).afterClosed().subscribe(result => {
@@ -335,7 +335,7 @@ export class TagsComponent implements OnInit {
   getCatgs() {
     this.catgLoading = true;
     this.catgs = [];
-    this.tagServ.catgList({ hubId: this.hubid, isActive: this.isActiveCatg })
+    this.tagServ.catgList({ hubId: this.hubid, isActive: this.isActiveCatg,pageNo: 0 })
       .subscribe((data: any) => {
         if (data && data.result && Array.isArray(data.result.results) && data.result.results.length > 0) {
           this.catgs = data.result.results;

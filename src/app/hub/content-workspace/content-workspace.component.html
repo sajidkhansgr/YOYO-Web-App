@@ -61,7 +61,8 @@
         <app-loader [type]="'page'" *ngIf="docLoading"></app-loader>
         <div class="card" *ngIf="!docLoading">
           <div class="card-header row m-0">
-            <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">{{rowInfo.name}}
+            <h5 class="mb-0 pt-1 col-10 pl-0 align-self-center">
+              {{rowInfo.name}}
             </h5>
             <div class="mr-2 col-1 ml-auto">
               <div class="btn btn-light" (click)="closeDoc()">
@@ -465,7 +466,7 @@
                             </form>
                           </div>
                         </div>
-                        <div class="appLink mt-3 work-div dark-bg-hover rounded p-2">
+                        <!-- Phase 2 <div class="appLink mt-3 work-div dark-bg-hover rounded p-2">
                           <div class="font-weight-bold mb-1">
                             App Link
                           </div>
@@ -474,7 +475,7 @@
                               showpad://abc/sabcbibicbiecbei875
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -970,13 +971,11 @@
         </thead>
         <tbody cdkDropList id="cntntLists" [cdkDropListData]="cntnts" class="min-ht pl-0 mt-2"
           [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)" *ngIf="cntnts.length > 0">
-          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)"
-            [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!isNotDrag()}" [cdkDragDisabled]="isNotDrag()"
-            cdkDrag>
+          <tr *ngFor="let cntnt of cntnts" (click)="toggleInfo(cntnt)" [ngClass]="{'sel-row':(rowInfo.id === cntnt.id), 'cur-mov':!isNotDrag()}"
+           [cdkDragDisabled]="isNotDrag()" cdkDrag>
             <div *cdkDragPreview><img [src]="getImg(cntnt)" alt="Thumbnail" style="height:100px;width:100px"></div>
             <td>
-              <mat-checkbox [checked]="cntnt.chk" (change)="chngChkBox($event, cntnt)"
-                (click)="$event.stopPropagation();"></mat-checkbox>
+              <mat-checkbox [checked]="cntnt.chk" (change)="chngChkBox($event, cntnt)" (click)="$event.stopPropagation();"></mat-checkbox>
             </td>
             <td *ngFor="let col of cols">
               <span [ngSwitch]="col.k">
@@ -985,21 +984,12 @@
                   <span *ngFor="let tg of cntnt.contentTags" class="badge badge-light p-2 mt-2 mr-1">{{tg.name}}
                   </span>
                 </span>
-                <span *ngSwitchCase="'createdDate'">
-                  {{(cntnt.createdDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}
-                </span>
-                <span *ngSwitchCase="'updatedDate'">
-                  {{(cntnt.updatedDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}
-                </span>
-                <span *ngSwitchCase="'queuedAt'">
-                  {{(cntnt.queuedAt|date:'dd MMM, yyyy HH:mm')||'N/A'}}
-                </span>
-                <span *ngSwitchCase="'size'">
-                  {{getSize(cntnt.size)}}
-                </span>
+                <span *ngSwitchCase="'createdDate'">{{(cntnt.createdDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}</span>
+                <span *ngSwitchCase="'updatedDate'">{{(cntnt.updatedDate|date:'dd MMM, yyyy HH:mm')||'N/A'}}</span>
+                <span *ngSwitchCase="'queuedAt'">{{(cntnt.queuedAt|date:'dd MMM, yyyy HH:mm')||'N/A'}}</span>
+                <span *ngSwitchCase="'size'">{{getSize(cntnt.size)}}</span>
                 <span *ngSwitchCase="'contentLanguages'">
-                  <span *ngFor="let cL of cntnt.contentLanguages"
-                    class="badge badge-light p-2 mt-2 mr-1 mt-sm-0">{{cL.name}}
+                  <span *ngFor="let cL of cntnt.contentLanguages" class="badge badge-light p-2 mt-2 mr-1 mt-sm-0">{{cL.name}}
                   </span>
                 </span>
                 <span *ngSwitchDefault>{{cntnt[col.k]}}</span>
@@ -1009,7 +999,7 @@
         </tbody>
       </table>
       <div class="text-center text-secondary pt-5 mt-4" *ngIf="cntnts.length<= 0">
-        No Content {{activeIndex==1?'is currently being processed':'found'}}
+        No Content {{activeIndex==1?'is currently being processed':'Found'}}
       </div>
       <div class="row justify-content-between" *ngIf="!view" cdkDropList id="cntntLists" [cdkDropListData]="cntnts"
         [cdkDropListConnectedTo]="['fldrLists']" (cdkDropListDropped)="drop($event)">
