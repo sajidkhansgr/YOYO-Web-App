@@ -18,6 +18,11 @@ body {
   color: $hi-dark;
 }
 
+// min height for tables
+.min-height.card-text {
+  min-height: 300px;
+}
+
 // width classes
 .w-40 {
   width: 40% !important;
